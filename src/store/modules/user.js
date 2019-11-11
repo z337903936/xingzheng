@@ -1,9 +1,10 @@
-import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { loginByUsername, logout, getUserInfo } from '@/api/user'
+import { getToken, setToken, removeToken, getUID, setUID, removeUID } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
+  uid: getUID(),
   name: '',
   avatar: '',
   introduction: '',
@@ -23,6 +24,9 @@ const mutations = {
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   },
+  SET_UID: (state, uid) => {
+    state.uid = uid
+  },
   SET_ROLES: (state, roles) => {
     state.roles = roles
   }
@@ -30,14 +34,19 @@ const mutations = {
 
 const actions = {
   // user login
-  login({ commit }, userInfo) {
-    const { username, password } = userInfo
+  LoginByUsername({ commit }, userInfo) {
+    const username = userInfo.username.trim()
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
+      loginByUsername(username, userInfo.password, userInfo.vcode).then(data => {
+        if (data.code !== 200) {
+          reject(data)
+        } else {
+          commit('SET_TOKEN', data.token)
+          commit('SET_UID', data.uid)
+          setToken(data.token)
+          setUID(data.uid)
+          resolve()
+        }
       }).catch(error => {
         reject(error)
       })
@@ -47,7 +56,7 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
+      getUserInfo(state.token).then(response => {
         const { data } = response
 
         if (!data) {
@@ -77,8 +86,10 @@ const actions = {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         commit('SET_TOKEN', '')
+        commit('SET_UID', '')
         commit('SET_ROLES', [])
         removeToken()
+        removeUID()
         resetRouter()
 
         // reset visited views and cached views

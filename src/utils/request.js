@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+import { getToken, getUID } from '@/utils/auth'
+import md5 from 'js-md5'
 
 // create an axios instance
 const service = axios.create({
@@ -13,13 +14,19 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
-    // do something before request is sent
-
+    // Do something before request is sent
     if (store.getters.token) {
-      // let each request carry token
-      // ['X-Token'] is a custom headers key
-      // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken()
+      // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
+      const token = getToken()
+      config.headers['X-AUTH-TOKEN-UID'] = getUID()
+      if (config.url.indexOf('/v1/cp/') > -1) {
+        var timestamp = Date.parse(new Date()) / 1000
+        var salt = 'http://starnew.cn/detect/'
+        var s = md5(token + md5(token + salt + timestamp))
+        if (!config.params)config.params = {}
+        config.params.t = timestamp
+        config.params.s = s
+      }
     }
     return config
   },
