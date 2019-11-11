@@ -51,6 +51,105 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/case',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/case/index'),
+        name: 'Case',
+        meta: { title: '案件管理', icon: 'tab' }
+      }
+    ]
+  },
+  {
+    path: '/permissions',
+    component: Layout,
+    redirect: '/permissions/list',
+    name: 'Permissions',
+    meta: {
+      title: '权限管理',
+      icon: 'drag',
+      noCache: true
+    },
+    children: [
+      {
+        path: 'list-admin-member',
+        component: () => import('@/views/permissions/member/list'),
+        name: 'MemberList',
+        meta: { title: '管理员列表', icon: 'list', noCache: true }
+      },
+      {
+        path: 'create-admin-member',
+        component: () => import('@/views/permissions/member/create'),
+        name: 'CreateMember',
+        meta: { title: '添加管理员', icon: 'edit', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'edit-admin-member/:id(\\d+)',
+        component: () => import('@/views/permissions/member/edit'),
+        name: 'EditMember',
+        meta: { title: '编辑管理员', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'list-role',
+        component: () => import('@/views/permissions/role/list'),
+        name: 'roleList',
+        meta: { title: '角色列表', icon: 'list', noCache: true }
+      },
+      {
+        path: 'create-role',
+        component: () => import('@/views/permissions/role/create'),
+        name: 'CreateRole',
+        meta: { title: '添加角色', icon: 'edit', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'edit-role/:id(\\d+)',
+        component: () => import('@/views/permissions/role/edit'),
+        name: 'EditRole',
+        meta: { title: '编辑角色', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'set-action/:id',
+        component: () => import('@/views/permissions/role/setGroupAction'),
+        name: 'SetGroupAction',
+        meta: { title: '设置角色权限', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'list-action',
+        component: () => import('@/views/permissions/action/list'),
+        name: 'actionList',
+        meta: { title: '权限列表', icon: 'list', noCache: true }
+      },
+      {
+        path: 'create-action',
+        component: () => import('@/views/permissions/action/create'),
+        name: 'CreateAction',
+        meta: { title: '添加权限', icon: 'edit', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'edit-action/:id',
+        component: () => import('@/views/permissions/action/edit'),
+        name: 'EditAction',
+        meta: { title: '编辑权限', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'change-password/',
+        component: () => import('@/views/permissions/changePassword'),
+        name: 'ChangePassword',
+        meta: { title: '修改密码', icon: 'edit', noCache: true },
+        hidden: false
+      }
+    ]
+  },
+  {
     path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
@@ -60,16 +159,7 @@ export const constantRoutes = [
     component: () => import('@/views/login/auth-redirect'),
     hidden: true
   },
-  {
-    path: '/404',
-    component: () => import('@/views/error-page/404'),
-    hidden: true
-  },
-  {
-    path: '/401',
-    component: () => import('@/views/error-page/401'),
-    hidden: true
-  },
+
   {
     path: '/',
     component: Layout,
@@ -79,19 +169,7 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/documentation',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'Documentation', icon: 'documentation', affix: true }
+        meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
   },
@@ -107,6 +185,16 @@ export const constantRoutes = [
         meta: { title: 'Guide', icon: 'guide', noCache: true }
       }
     ]
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/error-page/404'),
+    hidden: true
+  },
+  {
+    path: '/401',
+    component: () => import('@/views/error-page/401'),
+    hidden: true
   },
   {
     path: '/profile',
@@ -382,7 +470,6 @@ export const asyncRoutes = [
       }
     ]
   },
-
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
