@@ -138,17 +138,33 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          // this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-          this.$store.dispatch('user/login', this.loginForm)
+          this.$store.dispatch('LoginByUsername', this.loginForm)
             .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
+              this.$message({
+                message: '登录成功，欢迎回来',
+                type: 'success',
+                showClose: true,
+                duration: 1000
+              })
+              this.$router.push({ path: this.redirect || '/' })
             })
-            .catch(() => {
+            .catch((res) => {
+              this.$message({
+                message: res.reason,
+                type: 'error',
+                showClose: true,
+                duration: 2000
+              })
               this.loading = false
             })
         } else {
-          console.log('error submit!!')
+          this.$message({
+            message: '登录失败，请检查用户名/密码',
+            type: 'error',
+            showClose: true,
+            duration: 2000
+          })
           return false
         }
       })

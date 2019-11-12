@@ -37,7 +37,7 @@ const actions = {
   LoginByUsername({ commit }, userInfo) {
     const username = userInfo.username.trim()
     return new Promise((resolve, reject) => {
-      loginByUsername(username, userInfo.password, userInfo.vcode).then(data => {
+      loginByUsername(username, userInfo.password, '123456').then(data => {
         if (data.code !== 200) {
           reject(data)
         } else {
