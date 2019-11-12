@@ -20,7 +20,7 @@ service.interceptors.request.use(
       config.headers['X-AUTH-TOKEN-UID'] = getUID()
       if (config.url.indexOf('/v1/cp/') > -1) {
         var timestamp = Date.parse(new Date()) / 1000
-        var salt = 'https://wanl.com.cn/quick_search'
+        var salt = 'http://starnew.cn/detect/'
         var s = md5(token + md5(token + salt + timestamp))
         if (!config.params)config.params = {}
         config.params.t = timestamp
