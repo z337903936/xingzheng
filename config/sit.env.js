@@ -1,5 +1,6 @@
 module.exports = {
   NODE_ENV: '"production"',
   ENV_CONFIG: '"sit"',
-  BASE_API: '"https://wanl.com.cn"'
+  BASE_API: '"https://starnew.cn"'
 }
+r
