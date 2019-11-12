@@ -35,8 +35,8 @@ export function filterAsyncRoutes(routes, roles) {
 }
 
 const state = {
-  routes: [],
-  addRoutes: []
+  routers: [],
+  addRouters: []
 }
 
 const mutations = {
@@ -67,3 +67,4 @@ export default {
   mutations,
   actions
 }
+
