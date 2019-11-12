@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/article/list',
+    url: '/v1/cp/articles/',
     method: 'get',
     params: query
   })
@@ -10,23 +10,15 @@ export function fetchList(query) {
 
 export function fetchArticle(id) {
   return request({
-    url: '/article/detail',
+    url: '/v1/cp/articles/' + id + '/',
     method: 'get',
-    params: { id }
-  })
-}
-
-export function fetchPv(pv) {
-  return request({
-    url: '/article/pv',
-    method: 'get',
-    params: { pv }
+    params: {}
   })
 }
 
 export function createArticle(data) {
   return request({
-    url: '/article/create',
+    url: '/v1/cp/articles/new/',
     method: 'post',
     data
   })
@@ -34,7 +26,14 @@ export function createArticle(data) {
 
 export function updateArticle(data) {
   return request({
-    url: '/article/update',
+    url: '/v1/cp/articles/' + data.id + '/',
+    method: 'post',
+    data
+  })
+}
+export function delArticle(data) {
+  return request({
+    url: '/v1/cp/article/',
     method: 'post',
     data
   })

@@ -1,9 +1,8 @@
 <template>
   <div class="app-container">
-    <el-input v-model="filename" placeholder="Please enter the file name (default file)" style="width:300px;" prefix-icon="el-icon-document" />
-    <el-button :loading="downloadLoading" style="margin-bottom:20px;" type="primary" icon="el-icon-document" @click="handleDownload">
-      Export Zip
-    </el-button>
+    <!-- $t is vue-i18n global function to translate lang -->
+    <el-input :placeholder="$t('zip.placeholder')" v-model="filename" style="width:300px;" prefix-icon="el-icon-document"/>
+    <el-button :loading="downloadLoading" style="margin-bottom:20px;" type="primary" icon="document" @click="handleDownload">{{ $t('zip.export') }} zip</el-button>
     <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
@@ -27,7 +26,7 @@
       </el-table-column>
       <el-table-column align="center" label="Date" width="220">
         <template slot-scope="scope">
-          <i class="el-icon-time" />
+          <i class="el-icon-time"/>
           <span>{{ scope.row.display_time }}</span>
         </template>
       </el-table-column>
@@ -52,11 +51,12 @@ export default {
     this.fetchData()
   },
   methods: {
-    async fetchData() {
+    fetchData() {
       this.listLoading = true
-      const { data } = await fetchList()
-      this.list = data.items
-      this.listLoading = false
+      fetchList().then(response => {
+        this.list = response.data.items
+        this.listLoading = false
+      })
     },
     handleDownload() {
       this.downloadLoading = true

@@ -5,17 +5,15 @@
       :current-page.sync="currentPage"
       :page-size.sync="pageSize"
       :layout="layout"
-      :page-sizes="pageSizes"
       :total="total"
       v-bind="$attrs"
       @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
+      @current-change="handleCurrentChange"/>
   </div>
 </template>
 
 <script>
-import { scrollTo } from '@/utils/scroll-to'
+import { scrollTo } from '@/utils/scrollTo'
 
 export default {
   name: 'Pagination',
@@ -40,7 +38,7 @@ export default {
     },
     layout: {
       type: String,
-      default: 'total, sizes, prev, pager, next, jumper'
+      default: 'total,  prev, pager, next, jumper'
     },
     background: {
       type: Boolean,
@@ -94,6 +92,7 @@ export default {
 .pagination-container {
   background: #fff;
   padding: 32px 16px;
+  float: right;
 }
 .pagination-container.hidden {
   display: none;

@@ -1,14 +1,13 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div :class="className" :style="{height:height,width:width}"/>
 </template>
 
 <script>
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
-import resize from './mixins/resize'
+import { debounce } from '@/utils'
 
 export default {
-  mixins: [resize],
   props: {
     className: {
       type: String,
@@ -29,14 +28,19 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(() => {
-      this.initChart()
-    })
+    this.initChart()
+    this.__resizeHandler = debounce(() => {
+      if (this.chart) {
+        this.chart.resize()
+      }
+    }, 100)
+    window.addEventListener('resize', this.__resizeHandler)
   },
   beforeDestroy() {
     if (!this.chart) {
       return
     }
+    window.removeEventListener('resize', this.__resizeHandler)
     this.chart.dispose()
     this.chart = null
   },
@@ -54,6 +58,7 @@ export default {
           bottom: '10',
           data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
         },
+        calculable: true,
         series: [
           {
             name: 'WEEKLY WRITE ARTICLES',

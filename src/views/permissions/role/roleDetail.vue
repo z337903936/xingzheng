@@ -8,14 +8,14 @@
           <el-row>
             <el-col :span="8">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="角色名字:" prop="groupName" required>
-                <el-input v-model="postForm.groupName" :rows="1" autosize placeholder="选填，请输入角色名字" />
+                <el-input :rows="1" v-model="postForm.groupName" autosize placeholder="选填，请输入角色名字"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="角色备注:">
-                <el-input v-model="postForm.description" :rows="1" autosize placeholder="选填，角色备注" />
+                <el-input :rows="1" v-model="postForm.description" autosize placeholder="选填，角色备注"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -31,7 +31,7 @@
 
       </div>
 
-      <div class="btn-container" />
+      <div class="btn-container"/>
     </el-form>
   </div>
 </template>
@@ -115,7 +115,7 @@ export default {
           if (this.isEdit) {
             updateRole(data).then(data => {
               this.loading = false
-              if (data.code === 200) {
+              if (data.code == 200) {
                 this.$message({
                   message: '保存成功',
                   type: 'success',
@@ -137,7 +137,7 @@ export default {
           } else {
             createRole(data).then(data => {
               this.loading = false
-              if (data.code === 200) {
+              if (data.code == 200) {
                 this.$message({
                   message: '保存成功',
                   type: 'success',

@@ -3,7 +3,7 @@ import { debounce } from '@/utils'
 export default {
   data() {
     return {
-      $_sidebarElm: null
+      sidebarElm: null
     }
   },
   mounted() {
@@ -14,18 +14,16 @@ export default {
     }, 100)
     window.addEventListener('resize', this.__resizeHandler)
 
-    this.$_sidebarElm = document.getElementsByClassName('sidebar-container')[0]
-    this.$_sidebarElm && this.$_sidebarElm.addEventListener('transitionend', this.$_sidebarResizeHandler)
+    this.sidebarElm = document.getElementsByClassName('sidebar-container')[0]
+    this.sidebarElm && this.sidebarElm.addEventListener('transitionend', this.sidebarResizeHandler)
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.__resizeHandler)
 
-    this.$_sidebarElm && this.$_sidebarElm.removeEventListener('transitionend', this.$_sidebarResizeHandler)
+    this.sidebarElm && this.sidebarElm.removeEventListener('transitionend', this.sidebarResizeHandler)
   },
   methods: {
-    // use $_ for mixins properties
-    // https://vuejs.org/v2/style-guide/index.html#Private-property-names-essential
-    $_sidebarResizeHandler(e) {
+    sidebarResizeHandler(e) {
       if (e.propertyName === 'width') {
         this.__resizeHandler()
       }

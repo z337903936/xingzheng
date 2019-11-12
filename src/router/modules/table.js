@@ -1,6 +1,6 @@
-/** When your routing table is too long, you can split it into small modules **/
+/** When your routing table is too long, you can split it into small modules**/
 
-import Layout from '@/layout'
+import Layout from '@/views/layout/Layout'
 
 const tableRouter = {
   path: '/table',
@@ -14,27 +14,39 @@ const tableRouter = {
   children: [
     {
       path: 'dynamic-table',
-      component: () => import('@/views/table/dynamic-table/index'),
+      component: () => import('@/views/table/dynamicTable/index'),
       name: 'DynamicTable',
-      meta: { title: 'Dynamic Table' }
+      meta: { title: 'dynamicTable' }
     },
     {
       path: 'drag-table',
-      component: () => import('@/views/table/drag-table'),
+      component: () => import('@/views/table/dragTable'),
       name: 'DragTable',
-      meta: { title: 'Drag Table' }
+      meta: { title: 'dragTable' }
     },
     {
       path: 'inline-edit-table',
-      component: () => import('@/views/table/inline-edit-table'),
+      component: () => import('@/views/table/inlineEditTable'),
       name: 'InlineEditTable',
-      meta: { title: 'Inline Edit' }
+      meta: { title: 'inlineEditTable' }
+    },
+    {
+      path: 'tree-table',
+      component: () => import('@/views/table/treeTable/treeTable'),
+      name: 'TreeTableDemo',
+      meta: { title: 'treeTable' }
+    },
+    {
+      path: 'custom-tree-table',
+      component: () => import('@/views/table/treeTable/customTreeTable'),
+      name: 'CustomTreeTableDemo',
+      meta: { title: 'customTreeTable' }
     },
     {
       path: 'complex-table',
-      component: () => import('@/views/table/complex-table'),
+      component: () => import('@/views/table/complexTable'),
       name: 'ComplexTable',
-      meta: { title: 'Complex Table' }
+      meta: { title: 'complexTable' }
     }
   ]
 }

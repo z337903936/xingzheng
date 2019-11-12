@@ -8,35 +8,35 @@
           <el-row>
             <el-col :span="8">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="权限中文:" prop="actionDesc" required>
-                <el-input v-model="postForm.actionDesc" :rows="1" autosize placeholder="选填，请输入权限中文" />
+                <el-input :rows="1" v-model="postForm.actionDesc" autosize placeholder="选填，请输入权限中文"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="权限英文:" prop="actionName" required>
-                <el-input v-model="postForm.actionName" :rows="1" autosize placeholder="必填，请输入权限英文" />
+                <el-input :rows="1" v-model="postForm.actionName" autosize placeholder="必填，请输入权限英文"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="模块英文:" prop="moduleName" required>
-                <el-input v-model="postForm.moduleName" :rows="1" autosize placeholder="必填，请输入模块英文" />
+                <el-input :rows="1" v-model="postForm.moduleName" autosize placeholder="必填，请输入模块英文"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="模块中文:" prop="moduleDesc" required>
-                <el-input v-model="postForm.moduleDesc" :rows="1" autosize placeholder="必填，请输入模块中文" />
+                <el-input :rows="1" v-model="postForm.moduleDesc" autosize placeholder="必填，请输入模块中文"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="排序值:">
-                <el-input v-model="postForm.sortValue" :rows="1" autosize placeholder="选填，请输入排序值" />
+                <el-input :rows="1" v-model="postForm.sortValue" autosize placeholder="选填，请输入排序值"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -50,7 +50,7 @@
           </el-row>
         </div>
       </div>
-      <div class="btn-container" />
+      <div class="btn-container"/>
     </el-form>
   </div>
 </template>
@@ -140,7 +140,7 @@ export default {
           if (this.isEdit) {
             updateAction(data).then(data => {
               this.loading = false
-              if (data.code === 200) {
+              if (data.code == 200) {
                 this.$message({
                   message: '保存成功',
                   type: 'success',
@@ -162,7 +162,7 @@ export default {
           } else {
             createAction(data).then(data => {
               this.loading = false
-              if (data.code === 200) {
+              if (data.code == 200) {
                 this.$message({
                   message: '保存成功',
                   type: 'success',

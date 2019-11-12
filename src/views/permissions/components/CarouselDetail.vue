@@ -8,21 +8,21 @@
           <el-row>
             <el-col :span="18">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="名字:">
-                <el-input v-model="postForm.name" :rows="1" autosize placeholder="选填，请输入名字" />
+                <el-input :rows="1" v-model="postForm.name" autosize placeholder="选填，请输入名字"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="18">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="大标题:">
-                <el-input v-model="postForm.title1" :rows="1" autosize placeholder="选填，这是轮播图向上弹出的大标题" />
+                <el-input :rows="1" v-model="postForm.title1" autosize placeholder="选填，这是轮播图向上弹出的大标题"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="18">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="小标题:">
-                <el-input v-model="postForm.title2" :rows="1" autosize placeholder="选填，这是轮播图向上弹出的小标题" />
+                <el-input :rows="1" v-model="postForm.title2" autosize placeholder="选填，这是轮播图向上弹出的小标题"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -30,7 +30,7 @@
           <el-row>
             <el-col :span="18">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="备注:">
-                <el-input v-model="postForm.description" :rows="1" autosize placeholder="选填，请输入备注" />
+                <el-input :rows="1" v-model="postForm.description" autosize placeholder="选填，请输入备注"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -39,43 +39,43 @@
             <el-col :span="9">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="是否启用:">
                 <el-select v-model="postForm.needShow">
-                  <el-option key="true" label="启用" value="true" />
-                  <el-option key="false" label="停用" value="false" />
+                  <el-option key="true" label="启用" value="true"/>
+                  <el-option key="false" label="停用" value="false"/>
                 </el-select>
               </el-form-item>
             </el-col>
 
             <el-col :span="9">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="排序:">
-                <el-input v-model="postForm.displayOrder" :rows="1" autosize placeholder="选填，请输入排序数值，值越大越靠前" />
+                <el-input :rows="1" v-model="postForm.displayOrder" autosize placeholder="选填，请输入排序数值，值越大越靠前"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="18">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="PC端链接:">
-                <el-input v-model="postForm.linkUrl" :rows="1" autosize placeholder="选填，请输入PC端目标链接地址" />
+                <el-input :rows="1" v-model="postForm.linkUrl" autosize placeholder="选填，请输入PC端目标链接地址"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="18">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="手机端链接:">
-                <el-input v-model="postForm.mobileLinkUrl" :rows="1" autosize placeholder="选填，请输入手机端目标链接地址" />
+                <el-input :rows="1" v-model="postForm.mobileLinkUrl" autosize placeholder="选填，请输入手机端目标链接地址"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="18">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="PC端图片 1920*1000" required>
-                <Upload v-model="postForm.imgUrl" />
+                <Upload v-model="postForm.imgUrl"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="18">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="手机端图片 1366*600" required>
-                <Upload v-model="postForm.mobileImgUrl" />
+                <Upload v-model="postForm.mobileImgUrl"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -91,7 +91,7 @@
 
       </div>
 
-      <div class="btn-container" />
+      <div class="btn-container"/>
     </el-form>
   </div>
 </template>
@@ -220,7 +220,7 @@ export default {
       if (this.isEdit) {
         updateCarousel(data).then(data => {
           this.loading = false
-          if (data.code === 200) {
+          if (data.code == 200) {
             this.$message({
               message: '保存成功',
               type: 'success',
@@ -242,7 +242,7 @@ export default {
       } else {
         createCarousel(data).then(data => {
           this.loading = false
-          if (data.code === 200) {
+          if (data.code == 200) {
             this.$message({
               message: '保存成功',
               type: 'success',
@@ -265,10 +265,10 @@ export default {
     },
 
     getRemoteUserList(query) {
-      // userSearch(query).then(response => {
-      //   if (!response.data.items) return
-      //   this.userListOptions = response.data.items.map(v => v.name)
-      // })
+      userSearch(query).then(response => {
+        if (!response.data.items) return
+        this.userListOptions = response.data.items.map(v => v.name)
+      })
     }
   }
 }

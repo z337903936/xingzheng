@@ -1,13 +1,12 @@
 <template>
   <div class="dashboard-editor-container">
     <div class=" clearfix">
-      <pan-thumb :image="avatar" style="float: left">
-        Your roles:
+      <pan-thumb :image="avatar" style="float: left"> 您的角色:
         <span v-for="item in roles" :key="item" class="pan-info-roles">{{ item }}</span>
       </pan-thumb>
       <div class="info-container">
-        <span class="display_name">{{ name }}</span>
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">Editor's Dashboard</span>
+        <span class="display_name">欢迎您，{{ name }}</span>
+        <span style="font-size:20px;padding-top:20px;display:inline-block;">使用本控制台</span>
       </div>
     </div>
     <div>
@@ -38,7 +37,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
   .emptyGif {
     display: block;
     width: 45%;

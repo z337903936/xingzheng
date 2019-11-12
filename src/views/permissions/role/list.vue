@@ -42,7 +42,7 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>1" :total="total" :page.sync="listQuery.page" @pagination="getList" />
+    <pagination v-show="total>1" :total="total" :page.sync="listQuery.page" @pagination="getList"/>
 
   </div>
 </template>
@@ -97,7 +97,7 @@ export default {
         }
         delRole(param).then(data => {
           this.listLoading = false
-          if (data.code === 200) {
+          if (data.code == 200) {
             this.$message({
               message: '已删除成功',
               type: 'success',

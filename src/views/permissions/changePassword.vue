@@ -6,21 +6,21 @@
           <el-row>
             <el-col :span="8">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="旧密码:">
-                <el-input v-model="postForm.oldPassword" :rows="1" type="password" autocomplete="off" placeholder="选填" />
+                <el-input :rows="1" v-model="postForm.oldPassword" type="password" autocomplete="off" placeholder="选填"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="新密码:">
-                <el-input v-model="postForm.newPassword" :rows="1" type="password" autocomplete="off" placeholder="选填" />
+                <el-input :rows="1" v-model="postForm.newPassword" type="password" autocomplete="off" placeholder="选填"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="确认密码:">
-                <el-input v-model="postForm.checkPass" :rows="1" type="password" autocomplete="off" placeholder="选填" />
+                <el-input :rows="1" v-model="postForm.checkPass" type="password" autocomplete="off" placeholder="选填"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -34,7 +34,7 @@
           </el-row>
         </div>
       </div>
-      <div class="btn-container" />
+      <div class="btn-container"/>
     </el-form>
   </div>
 </template>

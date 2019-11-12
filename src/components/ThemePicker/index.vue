@@ -1,13 +1,12 @@
 <template>
   <el-color-picker
     v-model="theme"
-    :predefine="['#409EFF', '#1890ff', '#304156','#212121','#11a983', '#13c2c2', '#6959CD', '#f5222d', ]"
     class="theme-picker"
-    popper-class="theme-picker-dropdown"
-  />
+    popper-class="theme-picker-dropdown"/>
 </template>
 
 <script>
+
 const version = require('element-ui/package.json').version // element-ui version from node_modules
 const ORIGINAL_THEME = '#409EFF' // default color
 
@@ -15,36 +14,15 @@ export default {
   data() {
     return {
       chalk: '', // content of theme-chalk css
-      theme: ''
-    }
-  },
-  computed: {
-    defaultTheme() {
-      return this.$store.state.settings.theme
+      theme: ORIGINAL_THEME
     }
   },
   watch: {
-    defaultTheme: {
-      handler: function(val, oldVal) {
-        this.theme = val
-      },
-      immediate: true
-    },
-    async theme(val) {
-      const oldVal = this.chalk ? this.theme : ORIGINAL_THEME
+    theme(val, oldVal) {
       if (typeof val !== 'string') return
       const themeCluster = this.getThemeCluster(val.replace('#', ''))
       const originalCluster = this.getThemeCluster(oldVal.replace('#', ''))
       console.log(themeCluster, originalCluster)
-
-      const $message = this.$message({
-        message: '  Compiling the theme',
-        customClass: 'theme-message',
-        type: 'success',
-        duration: 0,
-        iconClass: 'el-icon-loading'
-      })
-
       const getHandler = (variable, id) => {
         return () => {
           const originalCluster = this.getThemeCluster(ORIGINAL_THEME.replace('#', ''))
@@ -60,14 +38,14 @@ export default {
         }
       }
 
-      if (!this.chalk) {
-        const url = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/index.css`
-        await this.getCSSString(url, 'chalk')
-      }
-
       const chalkHandler = getHandler('chalk', 'chalk-style')
 
-      chalkHandler()
+      if (!this.chalk) {
+        const url = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/index.css`
+        this.getCSSString(url, chalkHandler, 'chalk')
+      } else {
+        chalkHandler()
+      }
 
       const styles = [].slice.call(document.querySelectorAll('style'))
         .filter(style => {
@@ -79,10 +57,10 @@ export default {
         if (typeof innerText !== 'string') return
         style.innerText = this.updateStyle(innerText, originalCluster, themeCluster)
       })
-
-      this.$emit('change', val)
-
-      $message.close()
+      this.$message({
+        message: '换肤成功',
+        type: 'success'
+      })
     }
   },
 
@@ -95,18 +73,16 @@ export default {
       return newStyle
     },
 
-    getCSSString(url, variable) {
-      return new Promise(resolve => {
-        const xhr = new XMLHttpRequest()
-        xhr.onreadystatechange = () => {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            this[variable] = xhr.responseText.replace(/@font-face{[^}]+}/, '')
-            resolve()
-          }
+    getCSSString(url, callback, variable) {
+      const xhr = new XMLHttpRequest()
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          this[variable] = xhr.responseText.replace(/@font-face{[^}]+}/, '')
+          callback()
         }
-        xhr.open('GET', url)
-        xhr.send()
-      })
+      }
+      xhr.open('GET', url)
+      xhr.send()
     },
 
     getThemeCluster(theme) {
@@ -158,15 +134,8 @@ export default {
 </script>
 
 <style>
-.theme-message,
-.theme-picker-dropdown {
-  z-index: 99999 !important;
-}
-
 .theme-picker .el-color-picker__trigger {
-  height: 26px !important;
-  width: 26px !important;
-  padding: 2px;
+  vertical-align: middle;
 }
 
 .theme-picker-dropdown .el-color-dropdown__link-btn {

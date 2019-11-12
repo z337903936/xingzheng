@@ -9,7 +9,7 @@
     </div>
 
     <el-collapse v-model="activeNames" @change="handleChange">
-      <el-collapse-item v-for="(item,index) in list" :key="index" :title="item.moduleName" :name="index+1">
+      <el-collapse-item v-for="(item,index) in list" :title="item.moduleName" :name="index+1">
         <el-table :data="item.actionList" border fit highlight-current-row style="width: 100%">
           <el-table-column align="center" label="时间">
             <template slot-scope="scope">
@@ -59,7 +59,6 @@ export default {
     return {
       list: [],
       total: 0,
-      moduleKey: 0,
       listLoading: true,
       activeNames: ['1'],
       listQuery: {
@@ -69,7 +68,7 @@ export default {
   },
   computed: {},
   created() {
-    // this.getList()
+    this.getList()
   },
   methods: {
     getList() {
@@ -101,7 +100,7 @@ export default {
         }
         delAction(param).then(data => {
           this.loading = false
-          if (data.code === 200) {
+          if (data.code == 200) {
             this.$message({
               message: '已删除成功',
               type: 'success',

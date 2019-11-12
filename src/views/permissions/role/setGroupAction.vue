@@ -6,8 +6,7 @@
       :props="defaultProps"
       show-checkbox
       node-key="id"
-      highlight-current
-    />
+      highlight-current/>
     <div class="save_container">
       <el-button v-loading="saveLoading" :rows="1" type="primary" @click="saveRoleActions()">保存
       </el-button>
@@ -36,14 +35,14 @@ export default {
   },
   computed: {},
   created() {
-    // this.getList()
+    this.getList()
   },
   methods: {
     getList() {
       this.listLoading = true
       this.roleId = this.$route.params && this.$route.params.id
       fetchActionList(this.listQuery).then(data => {
-        if (data.code === 200) {
+        if (data.code == 200) {
           for (var prop in data) {
             var itemList = data[prop]
             if (itemList.length > 0) {
@@ -88,7 +87,7 @@ export default {
         actionId: resultKeys.toString()
       }
       updateGroupAction(data).then(res => {
-        if (res.code === 200) {
+        if (res.code == 200) {
           this.$message({
             message: '已保存',
             type: 'success',

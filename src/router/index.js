@@ -4,41 +4,29 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 /* Layout */
-import Layout from '@/layout'
+import Layout from '@/views/layout/Layout'
 
 /* Router Modules */
-import componentsRouter from './modules/components'
-import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
-import nestedRouter from './modules/nested'
+
+/** note: Submenu only appear when children.length>=1
+ *  detail see  https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
+ **/
 
 /**
- * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
- *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
+ * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
+ * alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
+ *                                if not set alwaysShow, only more than one route under the children
  *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
+ * redirect: noredirect           if `redirect:noredirect` will no redirect in the breadcrumb
  * name:'router-name'             the name is used by <keep-alive> (must set!!!)
  * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon show in the sidebar
-    noCache: true                if set true, the page will no be cached(default is false)
-    affix: true                  if set true, the tag will affix in the tags-view
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
+    roles: ['admin','editor']     will control the page roles (you can set multiple roles)
+    title: 'title'               the name show in submenu and breadcrumb (recommend set)
+    icon: 'svg-name'             the icon show in the sidebar,
+    noCache: true                if true ,the page will no be cached(default is false)
   }
- */
-
-/**
- * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
- */
-export const constantRoutes = [
+ **/
+export const constantRouterMap = [
   {
     path: '/redirect',
     component: Layout,
@@ -51,14 +39,442 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/case',
+    path: '/login',
+    component: () => import('@/views/login/index'),
+    hidden: true
+  },
+  {
+    path: '/change-password/',
+    component: () => import('@/views/permissions/changePassword'),
+    name: 'ChangePwd',
+    hidden: true
+  },
+  {
+    path: '/auth-redirect',
+    component: () => import('@/views/login/authredirect'),
+    hidden: true
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/errorPage/404'),
+    hidden: true
+  },
+  {
+    path: '/401',
+    component: () => import('@/views/errorPage/401'),
+    hidden: true
+  },
+  {
+    path: '',
     component: Layout,
+    redirect: 'dashboard',
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/case/index'),
-        name: 'Case',
-        meta: { title: '案件管理', icon: 'tab' }
+        path: 'dashboard',
+        component: () => import('@/views/dashboard/index'),
+        name: 'Dashboard',
+        meta: { title: 'dashboard', icon: 'dashboard', noCache: true }
+      }
+    ]
+  },
+
+  {
+    path: '/banner',
+    component: Layout,
+    redirect: '/banner/list',
+    name: 'Banner',
+    meta: {
+      title: '首页轮播图',
+      icon: 'example',
+      noCache: true
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/banner/list'),
+        name: 'BannerList',
+        meta: { title: '轮播图列表', icon: 'list', noCache: true }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/banner/create'),
+        name: 'CreateBanner',
+        meta: { title: '添加轮播图', icon: 'edit', noCache: true }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/banner/edit'),
+        name: 'EditBanner',
+        meta: { title: '编辑轮播图', noCache: true },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/category',
+    component: Layout,
+    redirect: '/category/list',
+    name: 'Category',
+    meta: {
+      title: '业务分类',
+      icon: 'component',
+      noCache: true
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/category/list'),
+        name: 'CategoryList',
+        meta: { title: '分类列表', icon: 'list', noCache: true }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/category/create'),
+        name: 'CreateCategory',
+        meta: { title: '添加分类', icon: 'edit', noCache: true }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/category/edit'),
+        name: 'EditCategory',
+        meta: { title: '编辑分类', noCache: true },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/article',
+    component: Layout,
+    redirect: '/article/list',
+    name: 'Article',
+    meta: {
+      title: '文章管理',
+      icon: 'documentation',
+      noCache: true
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/article/list'),
+        name: 'ArticleList',
+        meta: { title: '文章列表', icon: 'list', noCache: true }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/article/create'),
+        name: 'CreateArticle',
+        meta: { title: '添加文章', icon: 'edit', noCache: true }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/article/edit'),
+        name: 'EditArticle',
+        meta: { title: '编辑文章', noCache: true },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/members',
+    component: Layout,
+    redirect: '/members/list',
+    name: 'Members',
+    meta: {
+      title: '会员管理',
+      icon: 'user',
+      noCache: true
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/members/list'),
+        name: 'MembersList',
+        meta: { title: '会员列表', icon: 'list', noCache: true }
+      },
+      {
+        path: 'view/:id(\\d+)',
+        component: () => import('@/views/members/view'),
+        name: 'ViewMembers',
+        meta: { title: '会员详情', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'cashDeposit/:id(\\d+)',
+        component: () => import('@/views/members/cashDeposit'),
+        name: 'CashDeposit',
+        meta: { title: '现金充值', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'deposit/:id(\\d+)',
+        component: () => import('@/views/members/deposit'),
+        name: 'DepositMembers',
+        meta: { title: '短信充值', noCache: true },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/xp',
+    component: Layout,
+    redirect: '/experience/list',
+    name: 'Experience',
+    meta: {
+      title: '体验加盟',
+      icon: 'form',
+      noCache: true
+    },
+    children: [
+      {
+        path: 'experienceLogs',
+        component: () => import('@/views/experience/experienceLogs'),
+        name: 'ExperienceLogs',
+        meta: { title: '体验用户列表', icon: 'list', noCache: true }
+      },
+      {
+        path: 'submitLogs',
+        component: () => import('@/views/experience/submitLogs'),
+        name: 'SubmitLogs',
+        meta: { title: '加盟提交列表', icon: 'list', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/sendQuery',
+    component: Layout,
+    redirect: '/send_query/list',
+    name: 'SendQuery',
+    meta: {
+      title: '发送查询',
+      icon: 'guide',
+      noCache: true
+    },
+    children: [
+      {
+        path: 'rmsBatchSendResult',
+        component: () => import('@/views/send-query/rmsBatchSendResult'),
+        name: 'RMSBatchSendResult',
+        meta: { title: '富信批量查询', icon: 'international', noCache: true }
+      },
+      {
+        path: 'rmsSendResultDetail',
+        component: () => import('@/views/send-query/rmsBatchSendDetail'),
+        name: 'RMSSendResultDetail',
+        meta: { title: '富信发送查询', icon: 'international', noCache: true }
+      },
+      {
+        path: 'smsBatchSendResult',
+        component: () => import('@/views/send-query/smsBatchSendResult'),
+        name: 'SMSBatchSendResult',
+        meta: { title: '短信批量查询', icon: 'message', noCache: true }
+      },
+      {
+        path: 'smsSendResultDetail',
+        component: () => import('@/views/send-query/smsBatchSendDetail'),
+        name: 'SMSSendResultDetail',
+        meta: { title: '短信发送查询', icon: 'message', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/template',
+    component: Layout,
+    redirect: '/template/list',
+    name: 'Template',
+    meta: {
+      title: '模板管理',
+      icon: 'table',
+      noCache: true
+    },
+    children: [
+      {
+        path: 'rms-templates',
+        component: () => import('@/views/template/rms_template_list'),
+        name: 'RmsTemplateList',
+        meta: { title: '超级短信模板', icon: 'tree', noCache: true }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/template/create'),
+        name: 'CreateTemplate',
+        meta: { title: '添加模板', icon: 'edit', noCache: true }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/template/edit'),
+        name: 'EditTemplate',
+        meta: { title: '编辑模板', noCache: true },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/finance',
+    component: Layout,
+    redirect: '/finance/list',
+    name: 'Finance',
+    meta: {
+      title: '财务管理',
+      icon: 'money',
+      noCache: true
+    },
+    children: [
+      {
+        path: 'cash-deposit-logs',
+        component: () => import('@/views/finance/cashDepositLogs'),
+        name: 'CashDepositLogs',
+        meta: { title: '现金充值记录', icon: 'money', noCache: true }
+      }, {
+        path: 'sms-deposit-logs',
+        component: () => import('@/views/finance/depositLogs'),
+        name: 'DepositLogs',
+        meta: { title: '短信充值记录', icon: 'message', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/report',
+    component: Layout,
+    redirect: '/report/list',
+    name: 'Report',
+    meta: {
+      title: '报表管理',
+      icon: 'chart',
+      noCache: true
+    },
+    children: [
+      {
+        path: 'regList',
+        component: () => import('@/views/stat/regList'),
+        name: 'regList',
+        meta: { title: '注册日报', icon: 'user', noCache: true }
+      }, {
+        path: 'userDayStat',
+        component: () => import('@/views/stat/userDayStat'),
+        name: 'UserDayStat',
+        meta: { title: '用户日报', icon: 'user', noCache: true }
+      }
+      , {
+        path: 'userMonthStat',
+        component: () => import('@/views/stat/userMonthStat'),
+        name: 'UserMonthStat',
+        meta: { title: '用户月报', icon: 'user', noCache: true }
+      }, {
+        path: 'UserTotalStat',
+        component: () => import('@/views/stat/userTotalStat'),
+        name: 'userTotalStat',
+        meta: { title: '用户总报', icon: 'user', noCache: true }
+      }, {
+        path: 'platformDayStat',
+        component: () => import('@/views/stat/platformDayStat'),
+        name: 'PlatformDayStat',
+        meta: { title: '平台日报', icon: 'dashboard', noCache: true }
+      }, {
+        path: 'platformMonthStat',
+        component: () => import('@/views/stat/platformMonthStat'),
+        name: 'PlatformMonthStat',
+        meta: { title: '平台月报', icon: 'dashboard', noCache: true }
+      }, {
+        path: 'platformTotalStat',
+        component: () => import('@/views/stat/platformTotalStat'),
+        name: 'PlatformTotalStat',
+        meta: { title: '平台总报', icon: 'dashboard', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/links',
+    component: Layout,
+    redirect: '/links/list',
+    name: 'Links',
+    meta: {
+      title: '友链管理',
+      icon: 'link',
+      noCache: true
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/links/list'),
+        name: 'LinksList',
+        meta: { title: '友链列表', icon: 'list', noCache: true }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/links/create'),
+        name: 'CreateLinks',
+        meta: { title: '添加友链', icon: 'edit', noCache: true }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/links/edit'),
+        name: 'EditLinks',
+        meta: { title: '编辑友链', noCache: true },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/partner',
+    component: Layout,
+    redirect: '/partner/list',
+    name: 'Partner',
+    meta: {
+      title: '合作伙伴',
+      icon: 'peoples',
+      noCache: true
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/partner/list'),
+        name: 'PartnerList',
+        meta: { title: '合作伙伴列表', icon: 'list', noCache: true }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/partner/create'),
+        name: 'CreatePartner',
+        meta: { title: '添加合作伙伴', icon: 'edit', noCache: true }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/partner/edit'),
+        name: 'EditPartner',
+        meta: { title: '编辑合作伙伴', noCache: true },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/api',
+    component: Layout,
+    redirect: '/api/list',
+    name: 'Api',
+    meta: {
+      title: 'API帐号管理',
+      icon: 'star',
+      noCache: true
+    },
+    children: [
+      {
+        path: 'list-api-accounts',
+        component: () => import('@/views/api/accounts/list'),
+        name: 'AccountsList',
+        meta: { title: 'API账户列表', icon: 'list', noCache: true }
+      },
+      {
+        path: 'create-api-accounts',
+        component: () => import('@/views/api/accounts/create'),
+        name: 'CreateAccounts',
+        meta: { title: '添加API账户', icon: 'edit', noCache: true }
+      },
+      {
+        path: 'edit-api-accounts/:id(\\d+)',
+        component: () => import('@/views/api/accounts/edit'),
+        name: 'EditAccounts',
+        meta: { title: '编辑API账户', noCache: true },
+        hidden: true
       }
     ]
   },
@@ -148,83 +564,23 @@ export const constantRoutes = [
         hidden: false
       }
     ]
-  },
-  {
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
-  },
-  {
-    path: '/auth-redirect',
-    component: () => import('@/views/login/auth-redirect'),
-    hidden: true
-  },
-
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: 'Guide', icon: 'guide', noCache: true }
-      }
-    ]
-  },
-  {
-    path: '/404',
-    component: () => import('@/views/error-page/404'),
-    hidden: true
-  },
-  {
-    path: '/401',
-    component: () => import('@/views/error-page/401'),
-    hidden: true
-  },
-  {
-    path: '/profile',
-    component: Layout,
-    redirect: '/profile/index',
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
-      }
-    ]
   }
 ]
 
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
+export default new Router({
+  // mode: 'history', // require service support
+  scrollBehavior: () => ({ y: 0 }),
+  routes: constantRouterMap
+})
+
+export const asyncRouterMap = [
   {
     path: '/permission',
     component: Layout,
-    redirect: '/permission/page',
+    redirect: '/permission/index',
     alwaysShow: true, // will always show the root menu
-    name: 'Permission',
     meta: {
-      title: 'Permission',
+      title: 'permission',
       icon: 'lock',
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
@@ -234,7 +590,7 @@ export const asyncRoutes = [
         component: () => import('@/views/permission/page'),
         name: 'PagePermission',
         meta: {
-          title: 'Page Permission',
+          title: 'pagePermission',
           roles: ['admin'] // or you can only set roles in sub nav
         }
       },
@@ -243,249 +599,12 @@ export const asyncRoutes = [
         component: () => import('@/views/permission/directive'),
         name: 'DirectivePermission',
         meta: {
-          title: 'Directive Permission'
+          title: 'directivePermission'
           // if do not set roles, means: this page does not require permission
         }
-      },
-      {
-        path: 'role',
-        component: () => import('@/views/permission/role'),
-        name: 'RolePermission',
-        meta: {
-          title: 'Role Permission',
-          roles: ['admin']
-        }
       }
     ]
   },
 
-  {
-    path: '/icon',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/icons/index'),
-        name: 'Icons',
-        meta: { title: 'Icons', icon: 'icon', noCache: true }
-      }
-    ]
-  },
-
-  /** when your routing map is too long, you can split it into small modules **/
-  componentsRouter,
-  chartsRouter,
-  nestedRouter,
-  tableRouter,
-
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/list',
-    name: 'Example',
-    meta: {
-      title: 'Example',
-      icon: 'example'
-    },
-    children: [
-      {
-        path: 'create',
-        component: () => import('@/views/example/create'),
-        name: 'CreateArticle',
-        meta: { title: 'Create Article', icon: 'edit' }
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/example/edit'),
-        name: 'EditArticle',
-        meta: { title: 'Edit Article', noCache: true, activeMenu: '/example/list' },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/example/list'),
-        name: 'ArticleList',
-        meta: { title: 'Article List', icon: 'list' }
-      }
-    ]
-  },
-
-  {
-    path: '/tab',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/tab/index'),
-        name: 'Tab',
-        meta: { title: 'Tab', icon: 'tab' }
-      }
-    ]
-  },
-
-  {
-    path: '/error',
-    component: Layout,
-    redirect: 'noRedirect',
-    name: 'ErrorPages',
-    meta: {
-      title: 'Error Pages',
-      icon: '404'
-    },
-    children: [
-      {
-        path: '401',
-        component: () => import('@/views/error-page/401'),
-        name: 'Page401',
-        meta: { title: '401', noCache: true }
-      },
-      {
-        path: '404',
-        component: () => import('@/views/error-page/404'),
-        name: 'Page404',
-        meta: { title: '404', noCache: true }
-      }
-    ]
-  },
-
-  {
-    path: '/error-log',
-    component: Layout,
-    children: [
-      {
-        path: 'log',
-        component: () => import('@/views/error-log/index'),
-        name: 'ErrorLog',
-        meta: { title: 'Error Log', icon: 'bug' }
-      }
-    ]
-  },
-
-  {
-    path: '/excel',
-    component: Layout,
-    redirect: '/excel/export-excel',
-    name: 'Excel',
-    meta: {
-      title: 'Excel',
-      icon: 'excel'
-    },
-    children: [
-      {
-        path: 'export-excel',
-        component: () => import('@/views/excel/export-excel'),
-        name: 'ExportExcel',
-        meta: { title: 'Export Excel' }
-      },
-      {
-        path: 'export-selected-excel',
-        component: () => import('@/views/excel/select-excel'),
-        name: 'SelectExcel',
-        meta: { title: 'Export Selected' }
-      },
-      {
-        path: 'export-merge-header',
-        component: () => import('@/views/excel/merge-header'),
-        name: 'MergeHeader',
-        meta: { title: 'Merge Header' }
-      },
-      {
-        path: 'upload-excel',
-        component: () => import('@/views/excel/upload-excel'),
-        name: 'UploadExcel',
-        meta: { title: 'Upload Excel' }
-      }
-    ]
-  },
-
-  {
-    path: '/zip',
-    component: Layout,
-    redirect: '/zip/download',
-    alwaysShow: true,
-    name: 'Zip',
-    meta: { title: 'Zip', icon: 'zip' },
-    children: [
-      {
-        path: 'download',
-        component: () => import('@/views/zip/index'),
-        name: 'ExportZip',
-        meta: { title: 'Export Zip' }
-      }
-    ]
-  },
-
-  {
-    path: '/pdf',
-    component: Layout,
-    redirect: '/pdf/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/pdf/index'),
-        name: 'PDF',
-        meta: { title: 'PDF', icon: 'pdf' }
-      }
-    ]
-  },
-  {
-    path: '/pdf/download',
-    component: () => import('@/views/pdf/download'),
-    hidden: true
-  },
-
-  {
-    path: '/theme',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/theme/index'),
-        name: 'Theme',
-        meta: { title: 'Theme', icon: 'theme' }
-      }
-    ]
-  },
-
-  {
-    path: '/clipboard',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/clipboard/index'),
-        name: 'ClipboardDemo',
-        meta: { title: 'Clipboard', icon: 'clipboard' }
-      }
-    ]
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://github.com/PanJiaChen/vue-element-admin',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
-  // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
-
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
-
-const router = createRouter()
-
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
-}
-
-export default router

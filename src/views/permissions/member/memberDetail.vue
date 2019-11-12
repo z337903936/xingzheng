@@ -8,14 +8,14 @@
           <el-row>
             <el-col :span="8">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="名字:" prop="realName" required>
-                <el-input v-model="postForm.realName" :rows="1" autosize placeholder="选填，请输入名字" />
+                <el-input :rows="1" v-model="postForm.realName" autosize placeholder="选填，请输入名字"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="帐号:" prop="userName" required>
-                <el-input v-model="postForm.userName" :rows="1" autosize placeholder="必填，请输入帐号" />
+                <el-input :rows="1" v-model="postForm.userName" autosize placeholder="必填，请输入帐号"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -27,8 +27,7 @@
                     v-for="item in roles"
                     :key="item.id"
                     :label="item.groupName"
-                    :value="item.id"
-                  />
+                    :value="item.id"/>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -41,8 +40,7 @@
                     v-for="item in lockStatus"
                     :key="item.id"
                     :label="item.name"
-                    :value="item.id"
-                  />
+                    :value="item.id"/>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -50,14 +48,14 @@
           <el-row>
             <el-col :span="8">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="密码:">
-                <el-input v-model="postForm.password" :rows="1" type="password" autocomplete="off" placeholder="选填" />
+                <el-input :rows="1" v-model="postForm.password" type="password" autocomplete="off" placeholder="选填"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="确认密码:">
-                <el-input v-model="postForm.checkPass" :rows="1" type="password" autocomplete="off" placeholder="选填" />
+                <el-input :rows="1" v-model="postForm.checkPass" type="password" autocomplete="off" placeholder="选填"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -72,7 +70,7 @@
         </div>
       </div>
 
-      <div class="btn-container" />
+      <div class="btn-container"/>
     </el-form>
   </div>
 </template>
@@ -130,7 +128,7 @@ export default {
   },
   created() {
     fetchRoleList().then(data => {
-      if (data.code === 200) {
+      if (data.code == 200) {
         data.list.map((each) => {
           this.roles.push({
             id: each.id + '',
@@ -187,7 +185,7 @@ export default {
           if (this.isEdit) {
             updateAdminMember(data).then(data => {
               this.loading = false
-              if (data.code === 200) {
+              if (data.code == 200) {
                 this.$message({
                   message: '保存成功',
                   type: 'success',
@@ -209,7 +207,7 @@ export default {
           } else {
             createAdminMember(data).then(data => {
               this.loading = false
-              if (data.code === 200) {
+              if (data.code == 200) {
                 this.$message({
                   message: '保存成功',
                   type: 'success',

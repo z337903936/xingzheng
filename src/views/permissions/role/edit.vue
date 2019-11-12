@@ -1,5 +1,5 @@
 <template>
-  <role-detail :is-edit="true" />
+  <role-detail :is-edit="true"/>
 </template>
 
 <script>

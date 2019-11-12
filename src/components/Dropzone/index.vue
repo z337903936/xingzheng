@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" :ref="id" :action="url" class="dropzone">
+  <div :ref="id" :action="url" :id="id" class="dropzone">
     <input type="file" name="file">
   </div>
 </template>
@@ -237,7 +237,7 @@ export default {
 
     .dropzone .dz-preview:hover .dz-image img {
         transform: none;
-        filter: none;
+        -webkit-filter: none;
         width: 100%;
         height: 100%;
     }
