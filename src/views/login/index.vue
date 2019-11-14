@@ -10,8 +10,7 @@
       label-position="left">
 
       <div class="title-container">
-        <h3 class="title">{{ $t('login.title') }}</h3>
-        <lang-select class="set-language"/>
+        <h3 class="title">管理系统</h3>
       </div>
 
       <el-form-item prop="username">
@@ -44,27 +43,32 @@
         </span>
       </el-form-item>
 
-      <el-form-item prop="captcha" label="" id="captcha-container">
-          <span class="svg-container">
-          <svg-icon icon-class="password"/>
-        </span>
-        <el-input v-model="loginForm.captcha" placeholder="图形验证码" type="captcha"></el-input>
-        <a href="javascript:void(0)" title="点击刷新" @click="handleFreshCaptcha">
-          <img :src="captchaSrc" id="img-captcha"/>
-        </a>
-      </el-form-item>
+      <!--<el-form-item prop="captcha" label="" id="captcha-container">-->
+      <!--<span class="svg-container">-->
+      <!--<svg-icon icon-class="password"/>-->
+      <!--</span>-->
+      <!--<el-input v-model="loginForm.captcha" placeholder="图形验证码" type="captcha"></el-input>-->
+      <!--<a href="javascript:void(0)" title="点击刷新" @click="handleFreshCaptcha">-->
+      <!--<img :src="captchaSrc" id="img-captcha"/>-->
+      <!--</a>-->
+      <!--</el-form-item>-->
 
-      <el-form-item prop="vcode" label="" id="sms-container">
-          <span class="svg-container">
+      <el-form-item id="sms-container" prop="vcode" label="">
+        <span class="svg-container">
           <svg-icon icon-class="password"/>
         </span>
-        <el-input v-model="loginForm.vcode" :placeholder="$t('login.vcode')"
-                  @blur="handleBlur('vcode')"></el-input>
-        <el-button type="primary" class="btn-primary" id="btn-getsms" :disabled="sendSmsButtonDisable"
-                   @click="handleClickSendSms">{{sendSmsButtonTitle}}
+        <el-input
+          v-model="loginForm.vcode"
+          :placeholder="$t('login.vcode')"
+          @blur="handleBlur('vcode')"/>
+        <el-button
+          id="btn-getsms"
+          :disabled="sendSmsButtonDisable"
+          type="primary"
+          class="btn-primary"
+          @click="handleClickSendSms">{{ sendSmsButtonTitle }}
         </el-button>
       </el-form-item>
-
 
       <el-button
         :loading="loading"
@@ -77,150 +81,123 @@
 </template>
 
 <script>
-  // import { isvalidUsername } from '@/utils/validate'
-  import LangSelect from '@/components/LangSelect'
-  import { loginByUsername, requestSMS } from '@/api/login'
+// import { isvalidUsername } from '@/utils/validate'
+import { loginByUsername, requestSMS } from '@/api/login'
 
-  export default {
-    name: 'Login',
-    components: { LangSelect },
-    data() {
-      const validateUsername = (rule, value, callback) => {
-        if (value.length < 6) {
-          callback(new Error('Please enter the correct user name'))
+export default {
+  name: 'Login',
+  components: { },
+  data() {
+    const validateUsername = (rule, value, callback) => {
+      if (value.length < 6) {
+        callback(new Error('Please enter the correct user name'))
+      } else {
+        callback()
+      }
+    }
+    const validatePassword = (rule, value, callback) => {
+      if (value.length < 6) {
+        callback(new Error('The password can not be less than 6 digits'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      loginForm: {
+        username: '15659750709',
+        password: '123456',
+        vcode: '123456'
+        // captcha: ''
+      },
+      errMsg: '',
+      imgSrc: '/v1/user/captcha',
+      captchaSrc: this.imgSrc,
+      needCaptcha: true,
+      needVerifyCode: true,
+      sendSmsButtonDisable: false,
+      sendSmsButtonName: '发送验证码',
+      countDown: 0,
+      loginRules: {
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        vcode: [{ required: true }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+      },
+      passwordType: 'password',
+      loading: false,
+      showDialog: false,
+      redirect: undefined
+    }
+  },
+  computed: {
+    sendSmsButtonTitle() {
+      return this.countDown ? `${this.sendSmsButtonName}(${this.countDown})` : this.sendSmsButtonName
+    }
+  },
+  watch: {
+    $route: {
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
+      },
+      immediate: true
+    }
+  },
+  created() {
+    // window.addEventListener('hashchange', this.afterQRScan)
+  },
+  destroyed() {
+    // window.removeEventListener('hashchange', this.afterQRScan)
+  },
+  methods: {
+    showPwd() {
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
+      } else {
+        this.passwordType = 'password'
+      }
+    },
+
+    async sendSms() {
+      var requestData = { phoneNumber: this.loginForm.username, captcha: this.loginForm.captcha }
+      requestSMS(requestData).then(data => {
+        this.loading = false
+        if (data.code == 200) {
+          this.$message({
+            message: '短信已发送，请注意查收',
+            type: 'success',
+            showClose: true,
+            duration: 1000
+          })
         } else {
-          callback()
+          this.$message({
+            message: data.reason,
+            type: 'error',
+            showClose: true,
+            duration: 1000
+          })
         }
-      }
-      const validatePassword = (rule, value, callback) => {
-        if (value.length < 6) {
-          callback(new Error('The password can not be less than 6 digits'))
-        } else {
-          callback()
-        }
-      }
-      return {
-        loginForm: {
-          username: '',
-          password: '',
-          vcode: '',
-          captcha: ''
-        },
-        errMsg: '',
-        imgSrc: '/v1/user/captcha',
-        captchaSrc: this.imgSrc,
-        needCaptcha: true,
-        needVerifyCode: true,
-        sendSmsButtonDisable: false,
-        sendSmsButtonName: '发送验证码',
-        countDown: 0,
-        loginRules: {
-          username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-          vcode: [{ required: true }],
-          password: [{ required: true, trigger: 'blur', validator: validatePassword }]
-        },
-        passwordType: 'password',
-        loading: false,
-        showDialog: false,
-        redirect: undefined
-      }
+      }).catch(err => {
+        console.log(err)
+        this.loading = false
+      })
     },
-    watch: {
-      $route: {
-        handler: function(route) {
-          this.redirect = route.query && route.query.redirect
-        }
-        ,
-        immediate: true
-      }
+    handleFreshCaptcha() {
+      this.captchaSrc = `${this.imgSrc}/${this.loginForm.username}/?rnd=${Math.random()}`
     },
-    created() {
-      // window.addEventListener('hashchange', this.afterQRScan)
-    },
-    destroyed() {
-      // window.removeEventListener('hashchange', this.afterQRScan)
-    },
-    computed: {
-      sendSmsButtonTitle() {
-        return this.countDown ? `${this.sendSmsButtonName}(${this.countDown})` : this.sendSmsButtonName
-      }
-    },
-    methods: {
-      showPwd() {
-        if (this.passwordType === 'password') {
-          this.passwordType = ''
-        } else {
-          this.passwordType = 'password'
-        }
-      },
-
-      handleBlur(fieldName) {
-        this.$refs.loginForm.validateField(fieldName, errMsg => this.errMsg = errMsg)
-      },
-      async handleClickSendSms() {
-        this.sendSmsButtonDisable = true
-        if (!await this.sendSms()) {
-          this.sendSmsButtonDisable = false
-          return
-        }
-
-        this.coundDown = 60
-        var self = this
-        this.intervalID = setInterval(Countdown, 1000)
-
-        function Countdown() {
-          self.coundDown--
-          console.log(self.coundDown)
-          if (self.coundDown <= 0) {
-
-            self.sendSmsButtonDisable = false
-            clearInterval(self.intervalID)
-          }
-        }
-      },
-
-      async sendSms() {
-        var requestData = { phoneNumber: this.loginForm.username, captcha: this.loginForm.captcha }
-        requestSMS(requestData).then(data => {
-          this.loading = false
-          if (data.code == 200) {
-            this.$message({
-              message: '短信已发送，请注意查收',
-              type: 'success',
-              showClose: true,
-              duration: 1000
-            })
-          } else {
-            this.$message({
-              message: data.reason,
-              type: 'error',
-              showClose: true,
-              duration: 1000
-            })
-          }
-        }).catch(err => {
-          console.log(err)
-          this.loading = false
-        })
-      },
-      handleFreshCaptcha() {
-        this.captchaSrc = `${this.imgSrc}/${this.loginForm.username}/?rnd=${Math.random()}`
-      },
-      handleLogin() {
-        this.$refs.loginForm.validate(valid => {
-          if (valid) {
-            this.loading = true
-            this.$store.dispatch('LoginByUsername', this.loginForm)
-              .then(() => {
-                this.loading = false
-                this.$message({
-                  message: '登录成功，欢迎回来',
-                  type: 'success',
-                  showClose: true,
-                  duration: 1000
-                })
-                this.$router.push({ path: this.redirect || '/' })
-              }).catch((res) => {
+    handleLogin() {
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          this.$store.dispatch('LoginByUsername', this.loginForm)
+            .then(() => {
+              this.loading = false
+              this.$message({
+                message: '登录成功，欢迎回来',
+                type: 'success',
+                showClose: true,
+                duration: 1000
+              })
+              this.$router.push({ path: this.redirect || '/' })
+            }).catch((res) => {
               this.$message({
                 message: res.reason,
                 type: 'error',
@@ -229,37 +206,37 @@
               })
               this.loading = false
             })
-          } else {
-            this.$message({
-              message: '登录失败，请检查用户名/密码',
-              type: 'error',
-              showClose: true,
-              duration: 2000
-            })
-            return false
-          }
-        })
-      },
-      afterQRScan() {
-        // const hash = window.location.hash.slice(1)
-        // const hashObj = getQueryObject(hash)
-        // const originUrl = window.location.origin
-        // history.replaceState({}, '', originUrl)
-        // const codeMap = {
-        //   wechat: 'code',
-        //   tencent: 'code'
-        // }
-        // const codeName = hashObj[codeMap[this.auth_type]]
-        // if (!codeName) {
-        //   alert('第三方登录失败')
-        // } else {
-        //   this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
-        //     this.$router.push({ path: '/' })
-        //   })
-        // }
-      }
+        } else {
+          this.$message({
+            message: '登录失败，请检查用户名/密码',
+            type: 'error',
+            showClose: true,
+            duration: 2000
+          })
+          return false
+        }
+      })
+    },
+    afterQRScan() {
+      // const hash = window.location.hash.slice(1)
+      // const hashObj = getQueryObject(hash)
+      // const originUrl = window.location.origin
+      // history.replaceState({}, '', originUrl)
+      // const codeMap = {
+      //   wechat: 'code',
+      //   tencent: 'code'
+      // }
+      // const codeName = hashObj[codeMap[this.auth_type]]
+      // if (!codeName) {
+      //   alert('第三方登录失败')
+      // } else {
+      //   this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
+      //     this.$router.push({ path: '/' })
+      //   })
+      // }
     }
   }
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
