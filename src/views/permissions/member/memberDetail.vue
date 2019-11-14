@@ -21,19 +21,6 @@
           </el-row>
           <el-row>
             <el-col :span="6">
-              <el-form-item style="margin-bottom: 40px;" label-width="100px" label="角色:" prop="groupId" required>
-                <el-select v-model="postForm.groupId" placeholder="请选择">
-                  <el-option
-                    v-for="item in roles"
-                    :key="item.id"
-                    :label="item.groupName"
-                    :value="item.id"/>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="6">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="状态:" prop="status">
                 <el-select v-model="postForm.status" placeholder="请选择">
                   <el-option
@@ -76,12 +63,11 @@
 </template>
 
 <script>
-import { fetchAdminMember, updateAdminMember, createAdminMember, fetchRoleList } from '@/api/permissions'
+import { fetchAdminMember, updateAdminMember, createAdminMember } from '@/api/permissions'
 
 const defaultForm = {
   realName: '',
   userName: '',
-  groupId: '',
   status: '',
   password: '',
   checkPass: '',
@@ -98,17 +84,17 @@ export default {
     }
   },
   data() {
-    const validateRequire = (rule, value, callback) => {
-      if (value === '') {
-        this.$message({
-          message: '为必传项',
-          type: 'error'
-        })
-        callback(new Error('为必传项'))
-      } else {
-        callback()
-      }
-    }
+    // const validateRequire = (rule, value, callback) => {
+    //   if (value === '') {
+    //     this.$message({
+    //       message: '为必传项',
+    //       type: 'error'
+    //     })
+    //     callback(new Error('为必传项'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       postForm: Object.assign({}, defaultForm),
       loading: false,
@@ -116,7 +102,6 @@ export default {
       roles: [],
       lockStatus: [{ id: '1', name: '正常' }, { id: '2', name: '锁定' }],
       rules: {
-        groupName: [{ validator: validateRequire }]
       },
       tempRoute: {}
     }
@@ -127,19 +112,6 @@ export default {
     }
   },
   created() {
-    fetchRoleList().then(data => {
-      if (data.code == 200) {
-        data.list.map((each) => {
-          this.roles.push({
-            id: each.id + '',
-            groupName: each.groupName
-          })
-        })
-      }
-    }).catch(err => {
-      console.log(err)
-    })
-
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.postForm.id = id
@@ -185,7 +157,7 @@ export default {
           if (this.isEdit) {
             updateAdminMember(data).then(data => {
               this.loading = false
-              if (data.code == 200) {
+              if (data.code === 200) {
                 this.$message({
                   message: '保存成功',
                   type: 'success',
@@ -207,7 +179,7 @@ export default {
           } else {
             createAdminMember(data).then(data => {
               this.loading = false
-              if (data.code == 200) {
+              if (data.code === 200) {
                 this.$message({
                   message: '保存成功',
                   type: 'success',

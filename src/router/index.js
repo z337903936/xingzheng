@@ -121,7 +121,7 @@ export const constantRouterMap = [
   {
     path: '/permissions',
     component: Layout,
-      redirect: '/permissions/list',
+    redirect: '/permissions/list',
     name: 'Permissions',
     meta: {
       title: '权限管理',
@@ -202,6 +202,13 @@ export const constantRouterMap = [
         name: 'ChangePassword',
         meta: { title: '修改密码', icon: 'edit', noCache: true },
         hidden: false
+      },
+      {
+        path: 'bind-group-user/:id',
+        component: () => import('@/views/permissions/role/setGroupUser'),
+        name: 'BindGroupUser',
+        meta: { title: '设置岗位', noCache: true },
+        hidden: true
       }
     ]
   }

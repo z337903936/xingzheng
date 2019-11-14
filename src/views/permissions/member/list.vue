@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="action_container">
-      <div class="action_title"><h3>管理员列表</h3></div>
+      <div class="action_title"><h3>人员列表</h3></div>
       <div class="action_button">
-        <el-button :rows="1" type="primary" @click="toToAddMemberPage()">添加管理员
+        <el-button :rows="1" type="primary" @click="toToAddMemberPage()">添加岗位
         </el-button>
       </div>
     </div>
@@ -52,10 +52,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="240">
+      <el-table-column align="center" label="操作" width="360">
         <template slot-scope="scope">
           <router-link :to="'/permissions/edit-admin-member/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">编辑</el-button>
+          </router-link>
+          <router-link :to="'/permissions/bind-group-user/'+scope.row.id">
+            <el-button type="primary" size="small" icon="el-icon-menu">设置岗位</el-button>
           </router-link>
           <el-button size="small" icon="el-icon-delete" @click="deleteAdminMember(scope.row.id)">删除</el-button>
         </template>
@@ -97,10 +100,19 @@ export default {
     this.getList()
   },
   methods: {
-    getList() {
+    getList: function() {
       this.listLoading = true
       fetchAdminMemberList(this.listQuery).then(data => {
         this.list = data.list
+        this.list.map((each) => {
+          if (each.groupUserList) {
+            var groupName = ''
+            each.groupUserList.map((groupUser) => {
+              groupName = groupName + groupUser.groupName + ' '
+            })
+            each.groupName = groupName
+          }
+        })
         if (data.pages) this.total = data.pages
         this.listLoading = false
       })
@@ -118,7 +130,7 @@ export default {
         }
         delAdminMember(param).then(data => {
           this.loading = false
-          if (data.code == 200) {
+          if (data.code === 200) {
             this.$message({
               message: '已删除成功',
               type: 'success',

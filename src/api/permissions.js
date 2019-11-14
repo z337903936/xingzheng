@@ -165,3 +165,18 @@ export function changePassword(data) {
     data
   })
 }
+
+export function bindMemberToGroup(data) {
+  return request({
+    url: '/v1/cp/bind_member_to_group/',
+    method: 'post',
+    data
+  })
+}
+
+export function listUserGroups(memberId) {
+  return request({
+    url: '/v1/cp/user_groups/?memberId=' + memberId,
+    method: 'get'
+  })
+}
