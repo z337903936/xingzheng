@@ -116,95 +116,95 @@ export const constantRouterMap = [
       }
 
     ]
-  }
+  },
 
-  // {
-  //   path: '/permissions',
-  //   component: Layout,
-  //     redirect: '/permissions/list',
-  //   name: 'Permissions',
-  //   meta: {
-  //     title: '权限管理',
-  //     icon: 'drag',
-  //     noCache: true
-  //   },
-  //   children: [
-  //     {
-  //       path: 'list-admin-member',
-  //       component: () => import('@/views/permissions/member/list'),
-  //       name: 'MemberList',
-  //       meta: { title: '管理员列表', icon: 'list', noCache: true }
-  //     },
-  //     {
-  //       path: 'create-admin-member',
-  //       component: () => import('@/views/permissions/member/create'),
-  //       name: 'CreateMember',
-  //       meta: { title: '添加管理员', icon: 'edit', noCache: true },
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'edit-admin-member/:id(\\d+)',
-  //       component: () => import('@/views/permissions/member/edit'),
-  //       name: 'EditMember',
-  //       meta: { title: '编辑管理员', noCache: true },
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'list-role',
-  //       component: () => import('@/views/permissions/role/list'),
-  //       name: 'roleList',
-  //       meta: { title: '角色列表', icon: 'list', noCache: true }
-  //     },
-  //     {
-  //       path: 'create-role',
-  //       component: () => import('@/views/permissions/role/create'),
-  //       name: 'CreateRole',
-  //       meta: { title: '添加角色', icon: 'edit', noCache: true },
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'edit-role/:id(\\d+)',
-  //       component: () => import('@/views/permissions/role/edit'),
-  //       name: 'EditRole',
-  //       meta: { title: '编辑角色', noCache: true },
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'set-action/:id',
-  //       component: () => import('@/views/permissions/role/setGroupAction'),
-  //       name: 'SetGroupAction',
-  //       meta: { title: '设置角色权限', noCache: true },
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'list-action',
-  //       component: () => import('@/views/permissions/action/list'),
-  //       name: 'actionList',
-  //       meta: { title: '权限列表', icon: 'list', noCache: true }
-  //     },
-  //     {
-  //       path: 'create-action',
-  //       component: () => import('@/views/permissions/action/create'),
-  //       name: 'CreateAction',
-  //       meta: { title: '添加权限', icon: 'edit', noCache: true },
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'edit-action/:id',
-  //       component: () => import('@/views/permissions/action/edit'),
-  //       name: 'EditAction',
-  //       meta: { title: '编辑权限', noCache: true },
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'change-password/',
-  //       component: () => import('@/views/permissions/changePassword'),
-  //       name: 'ChangePassword',
-  //       meta: { title: '修改密码', icon: 'edit', noCache: true },
-  //       hidden: false
-  //     }
-  //   ]
-  // }
+  {
+    path: '/permissions',
+    component: Layout,
+      redirect: '/permissions/list',
+    name: 'Permissions',
+    meta: {
+      title: '权限管理',
+      icon: 'drag',
+      noCache: true
+    },
+    children: [
+      {
+        path: 'list-admin-member',
+        component: () => import('@/views/permissions/member/list'),
+        name: 'MemberList',
+        meta: { title: '管理员列表', icon: 'list', noCache: true }
+      },
+      {
+        path: 'create-admin-member',
+        component: () => import('@/views/permissions/member/create'),
+        name: 'CreateMember',
+        meta: { title: '添加管理员', icon: 'edit', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'edit-admin-member/:id(\\d+)',
+        component: () => import('@/views/permissions/member/edit'),
+        name: 'EditMember',
+        meta: { title: '编辑管理员', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'list-role',
+        component: () => import('@/views/permissions/role/list'),
+        name: 'roleList',
+        meta: { title: '角色列表', icon: 'list', noCache: true }
+      },
+      {
+        path: 'create-role',
+        component: () => import('@/views/permissions/role/create'),
+        name: 'CreateRole',
+        meta: { title: '添加角色', icon: 'edit', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'edit-role/:id(\\d+)',
+        component: () => import('@/views/permissions/role/edit'),
+        name: 'EditRole',
+        meta: { title: '编辑角色', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'set-action/:id',
+        component: () => import('@/views/permissions/role/setGroupAction'),
+        name: 'SetGroupAction',
+        meta: { title: '设置角色权限', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'list-action',
+        component: () => import('@/views/permissions/action/list'),
+        name: 'actionList',
+        meta: { title: '权限列表', icon: 'list', noCache: true }
+      },
+      {
+        path: 'create-action',
+        component: () => import('@/views/permissions/action/create'),
+        name: 'CreateAction',
+        meta: { title: '添加权限', icon: 'edit', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'edit-action/:id',
+        component: () => import('@/views/permissions/action/edit'),
+        name: 'EditAction',
+        meta: { title: '编辑权限', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'change-password/',
+        component: () => import('@/views/permissions/changePassword'),
+        name: 'ChangePassword',
+        meta: { title: '修改密码', icon: 'edit', noCache: true },
+        hidden: false
+      }
+    ]
+  }
 ]
 
 export default new Router({
