@@ -1,8 +1,16 @@
 <template>
   <div>
-    <el-steps :active="step" finish-status="success" simple style="margin-top: 20px">
-      <el-step title="生成案件" />
-      <el-step title="" />
+    <el-steps :active="2" align-center finish-status="success" >
+      <el-step style="color: rgb(64, 158, 255);" title="步骤1" description="这是一段很长很长很长的描述性文字"></el-step>
+      <el-step title="步骤2" description="这是一段很长很长很长的描述性文字"></el-step>
+      <el-step title="步骤3" description="这是一段很长很长很长的描述性文字"></el-step>
+      <el-step title="步骤4" description="这是一段很长很长很长的描述性文字"></el-step>
+      <el-step title="步骤4" description="这是一段很长很长很长的描述性文字"></el-step>
+      <el-step title="步骤4" description="这是一段很长很长很长的描述性文字"></el-step>
+      <el-step title="步骤4" description="这是一段很长很长很长的描述性文字"></el-step>
+      <el-step title="步骤4" description="这是一段很长很长很长的描述性文字"></el-step>
+      <el-step title="步骤4" description="这是一段很长很长很长的描述性文字"></el-step>
+      <el-step title="步骤4" description="这是一段很长很长很长的描述性文字"></el-step>
     </el-steps>
     <div class="part-1">
       <el-form

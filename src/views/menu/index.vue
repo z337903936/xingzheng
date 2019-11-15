@@ -31,7 +31,7 @@
       style="width: 30%"
     >
       <span slot-scope="{ node, data }" class="custom-tree-node">
-        <span>{{ data.title+'-'+data.id }}</span>
+        <span>{{ data.title}}</span>
         <span>
           <el-button
             type="text"
@@ -137,7 +137,16 @@
           <el-input v-model="temp.icon"/>
         </el-form-item>
         <el-form-item label="上级菜单" prop="parentId">
-          <el-input v-model="temp.parentId"/>
+            <template>
+                <el-select v-model="temp.parentId" placeholder="请选择">
+                    <el-option
+                            v-for="item in menuId"
+                            :key="item.id"
+                            :label="item.title"
+                            :value="item.id">
+                    </el-option>
+                </el-select>
+            </template>
         </el-form-item>
         <el-form-item label="排序值" prop="sort">
           <el-input v-model="temp.sort"/>
@@ -207,7 +216,7 @@ export default {
       statusOptions: ['published', 'draft', 'deleted'],
       temp: {
         id: '',
-        sort: '',
+        sort: '99',
         path: '',
         name: '',
         component: '',
@@ -215,7 +224,7 @@ export default {
         redirect: '',
         icon: ''
       },
-      parentId: [],
+      menuId: [],
       deleteMenuDialog: false,
       deleteData: {
         id: '',
@@ -245,7 +254,27 @@ export default {
       this.listLoading = true
       console.log(this.listQuery)
       fetchList({}).then(response => {
-        this.list = response.list
+        this.list = response.list;
+         var menu = response.list.map(data=>{
+            var menuData = [];
+            if (data.children){
+                menuData = data.children.map(item=>{
+                    return {
+                        id:item.id,
+                        title:item.title,
+                    };
+                })
+            }
+            menuData = menuData.concat([{
+                id:data.id,
+                title:data.title,
+            }]);
+
+            return menuData;
+        });
+         console.log(menu)
+          this.menuId = menu.flat(Infinity);
+
 
         // Just to simulate the time of the request
         setTimeout(() => {
@@ -280,14 +309,13 @@ export default {
     resetTemp() {
       this.temp = {
         id: '',
-        sort: '',
+        sort: '99',
         path: '',
         name: '',
         component: '',
         title: '',
         redirect: '',
         icon: '',
-        noCache: '',
         parentId: ''
       }
     },
@@ -304,6 +332,7 @@ export default {
         if (valid) {
           createMenu(this.temp).then((ref) => {
             if (ref.code === 200) {
+                this.dialogFormVisible = false
               this.getList()
             }
             this.$notify({
@@ -316,7 +345,17 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
+        this.temp = {
+            id: row.id,
+            sort: row.sort,
+            path: row.path,
+            name: row.name,
+            component: row.component,
+            title: row.meta.title,
+            redirect: row.meta.redirect,
+            icon: row.meta.icon,
+            parentId: row.parentId
+        }
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -328,7 +367,7 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           updateMenu(tempData).then((ref) => {
-            getList()
+            this.getList()
             this.dialogFormVisible = false
             this.$notify({
               title: 'Success',
