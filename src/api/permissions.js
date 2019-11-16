@@ -180,3 +180,11 @@ export function listUserGroups(memberId) {
     method: 'get'
   })
 }
+
+export function bindMemberToMenu(data) {
+  return request({
+    url: '/v1/cp/batch_update_menu_to_group/'+data.uid+'/',
+    method: 'post',
+    data
+  })
+}

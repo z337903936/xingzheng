@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="create_container">
-      <el-button v-loading="listLoading" :rows="1" type="primary" @click="toToAddRolePage()">添加角色
+      <el-button v-loading="listLoading" :rows="1" type="primary" @click="toToAddRolePage()">添加岗位
       </el-button>
     </div>
 
@@ -34,10 +34,13 @@
           <router-link :to="'/permissions/edit-role/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">编辑</el-button>
           </router-link>
-          <router-link :to="'/permissions/set-action/'+scope.row.id">
-            <el-button type="primary" size="small" icon="el-icon-menu">设置权限</el-button>
+          <router-link :to="'/permissions/bind-group-user/'+scope.row.id">
+            <el-button type="primary" size="small" icon="el-icon-menu">设置岗位</el-button>
           </router-link>
           <el-button size="small" icon="el-icon-delete" @click="deleteRole(scope.row.id)">删除</el-button>
+          <router-link :to="'/permissions/bind-group-menu/'+scope.row.id" >
+            <el-button type="primary" size="small" icon="el-icon-menu">批量修改岗位菜单</el-button>
+          </router-link>
         </template>
       </el-table-column>
     </el-table>

@@ -1,19 +1,6 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <!--<el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;" class="filter-item"-->
-      <!--@keyup.enter.native="handleFilter"/>-->
-      <!--<el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px"-->
-      <!--class="filter-item">-->
-      <!--<el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item"/>-->
-      <!--</el-select>-->
-
-      <!--<el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">-->
-      <!--<el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />-->
-      <!--</el-select>-->
-      <!--<el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">-->
-      <!--Search-->
-      <!--</el-button>-->
       <el-button
         class="filter-item"
         style="margin-left: 10px;"
@@ -29,6 +16,7 @@
       node-key="id"
       default-expand-all
       style="width: 30%"
+      v-loading="listLoading"
     >
       <span slot-scope="{ node, data }" class="custom-tree-node">
         <span>{{ data.title}}</span>
@@ -49,54 +37,6 @@
       </span>
     </el-tree>
 
-    <!--<el-table-->
-    <!--:key="tableKey"-->
-    <!--v-loading="listLoading"-->
-    <!--:data="list"-->
-    <!--border-->
-    <!--fit-->
-    <!--highlight-current-row-->
-    <!--style="width: 100%;"-->
-    <!--@sort-change="sortChange"-->
-
-    <!--&gt;-->
-    <!--<el-table-column label="ID" prop="sort" sortable="custom" align="center" width="80"-->
-    <!--:class-name="getSortClass('id')">-->
-    <!--<template slot-scope="{row}">-->
-    <!--<span>{{ row.id }}</span>-->
-    <!--</template>-->
-    <!--</el-table-column>-->
-    <!--<el-table-column label="标题" width="150px" align="center">-->
-    <!--<template slot-scope="{row}">-->
-    <!--<span>{{ row.title }}</span>-->
-    <!--</template>-->
-    <!--</el-table-column>-->
-    <!--<el-table-column label="是否缓存">-->
-    <!--<template slot-scope="{row}">-->
-    <!--<el-tag><i :class="row.noCache?'el-icon-check':'el-icon-close'"></i></el-tag>-->
-    <!--</template>-->
-    <!--</el-table-column>-->
-    <!--<el-table-column label="排序值" prop="sort" sortable="custom" align="center" width="80"-->
-    <!--:class-name="getSortClass('id')">-->
-    <!--<template slot-scope="{row}">-->
-    <!--<span>{{ row.sort }}</span>-->
-    <!--</template>-->
-    <!--</el-table-column>-->
-
-    <!--<el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">-->
-    <!--<template slot-scope="{row}">-->
-    <!--<el-button type="primary" size="mini" @click="handleUpdate(row)">-->
-    <!--修改-->
-    <!--</el-button>-->
-    <!--<el-button size="mini" type="danger" @click="handleModifyStatus(row,'del')">-->
-    <!--删除-->
-    <!--</el-button>-->
-    <!--</template>-->
-    <!--</el-table-column>-->
-    <!--</el-table>-->
-
-    <!--<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"-->
-    <!--@pagination="getList"/>-->
 
     <el-dialog
       :visible.sync="deleteMenuDialog"
@@ -137,16 +77,18 @@
           <el-input v-model="temp.icon"/>
         </el-form-item>
         <el-form-item label="上级菜单" prop="parentId">
-            <template>
-                <el-select v-model="temp.parentId" placeholder="请选择">
-                    <el-option
-                            v-for="item in menuId"
-                            :key="item.id"
-                            :label="item.title"
-                            :value="item.id">
-                    </el-option>
-                </el-select>
-            </template>
+
+          <el-select v-model="temp.parentId" placeholder="请选择">
+            <el-option
+                    v-for="item in menuId"
+                    :key="item.id"
+                    :label="item.title"
+                    :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否隐藏" prop="sort">
+          <el-checkbox v-model="temp.hidden"></el-checkbox>
         </el-form-item>
         <el-form-item label="排序值" prop="sort">
           <el-input v-model="temp.sort"/>
@@ -178,42 +120,20 @@
 
 <script>
 import { fetchList, fetchMenu, createMenu, updateMenu, delMenu } from '@/api/menu'
-import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+
 
 export default {
-  name: 'ComplexTable',
-  components: { Pagination },
-  directives: { waves },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
+  name: 'Menu',
+  components: { },
 
+  filters: {
   },
   data() {
     return {
       tableKey: 0,
       list: null,
-      total: 0,
       listLoading: true,
-      listQuery: {
-        page: 1,
-        limit: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: '+id'
-      },
-      importanceOptions: [1, 2, 3],
-      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-      statusOptions: ['published', 'draft', 'deleted'],
       temp: {
         id: '',
         sort: '99',
@@ -222,7 +142,8 @@ export default {
         component: '',
         title: '',
         redirect: '',
-        icon: ''
+        icon: '',
+        hidden: false
       },
       menuId: [],
       deleteMenuDialog: false,
@@ -236,8 +157,6 @@ export default {
         update: '修改',
         create: '新增'
       },
-
-      pvData: [],
       rules: {
         // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
@@ -252,7 +171,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      console.log(this.listQuery)
+
       fetchList({}).then(response => {
         this.list = response.list;
          var menu = response.list.map(data=>{
@@ -272,7 +191,6 @@ export default {
 
             return menuData;
         });
-         console.log(menu)
           this.menuId = menu.flat(Infinity);
 
 
@@ -293,19 +211,6 @@ export default {
         this.deleteMenuDialog = true
       }
     },
-    sortChange(data) {
-      const { prop, order } = data
-      if (prop === 'id') {
-        this.sortByID(order)
-      }
-    },
-    sortByID(order) {
-      if (order === 'ascending') {
-        this.listQuery.sort = '+id'
-      } else {
-        this.listQuery.sort = '-id'
-      }
-    },
     resetTemp() {
       this.temp = {
         id: '',
@@ -316,7 +221,8 @@ export default {
         title: '',
         redirect: '',
         icon: '',
-        parentId: ''
+        parentId: '',
+        hidden: false
       }
     },
     handleCreate() {
@@ -354,7 +260,8 @@ export default {
             title: row.meta.title,
             redirect: row.meta.redirect,
             icon: row.meta.icon,
-            parentId: row.parentId
+            parentId: row.parentId,
+            hidden: row.hidden
         }
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -381,7 +288,6 @@ export default {
     },
     handleDelete() {
       var row = this.deleteData
-      console.log(row)
       delMenu(row).then(() => {
         this.$notify({
           title: 'Success',
@@ -393,14 +299,7 @@ export default {
       })
     },
 
-    getSortClass: function(key) {
-      const sort = this.listQuery.sort
-      return sort === `+${key}`
-        ? 'ascending'
-        : sort === `-${key}`
-          ? 'descending'
-          : ''
-    }
+
   }
 }
 </script>

@@ -7,15 +7,15 @@
         <div class="postInfo-container">
           <el-row>
             <el-col :span="8">
-              <el-form-item style="margin-bottom: 40px;" label-width="100px" label="角色名字:" prop="groupName" required>
-                <el-input :rows="1" v-model="postForm.groupName" autosize placeholder="选填，请输入角色名字"/>
+              <el-form-item style="margin-bottom: 40px;" label-width="100px" label="岗位名称:" prop="groupName" required>
+                <el-input :rows="1" v-model="postForm.groupName" autosize placeholder="选填，请输入岗位名称"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item style="margin-bottom: 40px;" label-width="100px" label="角色备注:">
-                <el-input :rows="1" v-model="postForm.description" autosize placeholder="选填，角色备注"/>
+              <el-form-item style="margin-bottom: 40px;" label-width="100px" label="岗位备注:">
+                <el-input :rows="1" v-model="postForm.description" autosize placeholder="选填，岗位备注"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -103,7 +103,7 @@ export default {
       })
     },
     setTagsViewTitle() {
-      const title = this.lang === 'zh' ? '修改角色' : 'Edit Role'
+      const title = this.lang === 'zh' ? '修改岗位' : 'Edit Role'
       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.groupName}` })
       this.$store.dispatch('updateVisitedView', route)
     },

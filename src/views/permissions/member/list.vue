@@ -3,7 +3,7 @@
     <div class="action_container">
       <div class="action_title"><h3>人员列表</h3></div>
       <div class="action_button">
-        <el-button :rows="1" type="primary" @click="toToAddMemberPage()">添加岗位
+        <el-button :rows="1" type="primary" @click="toToAddMemberPage()">添加管理员
         </el-button>
       </div>
     </div>
@@ -34,12 +34,18 @@
           </router-link>
         </template>
       </el-table-column>
+      <el-table-column label="部门" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.orgName }}</span>
+        </template>
+      </el-table-column>
 
-      <el-table-column label="角色" align="center">
+      <el-table-column label="岗位" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.groupName }}</span>
         </template>
       </el-table-column>
+
       <el-table-column label="最后登录IP" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.lastLoginIP }}</span>

@@ -64,6 +64,7 @@ function changeAsyncRouter(asyncRouterMap) {
                 var sendChild = {
                     path: child.path,
                     name: child.name,
+                    hidden: child.hidden,
                     meta: { title: child.meta.title, icon: child.meta.icon }
                 }
 
@@ -72,7 +73,7 @@ function changeAsyncRouter(asyncRouterMap) {
                 } else {
                     sendChild.component =  () => import(`@/views${child.component}`) // 导入组件
                 }
-                console.log(sendChild);
+
                 return sendChild;
             })
 

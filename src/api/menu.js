@@ -38,3 +38,11 @@ export function delMenu(data) {
     data
   })
 }
+
+export function fetchListGroup(query) {
+  return request({
+    url: '/v1/cp/group_menu/',
+    method: 'get',
+    params: query
+  })
+}
