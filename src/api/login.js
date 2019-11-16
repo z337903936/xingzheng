@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
-export function loginByUsername(username, password,vcode) {
+export function loginByUsername(username, password, vcode) {
   const data = {
     'username': username,
     'password': password,
-    'vcode':vcode
+    'vcode': vcode
   }
   return request({
     url: '/v1/cp/login/',
@@ -25,6 +25,13 @@ export function getUserInfo(token) {
     url: '/v1/cp/admin_member/info/',
     method: 'get',
     params: { token }
+  })
+}
+export function getUserMenuInfo() {
+  return request({
+    url: '/v1/cp/member_menu/',
+    method: 'get',
+    params: {}
   })
 }
 

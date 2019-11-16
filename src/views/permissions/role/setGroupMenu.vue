@@ -1,14 +1,14 @@
 <template>
   <div class="app-container">
     <el-tree
-            :data="list"
-            show-checkbox
-            default-expand-all
-            node-key="id"
-            ref="tree"
-            highlight-current
-            :props="defaultProps">
-    </el-tree>
+      ref="tree"
+      :data="list"
+      :check-strictly="check"
+      :props="defaultProps"
+      show-checkbox
+      default-expand-all
+      node-key="id"
+      highlight-current/>
     <div class="save_container">
       <el-button v-loading="saveLoading" :rows="1" type="primary" @click="saveMemberGroup()">保存
       </el-button>
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { fetchList,fetchListGroup } from '@/api/menu'
+import { fetchList, fetchListGroup } from '@/api/menu'
 import { bindMemberToMenu } from '@/api/permissions'
 
 export default {
@@ -29,6 +29,7 @@ export default {
       list: [],
       listLoading: false,
       saveLoading: false,
+      check: true,
       memberId: 0,
       defaultProps: {
         children: 'children',
@@ -46,56 +47,51 @@ export default {
       this.memberId = this.$route.params && this.$route.params.id
       fetchList({}).then(response => {
         if (response.code === 200) {
-          this.list  = response.list.map(data=>{
-            var menuData = [];
+          this.list = response.list.map(data => {
+            var menuData = []
             menuData = {
-              id:data.id,
-              label:data.title,
-              children:[]
-            };
-            if (data.children){
-              var childrenTotal = 0;
-              data.children.map(item=>{
-                if (!item.hidden){
+              id: data.id,
+              label: data.title,
+              children: []
+            }
+            if (data.children) {
+              var childrenTotal = 0
+              data.children.map(item => {
+                if (!item.hidden) {
                   childrenTotal++
                   menuData.children.push({
-                    id:item.id,
-                    label:item.title,
+                    id: item.id,
+                    label: item.title
                   })
                 }
               })
             }
 
-            return menuData;
-          });
-          fetchListGroup({groupId:this.memberId}).then(checked=>{
-            if (checked.list){
-              var checkedList = [];
-               checked.list.map(each => {
-                 checkedList.push({
-                   id:each.menuId,
-                   label:each.title
-                 })
-                if (each.children){
-                  var childrenTotal = 0;
-                  each.children.map(item=>{
-                    if (!item.hidden){
+            return menuData
+          })
+          fetchListGroup({ groupId: this.memberId }).then(checked => {
+            if (checked.list) {
+              var checkedList = []
+              checked.list.map(each => {
+                checkedList.push({
+                  id: each.menuId,
+                  label: each.title
+                })
+                if (each.children) {
+                  var childrenTotal = 0
+                  each.children.map(item => {
+                    if (!item.hidden) {
                       checkedList.push({
-                        id:each.menuId,
-                        label:each.title
+                        id: each.menuId,
+                        label: each.title
                       })
                     }
                   })
                 }
-
-
               })
               this.$refs.tree.setCheckedNodes(checkedList)
             }
-
-
           })
-
         }
         this.listLoading = false
       })
