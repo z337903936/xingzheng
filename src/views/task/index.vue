@@ -3,21 +3,22 @@
     <div class="filter-container">
       <div class="mb10">
         <el-date-picker
-          v-model="timeRange"
-          type="datetimerange"
+          v-model="searchTime"
+          type="daterange"
           range-separator="至"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          value-format="yyyy-MM-dd"
         />
         <el-input v-model="listQuery.caseNo" placeholder="案件编号" style="width: 200px;margin-left: 5px" @keyup.enter.native="handleFilter" />
         <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
           搜索
         </el-button>
-        <router-link :to="'/permissions/edit-role/'">
-          <el-button style="margin-left: 10px;" type="primary" icon="el-icon-edit" >
-            添加
-          </el-button>
-        </router-link>
+        <!--<router-link :to="'/permissions/edit-role/'">-->
+          <!--<el-button style="margin-left: 10px;" type="primary" icon="el-icon-edit" >-->
+            <!--添加-->
+          <!--</el-button>-->
+        <!--</router-link>-->
       </div>
 
       <div>
@@ -44,39 +45,39 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="案件编号" prop="id" align="center" width="80">
+      <el-table-column label="案件编号" prop="id" align="center" >
         <template slot-scope="{row}">
           <span>{{ row.caseNo }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="任务编号" min-width="50px">
+      <el-table-column label="任务编号" >
         <template slot-scope="{row}">
           <span>{{ row.instanceNo }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="案件分类" min-width="150px">
+      <el-table-column label="案件分类" >
         <template slot-scope="{row}">
           <span>{{ row.caseCategoryId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="案发地点" width="110px" align="center">
+      <el-table-column label="案发地点" align="center">
         <template slot-scope="{row}">
           <span>{{ row.caseAddress }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="案发摘要" width="110px" align="center">
+      <el-table-column label="案发摘要"  align="center">
         <template slot-scope="{row}">
           <span>{{ row.caseDigest }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="损失情况" width="110px" align="center">
+      <el-table-column label="损失情况" align="center">
         <template slot-scope="{row}">
           <span>{{ row.lostDetails }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="状态" class-name="status-col" width="100">
+      <el-table-column label="状态" class-name="status-col">
         <template slot-scope="{row}">
           <el-tag :type="row.status | statusFilter">
             {{ row.status }}
@@ -144,7 +145,7 @@ export default {
         caseNo: undefined,
         status: undefined
       },
-      timeRange: '',
+      searchTime: '',
 
       dialogFormVisible: false,
       dialogStatus: '',
@@ -179,9 +180,13 @@ export default {
       })
     },
     handleFilter() {
+      this.listQuery.beginTime = this.searchTime[0];
+      this.listQuery.endTime = this.searchTime[1];
+      console.log(this.listQuery)
       this.listQuery.page = 1
       this.getList()
     },
+
     handleModifyStatus(row, status) {
       this.$message({
         message: '操作Success',

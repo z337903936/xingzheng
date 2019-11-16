@@ -1,19 +1,15 @@
 <template>
     <div class="app-container">
         <div class="filter-container">
-            <div class="mb10">
-                <el-date-picker
-                        v-model="searchTime"
-                        type="datetimerange"
-                        range-separator="至"
-                        start-placeholder="开始时间"
-                        end-placeholder="结束时间"
-                />
+            <div><el-date-picker
+                    v-model="searchTime"
+                    type="datetimerange"
+                    range-separator="至"
+                    start-placeholder="开始时间"
+                    end-placeholder="结束时间"
+            />
                 <el-input v-model="listQuery.leaderName" placeholder="带班领导" style="width: 200px;margin-left: 5px"
                           @keyup.enter.native="handleFilter"/>
-            </div>
-
-            <div>
                 <el-input v-model="listQuery.receiptName" placeholder="接警人" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
                 <el-input v-model="listQuery.reporterOrg" placeholder="报告单位" style="width: 200px;"
@@ -291,7 +287,7 @@
                     }, 1.5 * 1000)
                 })
             },
-            handleFilter() {
+            handleFilter () {
                 console.log(this.searchTime);
                 this.listQuery.page = 1
                 this.getList()

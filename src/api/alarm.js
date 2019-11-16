@@ -16,7 +16,7 @@ export function fetchArticle(id) {
   })
 }
 
-export function createArticle(data) {
+export function createAlarm(data) {
   return request({
     url: '/v1/cp/report/new/',
     method: 'post',

@@ -29,18 +29,19 @@
           <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作">
+      <el-table-column align="center" label="操作" width="700">
         <template slot-scope="scope">
           <router-link :to="'/permissions/edit-role/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">编辑</el-button>
           </router-link>
           <router-link :to="'/permissions/bind-group-user/'+scope.row.id">
-            <el-button type="primary" size="small" icon="el-icon-menu">设置岗位</el-button>
+            <el-button type="primary" size="small" icon="el-icon-menu">设置权限</el-button>
+          </router-link>
+          <router-link :to="'/permissions/bind-group-menu/'+scope.row.id" >
+            <el-button type="primary" size="small" icon="el-icon-menu">设置菜单</el-button>
           </router-link>
           <el-button size="small" icon="el-icon-delete" @click="deleteRole(scope.row.id)">删除</el-button>
-          <router-link :to="'/permissions/bind-group-menu/'+scope.row.id" >
-            <el-button type="primary" size="small" icon="el-icon-menu">批量修改岗位菜单</el-button>
-          </router-link>
+
         </template>
       </el-table-column>
     </el-table>

@@ -1,5 +1,5 @@
 import { loginByUsername, logout, getUserInfo } from '@/api/login'
-import { getToken, setToken, removeToken,getUID, setUID, removeUID } from '@/utils/auth'
+import { getToken, setToken, removeToken, getUID, setUID, removeUID } from '@/utils/auth'
 
 const user = {
   state: {
@@ -52,7 +52,7 @@ const user = {
     LoginByUsername({ commit }, userInfo) {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
-        loginByUsername(username, userInfo.password,userInfo.vcode).then(data => {
+        loginByUsername(username, userInfo.password, userInfo.vcode).then(data => {
           if (data.code !== 200) {
             reject(data)
           } else {

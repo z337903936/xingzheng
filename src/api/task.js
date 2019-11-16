@@ -16,7 +16,7 @@ export function fetchArticle(id) {
     })
 }
 
-export function createArticle(data) {
+export function createTask(data) {
     return request({
         url: '/v1/cp/crime_case/new/',
         method: 'post',
