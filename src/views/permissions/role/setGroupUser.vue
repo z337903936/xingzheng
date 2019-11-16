@@ -56,7 +56,7 @@ export default {
               var checkedList = []
               data.list.map(each => {
                 checkedList.push({
-                  id: each.id,
+                  id: each.groupId,
                   label: each.groupName
                 })
               })
