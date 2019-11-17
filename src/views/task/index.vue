@@ -100,8 +100,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
+    <!--<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />-->
+    <pagination v-show="pages>0" :page-count="pages" :total="pages" @pagination="getList"/>
     <el-dialog title="修改" :visible.sync="dialogFormUpdate" width="30%">
       <el-form
               ref="taskRef"
@@ -180,7 +180,7 @@ export default {
     return {
       tableKey: 0,
       list: null,
-      total: 0,
+      pages: 0,
       listLoading: true,
       listQuery: {
         page: 1,
@@ -220,7 +220,7 @@ export default {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.list
-        // this.total = response.data.total
+        this.pages = response.pages
 
         // Just to simulate the time of the request
         setTimeout(() => {

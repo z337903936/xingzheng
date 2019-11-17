@@ -3,10 +3,9 @@
     <el-pagination
       :background="background"
       :current-page.sync="currentPage"
-      :page-size.sync="pageSize"
       :layout="layout"
-      :total="total"
       v-bind="$attrs"
+      :page-count="pages"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"/>
   </div>
@@ -23,6 +22,10 @@ export default {
       type: Number
     },
     page: {
+      type: Number,
+      default: 1
+    },
+    pages: {
       type: Number,
       default: 1
     },

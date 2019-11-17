@@ -7,14 +7,30 @@
                     range-separator="至"
                     start-placeholder="开始时间"
                     end-placeholder="结束时间"
+                    value-format="timestamp"
             />
-                <el-input v-model="listQuery.leaderName" placeholder="带班领导" style="width: 200px;margin-left: 5px"
-                          @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.receiptName" placeholder="接警人" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
+                <el-select v-model="listQuery.leaderName" placeholder="带班领导" center>
+                    <el-option
+                            v-for="item in userList"
+                            :key="item.id"
+                            :label="item.title"
+                            :value="item.id"/>
+                </el-select>
+                <el-select v-model="listQuery.receiptName" placeholder="接警人" center>
+                    <el-option
+                            v-for="item in userList"
+                            :key="item.id"
+                            :label="item.title"
+                            :value="item.id"/>
+                </el-select>
+                <el-select v-model="listQuery.reporterName" placeholder="报告人" center>
+                    <el-option
+                            v-for="item in userList"
+                            :key="item.id"
+                            :label="item.title"
+                            :value="item.id"/>
+                </el-select>
                 <el-input v-model="listQuery.reporterOrg" placeholder="报告单位" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.reporterName" placeholder="报告人" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
                 <el-select v-model="listQuery.caseCategoryId" placeholder="案件类别" style="width: 140px">
                     <el-option v-for="item in calendarTypeOptions" :key="item.key"
@@ -93,20 +109,20 @@
                      style="width: 700px; margin-left:50px;">
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <el-form-item label="接警时间" prop="timestamp">
+                        <el-form-item label="接警时间" prop="receiptTime">
                             <el-date-picker v-model="temp.receiptTime" type="datetime"
                                             placeholder="Please pick a date"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="报告人" prop="title">
+                        <el-form-item label="报告人" prop="reporter">
                             <el-input v-model="temp.reporter"/>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <el-form-item label="报告单位" prop="type">
+                        <el-form-item label="报告单位" prop="reportOrg">
                             <el-select v-model="temp.reportOrg" class="filter-item" placeholder="Please select">
                                 <el-option v-for="item in calendarTypeOptions" :key="item.key"
                                            :label="item.display_name" :value="item.key"/>
@@ -114,7 +130,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="联系电话" prop="title">
+                        <el-form-item label="联系电话" prop="contactPhoneNumber">
                             <el-input v-model="temp.contactPhoneNumber"/>
                         </el-form-item>
                     </el-col>
@@ -125,45 +141,63 @@
                                    :value="item.key"/>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="案发地点" prop="title">
-                    <el-input v-model="temp.title"/>
-                </el-form-item>
-                <el-form-item label="损失情况" prop="title">
-                    <el-input v-model="temp.lostDetails"/>
-                </el-form-item>
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <el-form-item label="技术值班队长" prop="timestamp">
-                            <el-input v-model="temp.monitorUid"/>
+                        <el-form-item label="技术值班队长" prop="monitorUid">
+                            <el-select v-model="temp.monitorUid" placeholder="技术值班队长" center>
+                                <el-option
+                                        v-for="item in userList"
+                                        :key="item.id"
+                                        :label="item.title"
+                                        :value="item.id"/>
+                            </el-select>
                             <!--<el-checkbox v-model="checked">短信通知</el-checkbox>-->
                         </el-form-item>
 
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="值班技术员" prop="title">
-                            <el-input v-model="temp.techUid"/>
+                        <el-form-item label="值班技术员" prop="techUid">
+                            <el-select v-model="temp.techUid" placeholder="值班技术员" center>
+                                <el-option
+                                        v-for="item in userList"
+                                        :key="item.id"
+                                        :label="item.title"
+                                        :value="item.id"/>
+                            </el-select>
                             <!--<el-checkbox v-model="checked">短信通知</el-checkbox>-->
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <el-form-item label="大队值班领导" prop="timestamp">
-                            <el-input v-model="temp.leaderUid"/>
+                        <el-form-item label="大队值班领导" prop="leaderUid">
+                            <el-select v-model="temp.leaderUid" placeholder="大队值班领导" center>
+                                <el-option
+                                        v-for="item in userList"
+                                        :key="item.id"
+                                        :label="item.title"
+                                        :value="item.id"/>
+                            </el-select>
                             <!--<el-checkbox v-model="checked">短信通知</el-checkbox>-->
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="接警人" prop="title">
-                            <el-input v-model="temp.receiptUid"/>
+                        <el-form-item label="接警人" prop="receiptUid">
+                            <el-select v-model="temp.receiptUid" placeholder="接警人" center>
+                                <el-option
+                                        v-for="item in userList"
+                                        :key="item.id"
+                                        :label="item.title"
+                                        :value="item.id"/>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-form-item label="驾驶员" prop="title">
+                <el-form-item label="驾驶员" prop="driverName">
                     <el-input v-model="temp.driverName"/>
                 </el-form-item>
                 <el-form-item label="短信内容">
-                    <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea"
+                    <el-input v-model="temp.smsContent" :autosize="{ minRows: 2, maxRows: 4}" type="textarea"
                               placeholder="Please input"/>
                 </el-form-item>
             </el-form>
@@ -191,6 +225,7 @@
     import waves from '@/directive/waves' // waves directive
     import {parseTime} from '@/utils'
     import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+    import { fetchAdminMemberList} from '@/api/permissions'
 
     const calendarTypeOptions = [
         {key: 'CN', display_name: 'China'},
@@ -253,7 +288,8 @@
                     monitorUid: '',
                     techUid: '',
                     leaderUid: '',
-                    receiptTime: new Date(),
+                    receiptTime: '',
+                    smsContent: '',
                 },
                 dialogFormVisible: false,
                 dialogStatus: '',
@@ -268,13 +304,25 @@
                     timestamp: [{type: 'date', required: true, message: 'timestamp is required', trigger: 'change'}],
                     title: [{required: true, message: 'title is required', trigger: 'blur'}]
                 },
-                downloadLoading: false
+                downloadLoading: false,
+                userList: [],
             }
         },
         created() {
             this.getList()
+            this.getUserList()
         },
         methods: {
+            getUserList(){
+                fetchAdminMemberList({}).then(response => {
+                    this.userList = response.list.map(data => {
+                        return {
+                            id: data.id,
+                            title: data.realName
+                        }
+                    })
+                })
+            },
             getList() {
                 this.listLoading = true;
                 fetchList(this.listQuery).then(response => {
@@ -288,8 +336,10 @@
                 })
             },
             handleFilter () {
-                console.log(this.searchTime);
-                this.listQuery.page = 1
+                this.listQuery.beginTime = this.searchTime[0];
+                this.listQuery.endTime = this.searchTime[1];
+                this.listQuery.page = 1;
+                console.log(this.listQuery);
                 this.getList()
             },
             handleModifyStatus(row, status) {
