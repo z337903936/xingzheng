@@ -8,6 +8,16 @@ export function fetchList(data) {
     })
 }
 
+
+export function fetchArticle(id) {
+    return request({
+        url: '/v1/cp/evidence/' + id + '/',
+        method: 'get',
+        params: {}
+    })
+}
+
+
 export function createArticle(data) {
     return request({
         url: '/v1/cp/evidence/new/',
@@ -16,16 +26,16 @@ export function createArticle(data) {
     })
 }
 
-// export function updateArticle(data) {
-//     return request({
-//         url: '/v1/cp/articles/' + data.id + '/',
-//         method: 'post',
-//         data
-//     })
-// }
+export function updateArticle(data) {
+    return request({
+        url: '/v1/cp/evidence/' + data.id + '/',
+        method: 'post',
+        data
+    })
+}
 // export function delArticle(data) {
 //     return request({
-//         url: '/v1/cp/article/',
+//         url: '/v1/cp/evidence/',
 //         method: 'post',
 //         data
 //     })

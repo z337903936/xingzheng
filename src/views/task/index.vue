@@ -45,7 +45,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="案件编号" prop="id" align="center" >
+      <el-table-column label="案件编号" prop="caseNo" align="center" >
         <template slot-scope="{row}">
           <span>{{ row.caseNo }}</span>
         </template>
@@ -73,7 +73,7 @@
       </el-table-column>
       <el-table-column label="损失情况" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.lostDetails }}</span>
+          <span>{{ row.lostDetail }}</span>
         </template>
       </el-table-column>
 
@@ -94,13 +94,50 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button size="mini" type="success">
-            查看
-          </el-button>
+          <!--<el-button size="mini" type="success">-->
+            <!--查看-->
+          <!--</el-button>-->
         </template>
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+
+    <el-dialog title="修改" :visible.sync="dialogFormUpdate" width="30%">
+      <el-form
+              ref="taskRef"
+              :model="task"
+              :rules="taskRules"
+              label-position="center"
+              label-width="100px"
+              style="width: 400px;">
+        <el-form-item label="案件编号" prop="caseNo">
+          <el-input v-model="task.caseNo"/>
+        </el-form-item>
+        <el-form-item label="任务编号" prop="instanceNo">
+          <el-input v-model="task.instanceNo"/>
+        </el-form-item>
+        <el-form-item label="案件分类" prop="caseCategoryId">
+          <el-input v-model="task.caseCategoryId"/>
+        </el-form-item>
+        <el-form-item label="案发地点" prop="caseAddress">
+          <el-input v-model="task.caseAddress"/>
+        </el-form-item>
+        <el-form-item label="案发摘要" prop="caseDigest">
+          <el-input v-model="task.caseDigest"/>
+        </el-form-item>
+        <el-form-item label="损失情况" prop="lostDetail">
+          <el-input v-model="task.lostDetail"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormAdd = false">
+          取 消
+        </el-button>
+        <el-button type="primary" @click="updateData()">
+          确 定
+        </el-button>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
@@ -133,6 +170,13 @@ export default {
 
   },
   data() {
+    const max20 = (rule, value, callback) => {
+      if (value.length > 20) {
+        callback(new Error('输入的内容过长'))
+      } else {
+        callback()
+      }
+    }
     return {
       tableKey: 0,
       list: null,
@@ -155,12 +199,17 @@ export default {
       },
       dialogPvVisible: false,
       pvData: [],
-      rules: {
-        type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
+      task: {
       },
-      downloadLoading: false
+      taskRules: {
+        taskNo: [{ required: true, trigger: 'blur', validator: max20 }],
+        caseNo: [{ required: true, trigger: 'blur', validator: max20 }],
+        caseCategoryId: [{ required: true, trigger: 'blur' }],
+        caseAddress: [{ required: true, trigger: 'blur' }],
+        caseDigest: [{ required: true, trigger: 'blur' }],
+        lostDetail: [{ required: true, trigger: 'blur' }]
+      },
+      dialogFormUpdate: false,
     }
   },
   created() {
@@ -186,14 +235,34 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
-
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
+    handleUpdate(row) {
+      this.task = Object.assign({}, row) // copy obj
+      this.dialogFormUpdate = true
+      this.$nextTick(() => {
+        this.$refs['taskRef'].clearValidate()
       })
-      row.status = status
-    }
+    },
+    updateData() {
+      this.$refs['taskRef'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.task)
+          updateArticle(tempData).then(response => {
+            if (response.code === 200) {
+              this.dialogFormUpdate = false
+              this.$notify({
+                title: 'Success',
+                message: '修改成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.getList()
+            }
+          })
+        }
+      })
+    },
+
+
 
   }
 }

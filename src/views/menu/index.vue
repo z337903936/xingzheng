@@ -171,7 +171,6 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-
       fetchList({}).then(response => {
         this.list = response.list;
          var menu = response.list.map(data=>{
@@ -207,7 +206,6 @@ export default {
           id: row.id,
           operation: status
         }
-        console.log(this.deleteData)
         this.deleteMenuDialog = true
       }
     },
@@ -241,6 +239,7 @@ export default {
                 this.dialogFormVisible = false
               this.getList()
             }
+            this.$store.dispatch('GenerateRoutes')
             this.$notify({
               message: ref.reason,
               type: 'success',
@@ -282,6 +281,7 @@ export default {
               type: 'success',
               duration: 2000
             })
+            this.$store.dispatch('GenerateRoutes')
           })
         }
       })
@@ -295,6 +295,7 @@ export default {
           type: 'success',
           duration: 2000
         })
+        this.$store.dispatch('GenerateRoutes')
         this.getList()
       })
     },

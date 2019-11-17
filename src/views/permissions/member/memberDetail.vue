@@ -20,6 +20,13 @@
             </el-col>
           </el-row>
           <el-row>
+            <el-col :span="8">
+              <el-form-item style="margin-bottom: 40px;" label-width="100px" label="手机号:" prop="userName" required>
+                <el-input :rows="1" v-model="postForm.phoneNumber" autosize placeholder="请输入手机号"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="6">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="状态:" prop="status">
                 <el-select v-model="postForm.status" placeholder="请选择">
@@ -66,6 +73,7 @@
 import { fetchAdminMember, updateAdminMember, createAdminMember } from '@/api/permissions'
 
 const defaultForm = {
+  phoneNumber: '',
   realName: '',
   userName: '',
   status: '',

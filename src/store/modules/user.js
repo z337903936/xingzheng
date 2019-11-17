@@ -8,6 +8,7 @@ const user = {
     code: '',
     token: getToken(),
     uid: getUID(),
+    id: '',
     name: '',
     avatar: '',
     introduction: '',
@@ -20,6 +21,9 @@ const user = {
   mutations: {
     SET_CODE: (state, code) => {
       state.code = code
+    },
+    SET_ID: (state, id) => {
+      state.id = id
     },
     SET_TOKEN: (state, token) => {
       state.token = token
@@ -58,6 +62,7 @@ const user = {
           } else {
             commit('SET_TOKEN', data.token)
             commit('SET_UID', data.uid)
+            commit('SET_ID', data.id)
             setToken(data.token)
             setUID(data.uid)
             resolve()

@@ -33,7 +33,7 @@ export function updateArticle(data) {
 }
 export function nextTask(data) {
     return request({
-        url: '/v1/cp/case_tep/new/',
+        url: '/v1/cp/case_step/new/',
         method: 'post',
         data
     })

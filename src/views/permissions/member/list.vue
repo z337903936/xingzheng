@@ -39,6 +39,11 @@
           <span>{{ scope.row.orgName }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="手机号" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.phoneNumber }}</span>
+        </template>
+      </el-table-column>
 
       <el-table-column label="岗位" align="center">
         <template slot-scope="scope">
