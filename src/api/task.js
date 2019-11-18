@@ -8,7 +8,7 @@ export function fetchList(query) {
     })
 }
 
-export function fetchArticle(id) {
+export function fetchTask(id) {
     return request({
         url: '/v1/cp/crime_case/' + id + '/',
         method: 'get',
@@ -24,7 +24,7 @@ export function createTask(data) {
     })
 }
 
-export function updateArticle(data) {
+export function updateTask(data) {
     return request({
         url: '/v1/cp/crime_case/' + data.id + '/',
         method: 'post',

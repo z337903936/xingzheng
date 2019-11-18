@@ -8,7 +8,7 @@ export function fetchList(data) {
   })
 }
 
-export function fetchArticle(id) {
+export function fetchAlarm(id) {
   return request({
     url: '/v1/cp/report_list/' + id + '/',
     method: 'get',
@@ -24,7 +24,7 @@ export function createAlarm(data) {
   })
 }
 
-export function updateArticle(data) {
+export function updateAlarm(data) {
   return request({
     url: '/v1/cp/report/' + data.id + '/',
     method: 'post',

@@ -14,8 +14,8 @@
         <el-form-item label="任务编号" prop="instanceNo">
           <el-input v-model="task.instanceNo"/>
         </el-form-item>
-        <el-form-item label="案件分类" prop="caseCategoryId">
-          <el-input v-model="task.caseCategoryId"/>
+        <el-form-item label="案件分类" prop="caseCategory">
+          <el-input v-model="task.caseCategory"/>
         </el-form-item>
         <el-form-item label="案发地点" prop="caseAddress">
           <el-input v-model="task.caseAddress"/>
@@ -27,40 +27,34 @@
           <el-input v-model="task.lostDetail"/>
         </el-form-item>
       </el-form>
-      <div class="action">
-        <el-button type="primary" style="float: right" @click="dialogGroup = true">下一个步骤</el-button>
+      <div class="action" v-if="showNext && lastStep">
+        <el-button type="primary" style="float: right" @click="addTask(lastStep&& !is_detail)">下一个步骤</el-button>
       </div>
+
+      <div class="action" v-if="showNext&&!lastStep">
+        <el-button type="primary" style="float: right" @click="addTask(lastStep)">保存</el-button>
+      </div>
+
     </div>
-
-
-    <el-dialog
-      :visible.sync="dialogGroup"
-      title="岗位选择"
-      width="25%"
-      center>
-      <span>下一步转到：</span>
-      <el-select v-model="next" placeholder="请选择岗位">
-        <el-option
-          v-for="item in groupList"
-          :key="item.id"
-          :label="item.title"
-          :value="item.id"/>
-      </el-select>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogGroup = false">取 消</el-button>
-        <el-button type="primary" @click="addTask()">确 定</el-button>
-      </span>
-    </el-dialog>
-
   </div>
 </template>
 
 <script>
-import { groupList, createTask, nextTask } from '@/api/task'
+  import { fetchList,fetchTask,createTask,updateTask,nextTask,groupList } from '@/api/task'
 
 
 export default {
   name: 'AddCase',
+  props: {
+    is_detail: {
+      type: Boolean,
+      default: false
+    },
+    detailData: {
+      type: Object,
+      default: {}
+    }
+  },
   data() {
     const max20 = (rule, value, callback) => {
       if (value.length > 20) {
@@ -74,9 +68,10 @@ export default {
       showStep: '添加案件',
       nextStep: '',
       task: {
+        id:'',
         caseNo: 'A350181',
         instanceNo: '',
-        caseCategoryId: '',
+        caseCategory: '',
         caseAddress: '',
         caseDigest: '',
         lostDetail: ''
@@ -100,54 +95,58 @@ export default {
       ],
       next: null,
       taskId: null,
-
+      showNext:true,
+      lastStep:true,
 
     }
   },
   created() {
+    if (this.is_detail) {
+      if (this.detailData.currentUserId !== this.detailData.stepHanlderUid){
+        this.showNext=false;
+      }
+      this.lastStep = this.detailData.isLast;
+      this.task = Object.assign({}, this.detailData)// copy obj
+    }
   },
 
   methods: {
-    addTask(){
-
+    addTask(judge){
       this.$refs.task.validate(valid => {
         if (valid) {
-          if (!this.next) {
-            this.$message({
-              message: '请选择下一步岗位',
-              type: 'warning'
-            })
-          } else {
-            const sendData = {
-              caseId: '',
-              groupId: this.next
-            }
+          if (judge) {
             createTask(this.task).then(response => {
               if (response.code === 200) {
-                this.$parent.setNextStep(sendData.groupId,response.id);
-                sendData.caseId = response.id;
-                nextTask(sendData).then(taskData => {
-                  if (taskData.code === 200) {
-                    this.$message({
-                      message: '操作成功',
-                      type: 'success',
-                      showClose: true,
-                      duration: 2000
-                    })
-                    this.dialogGroup = false
-                  }else{
-                    this.$message({
-                      message: taskData.reason,
-                      type: 'success',
-                      showClose: true,
-                      duration: 2000
-                    })
-                  }
-                })
-              }else{
-
+                this.$parent.setNextStep(response.id);
                 this.$message({
-                  message: taskData.reason,
+                  message: '操作成功',
+                  type: 'success',
+                  showClose: true,
+                  duration: 2000
+                })
+                this.dialogGroup = false
+              }else{
+                this.$message({
+                  message: response.reason,
+                  type: 'success',
+                  showClose: true,
+                  duration: 2000
+                })
+              }
+            })
+          }else{
+            updateTask(this.task).then(response => {
+              if (response.code === 200) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  showClose: true,
+                  duration: 2000
+                })
+                this.dialogGroup = false
+              }else{
+                this.$message({
+                  message: response.reason,
                   type: 'success',
                   showClose: true,
                   duration: 2000
@@ -155,6 +154,7 @@ export default {
               }
             })
           }
+
         }else{
           this.$message({
             message: '操作失败，请检查数据',

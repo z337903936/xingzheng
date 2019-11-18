@@ -754,7 +754,7 @@
 </template>
 
 <script>
-    import {  createTask } from '@/api/task'
+    import { fetchList,fetchTask,createTask,updateTask,nextTask,groupList } from '@/api/task'
     import {  createSearch}  from '@/api/search'
     import { fetchAdminMemberList} from '@/api/permissions'
     export default {

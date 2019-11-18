@@ -9,6 +9,7 @@ const user = {
     token: getToken(),
     uid: getUID(),
     id: '',
+    groupName: '',
     name: '',
     avatar: '',
     introduction: '',
@@ -24,6 +25,9 @@ const user = {
     },
     SET_ID: (state, id) => {
       state.id = id
+    },
+    SET_GROUPNAME: (state, groupName) => {
+      state.groupName = groupName
     },
     SET_TOKEN: (state, token) => {
       state.token = token
@@ -62,7 +66,7 @@ const user = {
           } else {
             commit('SET_TOKEN', data.token)
             commit('SET_UID', data.uid)
-            commit('SET_ID', data.id)
+
             setToken(data.token)
             setUID(data.uid)
             resolve()
@@ -82,7 +86,9 @@ const user = {
           } else {
             reject('getInfo: roles must be a non-null array !')
           }
+          commit('SET_GROUPNAME', data.groupName)
           commit('SET_NAME', data.name)
+          commit('SET_ID', data.id)
           if (!data.avatar) data.avatar = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
           commit('SET_AVATAR', data.avatar)
           commit('SET_INTRODUCTION', data.introduction)

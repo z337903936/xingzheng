@@ -521,8 +521,12 @@
 
                     </el-form-item>
 
-                    <div class="action">
-                        <el-button type="primary" style="float: right" @click="dialogAlarmGroup = true">下一个步骤</el-button>
+                    <div class="action" v-if="showNext&&lastStep">
+                        <el-button type="primary" style="float: right" @click="addSearch(lastStep&& !is_detail)">下一个步骤</el-button>
+                    </div>
+
+                    <div class="action" v-if="showNext&&!lastStep">
+                        <el-button type="primary" style="float: right" @click="addSearch(lastStep)">保存</el-button>
                     </div>
                 </div>
             </el-form>
@@ -578,12 +582,25 @@
                         <el-input v-model="concernedPersonListForm.name"/>
                     </el-form-item>
                     <el-form-item label="证件类型" prop="idType">
-                        <el-input v-model="concernedPersonListForm.idType"/>
+                        <el-select v-model="concernedPersonListForm.idType" placeholder="请选择" center>
+                            <el-option
+                                    v-for="item in idType"
+                                    :key="item.id"
+                                    :label="item.title"
+                                    :value="item.id"/>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="证件号" prop="idNo">
                         <el-input v-model="concernedPersonListForm.idNo"/>
                     </el-form-item>
                     <el-form-item label="性别" prop="sex">
+                        <el-select v-model="concernedPersonListForm.sex" placeholder="请选择" center>
+                            <el-option
+                                    v-for="item in sex"
+                                    :key="item.id"
+                                    :label="item.title"
+                                    :value="item.id"/>
+                        </el-select>
                         <el-input v-model="concernedPersonListForm.sex"/>
                     </el-form-item>
                     <el-form-item label="联系电话" prop="contactNumber">
@@ -628,7 +645,14 @@
                         <el-input v-model="materialListForm.materialCategory"/>
                     </el-form-item>
                     <el-form-item label="物证类型" prop="materialType">
-                        <el-input v-model="materialListForm.materialType"/>
+                        <el-select v-model="materialListForm.materialType" placeholder="请选择" center>
+                            <el-option
+                                    v-for="item in materialType"
+                                    :key="item.id"
+                                    :label="item.title"
+                                    :value="item.id"/>
+                        </el-select>
+
                     </el-form-item>
                     <el-form-item label="提取日期" prop="extractTime">
                         <el-input v-model="materialListForm.extractTime"/>
@@ -672,6 +696,13 @@
                         <el-input v-model="documentListForm.documentNo"/>
                     </el-form-item>
                     <el-form-item label="文书类型" prop="documentType">
+                        <el-select v-model="concernedPersonListForm.idType" placeholder="请选择" center>
+                            <el-option
+                                    v-for="item in idType"
+                                    :key="item.id"
+                                    :label="item.title"
+                                    :value="item.id"/>
+                        </el-select>
                         <el-input v-model="documentListForm.documentType"/>
                     </el-form-item>
                     <el-form-item label="关联物证名称" prop="materialName">
@@ -709,31 +740,14 @@
                 </div>
             </el-dialog>
 
-            <el-dialog
-                    :visible.sync="dialogAlarmGroup"
-                    title="岗位选择"
-                    width="25%"
-                    center>
-                <span>下一步转到：</span>
-                <el-select v-model="next" placeholder="请选择岗位" center>
-                    <el-option
-                            v-for="item in groupList"
-                            :key="item.id"
-                            :label="item.title"
-                            :value="item.id"/>
-                </el-select>
-                <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogAlarmGroup = false">取 消</el-button>
-        <el-button type="primary" @click="addSearch()">确 定</el-button>
-      </span>
-            </el-dialog>
+
         </div>
 
 </template>
 
 <script>
-    import { groupList, nextTask } from '@/api/task'
-    import {  createSearch}  from '@/api/search'
+    import { fetchList,fetchTask,createTask,updateTask,nextTask,groupList } from '@/api/task'
+    import {  createSearch }  from '@/api/search'
     import { fetchAdminMemberList} from '@/api/permissions'
 
     export default {
@@ -741,12 +755,117 @@
         props: {
             parentId: {
                 type: Number,
+                default: 0
+            },
+            is_detail: {
+                type: Boolean,
                 default: false
+            },
+            detailData: {
+                type: Object,
+                default: {}
             }
         },
         data(){
             return {
+                sceneProtectType:[
+                    {
+                        id:1,
+                        title:'未移动',
+                    }, {
+                        id:2,
+                        title:'已复原',
+                    },{
+                        id:3,
+                        title:'不明显',
+                    },{
+                        id:4,
+                        title:'一般' ,
+                    },{
+                        id:5,
+                        title:'混乱',
+                    },{
+                        id:6,
+                        title:'其他',
+                    },
+                ],
+                crimePeoplesType:[
+                    {
+                        id:0,
+                        title:'不确定',
+                    }, {
+                        id:1,
+                        title:'1人',
+                    }, {
+                        id:2,
+                        title:'两个',
+                    },{
+                        id:3,
+                        title:'多人',
+                    }
+                ],
+                idType:[
+                    {
+                        id:1,
+                        title:'身份证',
+                    }, {
+                        id:2,
+                        title:'护照',
+                    }, {
+                        id:3,
+                        title:'军人证',
+                    },{
+                        id:4,
+                        title:'学生证',
+                    }
+                ],
+                sex:[
+                    {
+                        id:0,
+                        title:'未知',
+                    }, {
+                        id:1,
+                        title:'男',
+                    }, {
+                        id:2,
+                        title:'女',
+                    }
+                ],
+                documentType:[
+                    {
+                        id:1,
+                        title:'DNA鉴定书',
+                    }, {
+                        id:2,
+                        title:'指纹鉴定书',
+                    }, {
+                        id:3,
+                        title:'理化鉴定书',
+                    },{
+                        id:4,
+                        title:'其他鉴定书',
+                    },
+                ],
+                materialType:[
+                    {
+                        id:1,
+                        title:'指纹印',
+                    }, {
+                        id:2,
+                        title:'DNA',
+                    }, {
+                        id:3,
+                        title:'鞋印',
+                    },{
+                        id:4,
+                        title:'工痕',
+                    },{
+                        id:4,
+                        title:'微量物证',
+                    },
+                ],
                 list:{
+                    id:'',
                     caseId:'',
                     examBeginTime:'',
                     examEndTime:'',
@@ -778,42 +897,6 @@
                     documentList:[],
 
                 },
-                crimePeoplesType:[
-                    {
-                        id:0,
-                        title:'不确定',
-                    }, {
-                        id:1,
-                        title:'1人',
-                    }, {
-                        id:2,
-                        title:'两个',
-                    },{
-                        id:3,
-                        title:'多人',
-                    }
-                ],
-                sceneProtectType:[
-                    {
-                        id:1,
-                        title:'未移动',
-                    }, {
-                        id:2,
-                        title:'已复原',
-                    },{
-                        id:3,
-                        title:'不明显',
-                    },{
-                        id:4,
-                        title:'一般' ,
-                    },{
-                        id:5,
-                        title:'混乱',
-                    },{
-                        id:6,
-                        title:'其他',
-                    },
-                ],
                 listRules:{},
                 lostDetailListFormRules:{},
                 concernedPersonListFormRules:{},
@@ -883,9 +966,18 @@
                 groupList: [],
                 userList: [],
                 next: '',
+                showNext: true,
+                lastStep:true,
             }
         },
         created() {
+            if (this.is_detail) {
+                if (this.detailData.currentUserId !== this.detailData.stepHanlderUid){
+                    this.showNext=false;
+                }
+                this.lastStep = this.detailData.isLast;
+                this.list = Object.assign({}, this.detailData)// copy obj
+            }
             this.getGroup()
             this.getUserList()
         },
@@ -1058,13 +1150,7 @@
             addSearch(){
                 this.$refs.listForm.validate(valid => {
                     if (valid) {
-                        if (!this.next) {
-                            this.$message({
-                                message: '请选择下一步岗位',
-                                type: 'warning'
-                            })
-                        } else {
-                            this.list.caseId = this.parentId
+                            this.list.caseId = this.parentId;
                             this.list.examBeginTime = this.list.examBeginTime/1000;
                             this.list.examEndTime = this.list.examEndTime/1000;
                             this.list.caseBeginTime = this.list.caseBeginTime/1000;
@@ -1073,31 +1159,16 @@
                             this.list.crimeTime = this.list.crimeTime/1000;
                             createSearch(this.list).then(response => {
                                 if (response.code === 200) {
-                                    const sendData = {
-                                        caseId: this.parentId,
-                                        groupId: this.next
-                                    }
-                                    nextTask(sendData).then(alarmData => {
-                                        if (alarmData.code === 200) {
-                                            this.$message({
-                                                message: '操作成功',
-                                                type: 'success',
-                                                showClose: true,
-                                                duration: 2000
-                                            })
-                                            this.dialogGroup = false
-                                        }else{
-                                            this.$message({
-                                                message: alarmData.reason,
-                                                type: 'success',
-                                                showClose: true,
-                                                duration: 2000
-                                            })
-                                        }
+                                    this.$parent.setTaskStep(response.id);
+                                    this.$message({
+                                        message: '操作成功',
+                                        type: 'success',
+                                        showClose: true,
+                                        duration: 2000
                                     })
                                 }else{
                                     this.$message({
-                                        message: alarmData.reason,
+                                        message: response.reason,
                                         type: 'success',
                                         showClose: true,
                                         duration: 2000
@@ -1105,17 +1176,7 @@
                                 }
                             })
                         }
-                    } else {
-                        this.$message({
-                            message: '操作失败，请检查数据',
-                            type: 'error',
-                            showClose: true,
-                            duration: 2000
-                        });
-                        return false
-                    }
                 })
-                this.nextAlarm = null;
             },
         }
     }

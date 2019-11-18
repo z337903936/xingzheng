@@ -87,14 +87,23 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <!--<el-button size="mini" type="success">-->
-            <!--查看-->
-          <!--</el-button>-->
+          <router-link :to="'/show-case/'+row.id">
+            <el-button type="primary" size="mini">查看</el-button>
+          </router-link>
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+            background
+            layout="prev, pager, next"
+            :page-count="pages"
+            :current-page.sync="listQuery.page"
+            @current-change="getList"
+            @size-change="getList"
+    >
+    </el-pagination>
     <!--<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />-->
-    <pagination v-show="pages>0" :page-count="pages" :total="pages" @pagination="getList"/>
+    <!--<pagination v-show="pages>0" :page-count="pages" :total="pages" @pagination="getList"/>-->
     <el-dialog title="修改" :visible.sync="dialogFormUpdate" width="30%">
       <el-form
               ref="taskRef"
@@ -142,7 +151,7 @@
 </style>
 
 <script>
-import { fetchList, fetchArticle, createArticle, updateArticle } from '@/api/task'
+  import { fetchList,fetchTask,createTask,updateTask,nextTask,groupList } from '@/api/task'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination

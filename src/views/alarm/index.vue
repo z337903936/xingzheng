@@ -95,9 +95,6 @@
                     <el-button type="primary" size="mini" @click="handleUpdate(row)">
                         编辑
                     </el-button>
-                    <el-button size="mini" type="success">
-                        查看
-                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -110,24 +107,31 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="接警时间" prop="receiptTime">
-                            <el-date-picker v-model="temp.receiptTime" type="datetime"
-                                            placeholder="Please pick a date"/>
+                            <el-date-picker
+                                    v-model="temp.receiptTime"
+                                    type="datetime"
+                                    value-format="timestamp"
+                                    placeholder="选择时间"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="报告人" prop="reporter">
-                            <el-input v-model="temp.reporter"/>
+                        <el-form-item label="报告单位" prop="reportOrg">
+                            <el-input v-model="temp.reportOrg"/>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <el-form-item label="报告单位" prop="reportOrg">
-                            <el-select v-model="temp.reportOrg" class="filter-item" placeholder="Please select">
-                                <el-option v-for="item in calendarTypeOptions" :key="item.key"
-                                           :label="item.display_name" :value="item.key"/>
+                        <el-form-item label="报告人" prop="reporter">
+                            <el-select v-model="temp.reporter" filterable  class="filter-item">
+                                <el-option
+                                        v-for="item in userList"
+                                        :key="item.id"
+                                        :label="item.title"
+                                        :value="item.id"/>
                             </el-select>
                         </el-form-item>
+
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="联系电话" prop="contactPhoneNumber">
@@ -135,55 +139,47 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-form-item label="案件类别" prop="type">
-                    <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-                        <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name"
-                                   :value="item.key"/>
-                    </el-select>
-                </el-form-item>
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="技术值班队长" prop="monitorUid">
-                            <el-select v-model="temp.monitorUid" placeholder="技术值班队长" center>
+                            <el-select v-model="temp.monitorUid" filterable  class="filter-item">
                                 <el-option
                                         v-for="item in userList"
                                         :key="item.id"
                                         :label="item.title"
                                         :value="item.id"/>
                             </el-select>
-                            <!--<el-checkbox v-model="checked">短信通知</el-checkbox>-->
                         </el-form-item>
-
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="值班技术员" prop="techUid">
-                            <el-select v-model="temp.techUid" placeholder="值班技术员" center>
+
+                            <el-select v-model="temp.techUid" filterable  class="filter-item">
                                 <el-option
                                         v-for="item in userList"
                                         :key="item.id"
                                         :label="item.title"
                                         :value="item.id"/>
                             </el-select>
-                            <!--<el-checkbox v-model="checked">短信通知</el-checkbox>-->
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="大队值班领导" prop="leaderUid">
-                            <el-select v-model="temp.leaderUid" placeholder="大队值班领导" center>
+
+                            <el-select v-model="temp.leaderUid" filterable  class="filter-item">
                                 <el-option
                                         v-for="item in userList"
                                         :key="item.id"
                                         :label="item.title"
                                         :value="item.id"/>
                             </el-select>
-                            <!--<el-checkbox v-model="checked">短信通知</el-checkbox>-->
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="接警人" prop="receiptUid">
-                            <el-select v-model="temp.receiptUid" placeholder="接警人" center>
+                            <el-select v-model="temp.receiptUid" filterable  class="filter-item">
                                 <el-option
                                         v-for="item in userList"
                                         :key="item.id"
@@ -193,20 +189,46 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-form-item label="驾驶员" prop="driverName">
-                    <el-input v-model="temp.driverName"/>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-form-item label="驾驶员" prop="driverName" >
+                            <el-input v-model="temp.driverName" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="短信通知" prop="sms">
+                            <el-select v-model="temp.sms" class="filter-item" multiple  >
+                                <el-option
+                                        v-for="item in userList"
+                                        :key="item.id"
+                                        :label="item.title"
+                                        :value="item.id"/>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-form-item label="案件类型" prop="caseCategory">
+                    <el-select v-model="temp.caseCategory" class="filter-item"  >
+                        <el-option
+                                v-for="item in calendarTypeOptions"
+                                :key="item.id"
+                                :label="item.title"
+                                :value="item.id"/>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="短信内容">
-                    <el-input v-model="temp.smsContent" :autosize="{ minRows: 2, maxRows: 4}" type="textarea"
-                              placeholder="Please input"/>
+                <el-form-item label="损失情况" prop="lostDetails">
+                    <el-input v-model="temp.lostDetails" />
+                </el-form-item>
+                <el-form-item label="短信内容" prop="remark">
+                    <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea"/>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">
-                    Cancel
+                    取消
                 </el-button>
                 <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-                    Confirm
+                    确认
                 </el-button>
             </div>
         </el-dialog>
@@ -221,7 +243,7 @@
 </style>
 
 <script>
-    import {fetchList, fetchArticle, createArticle, updateArticle} from '@/api/alarm'
+    import {fetchList, fetchAlarm, createArticle, updateAlarm} from '@/api/alarm'
     import waves from '@/directive/waves' // waves directive
     import {parseTime} from '@/utils'
     import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -290,6 +312,7 @@
                     leaderUid: '',
                     receiptTime: '',
                     smsContent: '',
+                    sms: [],
                 },
                 dialogFormVisible: false,
                 dialogStatus: '',
@@ -300,9 +323,9 @@
                 dialogPvVisible: false,
                 pvData: [],
                 rules: {
-                    type: [{required: true, message: 'type is required', trigger: 'change'}],
-                    timestamp: [{type: 'date', required: true, message: 'timestamp is required', trigger: 'change'}],
-                    title: [{required: true, message: 'title is required', trigger: 'blur'}]
+                    // type: [{required: true, message: 'type is required', trigger: 'change'}],
+                    // timestamp: [{type: 'date', required: true, message: 'timestamp is required', trigger: 'change'}],
+                    // title: [{required: true, message: 'title is required', trigger: 'blur'}]
                 },
                 downloadLoading: false,
                 userList: [],
@@ -389,7 +412,6 @@
             },
             handleUpdate(row) {
                 this.temp = Object.assign({}, row) // copy obj
-                this.temp.timestamp = new Date(this.temp.timestamp)
                 this.dialogStatus = 'update'
                 this.dialogFormVisible = true
                 this.$nextTick(() => {
@@ -400,22 +422,24 @@
                 this.$refs['dataForm'].validate((valid) => {
                     if (valid) {
                         const tempData = Object.assign({}, this.temp)
-                        tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-                        updateArticle(tempData).then(() => {
-                            for (const v of this.list) {
-                                if (v.id === this.temp.id) {
-                                    const index = this.list.indexOf(v)
-                                    this.list.splice(index, 1, this.temp)
-                                    break
-                                }
+                        updateAlarm(tempData).then(response => {
+                            if (response.code == 200) {
+                                this.dialogFormVisible = false;
+                                this.$notify({
+                                    title: 'Success',
+                                    message: '操作成功',
+                                    type: 'success',
+                                    duration: 2000
+                                })
+                            }else{
+                                this.$notify({
+                                    title: 'Success',
+                                    message: response.reason,
+                                    type: 'success',
+                                    duration: 2000
+                                })
                             }
-                            this.dialogFormVisible = false
-                            this.$notify({
-                                title: 'Success',
-                                message: 'Update Successfully',
-                                type: 'success',
-                                duration: 2000
-                            })
+
                         })
                     }
                 })

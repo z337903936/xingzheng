@@ -1,18 +1,22 @@
 <template>
     <div>
         <el-steps :active="step" align-center finish-status="success" style="margin-top: 20px" >
-            <!--<el-step style="color: rgb(64, 158, 255)!important;" title="添加案件" @click.native="show('添加案件')"/>-->
-            <!--<el-step style="color: rgb(64, 158, 255)!important;" title="接警" @click.native="show('接警')" v-if="nextStep===1"/>-->
-            <!--<el-step style="color: rgb(64, 158, 255)!important;" title="现勘" @click.native="show('现勘')" v-if="nextStep===2"/>-->
-            <el-step style="color: rgb(64, 158, 255)!important;" title="添加案件" />
-            <el-step style="color: rgb(64, 158, 255)!important;" title="接警" v-if="nextStep===1"/>
-            <el-step style="color: rgb(64, 158, 255)!important;" title="现勘" v-if="nextStep===2"/>
+            <el-step  title="添加案件" @click.native="show('添加案件')"/>
+            <el-step  title="接警台"  v-if="currenGroup==='接警台'"/>
+            <el-step  title="痕检现勘"  v-if="currenGroup==='痕检现勘'"/>
+            <el-step  title="法医现勘"  v-if="currenGroup==='法医现勘'"/>
+            <el-step  title="DNA检测" v-if="currenGroup==='DNA检测'"/>
+            <el-step  title="DNA检测" v-if="currenGroup==='DNA检测'"/>
+            <el-step title="指派任务"/>
+            <!--<el-step  title="指纹检测" @click.native="show('指纹检测')" v-if="currenGroup==='指纹检测'"/>-->
+            <!--<el-step  title="理化检测" @click.native="show('理化检测')" v-if="currenGroup==='理化检测'"/>-->
         </el-steps>
 
         <div>
             <addCase v-if="showStep ==='添加案件'"></addCase>
-            <addAlarm :parentId="caseId" v-if="showStep==='接警'"></addAlarm>
-            <addSearch :parentId="caseId" v-if="showStep==='现勘'"></addSearch>
+            <addAlarm :parentId="caseId" v-if="showStep==='接警台'"></addAlarm>
+            <addSearch :parentId="caseId" v-if="showStep==='痕检现勘'"></addSearch>
+            <nextStep :parentId="caseId" :taskId="taskId" v-if="showStep==='指派任务'"></nextStep>
 
         </div>
     </div>
@@ -22,33 +26,53 @@
     import addAlarm from './components/addAlarm'
     import addSearch from './components/addSearch'
     import addCase from './components/addCase'
+    import nextStep from './components/nextStep'
+
+    const group = [
+        '接警台','痕检现勘','法医现勘','DNA检测','指纹检测','理化检测',
+    ]
     export default {
         name: "editTask",
         components: {
             addAlarm,
             addSearch,
             addCase,
+            nextStep
         },
         data(){
             return{
-                step: 1,
+                step: 0,
                 showStep: '添加案件',
                 nextStep: 0,
                 caseId: 0,
+                taskId: 0,
+                currenGroup: '',
+                allGroup: ['添加案件'],
             }
+        },
+        created(){
+            const groupName = this.$store.getters.groupName;
+            group.map(data=>{
+                if (groupName.indexOf(data) > -1){
+                    this.currenGroup = data
+                    this.allGroup.push(data);
+                }
+            })
+            this.allGroup.push('指派任务');
         },
         methods:{
             show(e){
                 this.showStep = e
             },
-            setNextStep(num,id){
-                console.log(num,id)
-                if (num === 1)
-                    this.showStep = '接警';
-                else
-                    this.showStep = '现勘';
-                this.nextStep = num;
+            setNextStep(id){
                 this.caseId = id;
+                this.step++;
+                this.showStep = this.allGroup[this.step];
+            },
+            setTaskStep(taskId){
+                this.taskId = taskId;
+                this.step++;
+                this.showStep = this.allGroup[this.step];
             }
         }
     }
