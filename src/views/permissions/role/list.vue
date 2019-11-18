@@ -34,7 +34,7 @@
           <router-link :to="'/permissions/edit-role/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">编辑</el-button>
           </router-link>
-          <router-link :to="'/permissions/bind-group-user/'+scope.row.id">
+          <router-link :to="'/permissions/set-action/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-menu">设置权限</el-button>
           </router-link>
           <router-link :to="'/permissions/bind-group-menu/'+scope.row.id" >
