@@ -78,7 +78,7 @@
         </el-form-item>
         <el-form-item label="上级菜单" prop="parentId">
 
-          <el-select v-model="temp.parentId" placeholder="请选择">
+          <el-select v-model="temp.parentId" placeholder="请选择" filterable >
             <el-option
                     v-for="item in menuId"
                     :key="item.id"

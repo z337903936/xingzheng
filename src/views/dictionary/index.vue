@@ -3,15 +3,15 @@
     <div class="filter-container">
 
       <div>
-        <el-input
-          v-model="listQuery.name"
-          placeholder="名称"
-          style="width: 200px;"
-          @keyup.enter.native="handleFilter"/>
+        <!--<el-input-->
+          <!--v-model="listQuery.name"-->
+          <!--placeholder="名称"-->
+          <!--style="width: 200px;"-->
+          <!--@keyup.enter.native="handleFilter"/>-->
 
-        <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
-          搜索
-        </el-button>
+        <!--<el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">-->
+          <!--搜索-->
+        <!--</el-button>-->
         <el-button
           type="primary"
           icon="el-icon-edit"
@@ -21,37 +21,63 @@
 
       </div>
     </div>
-    <el-table
-      v-loading="listLoading"
-      :key="tableKey"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
+    <el-tree
+            :data="list"
+            :expand-on-click-node="false"
+            node-key="id"
+            default-expand-all
+            style="width: 30%"
+            v-loading="listLoading"
     >
-      <el-table-column label="ID" prop="id" align="center" width="80">
-        <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="名称" min-width="50px">
-        <template slot-scope="{row}">
-          <span>{{ row.name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            编辑
+      <span slot-scope="{ node, data }" class="custom-tree-node">
+        <span>{{ data.name}}</span>
+        <span>
+          <el-button
+                  type="text"
+                  size="mini"
+                  @click="() => handleUpdate(data)">
+            修改
           </el-button>
-          <el-button type="primary" size="mini" @click="handleDelete(row)">
+          <el-button
+                  type="text"
+                  size="mini"
+                  @click="() => handleDelete(row)">
             删除
           </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="limit" @pagination="getList"/>
+        </span>
+      </span>
+    </el-tree>
+    <!--<el-table-->
+      <!--v-loading="listLoading"-->
+      <!--:key="tableKey"-->
+      <!--:data="list"-->
+      <!--border-->
+      <!--fit-->
+      <!--highlight-current-row-->
+      <!--style="width: 100%;"-->
+    <!--&gt;-->
+      <!--<el-table-column label="ID" prop="id" align="center" width="80">-->
+        <!--<template slot-scope="{row}">-->
+          <!--<span>{{ row.id }}</span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
+      <!--<el-table-column label="名称" min-width="50px" prop="name">-->
+        <!--<template slot-scope="{row}">-->
+          <!--<span>{{ row.name }}</span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
+      <!--<el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">-->
+        <!--<template slot-scope="{row}">-->
+          <!--<el-button type="primary" size="mini" @click="handleUpdate(row)">-->
+            <!--编辑-->
+          <!--</el-button>-->
+          <!--<el-button type="primary" size="mini" @click="handleDelete(row)">-->
+            <!--删除-->
+          <!--</el-button>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
+    <!--</el-table>-->
+    <!--<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="limit" @pagination="getList"/>-->
 
     <el-dialog
       :visible.sync="dialogDelete"
@@ -78,7 +104,7 @@
           <el-input v-model="temp.name"/>
         </el-form-item>
         <el-form-item label="上级字典" prop="parentId">
-          <el-select v-model="temp.parentId" placeholder="请选择">
+          <el-select v-model="temp.parentId" placeholder="请选择" filterable >
             <el-option
               v-for="item in parentId"
               :key="item.id"
@@ -104,7 +130,16 @@
   </div>
 
 </template>
-
+<style scoped>
+  .custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-right: 8px;
+  }
+</style>
 <script>
 import { fetchList, fetchArticle, createArticle, updateArticle, delArticle } from '@/api/dictionary'
 import waves from '@/directive/waves' // waves directive
@@ -154,12 +189,30 @@ export default {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.list
-        response.list.map(data=>{
-          this.parentId.push({
+        var menu = response.list.map(data=>{
+          var menuData = [];
+          if (data.children){
+            menuData = data.children.map(item=>{
+              return {
+                id:item.id,
+                title:item.name,
+              };
+            })
+          }
+          menuData = menuData.concat([{
             id:data.id,
             title:data.name,
-          })
-        })
+          }]);
+
+          return menuData;
+        });
+        this.parentId = menu.flat(Infinity);
+        // response.list.map(data=>{
+        //   this.parentId.push({
+        //     id:data.id,
+        //     title:data.name,
+        //   })
+        // })
         // this.total = response.pages
 
         // Just to simulate the time of the request
