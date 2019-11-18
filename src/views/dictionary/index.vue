@@ -136,7 +136,7 @@ export default {
         sort: 99,
         parentId: ''
       },
-      parentId: {},
+      parentId: [],
       rules: {
         name: [{ required: true, message: '请输入名称', trigger: 'change' }],
         sort: [{ required: true, message: '请输入排序值', trigger: 'change' }]
@@ -154,6 +154,12 @@ export default {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.list
+        response.list.map(data=>{
+          this.parentId.push({
+            id:data.id,
+            title:data.name,
+          })
+        })
         // this.total = response.pages
 
         // Just to simulate the time of the request

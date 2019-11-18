@@ -112,6 +112,15 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+                <el-form-item label="案件类型" prop="caseCategory">
+                    <el-select v-model="alarm.caseCategory" class="filter-item"  >
+                        <el-option
+                                v-for="item in userList"
+                                :key="item.id"
+                                :label="item.title"
+                                :value="item.id"/>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="短信内容" prop="remark">
                     <el-input v-model="alarm.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea"/>
                 </el-form-item>

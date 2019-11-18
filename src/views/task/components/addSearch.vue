@@ -68,7 +68,13 @@
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="现场保护情况" prop="sceneProtect">
-                                <el-input v-model="list.sceneProtect"/>
+                                <el-select v-model="list.sceneProtect" placeholder="请选择" center>
+                                    <el-option
+                                            v-for="item in sceneProtectType"
+                                            :key="item.id"
+                                            :label="item.title"
+                                            :value="item.id"/>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -329,7 +335,13 @@
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="作案人数" prop="crimePeoples">
-                                <el-input v-model="list.crimePeoples"/>
+                                <el-select v-model="list.crimePeoples" placeholder="请选择" center>
+                                    <el-option
+                                            v-for="item in crimePeoplesType"
+                                            :key="item.id"
+                                            :label="item.title"
+                                            :value="item.id"/>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -423,9 +435,9 @@
                         </el-table>
                     </el-form-item>
                     <el-form-item label-width="auto">
-                        <el-button type="primary" size="mini" @click="dialogDocumentlListForm=true">添加文书</el-button>
+                        <el-button type="primary" size="mini" @click="dialogdocumentListForm=true">添加文书</el-button>
                         <el-table
-                                :data="list.documentlList"
+                                :data="list.documentList"
                                 height="250"
                                 border
                                 style="width: 100%">
@@ -498,11 +510,11 @@
                                 <template slot-scope="scope">
                                     <el-button
                                             size="mini"
-                                            @click="handleEditDocumentlListForm(scope.$index, scope.row)">编辑</el-button>
+                                            @click="handleEditdocumentListForm(scope.$index, scope.row)">编辑</el-button>
                                     <el-button
                                             size="mini"
                                             type="danger"
-                                            @click="handleDeleteDocumentlListForm(scope.$index, scope.row)">删除</el-button>
+                                            @click="handleDeletedocumentListForm(scope.$index, scope.row)">删除</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -625,7 +637,7 @@
                         <el-input v-model="materialListForm.extractMethod"/>
                     </el-form-item>
                     <el-form-item label="提取人" prop="extractUid">
-                        <el-select v-model="documentlListForm.extractUid" placeholder="请选择" center>
+                        <el-select v-model="documentListForm.extractUid" placeholder="请选择" center>
                             <el-option
                                     v-for="item in userList"
                                     :key="item.id"
@@ -644,41 +656,41 @@
                 </div>
             </el-dialog>
 
-            <el-dialog title="添加文书" :visible.sync="dialogDocumentlListForm" width="30%">
+            <el-dialog title="添加文书" :visible.sync="dialogdocumentListForm" width="30%">
                 <el-form
-                        ref="documentlListForm"
-                        :rules="documentlListFormRules"
-                        :model="documentlListForm"
+                        ref="documentListForm"
+                        :rules="documentListFormRules"
+                        :model="documentListForm"
                         label-position="left"
                         label-width="100px"
                         style="width: 400px; margin-left:50px;">
 
                     <el-form-item label="文书编号" prop="documentSeqNo">
-                        <el-input v-model="documentlListForm.documentSeqNo"/>
+                        <el-input v-model="documentListForm.documentSeqNo"/>
                     </el-form-item>
                     <el-form-item label="文书号" prop="documentNo">
-                        <el-input v-model="documentlListForm.documentNo"/>
+                        <el-input v-model="documentListForm.documentNo"/>
                     </el-form-item>
                     <el-form-item label="文书类型" prop="documentType">
-                        <el-input v-model="documentlListForm.documentType"/>
+                        <el-input v-model="documentListForm.documentType"/>
                     </el-form-item>
                     <el-form-item label="关联物证名称" prop="materialName">
-                        <el-input v-model="documentlListForm.materialName"/>
+                        <el-input v-model="documentListForm.materialName"/>
                     </el-form-item>
                     <el-form-item label="关联勘查号" prop="evidenceNo">
-                        <el-input v-model="documentlListForm.evidenceNo"/>
+                        <el-input v-model="documentListForm.evidenceNo"/>
                     </el-form-item>
                     <el-form-item label="可靠程度" prop="reliabilityLevel">
-                        <el-input v-model="documentlListForm.reliabilityLevel"/>
+                        <el-input v-model="documentListForm.reliabilityLevel"/>
                     </el-form-item>
                     <el-form-item label="是否已入库" prop="hasPutInStorage">
-                        <el-input v-model="documentlListForm.hasPutInStorage"/>
+                        <el-input v-model="documentListForm.hasPutInStorage"/>
                     </el-form-item>
                     <el-form-item label="是否已转交·" prop="hasTransfered">
-                        <el-input v-model="documentlListForm.hasTransfered"/>
+                        <el-input v-model="documentListForm.hasTransfered"/>
                     </el-form-item>
                     <el-form-item label="提交人" prop="submitUid">
-                        <el-select v-model="documentlListForm.submitUid" placeholder="请选择" center>
+                        <el-select v-model="documentListForm.submitUid" placeholder="请选择" center>
                             <el-option
                                     v-for="item in userList"
                                     :key="item.id"
@@ -688,10 +700,10 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogDocumentlListForm = false">
+                    <el-button @click="dialogdocumentListForm = false">
                         取 消
                     </el-button>
-                    <el-button type="primary" @click="dialogDocumentlListFormMethod === 'add'?addDocumentlListForm():updateDocumentlListForm()">
+                    <el-button type="primary" @click="dialogdocumentListFormMethod === 'add'?adddocumentListForm():updatedocumentListForm()">
                         确 定
                     </el-button>
                 </div>
@@ -721,7 +733,7 @@
 
 <script>
     import { groupList, nextTask } from '@/api/task'
-    import {  createArticle}  from '@/api/search'
+    import {  createSearch}  from '@/api/search'
     import { fetchAdminMemberList} from '@/api/permissions'
 
     export default {
@@ -763,29 +775,65 @@
                     lostDetailList:[],
                     concernedPersonList:[],
                     materialList:[],
-                    documentlList:[],
+                    documentList:[],
 
                 },
+                crimePeoplesType:[
+                    {
+                        id:0,
+                        title:'不确定',
+                    }, {
+                        id:1,
+                        title:'1人',
+                    }, {
+                        id:2,
+                        title:'两个',
+                    },{
+                        id:3,
+                        title:'多人',
+                    }
+                ],
+                sceneProtectType:[
+                    {
+                        id:1,
+                        title:'未移动',
+                    }, {
+                        id:2,
+                        title:'已复原',
+                    },{
+                        id:3,
+                        title:'不明显',
+                    },{
+                        id:4,
+                        title:'一般' ,
+                    },{
+                        id:5,
+                        title:'混乱',
+                    },{
+                        id:6,
+                        title:'其他',
+                    },
+                ],
                 listRules:{},
                 lostDetailListFormRules:{},
                 concernedPersonListFormRules:{},
                 materialListFormRules:{},
-                documentlListFormRules:{},
+                documentListFormRules:{},
 
                 dialogLostDetailListForm:false,
                 dialogConcernedPersonListForm:false,
                 dialogMaterialListForm:false,
-                dialogDocumentlListForm:false,
+                dialogdocumentListForm:false,
 
                 dialogLostDetailListFormMethod:'add',
                 dialogConcernedPersonListFormMethod:'add',
                 dialogMaterialListFormMethod:'add',
-                dialogDocumentlListFormMethod:'add',
+                dialogdocumentListFormMethod:'add',
 
                 dialogLostDetailListFormIndex:'',
                 dialogConcernedPersonListFormIndex:'',
                 dialogMaterialListFormIndex:'',
-                dialogDocumentlListFormIndex:'',
+                dialogdocumentListFormIndex:'',
 
                 dialogAlarmGroup:false,
                 lostDetailListForm:{
@@ -819,7 +867,7 @@
                     extractMethod:'',
                     extractUid:'',
                 },
-                documentlListForm:{
+                documentListForm:{
                     id:'',
                     name:'',
                     documentSeqNo:'',
@@ -970,8 +1018,8 @@
                 this.list.materialList.splice(index, 1);
             },
 
-            resetDocumentlListForm() {
-                this.documentlListForm={
+            resetdocumentListForm() {
+                this.documentListForm={
                     name:'',
                     documentSeqNo:'',
                     documentNo:'',
@@ -983,29 +1031,29 @@
                     hasPutInStorage:'',
                     hasTransfered:'',
                 }
-                this.dialogDocumentlListFormMethod='add'
-                this.dialogDocumentlListFormIndex=''
+                this.dialogdocumentListFormMethod='add'
+                this.dialogdocumentListFormIndex=''
             },
-            addDocumentlListForm(){
-                this.list.documentlList.push(this.documentlListForm);
-                this.dialogDocumentlListForm = false;
-                this.resetDocumentlListForm();
+            adddocumentListForm(){
+                this.list.documentList.push(this.documentListForm);
+                this.dialogdocumentListForm = false;
+                this.resetdocumentListForm();
             },
-            handleEditDocumentlListForm(index, row){
-                this.documentlListForm = Object.assign({}, row) // copy obj
-                this.dialogDocumentlListFormIndex = index;
-                this.dialogDocumentlListFormMethod = 'edit';
-                this.dialogDocumentlListForm = true;
+            handleEditdocumentListForm(index, row){
+                this.documentListForm = Object.assign({}, row) // copy obj
+                this.dialogdocumentListFormIndex = index;
+                this.dialogdocumentListFormMethod = 'edit';
+                this.dialogdocumentListForm = true;
 
             },
-            updateDocumentlListForm(){
-                var temp =  Object.assign({}, this.documentlListForm)// copy obj
-                this.list.documentlList.splice(this.dialogDocumentlListFormIndex,1, temp)
-                this.dialogDocumentlListForm = false;
-                this.resetDocumentlListForm();
+            updatedocumentListForm(){
+                var temp =  Object.assign({}, this.documentListForm)// copy obj
+                this.list.documentList.splice(this.dialogdocumentListFormIndex,1, temp)
+                this.dialogdocumentListForm = false;
+                this.resetdocumentListForm();
             },
-            handleDeleteDocumentlListForm(index, row){
-                this.list.documentlList.splice(index, 1);
+            handleDeletedocumentListForm(index, row){
+                this.list.documentList.splice(index, 1);
             },
             addSearch(){
                 this.$refs.listForm.validate(valid => {
@@ -1017,7 +1065,13 @@
                             })
                         } else {
                             this.list.caseId = this.parentId
-                            createArticle(this.list).then(response => {
+                            this.list.examBeginTime = this.list.examBeginTime/1000;
+                            this.list.examEndTime = this.list.examEndTime/1000;
+                            this.list.caseBeginTime = this.list.caseBeginTime/1000;
+                            this.list.caseEndTime = this.list.caseEndTime/1000;
+                            this.list.caseHappenTime = this.list.caseHappenTime/1000;
+                            this.list.crimeTime = this.list.crimeTime/1000;
+                            createSearch(this.list).then(response => {
                                 if (response.code === 200) {
                                     const sendData = {
                                         caseId: this.parentId,
@@ -1032,7 +1086,21 @@
                                                 duration: 2000
                                             })
                                             this.dialogGroup = false
+                                        }else{
+                                            this.$message({
+                                                message: alarmData.reason,
+                                                type: 'success',
+                                                showClose: true,
+                                                duration: 2000
+                                            })
                                         }
+                                    })
+                                }else{
+                                    this.$message({
+                                        message: alarmData.reason,
+                                        type: 'success',
+                                        showClose: true,
+                                        duration: 2000
                                     })
                                 }
                             })

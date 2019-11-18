@@ -19,7 +19,9 @@
                 <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
                     搜索
                 </el-button>
-
+                <router-link :to="'/search/create-search/'">
+                    <el-button type="primary" icon="el-icon-edit">添加</el-button>
+                </router-link>
                 <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
                 <!--导出-->
                 <!--</el-button>-->
@@ -59,12 +61,15 @@
 
             <el-table-column label="操作" align="center" width="530" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <el-button type="primary" size="mini" @click="handleUpdate(row)">
-                        编辑
-                    </el-button>
-                    <el-button size="mini" type="success">
-                        查看
-                    </el-button>
+                    <router-link :to="'/search/update-search/'+row.id">
+                        <el-button type="primary" size="mini" icon="el-icon-edit">编辑</el-button>
+                    </router-link>
+                    <!--<el-button type="primary" size="mini" @click="handleUpdate(row)">-->
+                        <!--编辑-->
+                    <!--</el-button>-->
+                    <!--<el-button size="mini" type="success">-->
+                        <!--查看-->
+                    <!--</el-button>-->
                 </template>
             </el-table-column>
         </el-table>
