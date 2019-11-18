@@ -34,7 +34,7 @@
         props: {
             parentId: {
                 type: Number,
-                default: false
+                default: 0
             },
             taskId: {
                 type: Number,

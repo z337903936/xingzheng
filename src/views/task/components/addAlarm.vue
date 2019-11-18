@@ -251,7 +251,7 @@
 
                             createAlarm(this.alarm).then(response => {
                                 if (response.code === 200) {
-                                    this.$parent.setTaskStep(response.id);
+
                                     this.$message({
                                         message: '操作成功',
                                         type: 'success',
@@ -274,6 +274,9 @@
 
                             updateAlarm(this.alarm).then(response => {
                                 if (response.code === 200) {
+                                    if ( this.lastStep){
+                                        this.$parent.setTaskStep(response.id);
+                                    }
                                     this.$message({
                                         message: '操作成功',
                                         type: 'success',

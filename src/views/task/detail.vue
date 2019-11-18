@@ -49,6 +49,7 @@
         created(){
             const id = this.$route.params && this.$route.params.id;
             this.caseId = id;
+            this.parentId = id;
             this.currentUserId  = this.$store.getters.id
             this.getTask(id)
         },
