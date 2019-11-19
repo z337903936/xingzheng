@@ -36,12 +36,6 @@ exports.cssLoaders = function(options) {
 
     // Extract CSS when that option is specified
     // (which is the case during production build)
-    if (options.extract) {
-      loaders.push(MiniCssExtractPlugin.loader)
-    } else {
-      loaders.push('vue-style-loader')
-    }
-
     loaders.push(cssLoader)
 
     if (options.usePostCSS) {
@@ -56,8 +50,15 @@ exports.cssLoaders = function(options) {
         })
       })
     }
+    return [
+      options.extract ? {
+        loader: MiniCssExtractPlugin.loader,
+        options: {
+          publicPath: '../../'
+        }
+      } : 'vue-style-loader',
+    ].concat(loaders)
 
-    return loaders
   }
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
   return {
