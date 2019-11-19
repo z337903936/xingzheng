@@ -13,9 +13,9 @@
         </el-steps>
 
         <div>
-            <addCase v-if="showStep ==='添加案件'"></addCase>
-            <addAlarm :parentId="caseId" v-if="showStep==='接警台'"></addAlarm>
-            <addSearch :parentId="caseId" v-if="showStep==='痕检现勘'"></addSearch>
+            <addCase  :detailData="caseDetail" v-if="showStep ==='添加案件'"></addCase>
+            <addAlarm :parentId="caseId" :detailData="caseDetail" v-if="showStep==='接警台'"></addAlarm>
+            <addSearch :parentId="caseId" :detailData="caseDetail" v-if="showStep==='痕检现勘'"></addSearch>
             <nextStep :parentId="caseId" :taskId="taskId" v-if="showStep==='指派任务'"></nextStep>
 
         </div>
@@ -48,6 +48,7 @@
                 taskId: 0,
                 currenGroup: '',
                 allGroup: ['添加案件'],
+                caseDetail:{}
             }
         },
         created(){

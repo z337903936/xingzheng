@@ -98,8 +98,16 @@
                 </template>
             </el-table-column>
         </el-table>
-        <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="limit"
-                    @pagination="getList"/>
+        <el-pagination
+                background
+                layout="prev, pager, next"
+                :page-count="pages"
+                :current-page.sync="listQuery.page"
+                @current-change="getList"
+                @size-change="getList"
+        >
+        </el-pagination>
+
 
         <el-dialog :visible.sync="dialogFormVisible" title="新增接警">
             <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px"
@@ -284,7 +292,7 @@
             return {
                 tableKey: 0,
                 list: null,
-                total: 0,
+                pages: 0,
                 listLoading: true,
                 searchTime: '',
                 limit: 20,
@@ -350,7 +358,7 @@
                 this.listLoading = true;
                 fetchList(this.listQuery).then(response => {
                     this.list = response.list;
-                    this.total = response.pages
+                    this.pages = response.pages
 
                     // Just to simulate the time of the request
                     setTimeout(() => {

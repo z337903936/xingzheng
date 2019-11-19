@@ -31,9 +31,26 @@ export function updateTask(data) {
         data
     })
 }
+
+export function taskList(query) {
+    return request({
+        url: '/v1/cp/group_case_step_list/',
+        method: 'get',
+        params: query
+    })
+}
+
 export function nextTask(data) {
     return request({
         url: '/v1/cp/case_step/new/',
+        method: 'post',
+        data
+    })
+}
+
+export function accetpTask(data) {
+    return request({
+        url: '/v1/cp/case_step/' + data.id + '/',
         method: 'post',
         data
     })

@@ -54,11 +54,17 @@
         methods: {
             getGroup() {
                 groupList({}).then(response => {
-                    this.groupList = response.list.map(data => {
-                        return {
-                            id: data.id,
-                            title: data.groupName
+                     response.list.map(data => {
+
+                        if (data.groupName !== '超级管理员') {
+                            this.groupList.push({
+                                id: data.id,
+                                title: data.groupName
+                            })
                         }
+
+
+
                     })
                 })
             },
