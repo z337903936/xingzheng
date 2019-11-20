@@ -33,11 +33,14 @@
                 <el-input v-model="listQuery.reporterOrg" placeholder="报告单位" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
                 <el-select v-model="listQuery.caseCategoryId" placeholder="案件类别" style="width: 140px">
-                    <el-option v-for="item in calendarTypeOptions" :key="item.key"
-                               :label="item.display_name+'('+item.key+')'" :value="item.key"/>
+                    <el-option v-for="item in userList" :key="item.id"
+                               :label="item.title" :value="item.id"/>
                 </el-select>
                 <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
                     搜索
+                </el-button>
+                <el-button v-waves  type="primary" icon="el-icon-edit" @click="handleCreate">
+                    添加
                 </el-button>
 
                 <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
@@ -109,7 +112,7 @@
         </el-pagination>
 
 
-        <el-dialog :visible.sync="dialogFormVisible" title="新增接警">
+        <el-dialog :visible.sync="dialogFormVisible" :title="textMap[dialogStatus]">
             <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px"
                      style="width: 700px; margin-left:50px;">
                 <el-row :gutter="20">
@@ -131,13 +134,7 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="报告人" prop="reporter">
-                            <el-select v-model="temp.reporter" filterable  class="filter-item">
-                                <el-option
-                                        v-for="item in userList"
-                                        :key="item.id"
-                                        :label="item.title"
-                                        :value="item.id"/>
-                            </el-select>
+                            <el-input v-model="temp.reporter"/>
                         </el-form-item>
 
                     </el-col>
@@ -205,7 +202,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="短信通知" prop="sms">
-                            <el-select v-model="temp.sms" class="filter-item" multiple  >
+                            <el-select v-model="temp.smsReceiver" class="filter-item" multiple  >
                                 <el-option
                                         v-for="item in userList"
                                         :key="item.id"
@@ -215,20 +212,34 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+
+                <el-form-item label="短信内容" prop="smsContent">
+                    <el-input v-model="temp.smsContent" :autosize="{ minRows: 2, maxRows: 4}" type="textarea"/>
+                </el-form-item>
+                <el-divider>案件信息</el-divider>
+                <el-form-item label="案件编号" prop="caseNo">
+                    <el-input v-model="temp.caseNo"/>
+                </el-form-item>
+                <el-form-item label="任务编号" prop="instanceNo">
+                    <el-input v-model="temp.instanceNo"/>
+                </el-form-item>
                 <el-form-item label="案件类型" prop="caseCategory">
                     <el-select v-model="temp.caseCategory" class="filter-item"  >
                         <el-option
-                                v-for="item in calendarTypeOptions"
+                                v-for="item in userList"
                                 :key="item.id"
                                 :label="item.title"
                                 :value="item.id"/>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="损失情况" prop="lostDetails">
-                    <el-input v-model="temp.lostDetails" />
+                <el-form-item label="案发地点" prop="caseAddress">
+                    <el-input v-model="temp.caseAddress"/>
                 </el-form-item>
-                <el-form-item label="短信内容" prop="remark">
-                    <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea"/>
+                <el-form-item label="案发摘要" prop="caseDigest">
+                    <el-input v-model="temp.caseDigest"/>
+                </el-form-item>
+                <el-form-item label="损失情况" prop="lostDetail">
+                    <el-input v-model="temp.lostDetail"/>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -251,43 +262,16 @@
 </style>
 
 <script>
-    import {fetchList, fetchAlarm, createArticle, updateAlarm} from '@/api/alarm'
+    import {fetchList, fetchAlarm, createAlarm, updateAlarm} from '@/api/alarm'
     import waves from '@/directive/waves' // waves directive
     import {parseTime} from '@/utils'
-    import Pagination from '@/components/Pagination' // secondary package based on el-pagination
     import { fetchAdminMemberList} from '@/api/permissions'
 
-    const calendarTypeOptions = [
-        {key: 'CN', display_name: 'China'},
-        {key: 'US', display_name: 'USA'},
-        {key: 'JP', display_name: 'Japan'},
-        {key: 'EU', display_name: 'Eurozone'}
-    ]
 
-    // arr to obj, such as { CN : "China", US : "USA" }
-    const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-        acc[cur.key] = cur.display_name
-        return acc
-    }, {})
 
     export default {
         name: 'Alarm',
-        components: {Pagination},
         directives: {waves},
-        filters: {
-            statusFilter(status) {
-                const statusMap = {
-                    published: 'success',
-                    draft: 'info',
-                    deleted: 'danger'
-                }
-                return statusMap[status]
-            },
-            typeFilter(type) {
-                return calendarTypeKeyValue[type]
-            }
-        },
-
         data() {
             return {
                 tableKey: 0,
@@ -306,35 +290,32 @@
                     reporterName: undefined,
                     caseCategoryId: undefined
                 },
-                calendarTypeOptions,
-
                 temp: {
                     id: undefined,
                     reporter: '',
                     reportOrg: '',
                     contactPhoneNumber: '',
-                    lostDetails: '',
                     driverName: '',
                     monitorUid: '',
                     techUid: '',
                     leaderUid: '',
                     receiptTime: '',
                     smsContent: '',
-                    sms: [],
+                    smsReceiver: [],
+                    caseAddress:'',
+                    caseCategory:'',
+                    caseDigest:'',
+                    instanceNo:'',
+                    caseNo:'',
+                    lostDetail:'',
                 },
                 dialogFormVisible: false,
                 dialogStatus: '',
                 textMap: {
-                    update: 'Edit',
-                    create: 'Create'
+                    update: '修改',
+                    create: '新增'
                 },
-                dialogPvVisible: false,
-                pvData: [],
-                rules: {
-                    // type: [{required: true, message: 'type is required', trigger: 'change'}],
-                    // timestamp: [{type: 'date', required: true, message: 'timestamp is required', trigger: 'change'}],
-                    // title: [{required: true, message: 'title is required', trigger: 'blur'}]
-                },
+                rules:{},
                 downloadLoading: false,
                 userList: [],
             }
@@ -363,58 +344,75 @@
                     // Just to simulate the time of the request
                     setTimeout(() => {
                         this.listLoading = false
-                    }, 1.5 * 1000)
+                    },1000)
                 })
             },
             handleFilter () {
                 this.listQuery.beginTime = this.searchTime[0]/1000;
                 this.listQuery.endTime = this.searchTime[1]/1000;
                 this.listQuery.page = 1;
-                console.log(this.listQuery);
                 this.getList()
             },
-            handleModifyStatus(row, status) {
-                this.$message({
-                    message: '操作Success',
-                    type: 'success'
-                })
-                row.status = status
-            },
-
             resetTemp() {
                 this.temp = {
                     id: undefined,
-                    importance: 1,
-                    remark: '',
-                    timestamp: new Date(),
-                    title: '',
-                    status: 'published',
-                    type: ''
+                    reporter: '',
+                    reportOrg: '',
+                    contactPhoneNumber: '',
+                    driverName: '',
+                    monitorUid: '',
+                    techUid: '',
+                    leaderUid: '',
+                    receiptTime: '',
+                    smsContent: '',
+                    smsReceiver: [],
+                    caseAddress:'',
+                    caseCategory:'',
+                    caseDigest:'',
+                    instanceNo:'',
+                    caseNo:'',
+                    lostDetail:'',
                 }
             },
             handleCreate() {
                 this.resetTemp()
                 this.dialogStatus = 'create'
                 this.dialogFormVisible = true
-                this.$nextTick(() => {
-                    this.$refs['dataForm'].clearValidate()
-                })
+                // this.$nextTick(() => {
+                //     this.$refs['dataForm'].clearValidate()
+                // })
             },
             createData() {
                 this.$refs['dataForm'].validate((valid) => {
                     if (valid) {
-                        this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-                        this.temp.author = 'vue-element-admin'
-                        createArticle(this.temp).then(() => {
-                            // this.list.unshift(this.temp)
-                            this.dialogFormVisible = false
-                            this.$notify({
-                                title: 'Success',
-                                message: 'Created Successfully',
-                                type: 'success',
-                                duration: 2000
-                            })
+                        createAlarm(this.temp).then(response=> {
+                            if (response.code === 200){
+                                this.getList()
+                                this.dialogFormVisible = false
+                                this.$notify({
+                                    title: 'Success',
+                                    message: '操作成功',
+                                    type: 'success',
+                                    duration: 2000
+                                })
+                            } else{
+                                this.$notify({
+                                    title: 'Success',
+                                    message: response.reason,
+                                    type: 'success',
+                                    duration: 2000
+                                })
+                            }
+
                         })
+                    }else {
+                        this.$message({
+                            message: '操作失败，请检查数据',
+                            type: 'error',
+                            showClose: true,
+                            duration: 2000
+                        });
+
                     }
                 })
             },
@@ -422,9 +420,9 @@
                 this.temp = Object.assign({}, row) // copy obj
                 this.dialogStatus = 'update'
                 this.dialogFormVisible = true
-                this.$nextTick(() => {
-                    this.$refs['dataForm'].clearValidate()
-                })
+                // this.$nextTick(() => {
+                //     this.$refs['dataForm'].clearValidate()
+                // })
             },
             updateData() {
                 this.$refs['dataForm'].validate((valid) => {
@@ -449,6 +447,14 @@
                             }
 
                         })
+                    }else {
+                        this.$message({
+                            message: '操作失败，请检查数据',
+                            type: 'error',
+                            showClose: true,
+                            duration: 2000
+                        });
+
                     }
                 })
             },
