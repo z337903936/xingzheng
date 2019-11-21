@@ -760,8 +760,10 @@
 
 <script>
     import {fetchList, fetchTask, createTask, updateTask, nextTask, groupList} from '@/api/task'
-    import {createSearch, updateSearch} from '@/api/search'
     import {fetchAdminMemberList} from '@/api/permissions'
+    import { createSearch,updateSearch,fetchSearch, createPerson, updatePerson, delPerson, createLost, updateLost, delLost,
+        createMaterial, updateMaterial, delMaterial, createDocument, updateDocument, delDocument} from '@/api/search'
+
 
     export default {
         name: "addSearch",
@@ -1028,9 +1030,35 @@
                 this.dialogLostDetailListFormIndex = ''
             },
             addLostDetailListForm() {
-                this.list.lostDetailList.push(this.lostDetailListForm);
-                this.dialogLostDetailListForm = false;
-                this.resetLostDetailListForm();
+                if (this.is_detail){
+                    this.lostDetailListForm.evidenceId = this.list.id;
+                    createLost(this.lostDetailListForm).then(response=>{
+                        if (response.code === 200){
+                            this.$message({
+                                message: '操作成功',
+                                type: 'success',
+                                showClose: true,
+                                duration: 2000
+                            })
+
+                            this.dialogLostDetailListForm = false;
+                            this.resetLostDetailListForm();
+                            this.$parent.getTask(this.$route.params.id)
+                        }else{
+                            this.$message({
+                                message: response.reason,
+                                type: 'success',
+                                showClose: true,
+                                duration: 2000
+                            })
+                        }
+                    });
+                } else{
+                    this.list.lostDetailList.push(this.lostDetailListForm);
+                    this.dialogLostDetailListForm = false;
+                    this.resetLostDetailListForm();
+                }
+
             },
             handleEditLostDetailListForm(index, row) {
                 this.lostDetailListForm = Object.assign({}, row) // copy obj

@@ -2,90 +2,90 @@
     <div>
         <el-row :gutter="20" class="mb10">
             <el-col :span="6">
-                勘查开始：
+                勘查开始：{{ list.examBeginTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
             </el-col>
             <el-col :span="6">
-                勘查结束：
+                勘查结束：{{ list.examEndTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
             </el-col>
             <el-col :span="6">
-                案件开始：
+                案件开始：{{ list.caseBeginTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
             </el-col>
             <el-col :span="6">
-                案件开始：
-            </el-col>
-        </el-row>
-        <el-row :gutter="20" class="mb10">
-            <el-col :span="6">
-                发案日期：
-            </el-col>
-            <el-col :span="6">
-                发案区划：
-            </el-col>
-            <el-col :span="6">
-                现场保护情况：
-            </el-col>
-            <el-col :span="6">
-                案件类型：
+                案件结束：{{ list.caseEndTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
             </el-col>
         </el-row>
         <el-row :gutter="20" class="mb10">
             <el-col :span="6">
-                主办：
+                发案日期：{{ list.caseHappenTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
             </el-col>
             <el-col :span="6">
-                协办：
+                发案区划：{{ list.caseHappenRegion }}
             </el-col>
             <el-col :span="6">
-                照相员：
+                现场保护情况：{{ list.sceneProtect }}
             </el-col>
             <el-col :span="6">
-                录像员：
+                案件类型：{{ list.caseType }}
             </el-col>
         </el-row>
         <el-row :gutter="20" class="mb10">
             <el-col :span="6">
-                法医：
+                主办：{{ list.mainChargerUid }}
             </el-col>
             <el-col :span="6">
-                现场保护民警：
+                协办：{{ list.supporterUid }}
             </el-col>
             <el-col :span="6">
-                是否有监控：
+                照相员：{{ list.photographUid }}
             </el-col>
             <el-col :span="6">
-                处所：
+                录像员：{{ list.cameraUid }}
+            </el-col>
+        </el-row>
+        <el-row :gutter="20" class="mb10">
+            <el-col :span="6">
+                法医：{{ list.medicalUid }}
+            </el-col>
+            <el-col :span="6">
+                现场保护民警：{{ list.sceneProtectUid }}
+            </el-col>
+            <el-col :span="6">
+                是否有监控：{{ list.hasCamera?'是':'不是' }}
+            </el-col>
+            <el-col :span="6">
+                处所：{{ list.sceneType }}
             </el-col>
         </el-row>
 
         <el-row :gutter="20" class="mb10">
             <el-col :span="6">
-                作案时机：
+                作案时机：{{ list.crimeTime }}
             </el-col>
             <el-col :span="6">
-                侵入方式：
+                侵入方式：{{ list.invadeType }}
             </el-col>
             <el-col :span="6">
-                作案出口：
+                作案出口：{{ list.escapeType }}
             </el-col>
             <el-col :span="6">
-                作案人数：
+                作案人数：{{ list.crimePeoples }}
             </el-col>
         </el-row>
         <el-row :gutter="20" class="mb10">
             <el-col :span="6">
-                作案工具：
+                作案工具：{{ list.crimeTools }}
             </el-col>
             <el-col :span="6">
-                是否十类案件：
+                是否十类案件：{{ list.isTenCase?'是':'不是' }}
             </el-col>
             <el-col :span="6">
-                是否死亡案件：
+                是否死亡案件：{{ list.isDeathCase?'是':'不是' }}
             </el-col>
             <el-col :span="6">
             </el-col>
         </el-row>
         <div class="mb10">
-            作案过程:
+            作案过程:{{ list.crimeDetail }}
         </div>
         <el-table
                 :data="list.concernedPersonList"
@@ -107,7 +107,7 @@
                     label="证件类型"
             >
                 <template slot-scope="{row}">
-                    <span>{{ row.idTypeShow }}</span>
+                    <span>{{ row.idType }}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -121,7 +121,7 @@
                     prop="sex"
                     label="性别">
                 <template slot-scope="{row}">
-                    <span>{{ row.sexShow }}</span>
+                    <span>{{ row.sex }}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -242,7 +242,7 @@
                     prop="materialType"
                     label="物证类型">
                 <template slot-scope="{row}">
-                    <span>{{ row.materialTypeShow }}</span>
+                    <span>{{ row.materialType }}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -263,7 +263,7 @@
                     prop="extractUid"
                     label="提取人">
                 <template slot-scope="{row}">
-                    <span>{{ row.extractUidShow }}</span>
+                    <span>{{ row.extractUid }}</span>
                 </template>
             </el-table-column>
 
@@ -272,6 +272,7 @@
 </template>
 
 <script>
+    import {fetchSearch} from '@/api/search'
     export default {
         name: "searchDetail",
         data(){
@@ -305,9 +306,126 @@
                     concernedPersonList:[],
                     materialList:[],
 
-
                 },
+                sceneProtectType:[
+                    {
+                        id:1,
+                        title:'未移动',
+                    }, {
+                        id:2,
+                        title:'已复原',
+                    },{
+                        id:3,
+                        title:'不明显',
+                    },{
+                        id:4,
+                        title:'一般' ,
+                    },{
+                        id:5,
+                        title:'混乱',
+                    },{
+                        id:6,
+                        title:'其他',
+                    },
+                ],
+                crimePeoplesType:[
+                    {
+                        id:0,
+                        title:'不确定',
+                    }, {
+                        id:1,
+                        title:'1人',
+                    }, {
+                        id:2,
+                        title:'两个',
+                    },{
+                        id:3,
+                        title:'多人',
+                    }
+                ],
+                idType:[
+                    {
+                        id:1,
+                        title:'身份证',
+                    }, {
+                        id:2,
+                        title:'护照',
+                    }, {
+                        id:3,
+                        title:'军人证',
+                    },{
+                        id:4,
+                        title:'学生证',
+                    }
+                ],
+                sex:[
+                    {
+                        id:0,
+                        title:'未知',
+                    }, {
+                        id:1,
+                        title:'男',
+                    }, {
+                        id:2,
+                        title:'女',
+                    }
+                ],
+                documentType:[
+                    {
+                        id:1,
+                        title:'DNA鉴定书',
+                    }, {
+                        id:2,
+                        title:'指纹鉴定书',
+                    }, {
+                        id:3,
+                        title:'理化鉴定书',
+                    },{
+                        id:4,
+                        title:'其他鉴定书',
+                    },
+                ],
+                materialType:[
+                    {
+                        id:1,
+                        title:'指纹印',
+                    }, {
+                        id:2,
+                        title:'DNA',
+                    }, {
+                        id:3,
+                        title:'鞋印',
+                    },{
+                        id:4,
+                        title:'工痕',
+                    },{
+                        id:5,
+                        title:'微量物证',
+                    },
+                ],
             }
+        },
+        created() {
+            const id = this.$route.params && this.$route.params.id;
+            this.getSearch(id)
+        },
+        methods: {
+            getSearch(id) {
+                fetchSearch(id).then(response => {
+                    this.list = response;
+                    this.sceneProtectType.map(data=>{
+                        if (data.id == this.list.sceneProtect){
+                            this.list.sceneProtect = data.title
+                        }
+                    });
+                    this.crimePeoplesType.map(data=>{
+                        if (data.id == this.list.crimePeoples){
+                            this.list.crimePeoples = data.title
+                        }
+                    })
+
+                })
+            },
         }
     }
 </script>

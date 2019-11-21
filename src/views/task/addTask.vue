@@ -3,8 +3,8 @@
         <el-steps :active="step" align-center finish-status="success" style="margin-top: 20px" >
             <el-step  title="添加案件" @click.native="show('添加案件')"/>
             <el-step  title="接警台"  v-if="currenGroup==='接警台'"/>
-            <el-step  title="痕检现勘"  v-if="currenGroup==='痕检现勘'"/>
-            <el-step  title="法医现勘"  v-if="currenGroup==='法医现勘'"/>
+            <el-step  title="痕检"  v-if="currenGroup==='痕检'"/>
+            <el-step  title="法医现勘"  v-if="currenGroup==='法医'"/>
             <el-step  title="DNA检测" v-if="currenGroup==='DNA检测'"/>
             <el-step  title="DNA检测" v-if="currenGroup==='DNA检测'"/>
             <el-step title="指派任务"/>
@@ -15,7 +15,7 @@
         <div>
             <addCase  :detailData="caseDetail" v-if="showStep ==='添加案件'"></addCase>
             <addAlarm :parentId="caseId" :detailData="caseDetail" v-if="showStep==='接警台'"></addAlarm>
-            <addSearch :parentId="caseId" :detailData="caseDetail" v-if="showStep==='痕检现勘'"></addSearch>
+            <addSearch :parentId="caseId" :detailData="caseDetail" v-if="showStep==='痕检'"></addSearch>
             <nextStep :parentId="caseId" :taskId="taskId" v-if="showStep==='指派任务'"></nextStep>
 
         </div>
@@ -29,7 +29,7 @@
     import nextStep from './components/nextStep'
 
     const group = [
-        '接警台','痕检现勘','法医现勘','DNA检测','指纹检测','理化检测',
+        '接警台','痕检','法医','DNA检测','指纹检测','理化检测',
     ]
     export default {
         name: "editTask",
@@ -59,6 +59,7 @@
                     this.allGroup.push(data);
                 }
             })
+            console.log()
             this.allGroup.push('指派任务');
         },
         methods:{

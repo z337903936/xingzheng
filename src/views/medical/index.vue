@@ -114,6 +114,7 @@
                 :current-page.sync="listQuery.page"
                 @current-change="getList"
                 @size-change="getList"
+                :hide-on-single-page="paginationShow"
         >
         </el-pagination>
 
@@ -141,6 +142,7 @@
                 list: null,
                 pages: 0,
                 listLoading: true,
+                paginationShow: true,
                 searchTime: '',
                 limit: 20,
                 listQuery: {

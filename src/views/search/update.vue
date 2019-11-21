@@ -61,7 +61,13 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="发案区划" prop="caseHappenRegion">
-                            <el-input v-model="list.caseHappenRegion"/>
+                            <el-cascader
+                                    :options="caseHappenRegionList"
+                                    filterable
+                                    v-model="list.caseHappenRegion"
+                                    :filter-method="caseHappenRegionSearch"
+                                    :show-all-levels="false">
+                            </el-cascader>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -78,8 +84,14 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="案件类型 " prop="caseType">
-                            <el-input v-model="list.caseType"/>
+                        <el-form-item label="案件类别" prop="caseType">
+                            <el-cascader
+                                    :options="caseTypeList"
+                                    filterable
+                                    v-model="list.caseType"
+                                    :filter-method="caseTypeSearch"
+                                    :show-all-levels="false">
+                            </el-cascader>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -164,12 +176,24 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="处所" prop="sceneType">
-                            <el-input v-model="list.sceneType"/>
+                            <el-cascader
+                                    :options="sceneTypeList"
+                                    filterable
+                                    v-model="list.sceneType"
+                                    :filter-method="sceneTypeSearch"
+                                    :show-all-levels="false">
+                            </el-cascader>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="作案时机" prop="crimeTime">
-                            <el-input v-model="list.crimeTime"/>
+                            <el-cascader
+                                    :options="crimeTimeList"
+                                    filterable
+                                    v-model="list.crimeTime"
+                                    :filter-method="crimeTimeSearch"
+                                    :show-all-levels="false">
+                            </el-cascader>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -177,12 +201,25 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="侵入方式" prop="invadeType">
-                            <el-input v-model="list.invadeType"/>
+                            <el-cascader
+                                    :options="invadeTypeList"
+                                    filterable
+                                    v-model="list.invadeType"
+                                    :filter-method="invadeTypeSearch"
+                                    :show-all-levels="false">
+                            </el-cascader>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="作案出口" prop="escapeType">
-                            <el-input v-model="list.escapeType"/>
+
+                            <el-cascader
+                                    :options="escapeTypeList"
+                                    filterable
+                                    v-model="list.escapeType"
+                                    :filter-method="escapeTypeSearch"
+                                    :show-all-levels="false">
+                            </el-cascader>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -494,13 +531,14 @@
                     <el-input v-model="concernedPersonListForm.name"/>
                 </el-form-item>
                 <el-form-item label="证件类型" prop="idType">
-                    <el-select v-model="concernedPersonListForm.idType" placeholder="请选择" center>
-                        <el-option
-                                v-for="item in idType"
-                                :key="item.id"
-                                :label="item.title"
-                                :value="item.id"/>
-                    </el-select>
+                    <el-cascader
+                            :options="idTypeList"
+                            filterable
+                            v-model="concernedPersonListForm.idType"
+                            :filter-method="idTypeSearch"
+                            :show-all-levels="false">
+                    </el-cascader>
+
                 </el-form-item>
                 <el-form-item label="证件号" prop="idNo">
                     <el-input v-model="concernedPersonListForm.idNo"/>
@@ -597,6 +635,7 @@
 <script>
     import { fetchSearch, updateSearch, createPerson, updatePerson, delPerson, createLost, updateLost, delLost,
         createMaterial, updateMaterial, delMaterial, createDocument, updateDocument, delDocument} from '@/api/search'
+    import {fetchList} from '@/api/dictionary'
     import { fetchAdminMemberList} from '@/api/permissions'
     export default {
         name: "UpdateSearch",
@@ -801,16 +840,45 @@
                     hasTransfered:'',
                 },
                 userList: [],
+                caseHappenRegionList: [],
+                caseTypeList: [],
+                sceneTypeList: [],
+                crimeTimeList: [],
+                invadeTypeList: [],
+                escapeTypeList: [],
+                idTypeList: [],
 
             }
         },
         created() {
                 const id = this.$route.params && this.$route.params.id;
                 this.list.id = id;
-                this.fetchData(id)
+                this.fetchData(id);
                 this.getUserList()
+            this.search('案件类别').then(data=>{
+                this.caseTypeList = this.processData(data.list);
+            });
+            this.search('行政区划').then(data=>{
+                this.caseHappenRegionList = this.processData(data.list);
+            });
+            this.search('作案选择处所').then(data=>{
+                this.sceneTypeList = this.processData(data.list);
+            });
+            this.search('作案时机').then(data=>{
+                this.crimeTimeList = this.processData(data.list);
+            });
+            this.search('侵入方式').then(data=>{
+                this.invadeTypeList = this.processData(data.list);
+            });
+            this.search('作案出口').then(data=>{
+                this.escapeTypeList = this.processData(data.list);
+            });
+            this.search('身份类型').then(data=>{
+                this.idTypeList = this.processData(data.list);
+            });
         },
         methods:{
+
             fetchData(id) {
                 fetchSearch(id).then(data => {
                     this.list = data;
@@ -819,6 +887,58 @@
                 }).catch(err => {
                     console.log(err)
                 })
+            },
+            search(parentName,filter=null){
+                return new Promise((resolve, reject) => {
+                    const data = {
+                        filter:filter,
+                        parentName:parentName
+                    };
+                    resolve(fetchList(data))
+                })
+
+            },
+            processData(data){
+                return data.map(item=>{
+                    var sendData = {
+                        value:item.name,
+                        label:item.name,
+                        py:item.pinyinAbbr,
+                    }
+                    if (item.children.length >0){
+                        sendData.children = this.proData(item.children);
+                    }
+
+                    return sendData;
+                })
+            },
+            caseHappenRegionSearch(node,value){
+                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                    return true
+            },
+            caseTypeSearch(node,value){
+                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                    return true
+            },
+            sceneTypeSearch(node,value){
+                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                    return true
+            },
+            crimeTimeSearch(node,value){
+                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                    return true
+            },
+            invadeTypeSearch(node,value){
+                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                    return true
+            },
+            escapeTypeSearch(node,value){
+                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                    return true
+            },
+            idTypeSearch(node,value){
+                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                    return true
             },
             updateSearch() {
                 this.$refs.listForm.validate(valid => {
@@ -833,6 +953,14 @@
                             this.list.caseEndTime = this.list.caseEndTime/1000;
                         if (this.list.caseHappenTime.toString().length>10)
                             this.list.caseHappenTime = this.list.caseHappenTime/1000;
+
+                        this.list.caseHappenRegion = this.list.caseHappenRegion.slice(-1)[0];
+                        this.list.caseType = this.list.caseType.slice(-1)[0];
+                        this.list.sceneType = this.list.sceneType.slice(-1)[0];
+                        this.list.crimeTime = this.list.crimeTime.slice(-1)[0];
+                        this.list.invadeType = this.list.invadeType.slice(-1)[0];
+                        this.list.escapeType = this.list.escapeType.slice(-1)[0];
+
                         updateSearch(this.list).then(response => {
                             if (response.code === 200) {
                                 this.$message({
@@ -980,6 +1108,9 @@
             },
             addConcernedPersonListForm() {
                 this.concernedPersonListForm.evidenceId = this.list.id;
+                if (this.concernedPersonListForm.idType.constructor === Array) {
+                    this.concernedPersonListForm.idType = this.concernedPersonListForm.idType.slice(-1)[0]
+                }
                 createPerson(this.concernedPersonListForm).then(response=>{
                     if (response.code === 200){
                         this.$message({
@@ -1008,6 +1139,9 @@
 
             },
             updateConcernedPersonListForm() {
+                if (this.concernedPersonListForm.idType.constructor === Array) {
+                    this.concernedPersonListForm.idType = this.concernedPersonListForm.idType.slice(-1)[0]
+                }
                 updatePerson(this.concernedPersonListForm).then(response=>{
                     if (response.code === 200){
                         this.$message({

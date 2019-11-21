@@ -114,8 +114,7 @@
                                     :options="caseCategoryList"
                                     filterable
                                     v-model="postForm.caseCategory"
-                                    :before-filter="remoteSearch"
-                                    :filter-method="remoteSearch2"
+                                    :filter-method="remoteSearch"
                                     :show-all-levels="false">
                             </el-cascader>
                     </el-form-item>
@@ -220,17 +219,9 @@
             this.postForm.receiptUid = this.$store.getters.id;
         },
         methods: {
-            remoteSearch(value){
-                const data = {
-                    filter:value,
-                    parentName:'案件类别'
-                };
-                fetchList(data).then(response=>{
-                    this.caseCategoryList = this.processData(response.list)
-                })
-            },
-            remoteSearch2(value){
-                return true;
+            remoteSearch(node,value){
+                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                    return true
             },
             restForm() {
                 this.postForm = {
@@ -267,6 +258,7 @@
                     var sendData = {
                         value:item.name,
                         label:item.name,
+                        py:item.pinyinAbbr,
                     }
                     if (item.children.length >0){
                         sendData.children = this.proData(item.children);

@@ -58,10 +58,12 @@
                 fetchTask(id).then(response=>{
                     this.task = response;
                     this.stepDetail = response.caseStepList;
+                    this.step = 0;
                     var count = response.caseStepList.length;
                     if (count>0){
                         this.step +=count-1;
                     }
+                    this.allGroup = [];
                     response.caseStepList.map(data=>{
                         count--;
                         this.allGroup.push(data.stepName);

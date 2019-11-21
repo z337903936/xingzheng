@@ -87,12 +87,11 @@
             }
         },
         created() {
-            // alert(1);
             this.getList();
         },
         methods:{
             getList() {
-                this.listLoading = true
+                this.listLoading = true;
                 taskList().then(response => {
                     this.list = response.list;
                     // this.pages = response.pages
