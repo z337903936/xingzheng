@@ -77,7 +77,7 @@
                 <el-select v-model="postForm.receiptUid" disabled   class="filter-item">
                   <el-option
                           v-for="item in userList"
-                          :key="item.id"
+                          :value-key="item.id"
                           :label="item.title"
                           :value="item.id"/>
                 </el-select>
@@ -203,6 +203,7 @@ export default {
   },
   created() {
     this.getUserList()
+    this.restForm()
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.postForm.id = id;
@@ -211,6 +212,27 @@ export default {
     this.postForm.receiptUid = this.$store.getters.id;
   },
   methods: {
+    restForm(){
+      this.postForm={
+        id: undefined,
+        reporter: '',
+        reportOrg: '',
+        contactPhoneNumber: '',
+        driverName: '',
+        monitorUid: '',
+        techUid: '',
+        leaderUid: '',
+        receiptTimeShow: '',
+        receiptTime: '',
+        smsContent: "",
+        smsReceiverArray: '',
+        smsReceiver: '',
+        caseAddress:'',
+        caseCategory:'',
+        caseDigest:'',
+        lostDetail:'',
+      }
+    },
     getUserList(){
       fetchAdminMemberList({}).then(response => {
         this.userList = response.list.map(data => {
@@ -221,20 +243,36 @@ export default {
         })
       })
     },
+    formatDate(now) {
+    var year=now.getFullYear();
+    var month=now.getMonth()+1;
+    var date=now.getDate();
+    var hour=now.getHours();
+    var minute=now.getMinutes();
+    var second=now.getSeconds();
+    return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
+  },
     fetchData(id) {
       fetchAlarm(id).then(data => {
        this.postForm =  Object.assign({}, data);
+        this.postForm.smsReceiverArray = this.postForm.smsReceiver.split(",").map(data=>{
+          return  parseInt(data);
+        });
+        var d=new Date(this.postForm.receiptTime*1000);
+        this.postForm.receiptTimeShow =this.formatDate(d)
       }).catch(err => {
         console.log(err)
       })
     },
     submitForm() {
+      console.log(this.postForm);
       var data = this.postForm
       data.smsContent = this.smsContentChange;
-      if (data.smsReceiver.length>0){
+      if (data.smsReceiverArray.length>0){
         data.smsReceiver = data.smsReceiverArray.join(',');
       }
-      data.receiptTime = data.receiptTimeShow/1000;
+      data.receiptTime = Date.parse(data.receiptTimeShow)/1000;
+
 
       this.$refs.postForm.validate(valid => {
         if (valid) {

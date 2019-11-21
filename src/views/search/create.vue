@@ -1,55 +1,41 @@
 <template>
     <div class="app-container">
-        <el-steps :active="step" align-center finish-status="success" style="margin-top: 20px" >
-            <el-step title="添加案件" />
-            <el-step title="添加现勘"/>
-        </el-steps>
-
-        <el-form
-                ref="task"
-                :model="task"
-                :rules="taskRules"
-                label-position="center"
-                label-width="100px"
-                style="width: 600px; margin:auto;"
-                v-if="step===1"
-        >
-            <el-form-item label="案件编号" prop="caseNo">
-                <el-input v-model="task.caseNo"/>
-            </el-form-item>
-            <el-form-item label="任务编号" prop="instanceNo">
-                <el-input v-model="task.instanceNo"/>
-            </el-form-item>
-            <el-form-item label="案件分类" prop="caseCategory">
-                <el-input v-model="task.caseCategoryId"/>
-            </el-form-item>
-            <el-form-item label="案发地点" prop="caseAddress">
-                <el-input v-model="task.caseAddress"/>
-            </el-form-item>
-            <el-form-item label="案发摘要" prop="caseDigest">
-                <el-input v-model="task.caseDigest"/>
-            </el-form-item>
-            <el-form-item label="损失情况" prop="lostDetail">
-                <el-input v-model="task.lostDetail"/>
-            </el-form-item>
-            <div class="action" v-if="step===1">
-                <el-button type="primary" style="float: right" @click="addTask()">保存</el-button>
-            </div>
-        </el-form>
-
-
-
-
         <el-form
                 ref="listForm"
                 :rules="listRules"
                 :model="list"
                 label-position="left"
                 label-width="120px"
-                style="display: flex;"
-                v-if="step===2"
+               style="width: 50%;margin: auto;padding-bottom: 20px"
         >
-            <div style="width: 700px;margin-left: 150px">
+
+            <!--<el-divider>案件信息</el-divider>-->
+            <!--<el-form-item label="案件编号" prop="caseNo">-->
+                <!--<el-input v-model="list.caseNo"/>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="任务编号" prop="instanceNo">-->
+                <!--<el-input v-model="list.instanceNo"/>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="案件类型" prop="caseCategory">-->
+                <!--<el-select v-model="list.caseCategory" class="filter-item"  >-->
+                    <!--<el-option-->
+                            <!--v-for="item in userList"-->
+                            <!--:key="item.id"-->
+                            <!--:label="item.title"-->
+                            <!--:value="item.id"/>-->
+                <!--</el-select>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="案发地点" prop="caseAddress">-->
+                <!--<el-input v-model="list.caseAddress"/>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="案发摘要" prop="caseDigest">-->
+                <!--<el-input v-model="list.caseDigest"/>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="损失情况" prop="lostDetail">-->
+                <!--<el-input v-model="list.lostDetail"/>-->
+            <!--</el-form-item>-->
+
+            <el-divider>痕检信息</el-divider>
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="勘查开始" prop="examBeginTime">
@@ -124,152 +110,11 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-form-item label="当事人">
-                    <el-button type="primary" size="mini" @click="dialogConcernedPersonListForm=true">添加当事人</el-button>
-                    <el-table
-                            :data="list.concernedPersonList"
-                            height="250"
-                            border
-                            style="width: 100%">
-                        <el-table-column
-                                prop="name"
-                                label="名字"
-                        >
-                            <template slot-scope="{row}">
-                                <span>{{ row.name }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="idType"
-                                label="证件类型"
-                        >
-                            <template slot-scope="{row}">
-                                <span>{{ row.idType }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="idNo"
-                                label="证件号">
-                            <template slot-scope="{row}">
-                                <span>{{ row.idNo }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="sex"
-                                label="性别">
-                            <template slot-scope="{row}">
-                                <span>{{ row.sex }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="contactNumber"
-                                label="联系电话">
-                            <template slot-scope="{row}">
-                                <span>{{ row.contactNumber }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="residence"
-                                label="常住地址">
-                            <template slot-scope="{row}">
-                                <span>{{ row.residence }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="huji"
-                                label="户籍">
-                            <template slot-scope="{row}">
-                                <span>{{ row.huji }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="registerName"
-                                label="登记人">
-                            <template slot-scope="{row}">
-                                <span>{{ row.registerName }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="操作" fixed="right" width="150">
-                            <template slot-scope="scope">
-                                <el-button
-                                        size="mini"
-                                        @click="handleEditConcernedPersonListForm(scope.$index, scope.row)">编辑</el-button>
-                                <el-button
-                                        size="mini"
-                                        type="danger"
-                                        @click="handleDeleteConcernedPersonListForm(scope.$index, scope.row)">删除</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-form-item>
-                <el-form-item label="损失情况">
-                    <el-button type="primary" size="mini" @click="dialogLostDetailListForm=true">添加损失情况</el-button>
-                    <el-table
-                            :data="list.lostDetailList"
-                            height="250"
-                            border
-                            style="width: 100%">
-                        <el-table-column
-                                prop="name"
-                                label="名字"
-                        >
-                            <template slot-scope="{row}">
-                                <span>{{ row.name }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="model"
-                                label="型号"
-                        >
-                            <template slot-scope="{row}">
-                                <span>{{ row.model }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="feather"
-                                label="特征">
-                            <template slot-scope="{row}">
-                                <span>{{ row.feather }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="value"
-                                label="价值">
-                            <template slot-scope="{row}">
-                                <span>{{ row.value }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="amount"
-                                label="数量">
-                            <template slot-scope="{row}">
-                                <span>{{ row.amount }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="regName"
-                                label="登记人">
-                            <template slot-scope="{row}">
-                                <span>{{ row.regName }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="操作" fixed="right" width="150">
-                            <template slot-scope="scope">
-                                <el-button
-                                        size="mini"
-                                        @click="handleEditLostDetailListForm(scope.$index, scope.row)">编辑</el-button>
-                                <el-button
-                                        size="mini"
-                                        type="danger"
-                                        @click="handleDeleteLostDetailListForm(scope.$index, scope.row)">删除</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-form-item>
+
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="主办" prop="mainChargerUid">
-                            <el-select v-model="list.mainChargerUid" placeholder="请选择" center>
+                            <el-select v-model="list.mainChargerUid" disabled placeholder="请选择" center>
                                 <el-option
                                         v-for="item in userList"
                                         :key="item.id"
@@ -351,11 +196,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="作案时机" prop="crimeTime">
-                            <el-date-picker
-                                    v-model="list.crimeTime"
-                                    type="datetime"
-                                    value-format="timestamp"
-                                    placeholder="选择时间"/>
+                            <el-input v-model="list.crimeTime"/>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -400,16 +241,162 @@
                 <el-form-item label="是否死亡案件" prop="isDeathCase">
                     <el-checkbox v-model="list.isDeathCase"></el-checkbox>
                 </el-form-item>
-            </div>
 
-            <div style="width: 700px;margin-left: 30px">
+            <el-form-item label-width="auto">
+                <el-button type="primary" size="mini" @click="dialogConcernedPersonListForm=true">添加当事人</el-button>
+                <el-table
+                        :data="list.concernedPersonList"
+                        height="200"
+                        border
+                        max-height="200"
+                        style="width: 100%">
+                    <el-table-column
+                            prop="name"
+                            label="名字"
+                    >
+                        <template slot-scope="{row}">
+                            <span>{{ row.name }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="idType"
+                            label="证件类型"
+                    >
+                        <template slot-scope="{row}">
+                            <span>{{ row.idTypeShow }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="idNo"
+                            label="证件号">
+                        <template slot-scope="{row}">
+                            <span>{{ row.idNo }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="sex"
+                            label="性别">
+                        <template slot-scope="{row}">
+                            <span>{{ row.sexShow }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="contactNumber"
+                            label="联系电话">
+                        <template slot-scope="{row}">
+                            <span>{{ row.contactNumber }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="residence"
+                            label="常住地址">
+                        <template slot-scope="{row}">
+                            <span>{{ row.residence }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="huji"
+                            label="户籍">
+                        <template slot-scope="{row}">
+                            <span>{{ row.huji }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="registerName"
+                            label="登记人">
+                        <template slot-scope="{row}">
+                            <span>{{ row.registerName }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" fixed="right" width="150">
+                        <template slot-scope="scope">
+                            <el-button
+                                    size="mini"
+                                    @click="handleEditConcernedPersonListForm(scope.$index, scope.row)">编辑</el-button>
+                            <el-button
+                                    size="mini"
+                                    type="danger"
+                                    @click="handleDeleteConcernedPersonListForm(scope.$index, scope.row)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-form-item>
+            <el-form-item label-width="auto">
+                <el-button type="primary" size="mini" @click="dialogLostDetailListForm=true">添加损失情况</el-button>
+                <el-table
+                        :data="list.lostDetailList"
+                        height="200"
+                        border
+                        max-height="200"
+                        style="width: 100%">
+                    <el-table-column
+                            prop="name"
+                            label="名字"
+                    >
+                        <template slot-scope="{row}">
+                            <span>{{ row.name }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="model"
+                            label="型号"
+                    >
+                        <template slot-scope="{row}">
+                            <span>{{ row.model }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="feather"
+                            label="特征">
+                        <template slot-scope="{row}">
+                            <span>{{ row.feather }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="value"
+                            label="价值">
+                        <template slot-scope="{row}">
+                            <span>{{ row.value }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="amount"
+                            label="数量">
+                        <template slot-scope="{row}">
+                            <span>{{ row.amount }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="regName"
+                            label="登记人">
+                        <template slot-scope="{row}">
+                            <span>{{ row.regName }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" fixed="right" width="150">
+                        <template slot-scope="scope">
+                            <el-button
+                                    size="mini"
+                                    @click="handleEditLostDetailListForm(scope.$index, scope.row)">编辑</el-button>
+                            <el-button
+                                    size="mini"
+                                    type="danger"
+                                    @click="handleDeleteLostDetailListForm(scope.$index, scope.row)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-form-item>
+
+
+
                 <el-divider>物证信息</el-divider>
                 <el-form-item label-width="auto">
                     <el-button type="primary" size="mini" @click="dialogMaterialListForm=true">添加物证</el-button>
                     <el-table
                             :data="list.materialList"
-                            height="250"
+                            height="200"
                             border
+                            max-height="200"
                             style="width: 100%">
                         <el-table-column
                                 prop="materialNo"
@@ -438,7 +425,7 @@
                                 prop="materialType"
                                 label="物证类型">
                             <template slot-scope="{row}">
-                                <span>{{ row.materialType }}</span>
+                                <span>{{ row.materialTypeShow }}</span>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -459,7 +446,7 @@
                                 prop="extractUid"
                                 label="提取人">
                             <template slot-scope="{row}">
-                                <span>{{ row.extractUid }}</span>
+                                <span>{{ row.extractUidShow }}</span>
                             </template>
                         </el-table-column>
                         <el-table-column label="操作" fixed="right" width="150">
@@ -475,99 +462,11 @@
                         </el-table-column>
                     </el-table>
                 </el-form-item>
-                <el-form-item label-width="auto">
-                    <el-button type="primary" size="mini" @click="dialogdocumentListForm=true">添加文书</el-button>
-                    <el-table
-                            :data="list.documentList"
-                            height="250"
-                            border
-                            style="width: 100%">
-                        <el-table-column
-                                prop="documentSeqNo"
-                                label="文书编号"
-                        >
-                            <template slot-scope="{row}">
-                                <span>{{ row.documentSeqNo }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="documentNo"
-                                label="文书号"
-                        >
-                            <template slot-scope="{row}">
-                                <span>{{ row.documentNo }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="documentType"
-                                label="文书种类">
-                            <template slot-scope="{row}">
-                                <span>{{ row.documentType }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="materialName"
-                                label="关联物证名称">
-                            <template slot-scope="{row}">
-                                <span>{{ row.materialName }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="evidenceNo"
-                                label="关联勘查号">
-                            <template slot-scope="{row}">
-                                <span>{{ row.evidenceNo }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="submitUid"
-                                label="提交人">
-                            <template slot-scope="{row}">
-                                <span>{{ row.submitUid }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="reliabilityLevel"
-                                label="可靠程度">
-                            <template slot-scope="{row}">
-                                <span>{{ row.reliabilityLevel }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="hasPutInStorage"
-                                label="是否入库">
-                            <template slot-scope="{row}">
-                                <span>{{ row.hasPutInStorage }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="hasTransfered"
-                                label="是否移交">
-                            <template slot-scope="{row}">
-                                <span>{{ row.hasTransfered }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="操作" fixed="right" width="150">
-                            <template slot-scope="scope">
-                                <el-button
-                                        size="mini"
-                                        @click="handleEditdocumentListForm(scope.$index, scope.row)">编辑</el-button>
-                                <el-button
-                                        size="mini"
-                                        type="danger"
-                                        @click="handleDeletedocumentListForm(scope.$index, scope.row)">删除</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
 
-                </el-form-item>
+            <el-button type="primary"  @click="addSearch()">保存</el-button>
 
-                <div class="action">
-                    <el-button type="primary" style="float: right" @click="addSearch()">保存</el-button>
-                </div>
-            </div>
+
         </el-form>
-
         <el-dialog title="添加损失情况" :visible.sync="dialogLostDetailListForm" width="30%">
             <el-form
                     ref="lostDetailListForm"
@@ -600,7 +499,8 @@
                 <el-button @click="dialogLostDetailListForm = false">
                     取 消
                 </el-button>
-                <el-button type="primary" @click="dialogLostDetailListFormMethod=== 'add'?addLostDetailListForm():updateLostDetailListForm()">
+                <el-button type="primary"
+                           @click="dialogLostDetailListFormMethod=== 'add'?addLostDetailListForm():updateLostDetailListForm()">
                     确 定
                 </el-button>
             </div>
@@ -619,13 +519,25 @@
                     <el-input v-model="concernedPersonListForm.name"/>
                 </el-form-item>
                 <el-form-item label="证件类型" prop="idType">
-                    <el-input v-model="concernedPersonListForm.idType"/>
+                    <el-select v-model="concernedPersonListForm.idType" placeholder="请选择" center>
+                        <el-option
+                                v-for="item in idType"
+                                :key="item.id"
+                                :label="item.title"
+                                :value="item.id"/>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="证件号" prop="idNo">
                     <el-input v-model="concernedPersonListForm.idNo"/>
                 </el-form-item>
                 <el-form-item label="性别" prop="sex">
-                    <el-input v-model="concernedPersonListForm.sex"/>
+                    <el-select v-model="concernedPersonListForm.sex" placeholder="请选择" center>
+                        <el-option
+                                v-for="item in sex"
+                                :key="item.id"
+                                :label="item.title"
+                                :value="item.id"/>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="联系电话" prop="contactNumber">
                     <el-input v-model="concernedPersonListForm.contactNumber"/>
@@ -644,7 +556,8 @@
                 <el-button @click="dialogConcernedPersonListForm = false">
                     取 消
                 </el-button>
-                <el-button type="primary" @click="dialogConcernedPersonListFormMethod==='add'?addConcernedPersonListForm():updateConcernedPersonListForm()">
+                <el-button type="primary"
+                           @click="dialogConcernedPersonListFormMethod==='add'?addConcernedPersonListForm():updateConcernedPersonListForm()">
                     确 定
                 </el-button>
             </div>
@@ -669,7 +582,14 @@
                     <el-input v-model="materialListForm.materialCategory"/>
                 </el-form-item>
                 <el-form-item label="物证类型" prop="materialType">
-                    <el-input v-model="materialListForm.materialType"/>
+                    <el-select v-model="materialListForm.materialType" placeholder="请选择" center>
+                        <el-option
+                                v-for="item in materialType"
+                                :key="item.id"
+                                :label="item.title"
+                                :value="item.id"/>
+                    </el-select>
+
                 </el-form-item>
                 <el-form-item label="提取日期" prop="extractTime">
                     <el-input v-model="materialListForm.extractTime"/>
@@ -691,60 +611,8 @@
                 <el-button @click="dialogMaterialListForm = false">
                     取 消
                 </el-button>
-                <el-button type="primary" @click="dialogMaterialListFormMethod === 'add'?addMaterialListForm():updateMaterialListForm()">
-                    确 定
-                </el-button>
-            </div>
-        </el-dialog>
-
-        <el-dialog title="添加文书" :visible.sync="dialogdocumentListForm" width="30%">
-            <el-form
-                    ref="documentListForm"
-                    :rules="documentListFormRules"
-                    :model="documentListForm"
-                    label-position="left"
-                    label-width="100px"
-                    style="width: 400px; margin-left:50px;">
-
-                <el-form-item label="文书编号" prop="documentSeqNo">
-                    <el-input v-model="documentListForm.documentSeqNo"/>
-                </el-form-item>
-                <el-form-item label="文书号" prop="documentNo">
-                    <el-input v-model="documentListForm.documentNo"/>
-                </el-form-item>
-                <el-form-item label="文书类型" prop="documentType">
-                    <el-input v-model="documentListForm.documentType"/>
-                </el-form-item>
-                <el-form-item label="关联物证名称" prop="materialName">
-                    <el-input v-model="documentListForm.materialName"/>
-                </el-form-item>
-                <el-form-item label="关联勘查号" prop="evidenceNo">
-                    <el-input v-model="documentListForm.evidenceNo"/>
-                </el-form-item>
-                <el-form-item label="可靠程度" prop="reliabilityLevel">
-                    <el-input v-model="documentListForm.reliabilityLevel"/>
-                </el-form-item>
-                <el-form-item label="是否已入库" prop="hasPutInStorage">
-                    <el-input v-model="documentListForm.hasPutInStorage"/>
-                </el-form-item>
-                <el-form-item label="是否已转交·" prop="hasTransfered">
-                    <el-input v-model="documentListForm.hasTransfered"/>
-                </el-form-item>
-                <el-form-item label="提交人" prop="submitUid">
-                    <el-select v-model="documentListForm.submitUid" placeholder="请选择" center>
-                        <el-option
-                                v-for="item in userList"
-                                :key="item.id"
-                                :label="item.title"
-                                :value="item.id"/>
-                    </el-select>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogdocumentListForm = false">
-                    取 消
-                </el-button>
-                <el-button type="primary" @click="dialogdocumentListFormMethod === 'add'?adddocumentListForm():updatedocumentListForm()">
+                <el-button type="primary"
+                           @click="dialogMaterialListFormMethod === 'add'?addMaterialListForm():updateMaterialListForm()">
                     确 定
                 </el-button>
             </div>
@@ -768,17 +636,9 @@
                 }
             }
             return {
-                step:1,
+                step:2,
                 caseId:'',
-                task: {
-                    caseNo: 'A350181',
-                    instanceNo: '',
-                    caseCategory: '',
-                    caseAddress: '',
-                    caseDigest: '',
-                    lostDetail: ''
 
-                },
                 taskRules: {
                     taskNo: [{ required: true, trigger: 'change', validator: max20 }],
                     caseNo: [{ required: true, trigger: 'change', validator: max20 }],
@@ -823,8 +683,71 @@
                         title:'多人',
                     }
                 ],
+                idType:[
+                    {
+                        id:1,
+                        title:'身份证',
+                    }, {
+                        id:2,
+                        title:'护照',
+                    }, {
+                        id:3,
+                        title:'军人证',
+                    },{
+                        id:4,
+                        title:'学生证',
+                    }
+                ],
+                sex:[
+                    {
+                        id:0,
+                        title:'未知',
+                    }, {
+                        id:1,
+                        title:'男',
+                    }, {
+                        id:2,
+                        title:'女',
+                    }
+                ],
+                documentType:[
+                    {
+                        id:1,
+                        title:'DNA鉴定书',
+                    }, {
+                        id:2,
+                        title:'指纹鉴定书',
+                    }, {
+                        id:3,
+                        title:'理化鉴定书',
+                    },{
+                        id:4,
+                        title:'其他鉴定书',
+                    },
+                ],
+                materialType:[
+                    {
+                        id:1,
+                        title:'指纹印',
+                    }, {
+                        id:2,
+                        title:'DNA',
+                    }, {
+                        id:3,
+                        title:'鞋印',
+                    },{
+                        id:4,
+                        title:'工痕',
+                    },{
+                        id:4,
+                        title:'微量物证',
+                    },
+                ],
                 list:{
-                    caseId:undefined,
+                    // caseCategory: '',
+                    // caseAddress: '',
+                    // caseDigest: '',
+                    // lostDetail: '',
                     examBeginTime:'',
                     examEndTime:'',
                     caseBeginTime:'',
@@ -852,7 +775,7 @@
                     lostDetailList:[],
                     concernedPersonList:[],
                     materialList:[],
-                    documentList:[],
+
 
                 },
                 listRules:{},
@@ -864,18 +787,14 @@
                 dialogLostDetailListForm:false,
                 dialogConcernedPersonListForm:false,
                 dialogMaterialListForm:false,
-                dialogdocumentListForm:false,
 
                 dialogLostDetailListFormMethod:'add',
                 dialogConcernedPersonListFormMethod:'add',
                 dialogMaterialListFormMethod:'add',
-                dialogdocumentListFormMethod:'add',
 
                 dialogLostDetailListFormIndex:'',
                 dialogConcernedPersonListFormIndex:'',
                 dialogMaterialListFormIndex:'',
-                dialogdocumentListFormIndex:'',
-
 
                 lostDetailListForm:{
                     id:'',
@@ -908,66 +827,15 @@
                     extractMethod:'',
                     extractUid:'',
                 },
-                documentListForm:{
-                    id:'',
-                    name:'',
-                    documentSeqNo:'',
-                    documentNo:'',
-                    documentType:'',
-                    materialName:'',
-                    evidenceNo:'',
-                    submitUid:'',
-                    reliabilityLevel:'',
-                    hasPutInStorage:'',
-                    hasTransfered:'',
-                },
+
                 userList: [],
             }
         },
         created() {
             this.getUserList()
+            this.list.mainChargerUid = this.$store.getters.id;
         },
         methods: {
-            addTask(){
-                this.$refs.task.validate(valid => {
-                    if (valid) {
-                            const sendData = {
-                                caseId: '',
-                                groupId: this.next
-                            }
-                            createTask(this.task).then(response => {
-                                if (response.code === 200) {
-                                    this.$message({
-                                        message: '操作成功',
-                                        type: 'success',
-                                        showClose: true,
-                                        duration: 2000
-                                    })
-                                    this.caseId = response.id;
-                                    this.step++;
-                                }else{
-
-                                    this.$message({
-                                        message: response.reason,
-                                        type: 'success',
-                                        showClose: true,
-                                        duration: 2000
-                                    })
-                                }
-                            })
-
-                    }else{
-                        this.$message({
-                            message: '操作失败，请检查数据',
-                            type: 'error',
-                            showClose: true,
-                            duration: 2000
-                        });
-                        return false
-                    }
-                })
-                this.next = null;
-            },
             getUserList() {
                 fetchAdminMemberList({}).then(response => {
                     this.userList = response.list.map(data => {
@@ -1027,7 +895,16 @@
                 this.dialogConcernedPersonListFormIndex = '';
             },
             addConcernedPersonListForm() {
-
+                 this.sex.map(data=>{
+                    if (data.id == this.concernedPersonListForm.sex){
+                        this.concernedPersonListForm.sexShow = data.title
+                    }
+                })
+                this.idType.map(data=>{
+                    if (data.id == this.concernedPersonListForm.idType){
+                        this.concernedPersonListForm.idTypeShow = data.title
+                    }
+                })
                 this.list.concernedPersonList.push(this.concernedPersonListForm);
                 this.dialogConcernedPersonListForm = false;
                 this.resetConcernedPersonListForm();
@@ -1040,6 +917,16 @@
 
             },
             updateConcernedPersonListForm() {
+                this.sex.map(data=>{
+                    if (data.id == this.concernedPersonListForm.sex){
+                        this.concernedPersonListForm.sexShow = data.title
+                    }
+                })
+                this.idType.map(data=>{
+                    if (data.id == this.concernedPersonListForm.idType){
+                        this.concernedPersonListForm.idTypeShow = data.title
+                    }
+                })
                 var temp = Object.assign({}, this.concernedPersonListForm)// copy obj
                 this.list.concernedPersonList.splice(this.dialogConcernedPersonListFormIndex, 1, temp)
                 this.dialogConcernedPersonListForm = false;
@@ -1064,6 +951,16 @@
                 this.dialogMaterialListFormIndex = ''
             },
             addMaterialListForm() {
+                this.materialType.map(data=>{
+                    if (data.id == this.materialListForm.materialType){
+                        this.materialListForm.materialTypeShow = data.title
+                    }
+                })
+                this.userList.map(data=>{
+                    if (data.id == this.materialListForm.extractUid){
+                        this.materialListForm.extractUidShow = data.title
+                    }
+                })
                 this.list.materialList.push(this.materialListForm);
                 this.dialogMaterialListForm = false;
                 this.resetMaterialListForm();
@@ -1076,6 +973,16 @@
 
             },
             updateMaterialListForm() {
+                this.materialType.map(data=>{
+                    if (data.id == this.materialListForm.materialType){
+                        this.materialListForm.materialTypeShow = data.title
+                    }
+                })
+                this.userList.map(data=>{
+                    if (data.id == this.materialListForm.extractUid){
+                        this.materialListForm.extractUidShow = data.title
+                    }
+                })
                 var temp = Object.assign({}, this.materialListForm)// copy obj
                 this.list.materialList.splice(this.dialogMaterialListFormIndex, 1, temp)
                 this.dialogMaterialListForm = false;
@@ -1083,44 +990,6 @@
             },
             handleDeleteMaterialListForm(index, row) {
                 this.list.materialList.splice(index, 1);
-            },
-
-            resetdocumentListForm() {
-                this.documentListForm = {
-                    name: '',
-                    documentSeqNo: '',
-                    documentNo: '',
-                    documentType: '',
-                    materialName: '',
-                    evidenceNo: '',
-                    submitUid: '',
-                    reliabilityLevel: '',
-                    hasPutInStorage: '',
-                    hasTransfered: '',
-                }
-                this.dialogdocumentListFormMethod = 'add'
-                this.dialogdocumentListFormIndex = ''
-            },
-            adddocumentListForm() {
-                this.list.documentList.push(this.documentListForm);
-                this.dialogdocumentListForm = false;
-                this.resetdocumentListForm();
-            },
-            handleEditdocumentListForm(index, row) {
-                this.documentListForm = Object.assign({}, row) // copy obj
-                this.dialogdocumentListFormIndex = index;
-                this.dialogdocumentListFormMethod = 'edit';
-                this.dialogdocumentListForm = true;
-
-            },
-            updatedocumentListForm() {
-                var temp = Object.assign({}, this.documentListForm)// copy obj
-                this.list.documentList.splice(this.dialogdocumentListFormIndex, 1, temp)
-                this.dialogdocumentListForm = false;
-                this.resetdocumentListForm();
-            },
-            handleDeletedocumentListForm(index, row) {
-                this.list.documentList.splice(index, 1);
             },
             addSearch() {
                 this.$refs.listForm.validate(valid => {
@@ -1131,7 +1000,6 @@
                         this.list.caseBeginTime = this.list.caseBeginTime/1000;
                         this.list.caseEndTime = this.list.caseEndTime/1000;
                         this.list.caseHappenTime = this.list.caseHappenTime/1000;
-                        this.list.crimeTime = this.list.crimeTime/1000;
                         createSearch(this.list).then(response => {
                             if (response.code === 200) {
                                 this.$message({
@@ -1167,13 +1035,6 @@
 </script>
 
 <style scoped>
-    .main {
-        width: 100%;
-        margin-top: 100px;
-    }
 
-    .action {
-        width: 600px;
-        margin: auto;
-    }
+
 </style>

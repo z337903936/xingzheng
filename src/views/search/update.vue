@@ -6,9 +6,9 @@
                 :model="list"
                 label-position="left"
                 label-width="120px"
-                style="display: flex;"
+                style="width: 50%;margin: auto;padding-bottom: 20px"
         >
-            <div style="width: 700px;margin-left: 150px">
+            <el-divider>痕检信息</el-divider>
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="勘查开始" prop="examBeginTime">
@@ -83,148 +83,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-form-item label="当事人">
-                    <el-button type="primary" size="mini" @click="dialogConcernedPersonListForm=true">添加当事人</el-button>
-                    <el-table
-                            :data="list.concernedPersonList"
-                            height="250"
-                            border
-                            style="width: 100%">
-                        <el-table-column
-                                prop="name"
-                                label="名字"
-                        >
-                            <template slot-scope="{row}">
-                                <span>{{ row.name }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="idType"
-                                label="证件类型"
-                        >
-                            <template slot-scope="{row}">
-                                <span>{{ row.idType }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="idNo"
-                                label="证件号">
-                            <template slot-scope="{row}">
-                                <span>{{ row.idNo }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="sex"
-                                label="性别">
-                            <template slot-scope="{row}">
-                                <span>{{ row.sex }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="contactNumber"
-                                label="联系电话">
-                            <template slot-scope="{row}">
-                                <span>{{ row.contactNumber }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="residence"
-                                label="常住地址">
-                            <template slot-scope="{row}">
-                                <span>{{ row.residence }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="huji"
-                                label="户籍">
-                            <template slot-scope="{row}">
-                                <span>{{ row.huji }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="registerName"
-                                label="登记人">
-                            <template slot-scope="{row}">
-                                <span>{{ row.registerName }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="操作" fixed="right" width="150">
-                            <template slot-scope="scope">
-                                <el-button
-                                        size="mini"
-                                        @click="handleEditConcernedPersonListForm(scope.row)">编辑</el-button>
-                                <el-button
-                                        size="mini"
-                                        type="danger"
-                                        @click="handleDeleteConcernedPersonListForm(scope.row)">删除</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-form-item>
-                <el-form-item label="损失情况">
-                    <el-button type="primary" size="mini" @click="dialogLostDetailListForm=true">添加损失情况</el-button>
-                    <el-table
-                            :data="list.lostDetailList"
-                            height="250"
-                            border
-                            style="width: 100%">
-                        <el-table-column
-                                prop="name"
-                                label="名字"
-                        >
-                            <template slot-scope="{row}">
-                                <span>{{ row.name }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="model"
-                                label="型号"
-                        >
-                            <template slot-scope="{row}">
-                                <span>{{ row.model }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="feather"
-                                label="特征">
-                            <template slot-scope="{row}">
-                                <span>{{ row.feather }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="value"
-                                label="价值">
-                            <template slot-scope="{row}">
-                                <span>{{ row.value }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="amount"
-                                label="数量">
-                            <template slot-scope="{row}">
-                                <span>{{ row.amount }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="regName"
-                                label="登记人">
-                            <template slot-scope="{row}">
-                                <span>{{ row.regName }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="操作" fixed="right" width="150">
-                            <template slot-scope="scope">
-                                <el-button
-                                        size="mini"
-                                        @click="handleEditLostDetailListForm( scope.row)">编辑</el-button>
-                                <el-button
-                                        size="mini"
-                                        type="danger"
-                                        @click="handleDeleteLostDetailListForm(scope.row)">删除</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-form-item>
+
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="主办" prop="mainChargerUid">
@@ -310,11 +169,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="作案时机" prop="crimeTime">
-                            <el-date-picker
-                                    v-model="list.crimeTime"
-                                    type="datetime"
-                                    value-format="timestamp"
-                                    placeholder="选择时间"/>
+                            <el-input v-model="list.crimeTime"/>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -359,16 +214,162 @@
                 <el-form-item label="是否死亡案件" prop="isDeathCase">
                     <el-checkbox v-model="list.isDeathCase"></el-checkbox>
                 </el-form-item>
-            </div>
 
-            <div style="width: 700px;margin-left: 30px">
+            <el-form-item label-width="auto">
+                <el-button type="primary" size="mini" @click="dialogConcernedPersonListForm=true">添加当事人</el-button>
+                <el-table
+                        :data="list.concernedPersonList"
+                        height="200"
+                        border
+                        max-height="200"
+                        style="width: 100%">
+                    <el-table-column
+                            prop="name"
+                            label="名字"
+                    >
+                        <template slot-scope="{row}">
+                            <span>{{ row.name }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="idType"
+                            label="证件类型"
+                    >
+                        <template slot-scope="{row}">
+                            <span>{{ row.idTypeShow }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="idNo"
+                            label="证件号">
+                        <template slot-scope="{row}">
+                            <span>{{ row.idNo }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="sex"
+                            label="性别">
+                        <template slot-scope="{row}">
+                            <span>{{ row.sexShow }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="contactNumber"
+                            label="联系电话">
+                        <template slot-scope="{row}">
+                            <span>{{ row.contactNumber }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="residence"
+                            label="常住地址">
+                        <template slot-scope="{row}">
+                            <span>{{ row.residence }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="huji"
+                            label="户籍">
+                        <template slot-scope="{row}">
+                            <span>{{ row.huji }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="registerName"
+                            label="登记人">
+                        <template slot-scope="{row}">
+                            <span>{{ row.registerName }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" fixed="right" width="150">
+                        <template slot-scope="scope">
+                            <el-button
+                                    size="mini"
+                                    @click="handleEditConcernedPersonListForm(scope.row)">编辑</el-button>
+                            <el-button
+                                    size="mini"
+                                    type="danger"
+                                    @click="handleDeleteConcernedPersonListForm(scope.row)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-form-item>
+            <el-form-item label-width="auto">
+                <el-button type="primary" size="mini" @click="dialogLostDetailListForm=true">添加损失情况</el-button>
+                <el-table
+                        :data="list.lostDetailList"
+                        height="200"
+                        border
+                        max-height="200"
+                        style="width: 100%">
+                    <el-table-column
+                            prop="name"
+                            label="名字"
+                    >
+                        <template slot-scope="{row}">
+                            <span>{{ row.name }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="model"
+                            label="型号"
+                    >
+                        <template slot-scope="{row}">
+                            <span>{{ row.model }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="feather"
+                            label="特征">
+                        <template slot-scope="{row}">
+                            <span>{{ row.feather }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="value"
+                            label="价值">
+                        <template slot-scope="{row}">
+                            <span>{{ row.value }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="amount"
+                            label="数量">
+                        <template slot-scope="{row}">
+                            <span>{{ row.amount }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="regName"
+                            label="登记人">
+                        <template slot-scope="{row}">
+                            <span>{{ row.regName }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" fixed="right" width="150">
+                        <template slot-scope="scope">
+                            <el-button
+                                    size="mini"
+                                    @click="handleEditLostDetailListForm( scope.row)">编辑</el-button>
+                            <el-button
+                                    size="mini"
+                                    type="danger"
+                                    @click="handleDeleteLostDetailListForm(scope.row)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-form-item>
+
+
+
                 <el-divider>物证信息</el-divider>
                 <el-form-item label-width="auto">
                     <el-button type="primary" size="mini" @click="dialogMaterialListForm=true">添加物证</el-button>
                     <el-table
                             :data="list.materialList"
-                            height="250"
+                            height="200"
                             border
+                            max-height="200"
                             style="width: 100%">
                         <el-table-column
                                 prop="materialNo"
@@ -397,7 +398,7 @@
                                 prop="materialType"
                                 label="物证类型">
                             <template slot-scope="{row}">
-                                <span>{{ row.materialType }}</span>
+                                <span>{{ row.materialTypeShow }}</span>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -418,7 +419,7 @@
                                 prop="extractUid"
                                 label="提取人">
                             <template slot-scope="{row}">
-                                <span>{{ row.extractUid }}</span>
+                                <span>{{ row.extractUidShow }}</span>
                             </template>
                         </el-table-column>
                         <el-table-column label="操作" fixed="right" width="150">
@@ -434,98 +435,12 @@
                         </el-table-column>
                     </el-table>
                 </el-form-item>
-                <el-form-item label-width="auto">
-                    <el-button type="primary" size="mini" @click="dialogdocumentListForm=true">添加文书</el-button>
-                    <el-table
-                            :data="list.documentList"
-                            height="250"
-                            border
-                            style="width: 100%">
-                        <el-table-column
-                                prop="documentSeqNo"
-                                label="文书编号"
-                        >
-                            <template slot-scope="{row}">
-                                <span>{{ row.documentSeqNo }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="documentNo"
-                                label="文书号"
-                        >
-                            <template slot-scope="{row}">
-                                <span>{{ row.documentNo }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="documentType"
-                                label="文书种类">
-                            <template slot-scope="{row}">
 
-                                <span>{{ row.documentType }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="materialName"
-                                label="关联物证名称">
-                            <template slot-scope="{row}">
-                                <span>{{ row.materialName }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="evidenceNo"
-                                label="关联勘查号">
-                            <template slot-scope="{row}">
-                                <span>{{ row.evidenceNo }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="submitUid"
-                                label="提交人">
-                            <template slot-scope="{row}">
-                                <span>{{ row.submitUid }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="reliabilityLevel"
-                                label="可靠程度">
-                            <template slot-scope="{row}">
-                                <span>{{ row.reliabilityLevel }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="hasPutInStorage"
-                                label="是否入库">
-                            <template slot-scope="{row}">
-                                <span>{{ row.hasPutInStorage }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="hasTransfered"
-                                label="是否移交">
-                            <template slot-scope="{row}">
-                                <span>{{ row.hasTransfered }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="操作" fixed="right" width="150">
-                            <template slot-scope="scope">
-                                <el-button
-                                        size="mini"
-                                        @click="handleEditdocumentListForm(scope.row)">编辑</el-button>
-                                <el-button
-                                        size="mini"
-                                        type="danger"
-                                        @click="handleDeletedocumentListForm(scope.row)">删除</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-
-                </el-form-item>
 
                 <div class="action">
                     <el-button type="primary" style="float: right" @click="updateSearch()">保存</el-button>
                 </div>
-            </div>
+
         </el-form>
 
         <el-dialog title="添加损失情况" :visible.sync="dialogLostDetailListForm" width="30%">
@@ -675,65 +590,6 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="添加文书" :visible.sync="dialogdocumentListForm" width="30%">
-            <el-form
-                    ref="documentListForm"
-                    :rules="documentListFormRules"
-                    :model="documentListForm"
-                    label-position="left"
-                    label-width="100px"
-                    style="width: 400px; margin-left:50px;">
-
-                <el-form-item label="文书编号" prop="documentSeqNo">
-                    <el-input v-model="documentListForm.documentSeqNo"/>
-                </el-form-item>
-                <el-form-item label="文书号" prop="documentNo">
-                    <el-input v-model="documentListForm.documentNo"/>
-                </el-form-item>
-                <el-form-item label="文书类型" prop="documentType">
-                    <el-select v-model="documentListForm.documentType" placeholder="请选择" center>
-                        <el-option
-                                v-for="item in documentType"
-                                :key="item.id"
-                                :label="item.title"
-                                :value="item.id"/>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="关联物证名称" prop="materialName">
-                    <el-input v-model="documentListForm.materialName"/>
-                </el-form-item>
-                <el-form-item label="关联勘查号" prop="evidenceNo">
-                    <el-input v-model="documentListForm.evidenceNo"/>
-                </el-form-item>
-                <el-form-item label="可靠程度" prop="reliabilityLevel">
-                    <el-input v-model="documentListForm.reliabilityLevel"/>
-                </el-form-item>
-                <el-form-item label="是否已入库" prop="hasPutInStorage">
-                    <el-checkbox v-model="documentListForm.hasPutInStorage"></el-checkbox>
-
-                </el-form-item>
-                <el-form-item label="是否已转交·" prop="hasTransfered">
-                    <el-checkbox v-model="documentListForm.hasTransfered"></el-checkbox>
-                </el-form-item>
-                <el-form-item label="提交人" prop="submitUid">
-                    <el-select v-model="documentListForm.submitUid" placeholder="请选择" center>
-                        <el-option
-                                v-for="item in userList"
-                                :key="item.id"
-                                :label="item.title"
-                                :value="item.id"/>
-                    </el-select>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogdocumentListForm = false">
-                    取 消
-                </el-button>
-                <el-button type="primary" @click="dialogdocumentListFormMethod === 'add'?adddocumentListForm():updatedocumentListForm()">
-                    确 定
-                </el-button>
-            </div>
-        </el-dialog>
 
     </div>
 </template>
@@ -885,17 +741,17 @@
                 lostDetailListFormRules:{},
                 concernedPersonListFormRules:{},
                 materialListFormRules:{},
-                documentListFormRules:{},
+
 
                 dialogLostDetailListForm:false,
                 dialogConcernedPersonListForm:false,
                 dialogMaterialListForm:false,
-                dialogdocumentListForm:false,
+
 
                 dialogLostDetailListFormMethod:'add',
                 dialogConcernedPersonListFormMethod:'add',
                 dialogMaterialListFormMethod:'add',
-                dialogdocumentListFormMethod:'add',
+
 
 
                 lostDetailListForm:{
@@ -959,6 +815,7 @@
                 fetchSearch(id).then(data => {
                     this.list = data;
 
+
                 }).catch(err => {
                     console.log(err)
                 })
@@ -966,18 +823,16 @@
             updateSearch() {
                 this.$refs.listForm.validate(valid => {
                     if (valid) {
-                        if (this.list.examBeginTime.length>10)
+                        if (this.list.examBeginTime.toString().length>10)
                             this.list.examBeginTime = this.list.examBeginTime/1000;
-                        if (this.list.examEndTime.length>10)
+                        if (this.list.examEndTime.toString().length>10)
                             this.list.examEndTime = this.list.examEndTime/1000;
-                        if (this.list.caseBeginTime.length>10)
+                        if (this.list.caseBeginTime.toString().length>10)
                             this.list.caseBeginTime = this.list.caseBeginTime/1000;
-                        if (this.list.caseEndTime.length>10)
+                        if (this.list.caseEndTime.toString().length>10)
                             this.list.caseEndTime = this.list.caseEndTime/1000;
-                        if (this.list.caseHappenTime.length>10)
+                        if (this.list.caseHappenTime.toString().length>10)
                             this.list.caseHappenTime = this.list.caseHappenTime/1000;
-                        if (this.list.crimeTime.length>10)
-                            this.list.crimeTime = this.list.crimeTime/1000;
                         updateSearch(this.list).then(response => {
                             if (response.code === 200) {
                                 this.$message({
@@ -1290,98 +1145,7 @@
                 });
             },
 
-            resetdocumentListForm() {
-                this.documentListForm = {
-                    id:'',
-                    name: '',
-                    documentSeqNo: '',
-                    documentNo: '',
-                    documentType: '',
-                    materialName: '',
-                    evidenceNo: '',
-                    submitUid: '',
-                    reliabilityLevel: '',
-                    hasPutInStorage: '',
-                    hasTransfered: '',
-                }
-                this.dialogdocumentListFormMethod = 'add'
-                // this.dialogdocumentListFormIndex = ''
-            },
-            adddocumentListForm() {
-                this.documentListForm.evidenceId = this.list.id;
-                createDocument(this.documentListForm).then(response=>{
-                    if (response.code === 200){
-                        this.$message({
-                            message: '操作成功',
-                            type: 'success',
-                            showClose: true,
-                            duration: 2000
-                        })
-                        this.fetchData(this.list.id)
-                        this.dialogdocumentListForm = false;
-                        this.resetdocumentListForm();
-                    }else{
-                        this.$message({
-                            message: response.reason,
-                            type: 'success',
-                            showClose: true,
-                            duration: 2000
-                        })
-                    }
-                });
-            },
-            handleEditdocumentListForm( row) {
-                this.documentListForm = Object.assign({}, row) // copy obj
-                this.dialogdocumentListFormMethod = 'edit';
-                this.dialogdocumentListForm = true;
 
-            },
-            updatedocumentListForm() {
-                updateDocument(this.documentListForm).then(response=>{
-                    if (response.code === 200){
-                        this.$message({
-                            message: '操作成功',
-                            type: 'success',
-                            showClose: true,
-                            duration: 2000
-                        })
-                        this.fetchData(this.list.id)
-                        this.dialogdocumentListForm = false;
-                        this.resetdocumentListForm();
-                    }else{
-                        this.$message({
-                            message: response.reason,
-                            type: 'success',
-                            showClose: true,
-                            duration: 2000
-                        })
-                    }
-                });
-            },
-            handleDeletedocumentListForm(row) {
-                const sendData={
-                    id:row.id,
-                    operation:'del',
-                }
-                delDocument(sendData).then(response=>{
-                    if (response.code === 200){
-                        this.$message({
-                            message: '操作成功',
-                            type: 'success',
-                            showClose: true,
-                            duration: 2000
-                        })
-                        this.fetchData(this.list.id)
-                    }else{
-                        this.$message({
-                            message: response.reason,
-                            type: 'success',
-                            showClose: true,
-                            duration: 2000
-                        })
-                    }
-                });
-            },
         },
     }
 </script>

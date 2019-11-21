@@ -62,11 +62,14 @@
             <el-table-column label="操作" align="center" width="530" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <router-link :to="'/search/update-search/'+row.id">
-                        <el-button type="primary" size="mini" icon="el-icon-edit">编辑</el-button>
+                        <el-button type="primary" size="mini" >编辑</el-button>
                     </router-link>
                     <!--<el-button type="primary" size="mini" @click="handleUpdate(row)">-->
                         <!--编辑-->
                     <!--</el-button>-->
+                    <router-link :to="'/search/show-search/'+row.id">
+                        <el-button type="success" size="mini" >查看</el-button>
+                    </router-link>
                     <!--<el-button size="mini" type="success">-->
                         <!--查看-->
                     <!--</el-button>-->
