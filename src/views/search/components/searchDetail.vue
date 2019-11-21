@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-row :gutter="20">
+        <el-row :gutter="20" class="mb10">
             <el-col :span="6">
                 勘查开始：
             </el-col>
@@ -14,7 +14,7 @@
                 案件开始：
             </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <el-row :gutter="20" class="mb10">
             <el-col :span="6">
                 发案日期：
             </el-col>
@@ -28,7 +28,7 @@
                 案件类型：
             </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <el-row :gutter="20" class="mb10">
             <el-col :span="6">
                 主办：
             </el-col>
@@ -42,7 +42,7 @@
                 录像员：
             </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <el-row :gutter="20" class="mb10">
             <el-col :span="6">
                 法医：
             </el-col>
@@ -57,7 +57,7 @@
             </el-col>
         </el-row>
 
-        <el-row :gutter="20">
+        <el-row :gutter="20" class="mb10">
             <el-col :span="6">
                 作案时机：
             </el-col>
@@ -71,7 +71,7 @@
                 作案人数：
             </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <el-row :gutter="20" class="mb10">
             <el-col :span="6">
                 作案工具：
             </el-col>
@@ -84,7 +84,7 @@
             <el-col :span="6">
             </el-col>
         </el-row>
-        <div>
+        <div class="mb10">
             作案过程:
         </div>
         <el-table
@@ -92,7 +92,8 @@
                 height="200"
                 border
                 max-height="200"
-                style="width: 100%">
+                style="width: 100%"
+                class="mb10">
             <el-table-column
                     prop="name"
                     label="名字"
@@ -158,7 +159,8 @@
                 height="200"
                 border
                 max-height="200"
-                style="width: 100%">
+                style="width: 100%"
+                class="mb10">
             <el-table-column
                     prop="name"
                     label="名字"
@@ -211,7 +213,8 @@
                 height="200"
                 border
                 max-height="200"
-                style="width: 100%">
+                style="width: 100%"
+                class="mb10">
             <el-table-column
                     prop="materialNo"
                     label="物证编码"
@@ -310,5 +313,7 @@
 </script>
 
 <style scoped>
-
+    .mb10{
+        margin-bottom: 10px;
+    }
 </style>
