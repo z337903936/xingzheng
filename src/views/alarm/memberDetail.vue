@@ -220,8 +220,14 @@
         },
         methods: {
             remoteSearch(node,value){
-                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
-                    return true
+                var p =  /^[a-zA-Z]+$/;
+                if (p.test(value)){
+                    if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                        return true
+                }else{
+                    if (node.data.label.indexOf(value)>-1)
+                        return true
+                }
             },
             restForm() {
                 this.postForm = {
@@ -261,7 +267,7 @@
                         py:item.pinyinAbbr,
                     }
                     if (item.children.length >0){
-                        sendData.children = this.proData(item.children);
+                        sendData.children = this.processData(item.children);
                     }
 
                     return sendData;

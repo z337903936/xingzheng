@@ -26,7 +26,13 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="案件类别" prop="caseCategory">
-                <el-input v-model="postForm.caseCategory"/>
+                <el-cascader
+                        :options="caseCategoryList"
+                        filterable
+                        v-model="postForm.caseCategory"
+                        :filter-method="remoteSearch"
+                        :show-all-levels="false">
+                </el-cascader>
               </el-form-item>
             </el-col>
           </el-row>
@@ -95,6 +101,7 @@
 <script>
   import {fetchMedicalList, fetchMedical, createMedical, updateMedical} from '@/api/medical'
   import { fetchAdminMemberList} from '@/api/permissions'
+  import {fetchList} from '@/api/dictionary'
 
 export default {
   name: 'Detail',
@@ -125,6 +132,7 @@ export default {
       rules:{},
       loading:false,
       smsContentChange:'',
+      caseCategoryList: [],
     }
   },
   computed: {
@@ -135,6 +143,7 @@ export default {
   created() {
     this.getUserList()
     this.restForm();
+    this.search('案件类别');
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.postForm.id = id;
@@ -157,6 +166,39 @@ export default {
         caseCategory: "",
         hasTransfered: '',
       }
+    },
+    remoteSearch(node,value){
+      var p =  /^[a-zA-Z]+$/;
+      if (p.test(value)){
+        if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+          return true
+      }else{
+        if (node.data.label.indexOf(value)>-1)
+          return true
+      }
+    },
+    search(parentName,filter=null){
+      const data = {
+        filter:filter,
+        parentName:parentName
+      };
+      fetchList(data).then(response=>{
+        this.caseCategoryList = this.processData(response.list)
+      })
+    },
+    processData(data){
+      return data.map(item=>{
+        var sendData = {
+          value:item.name,
+          label:item.name,
+          py:item.pinyinAbbr,
+        }
+        if (item.children.length >0){
+          sendData.children = this.processData(item.children);
+        }
+
+        return sendData;
+      })
     },
     getUserList(){
       fetchAdminMemberList({}).then(response => {

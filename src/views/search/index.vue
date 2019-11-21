@@ -38,28 +38,61 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="案件ID" prop="id" align="center" width="80">
+            <el-table-column label="勘查号" prop="id" align="center" width="80">
                 <template slot-scope="{row}">
                     <span>{{ row.caseId }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="案件编号">
+            <el-table-column label="案件性质">
                 <template slot-scope="{row}">
-                    <span>{{ row.caseNo }}</span>
+                    <span>{{ row.caseType }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="勘查起始时间"  align="center">
+ <el-table-column label="发案地址">
                 <template slot-scope="{row}">
-                    <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="创建时间" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+                    <span>{{ row.caseAddress }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="操作" align="center" width="530" class-name="small-padding fixed-width">
+            <el-table-column label="发案日期"  align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d}') }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="发案区划">
+                <template slot-scope="{row}">
+                    <span>{{ row.caseHappenRegion }}</span>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="主办">
+                <template slot-scope="{row}">
+                    <span>{{ row.mainChargerName }}</span>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="协办">
+                <template slot-scope="{row}">
+                    <span>{{ row.supporterName }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="法医">
+                <template slot-scope="{row}">
+                    <span>{{ row.medicalName }}</span>
+                </template>
+            </el-table-column>
+            <!--<el-table-column label="三录情况">-->
+                <!--<template slot-scope="{row}">-->
+                    <!--<span>{{ row.caseHappenRegion }}</span>-->
+                <!--</template>-->
+            <!--</el-table-column>-->
+            <el-table-column label="是否死亡">
+                <template slot-scope="{row}">
+                    <span>{{ row.isDeathCase?'是':'否' }}</span>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <router-link :to="'/search/update-search/'+row.id">
                         <el-button type="primary" size="mini" >编辑</el-button>

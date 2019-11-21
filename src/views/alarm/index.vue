@@ -66,12 +66,12 @@
             </el-table-column>
             <el-table-column label="案件编号" min-width="50px">
                 <template slot-scope="{row}">
-                    <span>{{ row.caseNo }}</span>
+                    <span>{{ row.taskNo }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="接警时间" width="150px" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.receiptTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+                    <span>{{ row.receiptTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="报告人" min-width="150px">
@@ -91,7 +91,12 @@
             </el-table-column>
             <el-table-column label="案件类别" width="110px" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.caseCategoryId }}</span>
+                    <span>{{ row.caseCategory }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="技术员" width="110px" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.techName }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">

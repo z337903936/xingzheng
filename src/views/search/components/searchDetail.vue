@@ -30,24 +30,24 @@
         </el-row>
         <el-row :gutter="20" class="mb10">
             <el-col :span="6">
-                主办：{{ list.mainChargerUid }}
+                主办：{{ list.mainChargerName }}
             </el-col>
             <el-col :span="6">
-                协办：{{ list.supporterUid }}
+                协办：{{ list.supporterName }}
             </el-col>
             <el-col :span="6">
-                照相员：{{ list.photographUid }}
+                照相员：{{ list.photographName }}
             </el-col>
             <el-col :span="6">
-                录像员：{{ list.cameraUid }}
+                录像员：{{ list.cameraName }}
             </el-col>
         </el-row>
         <el-row :gutter="20" class="mb10">
             <el-col :span="6">
-                法医：{{ list.medicalUid }}
+                法医：{{ list.medicalName }}
             </el-col>
             <el-col :span="6">
-                现场保护民警：{{ list.sceneProtectUid }}
+                现场保护民警：{{ list.sceneProtectName }}
             </el-col>
             <el-col :span="6">
                 是否有监控：{{ list.hasCamera?'是':'不是' }}
@@ -86,6 +86,9 @@
         </el-row>
         <div class="mb10">
             作案过程:{{ list.crimeDetail }}
+        </div>
+        <div class="mb10">
+            发案地址:{{ list.caseAddress }}
         </div>
         <el-table
                 :data="list.concernedPersonList"
@@ -302,6 +305,7 @@
                     crimeTools:'',
                     crimeDetail:'',
                     crimePeoples:'',
+                    caseAddress:'',
                     lostDetailList:[],
                     concernedPersonList:[],
                     materialList:[],

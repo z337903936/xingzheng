@@ -49,6 +49,9 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+            <el-form-item label="发案地点" prop="crimeTools">
+                <el-input v-model="list.caseAddress"/>
+            </el-form-item>
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="发案日期" prop="caseHappenTime">
@@ -65,7 +68,7 @@
                                     :options="caseHappenRegionList"
                                     filterable
                                     v-model="list.caseHappenRegion"
-                                    :filter-method="caseHappenRegionSearch"
+                                    :filter-method="filterSearch"
                                     :show-all-levels="false">
                             </el-cascader>
                         </el-form-item>
@@ -89,7 +92,7 @@
                                     :options="caseTypeList"
                                     filterable
                                     v-model="list.caseType"
-                                    :filter-method="caseTypeSearch"
+                                    :filter-method="filterSearch"
                                     :show-all-levels="false">
                             </el-cascader>
                         </el-form-item>
@@ -180,7 +183,7 @@
                                     :options="sceneTypeList"
                                     filterable
                                     v-model="list.sceneType"
-                                    :filter-method="sceneTypeSearch"
+                                    :filter-method="filterSearch"
                                     :show-all-levels="false">
                             </el-cascader>
                         </el-form-item>
@@ -191,7 +194,7 @@
                                     :options="crimeTimeList"
                                     filterable
                                     v-model="list.crimeTime"
-                                    :filter-method="crimeTimeSearch"
+                                    :filter-method="filterSearch"
                                     :show-all-levels="false">
                             </el-cascader>
                         </el-form-item>
@@ -205,7 +208,7 @@
                                     :options="invadeTypeList"
                                     filterable
                                     v-model="list.invadeType"
-                                    :filter-method="invadeTypeSearch"
+                                    :filter-method="filterSearch"
                                     :show-all-levels="false">
                             </el-cascader>
                         </el-form-item>
@@ -217,7 +220,7 @@
                                     :options="escapeTypeList"
                                     filterable
                                     v-model="list.escapeType"
-                                    :filter-method="escapeTypeSearch"
+                                    :filter-method="filterSearch"
                                     :show-all-levels="false">
                             </el-cascader>
                         </el-form-item>
@@ -535,7 +538,7 @@
                             :options="idTypeList"
                             filterable
                             v-model="concernedPersonListForm.idType"
-                            :filter-method="idTypeSearch"
+                            :filter-method="filterSearch"
                             :show-all-levels="false">
                     </el-cascader>
 
@@ -770,6 +773,7 @@
                     crimeTools:'',
                     crimeDetail:'',
                     crimePeoples:'',
+                    caseAddress:'',
                     lostDetailList:[],
                     concernedPersonList:[],
                     materialList:[],
@@ -906,40 +910,23 @@
                         py:item.pinyinAbbr,
                     }
                     if (item.children.length >0){
-                        sendData.children = this.proData(item.children);
+                        sendData.children = this.processData(item.children);
                     }
 
                     return sendData;
                 })
             },
-            caseHappenRegionSearch(node,value){
-                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
-                    return true
+            filterSearch(node,value){
+                var p =  /^[a-zA-Z]+$/;
+                if (p.test(value)){
+                    if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                        return true
+                }else{
+                    if (node.data.label.indexOf(value)>-1)
+                        return true
+                }
             },
-            caseTypeSearch(node,value){
-                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
-                    return true
-            },
-            sceneTypeSearch(node,value){
-                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
-                    return true
-            },
-            crimeTimeSearch(node,value){
-                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
-                    return true
-            },
-            invadeTypeSearch(node,value){
-                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
-                    return true
-            },
-            escapeTypeSearch(node,value){
-                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
-                    return true
-            },
-            idTypeSearch(node,value){
-                if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
-                    return true
-            },
+
             updateSearch() {
                 this.$refs.listForm.validate(valid => {
                     if (valid) {
