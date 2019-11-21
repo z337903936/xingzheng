@@ -109,12 +109,13 @@
                                   :value="smsContentChange" type="textarea"/>
                     </el-form-item>
                     <el-divider>案件信息</el-divider>
-                    <el-form-item label="案件类别" prop="caseCategory">
+                    <el-form-item label="案件类别" prop="caseCategory" >
                             <el-cascader
                                     :options="caseCategoryList"
                                     filterable
                                     v-model="postForm.caseCategory"
-                                    :filter-method="remoteSearch"
+                                    :before-filter="remoteSearch"
+                                    :filter-method="remoteSearch2"
                                     :show-all-levels="false">
                             </el-cascader>
                     </el-form-item>
@@ -186,7 +187,9 @@
                 caseCategoryList: [],
             }
         },
-        computed: {},
+        computed: {
+
+        },
         watch: {
             postForm: {
                 handler() {
@@ -199,11 +202,11 @@
                     }
                     this.smsContentChange = this.postForm.receiptTimeShow + ' 接到' + this.postForm.reportOrg + ' ' + this.postForm.reporter + '(' + this.postForm.contactPhoneNumber + ")" +
                         '报告在' + this.postForm.caseAddress + '发生一起' + this.postForm.caseCategory + ' 案件,损失情况：' + this.postForm.lostDetail + '。值班技术员：' + tech
-
                 },
                 deep: true,
 
             },
+
         },
         created() {
             this.getUserList()
@@ -217,10 +220,17 @@
             this.postForm.receiptUid = this.$store.getters.id;
         },
         methods: {
-            remoteSearch(node, keyword){
-                console.log(keyword)
-                console.log(node)
-
+            remoteSearch(value){
+                const data = {
+                    filter:value,
+                    parentName:'案件类别'
+                };
+                fetchList(data).then(response=>{
+                    this.caseCategoryList = this.processData(response.list)
+                })
+            },
+            remoteSearch2(value){
+                return true;
             },
             restForm() {
                 this.postForm = {
