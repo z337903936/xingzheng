@@ -352,7 +352,9 @@
                     data.smsReceiver = data.smsReceiverArray.join(',');
                 }
                 data.receiptTime = Date.parse(data.receiptTimeShow) / 1000;
-
+                if (data.caseCategory.constructor === Array) {
+                    data.caseCategory = data.caseCategory.slice(-1)[0]
+                }
 
                 this.$refs.postForm.validate(valid => {
                     if (valid) {
