@@ -61,7 +61,7 @@
                                     v-model="list.caseHappenTime"
                                     type="date"
                                     value-format="timestamp"
-                                    placeholder="选择时间"/>
+                                    placeholder="选择日期"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -481,8 +481,11 @@
                         </el-table-column>
                     </el-table>
                 </el-form-item>
+            <el-form-item style="margin-bottom: 40px;text-align: center;" label-width="auto">
 
-            <el-button type="primary"  @click="addSearch()">保存</el-button>
+                <el-button type="primary" style="width: 200px"  @click="addSearch()">保存</el-button>
+
+            </el-form-item>
 
 
         </el-form>
@@ -762,7 +765,7 @@
                     examEndTime:'',
                     caseBeginTime:'',
                     caseEndTime:'',
-                    caseHappenTime:'',
+                    caseHappenTime:Date.parse(new  Date()),
                     caseHappenRegion:'',
                     sceneProtect:'',
                     caseType:'',
@@ -874,6 +877,7 @@
             });
             this.getUserList()
             this.list.mainChargerUid = this.$store.getters.id;
+            
         },
         methods: {
             search(parentName,filter=null){

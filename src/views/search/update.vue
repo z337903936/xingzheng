@@ -475,11 +475,14 @@
                         </el-table-column>
                     </el-table>
                 </el-form-item>
+            <el-form-item style="margin-bottom: 40px;text-align: center;" label-width="auto">
+
+                <el-button type="primary" style="width: 200px"  @click="updateSearch()">保存</el-button>
+
+            </el-form-item>
 
 
-                <div class="action">
-                    <el-button type="primary" style="float: right" @click="updateSearch()">保存</el-button>
-                </div>
+
 
         </el-form>
 

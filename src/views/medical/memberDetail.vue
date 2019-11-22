@@ -82,14 +82,12 @@
 
           </el-form-item>
 
-          <el-row>
-            <el-col :span="8" :offset="16">
-              <el-form-item style="margin-bottom: 40px;" label-width="100px">
-                <el-button v-loading="loading" :rows="1" style="width: 100%" type="primary" @click="submitForm">保存
+
+              <el-form-item style="margin-bottom: 40px;text-align: center;" label-width="100px">
+                <el-button v-loading="loading"  style="width: 200px" type="primary" @click="submitForm">保存
                 </el-button>
               </el-form-item>
-            </el-col>
-          </el-row>
+
         </div>
       </div>
 
