@@ -105,9 +105,15 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="主办" prop="mainChargerUid">
-                            <el-select v-model="list.mainChargerUid" disabled placeholder="请选择" center>
+                            <el-select v-model="list.mainChargerUid"
+                                       filterable
+                                       :filter-method="filterUserSearch"
+                                       @visible-change="restUserSearch"
+                                       disabled
+                                       placeholder="请选择"
+                                       center>
                                 <el-option
-                                        v-for="item in userList"
+                                        v-for="item in userShowList"
                                         :key="item.id"
                                         :label="item.title"
                                         :value="item.id"/>
@@ -117,9 +123,13 @@
                     <el-col :span="12">
                         <el-form-item label="协办 " prop="supporterUid">
 
-                            <el-select v-model="list.supporterUid" placeholder="请选择" center>
+                            <el-select v-model="list.supporterUid"
+                                       filterable
+                                       :filter-method="filterUserSearch"
+                                       @visible-change="restUserSearch"
+                                       placeholder="请选择" center>
                                 <el-option
-                                        v-for="item in userList"
+                                        v-for="item in userShowList"
                                         :key="item.id"
                                         :label="item.title"
                                         :value="item.id"/>
@@ -131,9 +141,13 @@
                     <el-col :span="12">
                         <el-form-item label="照相员" prop="photographUid">
 
-                            <el-select v-model="list.photographUid" placeholder="请选择" center>
+                            <el-select v-model="list.photographUid"
+                                       filterable
+                                       :filter-method="filterUserSearch"
+                                       @visible-change="restUserSearch"
+                                       placeholder="请选择" center>
                                 <el-option
-                                        v-for="item in userList"
+                                        v-for="item in userShowList"
                                         :key="item.id"
                                         :label="item.title"
                                         :value="item.id"/>
@@ -142,9 +156,13 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="录像员" prop="cameraUid">
-                            <el-select v-model="list.cameraUid" placeholder="请选择" center>
+                            <el-select v-model="list.cameraUid"
+                                       filterable
+                                       :filter-method="filterUserSearch"
+                                       @visible-change="restUserSearch"
+                                       placeholder="请选择" center>
                                 <el-option
-                                        v-for="item in userList"
+                                        v-for="item in userShowList"
                                         :key="item.id"
                                         :label="item.title"
                                         :value="item.id"/>
@@ -157,7 +175,7 @@
                         <el-form-item label="法医" prop="medicalUid">
                             <el-select v-model="list.medicalUid" placeholder="请选择" center>
                                 <el-option
-                                        v-for="item in userList"
+                                        v-for="item in userShowList"
                                         :key="item.id"
                                         :label="item.title"
                                         :value="item.id"/>
@@ -166,9 +184,13 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="现场保护民警 " prop="sceneProtectUid">
-                            <el-select v-model="list.sceneProtectUid" placeholder="请选择" center>
+                            <el-select v-model="list.sceneProtectUid"
+                                       filterable
+                                       :filter-method="filterUserSearch"
+                                       @visible-change="restUserSearch"
+                                       placeholder="请选择" center>
                                 <el-option
-                                        v-for="item in userList"
+                                        v-for="item in userShowList"
                                         :key="item.id"
                                         :label="item.title"
                                         :value="item.id"/>
@@ -622,9 +644,13 @@
                     <el-input v-model="materialListForm.extractMethod"/>
                 </el-form-item>
                 <el-form-item label="提取人" prop="extractUid">
-                    <el-select v-model="materialListForm.extractUid" placeholder="请选择" center>
+                    <el-select v-model="materialListForm.extractUid"
+                               filterable
+                               :filter-method="filterUserSearch"
+                               @visible-change="restUserSearch"
+                               placeholder="请选择" center>
                         <el-option
-                                v-for="item in userList"
+                                v-for="item in userShowList"
                                 :key="item.id"
                                 :label="item.title"
                                 :value="item.id"/>
@@ -663,7 +689,6 @@
             return {
                 step:2,
                 caseId:'',
-
                 sceneProtectType:[
                     {
                         id:1,
@@ -841,8 +866,8 @@
                     extractMethod:'',
                     extractUid:'',
                 },
-
                 userList: [],
+                userShowList: [],
                 caseHappenRegionList: [],
                 caseTypeList: [],
                 sceneTypeList: [],
@@ -852,6 +877,7 @@
                 idTypeList: [],
             }
         },
+
         created() {
             this.search('案件类别').then(data=>{
 
@@ -877,7 +903,7 @@
             });
             this.getUserList()
             this.list.mainChargerUid = this.$store.getters.id;
-            
+
         },
         methods: {
             search(parentName,filter=null){
@@ -909,11 +935,14 @@
                     this.userList = response.list.map(data => {
                         return {
                             id: data.id,
-                            title: data.realName
+                            title: data.realName,
+                            py: data.pinyinAbbr
                         }
                     })
+                    this.userShowList = this.userList;
                 })
             },
+
             filterSearch(node,value){
                 var p =  /^[a-zA-Z]+$/;
                 if (p.test(value)){
@@ -924,7 +953,29 @@
                         return true
                 }
             },
+            filterUserSearch(value){
+                if (value) {
+                    this.userShowList = this.userList.filter(data=>{
 
+                        var p =  /^[a-zA-Z]+$/;
+                        if (p.test(value)) {
+                            if (data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                                return data
+                        }else{
+                            if (data.title.indexOf(value)>-1)
+                                return data
+                        }
+                    })
+                }else{
+                    this.userShowList = this.userList;
+                }
+            },
+            restUserSearch(change){
+                if (!change) {
+                    this.userShowList = this.userList;
+                }
+
+            },
             resetLostDetailListForm() {
                 this.lostDetailListForm = {
                     name: '',

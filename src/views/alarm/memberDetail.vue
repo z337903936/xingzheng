@@ -38,9 +38,13 @@
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="技术值班队长" prop="monitorUid">
-                                <el-select v-model="postForm.monitorUid" filterable class="filter-item">
+                                <el-select v-model="postForm.monitorUid"
+                                           filterable
+                                           :filter-method="filterUserSearch"
+                                           @visible-change="restUserSearch"
+                                           class="filter-item">
                                     <el-option
-                                            v-for="item in userList"
+                                            v-for="item in userShowList"
                                             :key="item.id"
                                             :label="item.title"
                                             :value="item.id"/>
@@ -50,9 +54,13 @@
                         <el-col :span="12">
                             <el-form-item label="值班技术员" prop="techUid">
 
-                                <el-select v-model="postForm.techUid" filterable class="filter-item">
+                                <el-select v-model="postForm.techUid"
+                                           filterable
+                                           :filter-method="filterUserSearch"
+                                           @visible-change="restUserSearch"
+                                           class="filter-item">
                                     <el-option
-                                            v-for="item in userList"
+                                            v-for="item in userShowList"
                                             :key="item.id"
                                             :label="item.title"
                                             :value="item.id"/>
@@ -64,9 +72,13 @@
                         <el-col :span="12">
                             <el-form-item label="大队值班领导" prop="leaderUid">
 
-                                <el-select v-model="postForm.leaderUid" filterable class="filter-item">
+                                <el-select v-model="postForm.leaderUid"
+                                           filterable
+                                           :filter-method="filterUserSearch"
+                                           @visible-change="restUserSearch"
+                                            class="filter-item">
                                     <el-option
-                                            v-for="item in userList"
+                                            v-for="item in userShowList"
                                             :key="item.id"
                                             :label="item.title"
                                             :value="item.id"/>
@@ -93,9 +105,13 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="短信通知" prop="sms">
-                                <el-select v-model="postForm.smsReceiverArray" class="filter-item" multiple>
+                                <el-select v-model="postForm.smsReceiverArray"
+                                           filterable
+                                           :filter-method="filterUserSearch"
+                                           @visible-change="restUserSearch"
+                                           class="filter-item" multiple>
                                     <el-option
-                                            v-for="item in userList"
+                                            v-for="item in userShowList"
                                             :key="item.id"
                                             :label="item.title"
                                             :value="item.id"/>
@@ -179,6 +195,7 @@
                     lostDetail: '',
                 },
                 userList: [],
+                userShowList: [],
                 rules: {},
                 loading: false,
                 smsContentChange: '',
@@ -218,6 +235,28 @@
             this.postForm.receiptUid = this.$store.getters.id;
         },
         methods: {
+            filterUserSearch(value){
+                if (value) {
+                    this.userShowList = this.userList.filter(data=>{
+                        var p =  /^[a-zA-Z]+$/;
+                        if (p.test(value)) {
+                            if (data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                                return data
+                        }else{
+                            if (data.title.indexOf(value)>-1)
+                                return data
+                        }
+                    })
+                }else{
+                    this.userShowList = this.userList;
+                }
+            },
+            restUserSearch(change){
+                if (!change) {
+                    this.userShowList = this.userList;
+                }
+
+            },
             remoteSearch(node,value){
                 var p =  /^[a-zA-Z]+$/;
                 if (p.test(value)){
@@ -277,9 +316,11 @@
                     this.userList = response.list.map(data => {
                         return {
                             id: data.id,
-                            title: data.realName
+                            title: data.realName,
+                            py:data.pinyinAbbr,
                         }
                     })
+                    this.userShowList = this.userList
                 })
             },
             formatDate(now) {
