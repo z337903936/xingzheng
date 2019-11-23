@@ -44,8 +44,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="文书号" prop="documentNo">
-                <el-input v-model="postForm.documentNo"/>
+              <el-form-item label="受理时间" prop="time">
+                <el-input v-model="postForm.time" disabled/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -56,10 +56,17 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="鉴定结论" prop="delegateResult">
-                <el-input v-model="postForm.delegateResult" :autosize="{ minRows: 2, maxRows: 4}"   type="textarea"/>
-              </el-form-item>
+              <el-form-item label="受理人" prop="supportName22" >
 
+                <el-select v-model="postForm.supportName22" disabled placeholder="请选择">
+                  <el-option
+                          v-for="item in userList"
+                          :key="item.id"
+                          :label="item.title"
+                          :value="item.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
           </el-row>
 
@@ -75,7 +82,35 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row :gutter="20">
+            <el-col :span="12">
 
+              <el-form-item label="文书号" prop="documentNo">
+                <el-input v-model="postForm.documentNo"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="鉴定结论" prop="delegateResult">
+                <el-input v-model="postForm.delegateResult" :autosize="{ minRows: 2, maxRows: 4}"   type="textarea"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="12">
+
+              <el-form-item label="出具鉴定书时间" prop="documentNo22">
+
+                  <el-date-picker
+                          v-model="postForm.documentNo22"
+                          type="date"
+                          placeholder="选择日期">
+                  </el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+
+            </el-col>
+          </el-row>
 
           <el-form-item label="是否移交" prop="hasTransfered">
             <el-checkbox v-model="postForm.hasTransfered"></el-checkbox>
@@ -122,7 +157,10 @@ export default {
         delegateResult: '',
         refereeName: '',
         documentNo: '',
+        time: '',
+        documentNo22: '',
         supportName: '',
+        supportName22: '',
         caseCategory: "",
         hasTransfered: '',
       },
@@ -147,6 +185,9 @@ export default {
       this.postForm.id = id;
       this.fetchData(id)
     }
+    this.postForm.supportName22 = this.$store.getters.id;
+    this.postForm.time = (new Date()).toLocaleDateString();
+    this.postForm.documentNo22 = new Date();
   },
   methods: {
     restForm(){
@@ -164,6 +205,18 @@ export default {
         caseCategory: "",
         hasTransfered: '',
       }
+    },
+    getUserList() {
+      fetchAdminMemberList({}).then(response => {
+        this.userList = response.list.map(data => {
+          return {
+            id: data.id,
+            title: data.realName,
+            py:data.pinyinAbbr,
+          }
+        })
+
+      })
     },
     remoteSearch(node,value){
       var p =  /^[a-zA-Z]+$/;
@@ -198,16 +251,7 @@ export default {
         return sendData;
       })
     },
-    getUserList(){
-      fetchAdminMemberList({}).then(response => {
-        this.userList = response.list.map(data => {
-          return {
-            id: data.id,
-            title: data.realName
-          }
-        })
-      })
-    },
+
 
     fetchData(id) {
       fetchMedical(id).then(data => {

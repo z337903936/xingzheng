@@ -56,6 +56,7 @@
                 fit
                 highlight-current-row
                 style="width: 100%;"
+
         >
             <el-table-column label="任务号" prop="id" align="center" width="80">
                 <template slot-scope="{row}">
