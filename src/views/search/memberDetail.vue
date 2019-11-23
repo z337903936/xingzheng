@@ -8,8 +8,6 @@
                 label-width="120px"
                 style="width: 50%;margin: auto;padding-bottom: 20px"
         >
-
-
             <el-divider>痕检信息</el-divider>
             <el-row :gutter="20">
                 <el-col :span="12">
@@ -535,7 +533,7 @@
 
 
 
-        <el-dialog title="添加损失情况"  :close-on-click-modal="false" :visible.sync="dialogLostDetailListForm" width="30%">
+        <el-dialog title="损失情况"  :close-on-click-modal="false" :visible.sync="dialogLostDetailListForm" width="30%">
             <el-form
                     ref="lostDetailListForm"
                     :rules="lostDetailListFormRules"
@@ -574,7 +572,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="添加当事人" :close-on-click-modal="false" :visible.sync="dialogConcernedPersonListForm" width="30%">
+        <el-dialog title="当事人" :close-on-click-modal="false" :visible.sync="dialogConcernedPersonListForm" width="30%">
             <el-form
                     ref="concernedPersonListForm"
                     :rules="concernedPersonListFormRules"
@@ -586,13 +584,14 @@
                 <el-form-item label="名字" prop="name">
                     <el-input v-model="concernedPersonListForm.name"/>
                 </el-form-item>
-                <el-form-item label="身份类型" prop="idType">
+                <el-form-item label="身份类型" prop="idType" >
                     <el-cascader
                             :options="idTypeList"
                             filterable
                             v-model="concernedPersonListForm.idType"
                             :filter-method="filterSearch"
-                            :show-all-levels="false">
+                            :show-all-levels="false"
+                            style="width: 100%">
                     </el-cascader>
 
 
@@ -606,7 +605,8 @@
                                 v-for="item in sex"
                                 :key="item.id"
                                 :label="item.title"
-                                :value="item.id"/>
+                                :value="item.id"
+                                style="width: 100%"/>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="联系电话" prop="contactNumber">
@@ -633,110 +633,20 @@
             </div>
         </el-dialog>
 
-        <!--<el-dialog title="添加物证" :visible.sync="dialogMaterialListForm"-->
-                   <!--:close-on-click-modal="false" width="90%">-->
+        <el-dialog title="物证" :visible.sync="dialogMaterialListForm"
+                   :close-on-click-modal="false" width="30%">
 
-            <!--<el-button v-waves type="primary" style="margin-bottom: 10px"  icon="el-icon-edit" @click="addMaterialListForm()">生成物证</el-button>-->
-            <!--<el-table-->
-                    <!--:key="tableKey"-->
-                    <!--:data="materialListForm"-->
-                    <!--border-->
-                    <!--fit-->
-                    <!--highlight-current-row-->
-                    <!--style="width: 100%;"-->
-            <!--&gt;-->
-                <!--<el-table-column label="系统编号" prop="id" align="center">-->
-                    <!--<template slot-scope="{row}">-->
 
-                        <!--<span>{{ row.taskNo</span>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="物证编码" >-->
-                    <!--<template slot-scope="{row}">-->
-                        <!--<span>{{ row.materialNo }}</span>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="物证细别" align="center">-->
-
-                    <!--<template slot-scope="{row}">-->
-                        <!--<span>{{ row.delegateName }}</span>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="物证类别" align="center">-->
-                    <!--<template slot-scope="{row}">-->
-                        <!--<span>{{ row.materialCategory }}</span>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="物证类型" >-->
-                    <!--<template slot-scope="{row}">-->
-                        <!--<span>{{ row.materialType }}</span>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="可靠程度" >-->
-                    <!--<template slot-scope="{row}">-->
-                        <!--<span>{{ row.digest }}</span>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="遗留部位" >-->
-                    <!--<template slot-scope="{row}">-->
-                        <!--<span>{{ row.digest }}</span>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="提取方法" >-->
-                    <!--<template slot-scope="{row}">-->
-                        <!--<span>{{ row.extractMethod }}</span>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="利用情况" >-->
-                    <!--<template slot-scope="{row}">-->
-                        <!--<span>{{ row.digest }}</span>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="提取日期"  align="center">-->
-                    <!--<template slot-scope="{row}">-->
-
-                        <!--<span>{{ row.extractTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="提取人"  align="center">-->
-                    <!--<template slot-scope="{row}">-->
-                        <!--<span>{{ row.extractUid }}</span>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="物证名称"  align="center">-->
-                    <!--<template slot-scope="{row}">-->
-                        <!--<span>{{ row.contactPhoneNumber }}</span>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="图片"  align="center">-->
-                    <!--<template slot-scope="{row}">-->
-                        <!--<span>{{ row.contactPhoneNumber }}</span>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="编辑状态"  align="center">-->
-                    <!--<template slot-scope="{row}">-->
-                        <!--<span>{{ row.status }}</span>-->
-                    <!--</template>-->
-                <!--</el-table-column>-->
-                <!--<el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">-->
-                    <!--<template slot-scope="{row}">-->
-                        <!--<router-link :to="'/medical/edit-medical/'+row.id">-->
-                            <!--<el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>-->
-                        <!--</router-link>-->
-
-                    <!--</template>-->
-                <!--</el-table-column>-->
-            <!--</el-table>-->
-            <!--<div slot="footer" class="dialog-footer">-->
-                <!--<el-button @click="dialogMaterialListForm = false">-->
-                    <!--取 消-->
-                <!--</el-button>-->
-                <!--<el-button type="primary"-->
-                           <!--@click="dialogMaterialListFormMethod === 'add'?addMaterialListForm():updateMaterialListForm()">-->
-                    <!--确 定-->
-                <!--</el-button>-->
-            <!--</div>-->
-        <!--</el-dialog>-->
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogMaterialListForm = false">
+                    取 消
+                </el-button>
+                <el-button type="primary"
+                           @click="dialogMaterialListFormMethod === 'add'?addMaterialListForm():updateMaterialListForm()">
+                    确 定
+                </el-button>
+            </div>
+        </el-dialog>
 
     </div>
 </template>
@@ -987,6 +897,7 @@
                 this.fetchData(id);
             }
             this.list.mainChargerUid = this.$store.getters.id
+            this.list.examBeginTime = new Date();
             this.getUserList()
             this.search('案件类别').then(data=>{
                 this.caseTypeList = this.processData(data.list);
@@ -1340,139 +1251,7 @@
 
             },
 
-            resetMaterialListForm() {
-                this.materialListForm = {
-                    name: '',
-                    materialNo: '',
-                    thirdMaterialNo: '',
-                    materialCategory: '',
-                    materialType: '',
-                    extractTime: '',
-                    extractMethod: '',
-                    extractUid: '',
-                }
-                this.dialogMaterialListFormMethod = 'add'
-                this.dialogMaterialListFormIndex = ''
-            },
-            addMaterialListForm() {
 
-                // if (this.isEdit) {
-                //     this.materialListForm.evidenceId = this.list.id;
-                //     createMaterial(this.materialListForm).then(response=>{
-                //         if (response.code === 200){
-                //             this.$message({
-                //                 message: '操作成功',
-                //                 type: 'success',
-                //                 showClose: true,
-                //                 duration: 2000
-                //             })
-                //             this.fetchData(this.list.id)
-                //             this.dialogMaterialListForm = false;
-                //             this.resetMaterialListForm();
-                //         }else{
-                //             this.$message({
-                //                 message: response.reason,
-                //                 type: 'success',
-                //                 showClose: true,
-                //                 duration: 2000
-                //             })
-                //         }
-                //     });
-                //
-                // }else{
-                //     this.materialType.map(data=>{
-                //         if (data.id == this.materialListForm.materialType){
-                //             this.materialListForm.materialTypeShow = data.title
-                //         }
-                //     })
-                //     this.userList.map(data=>{
-                //         if (data.id == this.materialListForm.extractUid){
-                //             this.materialListForm.extractUidShow = data.title
-                //         }
-                //     })
-                //     this.list.materialList.push(this.materialListForm);
-                //     this.dialogMaterialListForm = false;
-                //     this.resetMaterialListForm();
-                // }
-
-            },
-            handleEditMaterialListForm(index, row) {
-                    this.materialListForm = Object.assign({}, row) // copy obj
-                    this.dialogMaterialListFormIndex = index;
-                    this.dialogMaterialListFormMethod = 'edit';
-                    this.dialogMaterialListForm = true;
-
-
-            },
-            updateMaterialListForm() {
-                if (this.isEdit) {
-                    updateMaterial(this.materialListForm).then(response=>{
-                        if (response.code === 200){
-                            this.$message({
-                                message: '操作成功',
-                                type: 'success',
-                                showClose: true,
-                                duration: 2000
-                            })
-                            this.fetchData(this.list.id)
-                            this.dialogMaterialListForm = false;
-                            this.resetMaterialListForm();
-                        }else{
-                            this.$message({
-                                message: response.reason,
-                                type: 'success',
-                                showClose: true,
-                                duration: 2000
-                            })
-                        }
-                    });
-                }else{
-                    this.materialType.map(data=>{
-                        if (data.id == this.materialListForm.materialType){
-                            this.materialListForm.materialTypeShow = data.title
-                        }
-                    })
-                    this.userList.map(data=>{
-                        if (data.id == this.materialListForm.extractUid){
-                            this.materialListForm.extractUidShow = data.title
-                        }
-                    })
-                    var temp = Object.assign({}, this.materialListForm)// copy obj
-                    this.list.materialList.splice(this.dialogMaterialListFormIndex, 1, temp)
-                    this.dialogMaterialListForm = false;
-                    this.resetMaterialListForm();
-                }
-
-            },
-            handleDeleteMaterialListForm(index, row) {
-                if (this.isEdit) {
-                    const sendData={
-                        id:row.id,
-                        operation:'del',
-                    }
-                    delMaterial(sendData).then(response=>{
-                        if (response.code === 200){
-                            this.$message({
-                                message: '操作成功',
-                                type: 'success',
-                                showClose: true,
-                                duration: 2000
-                            })
-                            this.fetchData(this.list.id)
-                        }else{
-                            this.$message({
-                                message: response.reason,
-                                type: 'success',
-                                showClose: true,
-                                duration: 2000
-                            })
-                        }
-                    });
-                }else{
-                    this.list.materialList.splice(index, 1);
-                }
-
-            },
             submitForm() {
                 this.$refs.listForm.validate(valid => {
                     if (valid) {

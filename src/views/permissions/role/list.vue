@@ -17,7 +17,7 @@
           <span>{{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="名字">
+      <el-table-column label="岗位">
         <template slot-scope="scope">
           <router-link :to="'/permissions/edit-role/'+scope.row.id" class="link-type">
             <span>{{ scope.row.groupName }}</span>

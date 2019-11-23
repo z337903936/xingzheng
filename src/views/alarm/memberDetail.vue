@@ -26,7 +26,8 @@
                                         v-model="postForm.receiptTimeShow"
                                         type="datetime"
                                         value-format="yyyy-MM-dd HH:mm:ss"
-                                        placeholder="选择时间"/>
+                                        placeholder="选择时间"
+                                        style="width: 100%"/>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -42,7 +43,8 @@
                                            filterable
                                            :filter-method="filterUserSearch"
                                            @visible-change="restUserSearch"
-                                           class="filter-item">
+                                           class="filter-item"
+                                           style="width: 100%">
                                     <el-option
                                             v-for="item in userShowList"
                                             :key="item.id"
@@ -58,7 +60,8 @@
                                            filterable
                                            :filter-method="filterUserSearch"
                                            @visible-change="restUserSearch"
-                                           class="filter-item">
+                                           class="filter-item"
+                                           style="width: 100%">
                                     <el-option
                                             v-for="item in userShowList"
                                             :key="item.id"
@@ -76,7 +79,8 @@
                                            filterable
                                            :filter-method="filterUserSearch"
                                            @visible-change="restUserSearch"
-                                            class="filter-item">
+                                            class="filter-item"
+                                           style="width: 100%">
                                     <el-option
                                             v-for="item in userShowList"
                                             :key="item.id"
@@ -87,7 +91,8 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="接警人" prop="receiptUid">
-                                <el-select v-model="postForm.receiptUid" disabled class="filter-item">
+                                <el-select v-model="postForm.receiptUid" disabled class="filter-item"
+                                           style="width: 100%">
                                     <el-option
                                             v-for="item in userList"
                                             :value-key="item.id"
@@ -109,7 +114,8 @@
                                            filterable
                                            :filter-method="filterUserSearch"
                                            @visible-change="restUserSearch"
-                                           class="filter-item" multiple>
+                                           class="filter-item" multiple
+                                           style="width: 100%">
                                     <el-option
                                             v-for="item in userShowList"
                                             :key="item.id"
@@ -131,7 +137,8 @@
                                     filterable
                                     v-model="postForm.caseCategory"
                                     :filter-method="remoteSearch"
-                                    :show-all-levels="false">
+                                    :show-all-levels="false"
+                                    style="width: 100%">
                             </el-cascader>
                     </el-form-item>
                     <el-form-item label="案发地点" prop="caseAddress">

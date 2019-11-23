@@ -41,7 +41,8 @@
     <el-dialog
       :visible.sync="deleteMenuDialog"
       title="提示"
-      width="30%">
+      width="30%"
+    >
       <span>确定删除这条数据吗？</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="deleteMenuDialog = false">取 消</el-button>
@@ -49,7 +50,7 @@
       </span>
     </el-dialog>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" :close-on-click-modal="false" :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"

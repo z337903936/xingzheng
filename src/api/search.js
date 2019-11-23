@@ -108,6 +108,14 @@ export function delMaterial(data) {
     })
 }
 
+export function submitMaterial(data) {
+    return request({
+        url: '/v1/cp/batch_submit_material/',
+        method: 'post',
+        data
+    })
+}
+
 //文书
 export function createDocument(data) {
     return request({
