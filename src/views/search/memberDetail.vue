@@ -90,12 +90,12 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="案件类别" prop="caseType">
+                    <el-form-item label="案件类别" prop="caseCategory">
 
                         <el-cascader
                                 :options="caseTypeList"
                                 filterable
-                                v-model="list.caseType"
+                                v-model="list.caseCategory"
                                 :filter-method="filterSearch"
                                 :show-all-levels="false"
                                 style="width: 100%">
@@ -282,6 +282,18 @@
                     </el-form-item>
                 </el-col>
             </el-row>
+            <el-row :gutter="20">
+                <el-col :span="12">
+                    <el-form-item label="现勘号" prop="thirdEvidenceNo">
+                        <el-input v-model="list.thirdEvidenceNo"/>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="勘查号" prop="selfEvidenceNo">
+                        <el-input v-model="list.selfEvidenceNo"/>
+                    </el-form-item>
+                </el-col>
+            </el-row>
             <el-form-item label="作案过程" prop="crimeDetail">
                 <el-input v-model="list.crimeDetail" type="textarea"/>
             </el-form-item>
@@ -453,7 +465,7 @@
             <el-divider>物证信息</el-divider>
             <el-form-item label-width="auto">
                 <!--<el-button type="primary" size="mini" @click="dialogMaterialListForm=true">添加物证</el-button>-->
-                <el-button type="primary" size="mini" @click="toAddMaterial()">添加物证</el-button>
+                <el-button type="primary" size="mini" @click="handleClickToAddMaterial">添加物证</el-button>
                 <el-table
                         :data="list.materialList"
                         height="200"
@@ -531,6 +543,25 @@
 
         </el-form>
 
+        <el-dialog
+                title="提示"
+                :visible.sync="dialogPoint"
+                width="30%"
+                >
+            <span>添加物证必须先保存现勘记录，是否保存现勘记录</span>
+            <span slot="footer" class="dialog-footer">
+
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogPoint = false">
+                        取 消
+                    </el-button>
+                    <el-button type="primary"
+                               @click="toAddMaterial">
+                        确 定
+                    </el-button>
+                </div>
+            </span>
+        </el-dialog>
 
 
         <el-dialog title="损失情况"  :close-on-click-modal="false" :visible.sync="dialogLostDetailListForm" width="30%">
@@ -674,6 +705,7 @@
             }
             return {
                 tableKey:0,
+                dialogPoint:false,
                 sceneProtectUidList:[
                     {
                         id:0,
@@ -780,7 +812,7 @@
                     },
                 ],
                 list:{
-                    id:undefined,
+                    id:null,
                     examBeginTime:'',
                     examEndTime:'',
                     caseBeginTime:'',
@@ -788,7 +820,7 @@
                     caseHappenTime:'',
                     caseHappenRegion:'',
                     sceneProtect:'',
-                    caseType:'',
+                    caseCategory:'',
                     mainChargerUid:'',
                     supporterUid:'',
                     photographUid:'',
@@ -806,6 +838,8 @@
                     crimeDetail:'',
                     crimePeoples:'',
                     caseAddress:'',
+                    thirdEvidenceNo:'',
+                    selfEvidenceNo:'',
                     lostDetailList:[],
                     concernedPersonList:[],
                     materialList:[],
@@ -897,7 +931,7 @@
                 this.fetchData(id);
             }
             this.list.mainChargerUid = this.$store.getters.id
-            this.list.examBeginTime = new Date();
+            this.list.examBeginTime = (new Date()).valueOf();;
             this.getUserList()
             this.search('案件类别').then(data=>{
                 this.caseTypeList = this.processData(data.list);
@@ -922,13 +956,30 @@
             });
         },
         methods:{
+            handleClickToAddMaterial(){
+                if (this.list.id ==null){
+                    // this.$router.push({
+                    //     path: '/search/material/1',
+                    //     query: {
+                    //         t: +new Date()
+                    //     }
+                    // });
+                    this.dialogPoint=true;
+                }else{
+                    this.$router.push({
+                        path: '/search/material/'+this.list.id,
+                        query: {
+                            t: +new Date()
+                        }
+                    })
+                }
+            },
             toAddMaterial(){
-                this.$router.push({
-                    path: '/search/material/1',
-                    query: {
-                        t: +new Date()
-                    }
-                })
+                if (this.list.id ==null){
+                    this.submitForm(true);
+                }
+
+
             },
             fetchData(id) {
                 fetchSearch(id).then(data => {
@@ -1228,6 +1279,7 @@
                         operation:'del',
                     }
                     delPerson(sendData).then(response=>{
+
                         if (response.code === 200){
                             this.$message({
                                 message: '操作成功',
@@ -1252,27 +1304,28 @@
             },
 
 
-            submitForm() {
+            submitForm(toAddMaterial=false) {
                 this.$refs.listForm.validate(valid => {
                     if (valid) {
                         var data = this.list;
                         data.caseId = this.caseId;
-                        if (data.examBeginTime.toString().length>10)
-                            data.examBeginTime = data.examBeginTime/1000;
-                        if (data.examEndTime.toString().length>10)
-                            data.examEndTime = data.examEndTime/1000;
-                        if (data.caseBeginTime.toString().length>10)
-                            data.caseBeginTime = data.caseBeginTime/1000;
-                        if (data.caseEndTime.toString().length>10)
-                            data.caseEndTime = data.caseEndTime/1000;
-                        if (data.caseHappenTime.toString().length>10)
-                            data.caseHappenTime = data.caseHappenTime/1000;
 
+
+                        if (data.examBeginTime.toString().length>10)
+                           data.examBeginTime =  parseInt(data.examBeginTime/1000);
+                        if (data.examEndTime.toString().length>10)
+                            data.examEndTime =  parseInt(data.examEndTime/1000);
+                        if (data.caseBeginTime.toString().length>10)
+                            data.caseBeginTime =  parseInt(data.caseBeginTime/1000);
+                        if (data.caseEndTime.toString().length>10)
+                            data.caseEndTime =  parseInt(data.caseEndTime/1000);
+                        if (data.caseHappenTime.toString().length>10)
+                            data.caseHappenTime =  parseInt(data.caseHappenTime/1000);
                         if (data.caseHappenRegion.constructor === Array) {
                             data.caseHappenRegion = data.caseHappenRegion.slice(-1)[0]
                         }
-                        if (data.caseType.constructor === Array) {
-                            data.caseType = data.caseType.slice(-1)[0]
+                        if (data.caseCategory.constructor === Array) {
+                            data.caseCategory = data.caseCategory.slice(-1)[0]
                         }
                         if (data.sceneType.constructor === Array) {
                             data.sceneType = data.sceneType.slice(-1)[0]
@@ -1297,7 +1350,6 @@
                                         showClose: true,
                                         duration: 2000
                                     })
-
                                 }else{
                                     this.$message({
                                         message: response.reason,
@@ -1306,7 +1358,9 @@
                                         duration: 2000
                                     })
                                 }
+
                             })
+                            this.loading = false
                         }else{
                             createSearch(data).then(response => {
                                 if (response.code === 200) {
@@ -1316,7 +1370,16 @@
                                         showClose: true,
                                         duration: 2000
                                     })
-
+                                    const id = response.id;
+                                    if (toAddMaterial){
+                                        this.$router.push({
+                                            path: '/search/material/'+id,
+                                            query: {
+                                                t: +new Date()
+                                            }
+                                        })
+                                        this.dialogPoint=false;
+                                    }
                                 }else{
                                     this.$message({
                                         message: response.reason,
@@ -1324,8 +1387,11 @@
                                         showClose: true,
                                         duration: 2000
                                     })
+
                                 }
+
                             })
+                            this.loading = false
                         }
 
                     } else {
@@ -1335,6 +1401,7 @@
                             showClose: true,
                             duration: 2000
                         });
+                        this.loading = false
                         return false
                     }
                 })
