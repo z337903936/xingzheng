@@ -118,15 +118,14 @@
                 <el-row :gutter="20">
                     <el-col :span="8">
                         <el-form-item label="物证类别" prop="materialCategory">
-                            <el-input v-model="materialListForm.materialCategory"/>
-                            <!--<el-cascader-->
-                            <!--:options="materialCategoryList"-->
-                            <!--filterable-->
-                            <!--v-model="materialListForm.materialCategory"-->
-                            <!--:filter-method="filterSearch"-->
-                            <!--:show-all-levels="false"-->
-                            <!--style="width: 100%">-->
-                            <!--</el-cascader>-->
+                            <el-cascader
+                            :options="materialCategoryList"
+                            filterable
+                            v-model="materialListForm.materialCategory"
+                            :filter-method="filterSearch"
+                            :show-all-levels="false"
+                            style="width: 100%">
+                            </el-cascader>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -137,7 +136,14 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="可靠程度" prop="reliabilityLevel">
-                            <el-input v-model="materialListForm.reliabilityLevel"/>
+                            <el-select v-model="materialListForm.reliabilityLevel" placeholder="请选择">
+                                <el-option
+                                        v-for="item in reliabilityLevel"
+                                        :key="item.title"
+                                        :label="item.title"
+                                        :value="item.title">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -155,7 +161,14 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="利用情况" prop="usedType">
-                            <el-input v-model="materialListForm.usedType"/>
+                            <el-select v-model="materialListForm.usedType" placeholder="请选择">
+                                <el-option
+                                        v-for="item in usedType"
+                                        :key="item.title"
+                                        :label="item.title"
+                                        :value="item.title">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -229,6 +242,30 @@
         components: {Upload},
         data() {
             return {
+                reliabilityLevel:[
+                    {
+                        title:'是',
+                    }, {
+                        title:'疑似',
+                    }, {
+                        title:'其他',
+                    },
+                ],
+                usedType:[
+                    {
+                        title:'查档认定',
+                    }, {
+                        title:'鉴定认定',
+                    }, {
+                        title:'串并认定',
+                    },{
+                        title:'排除嫌疑',
+                    },{
+                        title:'其他利用',
+                    },{
+                        title:'尚未利用',
+                    },
+                ],
                 materialListForm: {
                     id: '',
                     evidenceId: '',
@@ -264,9 +301,9 @@
             this.searchId = id;
             this.getUserList();
             this.fetchData(id);
-            // this.search('案件类别').then(data=>{
-            //     this.materialCategoryList = this.processData(data.list);
-            // });
+            this.search('物证类别').then(data=>{
+                this.materialCategoryList = this.processData(data.list);
+            });
 
         },
         methods: {
@@ -285,9 +322,6 @@
                             showClose: true,
                             duration: 2000
                         })
-                        this.fetchData(this.searchId)
-                        this.dialogMaterialListForm = false;
-                        this.resetMaterialListForm();
                     } else {
                         this.$message({
                             message: response.reason,
