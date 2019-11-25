@@ -1142,7 +1142,7 @@
                 const data = {
                     list:this.taskId
                 };
-                submitMaterial(data).then(res=>{
+                submitMaterial(data).then(response=>{
                     if (response.code === 200) {
                         this.$message({
                             message: '操作成功',
@@ -1517,7 +1517,7 @@
                 this.dialogMaterialListFormMethod = 'add'
             },
             addMaterialListForm() {
-                
+
                 var data = this.materialListForm
                 if (data.extractTime.toString().length > 10)
                     data.extractTime = parseInt(data.extractTime / 1000);
