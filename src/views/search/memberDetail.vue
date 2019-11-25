@@ -466,12 +466,20 @@
             <el-form-item label-width="auto">
                 <!--<el-button type="primary" size="mini" @click="dialogMaterialListForm=true">添加物证</el-button>-->
                 <el-button type="primary" size="mini" @click="handleClickToAddMaterial">添加物证</el-button>
+                <el-button type="primary" size="mini" @click="submitTask">批量提交</el-button>
                 <el-table
                         :data="list.materialList"
                         height="200"
                         border
                         max-height="200"
-                        style="width: 100%">
+                        row-key="id"
+                        @selection-change="selectTask"
+                >
+                    <el-table-column
+                            type="selection"
+                            width="55"
+                            v-model="taskId">
+                    </el-table-column>
                     <el-table-column
                             prop="materialNo"
                             label="物证编码"
@@ -492,6 +500,7 @@
                             prop="materialCategory"
                             label="物证类别">
                         <template slot-scope="{row}">
+
                             <span>{{ row.materialCategory }}</span>
                         </template>
                     </el-table-column>
@@ -499,14 +508,15 @@
                             prop="materialType"
                             label="物证类型">
                         <template slot-scope="{row}">
-                            <span>{{ row.materialTypeShow }}</span>
+                            <span>{{ row.materialType }}</span>
                         </template>
                     </el-table-column>
                     <el-table-column
                             prop="extractTime"
                             label="提取日期">
                         <template slot-scope="{row}">
-                            <span>{{ row.extractTime }}</span>
+                            <span v-if="row.extractTime !== ''">{{ row.extractTime*1000 | parseTime('{y}-{m}-{d}') }}</span>
+                            <span v-else></span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -520,18 +530,20 @@
                             prop="extractUid"
                             label="提取人">
                         <template slot-scope="{row}">
-                            <span>{{ row.extractUidShow }}</span>
+                            <span>{{ row.extractName }}</span>
                         </template>
                     </el-table-column>
                     <el-table-column label="操作" fixed="right" width="150">
                         <template slot-scope="scope">
                             <el-button
                                     size="mini"
-                                    @click="handleEditMaterialListForm( scope.row)">编辑</el-button>
+                                    @click="handleEditMaterialListForm( scope.row)">编辑
+                            </el-button>
                             <el-button
                                     size="mini"
                                     type="danger"
-                                    @click="handleDeleteMaterialListForm( scope.row)">删除</el-button>
+                                    @click="handleDeleteMaterialListForm( scope.row)">删除
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -664,10 +676,133 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="物证" :visible.sync="dialogMaterialListForm"
-                   :close-on-click-modal="false" width="30%">
+        <el-dialog title="物证" :visible.sync="dialogMaterialListForm" :close-on-click-modal="false" width="50%">
+            <el-form
+                    ref="materialListForm"
+                    :rules="materialListFormRules"
+                    :model="materialListForm"
+                    label-position="left"
+                    label-width="100px"
+            >
+                <el-row :gutter="20">
+                    <el-col :span="8">
+                        <el-form-item label="系统编号">
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="物证编号" prop="thirdMaterialNo">
+                            <el-input v-model="materialListForm.thirdMaterialNo"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="物证细类" prop="noned">
+                            <el-input v-model="materialListForm.noned"/>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
 
+                <el-row :gutter="20">
+                    <el-col :span="8">
+                        <el-form-item label="物证类别" prop="materialCategory">
+                            <el-cascader
+                                    :options="materialCategoryList"
+                                    filterable
+                                    v-model="materialListForm.materialCategory"
+                                    :filter-method="filterSearch"
+                                    :show-all-levels="false"
+                                    style="width: 100%">
+                            </el-cascader>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
 
+                        <el-form-item label="物证类型" prop="materialType">
+                            <el-input v-model="materialListForm.materialType"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="可靠程度" prop="reliabilityLevel">
+                            <el-select v-model="materialListForm.reliabilityLevel" placeholder="请选择">
+                                <el-option
+                                        v-for="item in reliabilityLevel"
+                                        :key="item.title"
+                                        :label="item.title"
+                                        :value="item.title">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row :gutter="20">
+                    <el-col :span="8">
+                        <el-form-item label="遗留部位" prop="stayPart">
+                            <el-input v-model="materialListForm.stayPart"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="提取方法" prop="extractMethod">
+                            <el-input v-model="materialListForm.extractMethod"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="利用情况" prop="usedType">
+                            <el-select v-model="materialListForm.usedType" placeholder="请选择">
+                                <el-option
+                                        v-for="item in usedType"
+                                        :key="item.title"
+                                        :label="item.title"
+                                        :value="item.title">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row :gutter="20">
+                    <el-col :span="8">
+                        <el-form-item label="提取日期" prop="extractTime">
+
+                            <el-date-picker
+                                    v-model="materialListForm.extractTime"
+                                    type="date"
+                                    value-format="timestamp"
+                                    placeholder="选择时间"
+                                    style="width: 100%"
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="提取人" prop="extractUid">
+                            <el-select v-model="materialListForm.extractUid"
+                                       filterable
+                                       :filter-method="filterUserSearch"
+                                       @visible-change="restUserSearch"
+                                       placeholder="请选择" center
+                                       style="width: 100%">
+                                <el-option
+                                        v-for="item in userShowList"
+                                        :key="item.id"
+                                        :label="item.title"
+                                        :value="item.id"/>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+
+                        <el-form-item label="物证名称" prop="name">
+                            <el-input v-model="materialListForm.name"/>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-form-item label="特征描述" prop="note">
+                    <el-input type="textarea" v-model="materialListForm.note"/>
+                </el-form-item>
+                <el-form-item label="物证图片" prop="registerName">
+                    <Upload @tell='setStayPart' v-model="materialListForm.imgUrl"/>
+                </el-form-item>
+
+            </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogMaterialListForm = false">
                     取 消
@@ -679,16 +814,19 @@
             </div>
         </el-dialog>
 
+
     </div>
 </template>
 
 <script>
     import {createSearch, fetchSearch, updateSearch, createPerson, updatePerson, delPerson, createLost, updateLost, delLost,
-        createMaterial, updateMaterial, delMaterial, createDocument, updateDocument, delDocument} from '@/api/search'
+        createMaterial, updateMaterial, delMaterial,submitMaterial, createDocument, updateDocument, delDocument} from '@/api/search'
     import {fetchList} from '@/api/dictionary'
     import { fetchAdminMemberList} from '@/api/permissions'
+    import Upload from '@/components/Upload/SingleImage3'
     export default {
         name: "menberDetail",
+        components: {Upload},
         props: {
             isEdit: {
                 type: Boolean,
@@ -811,6 +949,30 @@
                         title:'微量物证',
                     },
                 ],
+                reliabilityLevel:[
+                    {
+                        title:'是',
+                    }, {
+                        title:'疑似',
+                    }, {
+                        title:'其他',
+                    },
+                ],
+                usedType:[
+                    {
+                        title:'查档认定',
+                    }, {
+                        title:'鉴定认定',
+                    }, {
+                        title:'串并认定',
+                    },{
+                        title:'排除嫌疑',
+                    },{
+                        title:'其他利用',
+                    },{
+                        title:'尚未利用',
+                    },
+                ],
                 list:{
                     id:null,
                     examBeginTime:'',
@@ -861,7 +1023,9 @@
                 dialogLostDetailListFormMethod:'add',
                 dialogConcernedPersonListFormMethod:'add',
                 dialogMaterialListFormMethod:'add',
-
+                taskId: [],
+                materialCategoryList: [],
+                searchId: null,
 
 
                 lostDetailListForm:{
@@ -886,18 +1050,23 @@
                     huji:'',
                     registerName:'',
                 },
-
-                materialListForm:{
-                    id:'',
-                    evidenceId:'',
-                    materialNo:'',
-                    thirdMaterialNo:'',
-                    materialCategory:'',
-                    materialType:'',
-                    extractTime:'',
-                    extractMethod:'',
-                    extractUid:'',
-                    isAdd:true,
+                materialListForm: {
+                    id: '',
+                    evidenceId: '',
+                    materialNo: '',
+                    thirdMaterialNo: '',
+                    materialCategory: '',
+                    materialType: '',
+                    extractTime: '',
+                    extractMethod: '',
+                    extractUid: '',
+                    imgUrl: '',
+                    stayPart: '',
+                    reliabilityLevel: '',
+                    usedType: '',
+                    name: '',
+                    note: '',
+                    noned: '',
                 },
                 documentListForm:{
                     id:'',
@@ -954,8 +1123,43 @@
             this.search('身份类型').then(data=>{
                 this.idTypeList = this.processData(data.list);
             });
+            this.search('物证类别').then(data=>{
+                this.materialCategoryList = this.processData(data.list);
+            });
         },
         methods:{
+            setStayPart(val){
+
+                this.materialListForm.stayPart = val.originalFileName;
+                this.materialListForm.imgUrl = val.imgUrl;
+            },
+            selectTask(selection){
+                this.taskId = selection.map(data=>{
+                    return data.id;
+                })
+            },
+            submitTask() {
+                const data = {
+                    list:this.taskId
+                };
+                submitMaterial(data).then(res=>{
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                });
+            },
             handleClickToAddMaterial(){
                 if (this.list.id ==null){
                     // this.$router.push({
@@ -966,20 +1170,13 @@
                     // });
                     this.dialogPoint=true;
                 }else{
-                    this.$router.push({
-                        path: '/search/material/'+this.list.id,
-                        query: {
-                            t: +new Date()
-                        }
-                    })
+                    this.dialogMaterialListForm=true
                 }
             },
             toAddMaterial(){
                 if (this.list.id ==null){
                     this.submitForm(true);
                 }
-
-
             },
             fetchData(id) {
                 fetchSearch(id).then(data => {
@@ -1224,13 +1421,10 @@
 
             },
             handleEditConcernedPersonListForm(index, row) {
-
                     this.concernedPersonListForm = Object.assign({}, row) // copy obj
                     this.dialogConcernedPersonListFormMethod = 'edit';
                     this.dialogConcernedPersonListFormIndex = index;
                     this.dialogConcernedPersonListForm = true;
-
-
 
             },
             updateConcernedPersonListForm() {
@@ -1302,6 +1496,149 @@
                 }
 
             },
+            resetMaterialListForm() {
+                this.materialListForm = {
+                    id: '',
+                    materialNo: '',
+                    thirdMaterialNo: '',
+                    materialCategory: '',
+                    materialType: '',
+                    extractTime: '',
+                    extractMethod: '',
+                    extractUid: '',
+                    imgUrl: '',
+                    stayPart: '',
+                    reliabilityLevel: '',
+                    usedType: '',
+                    name: '',
+                    note: '',
+                    noned: '',
+                }
+                this.dialogMaterialListFormMethod = 'add'
+            },
+            addMaterialListForm() {
+                
+                var data = this.materialListForm
+                if (data.extractTime.toString().length > 10)
+                    data.extractTime = parseInt(data.extractTime / 1000);
+                createMaterial(data).then(response => {
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.fetchData(this.searchId)
+                        this.dialogMaterialListForm = false;
+                        this.resetMaterialListForm();
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                });
+
+                // }else{
+                //     this.materialType.map(data=>{
+                //         if (data.id == this.materialListForm.materialType){
+                //             this.materialListForm.materialTypeShow = data.title
+                //         }
+                //     })
+                //     this.userList.map(data=>{
+                //         if (data.id == this.materialListForm.extractUid){
+                //             this.materialListForm.extractUidShow = data.title
+                //         }
+                //     })
+                //     this.list.materialList.push(this.materialListForm);
+                //     this.dialogMaterialListForm = false;
+                //     this.resetMaterialListForm();
+                // }
+
+            },
+            handleEditMaterialListForm(row) {
+                console.log(row);
+                row.extractTime = row.extractTime*1000
+                this.materialListForm = Object.assign({}, row) // copy obj
+                this.dialogMaterialListFormMethod = 'edit';
+                this.dialogMaterialListForm = true;
+
+
+            },
+            updateMaterialListForm() {
+                // if (this.isEdit) {
+                var data = this.materialListForm
+                if (data.extractTime.toString().length > 10)
+                    data.extractTime = parseInt(data.extractTime / 1000);
+                updateMaterial(data).then(response => {
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.fetchData(this.searchId)
+                        this.dialogMaterialListForm = false;
+                        this.resetMaterialListForm();
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                });
+                // }else{
+                //     this.materialType.map(data=>{
+                //         if (data.id == this.materialListForm.materialType){
+                //             this.materialListForm.materialTypeShow = data.title
+                //         }
+                //     })
+                //     this.userList.map(data=>{
+                //         if (data.id == this.materialListForm.extractUid){
+                //             this.materialListForm.extractUidShow = data.title
+                //         }
+                //     })
+                //     var temp = Object.assign({}, this.materialListForm)// copy obj
+                //     this.dialogMaterialListForm = false;
+                //     this.resetMaterialListForm();
+                // }
+
+            },
+            handleDeleteMaterialListForm(row) {
+                // if (this.isEdit) {
+                const sendData = {
+                    id: row.id,
+                    operation: 'del',
+                }
+                delMaterial(sendData).then(response => {
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.fetchData(this.searchId)
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                });
+                // }else{
+                //     this.list.materialList.splice(index, 1);
+                // }
+
+            },
 
 
             submitForm(toAddMaterial=false) {
@@ -1309,7 +1646,6 @@
                     if (valid) {
                         var data = this.list;
                         data.caseId = this.caseId;
-
 
                         if (data.examBeginTime.toString().length>10)
                            data.examBeginTime =  parseInt(data.examBeginTime/1000);
@@ -1372,12 +1708,10 @@
                                     })
                                     const id = response.id;
                                     if (toAddMaterial){
-                                        this.$router.push({
-                                            path: '/search/material/'+id,
-                                            query: {
-                                                t: +new Date()
-                                            }
-                                        })
+                                        this.isEdit=true;
+                                        this.materialListForm.evidenceId = id;
+                                        this.searchId = id;
+                                        this.list.id = id;
                                         this.dialogPoint=false;
                                     }
                                 }else{
