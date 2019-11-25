@@ -9,9 +9,9 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="步骤号" align="center" >
+            <el-table-column label="任务单号" align="center" >
                 <template slot-scope="{row}">
-                    <span>{{ row.stepNo }}</span>
+                    <span>{{ row.taskNo }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="步骤内容" >

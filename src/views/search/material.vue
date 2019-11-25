@@ -54,7 +54,7 @@
                         prop="extractTime"
                         label="提取日期">
                     <template slot-scope="{row}">
-                        <span v-if="row.extractTime !== ''">{{ row.extractTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                        <span v-if="row.extractTime !== ''">{{ row.extractTime*1000 | parseTime('{y}-{m}-{d}') }}</span>
                         <span v-else></span>
                     </template>
                 </el-table-column>
@@ -88,7 +88,7 @@
             </el-table>
         </div>
 
-        <el-dialog title="添加物证" :visible.sync="dialogMaterialListForm"
+        <el-dialog title="物证" :visible.sync="dialogMaterialListForm"
                    :close-on-click-modal="false" width="50%">
             <el-form
                     ref="materialListForm"
@@ -213,7 +213,7 @@
                     <el-input type="textarea" v-model="materialListForm.note"/>
                 </el-form-item>
                 <el-form-item label="物证图片" prop="registerName">
-                    <Upload v-model="materialListForm.imgUrl"/>
+                    <Upload @tell='setStayPart' v-model="materialListForm.imgUrl"/>
                 </el-form-item>
 
             </el-form>
@@ -293,6 +293,7 @@
                 dialogMaterialListForm: false,
                 dialogMaterialListFormMethod: 'add',
                 searchId: null,
+                text:'1'
             }
         },
         created() {
@@ -307,13 +308,21 @@
 
         },
         methods: {
+
+            setStayPart(val){
+
+                this.materialListForm.stayPart = val.originalFileName;
+                this.materialListForm.imgUrl = val.imgUrl;
+            },
             selectTask(selection){
                 this.taskId = selection.map(data=>{
                     return data.id;
                 })
             },
             submitTask() {
-                const data = this.taskId;
+                const data = {
+                    list:this.taskId
+                };
                 submitMaterial(data).then(res=>{
                     if (response.code === 200) {
                         this.$message({
@@ -495,7 +504,7 @@
                             showClose: true,
                             duration: 2000
                         })
-                        this.fetchData(this.list.id)
+                        this.fetchData(this.searchId)
                         this.dialogMaterialListForm = false;
                         this.resetMaterialListForm();
                     } else {
@@ -538,7 +547,7 @@
                             showClose: true,
                             duration: 2000
                         })
-                        this.fetchData(this.list.id)
+                        this.fetchData(this.searchId)
                     } else {
                         this.$message({
                             message: response.reason,

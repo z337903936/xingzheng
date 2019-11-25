@@ -61,10 +61,9 @@ export default {
       this.$emit('input', val)
     },
     handleImageSuccess(res) {
-      this.emitInput(res.imgUrl)
-      console.log(res);
-      this.$parent.materialListForm.imgUrl = res.imgUrl
-      this.$parent.materialListForm.stayPart = res.originalFileName
+      this.emitInput(res.imgUrl);
+      this.$emit('tell',res)
+
     },
     beforeUpload() {
       // const _self = this
