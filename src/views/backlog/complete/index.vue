@@ -11,6 +11,7 @@
         >
             <el-table-column label="任务单号" align="center" >
                 <template slot-scope="{row}">
+
                     <span>{{ row.taskNo }}</span>
                 </template>
             </el-table-column>
@@ -51,6 +52,7 @@
                 </template>
             </el-table-column>
         </el-table>
+
         <!--<el-pagination-->
                 <!--background-->
                 <!--layout="prev, pager, next"-->
@@ -64,10 +66,10 @@
 </template>
 
 <script>
-    import { nextTask,accetpTask,taskList } from '@/api/task'
+    import { accetpTask,taskList } from '@/api/backlog'
 
     export default {
-        name: "Backlog",
+        name: "Complete",
         filters: {
 
             statusFilter(status) {

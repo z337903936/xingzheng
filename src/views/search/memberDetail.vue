@@ -483,6 +483,7 @@
                     <el-table-column
                             prop="materialNo"
                             label="物证编码"
+                            width="140"
                     >
                         <template slot-scope="{row}">
                             <span>{{ row.materialNo }}</span>
@@ -491,7 +492,7 @@
                     <el-table-column
                             prop="thirdMaterialNo"
                             label="物证库编号"
-                            width="120"
+                            width="140"
                     >
                         <template slot-scope="{row}">
                             <span>{{ row.thirdMaterialNo }}</span>
@@ -514,7 +515,8 @@
                     </el-table-column>
                     <el-table-column
                             prop="extractTime"
-                            label="提取日期">
+                            label="提取日期"
+                    width="100px">
                         <template slot-scope="{row}">
                             <span v-if="row.extractTime !== ''">{{ row.extractTime*1000 | parseTime('{y}-{m}-{d}') }}</span>
                             <span v-else></span>
