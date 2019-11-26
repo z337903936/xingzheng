@@ -74,27 +74,27 @@
                     <span>{{ row.receiptTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="报告人" min-width="150px">
+            <el-table-column label="报告人" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.reporter }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="报告单位" width="110px" align="center">
+            <el-table-column label="报告单位" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.reportOrg }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="联系方式" width="110px" align="center">
+            <el-table-column label="联系方式" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.contactPhoneNumber }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="案件类别" width="110px" align="center">
+            <el-table-column label="案件类别" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.caseCategory }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="技术员" width="110px" align="center">
+            <el-table-column label="技术员" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.techName }}</span>
                 </template>

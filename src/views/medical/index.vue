@@ -63,38 +63,38 @@
                     <span>{{ row.taskNo</span>
                 </template>
             </el-table-column>
-            <el-table-column label="委托单位" min-width="50px">
+            <el-table-column label="委托单位" >
                 <template slot-scope="{row}">
                     <span>{{ row.delegateOrg }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="委托人" width="150px" align="center">
+            <el-table-column label="委托人"  align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.delegateName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="受理日期" min-width="150px">
+            <el-table-column label="受理日期" >
                 <template slot-scope="{row}">
 
                     <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="简要案情" width="110px" align="center">
+            <el-table-column label="简要案情" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.digest }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="鉴定结论" width="110px" align="center">
+            <el-table-column label="鉴定结论" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.contactPhoneNumber }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="鉴定人" width="110px" align="center">
+            <el-table-column label="鉴定人"  align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.refereeName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="案件类别" width="110px" align="center">
+            <el-table-column label="案件类别" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.caseCategory }}</span>
                 </template>

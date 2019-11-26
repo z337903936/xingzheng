@@ -491,6 +491,7 @@
                     <el-table-column
                             prop="thirdMaterialNo"
                             label="物证库编号"
+                            width="120"
                     >
                         <template slot-scope="{row}">
                             <span>{{ row.thirdMaterialNo }}</span>
@@ -533,11 +534,19 @@
                             <span>{{ row.extractName }}</span>
                         </template>
                     </el-table-column>
+                    <el-table-column
+                            prop="extractUid"
+                            label="图片"
+                    width="200">
+                        <template slot-scope="{row}">
+                            <span><img :src="row.imgUrl" height="100"></span>
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作" fixed="right" width="150">
                         <template slot-scope="scope">
                             <el-button
                                     size="mini"
-                                    @click="handleEditMaterialListForm( scope.row)">编辑
+                                    @click="handleEditMaterialListForm(scope.row)">编辑
                             </el-button>
                             <el-button
                                     size="mini"
@@ -1098,8 +1107,10 @@
                 const id = this.$route.params && this.$route.params.id;
                 this.list.id = id;
                 this.fetchData(id);
+
             }
             this.list.mainChargerUid = this.$store.getters.id
+
             this.list.examBeginTime = (new Date()).valueOf();;
             this.getUserList()
             this.search('案件类别').then(data=>{
@@ -1160,24 +1171,7 @@
                     }
                 });
             },
-            handleClickToAddMaterial(){
-                if (this.list.id ==null){
-                    // this.$router.push({
-                    //     path: '/search/material/1',
-                    //     query: {
-                    //         t: +new Date()
-                    //     }
-                    // });
-                    this.dialogPoint=true;
-                }else{
-                    this.dialogMaterialListForm=true
-                }
-            },
-            toAddMaterial(){
-                if (this.list.id ==null){
-                    this.submitForm(true);
-                }
-            },
+
             fetchData(id) {
                 fetchSearch(id).then(data => {
                     this.list = data;
@@ -1497,7 +1491,7 @@
 
             },
             resetMaterialListForm() {
-                this.materialListForm = {
+                const change  = {
                     id: '',
                     materialNo: '',
                     thirdMaterialNo: '',
@@ -1513,12 +1507,30 @@
                     name: '',
                     note: '',
                     noned: '',
+                    evidenceId:this.list.id
                 }
+                this.materialListForm = Object.assign({}, change) // copy obj
                 this.dialogMaterialListFormMethod = 'add'
+            },
+            handleClickToAddMaterial(){
+                this.resetMaterialListForm();
+                if (this.list.id ==null){
+                    this.dialogPoint=true;
+                }else{
+                    this.dialogMaterialListForm=true
+                }
+            },
+            toAddMaterial(){
+                if (this.list.id ==null){
+                    this.submitForm(true);
+                }
             },
             addMaterialListForm() {
 
                 var data = this.materialListForm
+                if (data.materialCategory.constructor === Array) {
+                    data.materialCategory = data.materialCategory.slice(-1)[0]
+                }
                 if (data.extractTime.toString().length > 10)
                     data.extractTime = parseInt(data.extractTime / 1000);
                 createMaterial(data).then(response => {
@@ -1529,7 +1541,7 @@
                             showClose: true,
                             duration: 2000
                         })
-                        this.fetchData(this.searchId)
+                        this.fetchData(this.list.id)
                         this.dialogMaterialListForm = false;
                         this.resetMaterialListForm();
                     } else {
@@ -1581,7 +1593,7 @@
                             showClose: true,
                             duration: 2000
                         })
-                        this.fetchData(this.searchId)
+                        this.fetchData(this.list.id)
                         this.dialogMaterialListForm = false;
                         this.resetMaterialListForm();
                     } else {
@@ -1624,7 +1636,7 @@
                             showClose: true,
                             duration: 2000
                         })
-                        this.fetchData(this.searchId)
+                        this.fetchData(this.list.id)
                     } else {
                         this.$message({
                             message: response.reason,

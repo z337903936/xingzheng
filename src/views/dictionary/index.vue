@@ -32,13 +32,18 @@
           <el-button
                   type="text"
                   size="mini"
+                  @click="() => handleAdd(data)">
+            添加
+          </el-button> <el-button
+                  type="text"
+                  size="mini"
                   @click="() => handleUpdate(data)">
             修改
           </el-button>
           <el-button
                   type="text"
                   size="mini"
-                  @click="() => handleDelete(row)">
+                  @click="() => handleDelete(data)">
             删除
           </el-button>
         </span>
@@ -50,6 +55,7 @@
       :visible.sync="dialogDelete"
       title="删除提示"
       width="30%"
+      :close-on-click-modal="false"
     >
       <span>是否删除该条数据?</span>
       <span slot="footer" class="dialog-footer">
@@ -193,6 +199,12 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    },
+    handleAdd(data) {
+      this.resetTemp();
+      this.dialogStatus = 'create'
+      this.temp.parentId = data.id
+      this.dialogFormAdd = true
     },
     handleCreate() {
       this.resetTemp()
