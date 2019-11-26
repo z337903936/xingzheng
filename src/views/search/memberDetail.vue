@@ -1177,7 +1177,7 @@
             fetchData(id) {
                 fetchSearch(id).then(data => {
                     this.list = data;
-
+                    this.list = this.changeTime(this.list,false);
 
                 }).catch(err => {
                     console.log(err)
@@ -1653,24 +1653,51 @@
                 // }
 
             },
+            changeTime(data,type){
+                if (type) {
+                    if (data.examBeginTime.toString().length>10)
+                        data.examBeginTime =  parseInt(data.examBeginTime/1000);
+                    if (data.examEndTime.toString().length>10)
+                        data.examEndTime =  parseInt(data.examEndTime/1000);
+                    if (data.caseBeginTime.toString().length>10)
+                        data.caseBeginTime =  parseInt(data.caseBeginTime/1000);
+                    if (data.caseEndTime.toString().length>10)
+                        data.caseEndTime =  parseInt(data.caseEndTime/1000);
+                    if (data.caseHappenTime.toString().length>10)
+                        data.caseHappenTime =  parseInt(data.caseHappenTime/1000);
+                }else{
+                    console.log(data.examBeginTime.toString().length);
+                    if (data.examBeginTime.toString().length===10)
+                        data.examBeginTime =  parseInt(data.examBeginTime*1000);
+                    if (data.examEndTime.toString().length===10)
+                        data.examEndTime =  parseInt(data.examEndTime*1000);
+                    if (data.caseBeginTime.toString().length===10)
+                        data.caseBeginTime =  parseInt(data.caseBeginTime*1000);
+                    if (data.caseEndTime.toString().length===10)
+                        data.caseEndTime =  parseInt(data.caseEndTime*1000);
+                    if (data.caseHappenTime.toString().length===10)
+                        data.caseHappenTime =  parseInt(data.caseHappenTime*1000);
+                }
+              return data;
 
-
+            },
             submitForm(toAddMaterial=false) {
                 this.$refs.listForm.validate(valid => {
                     if (valid) {
                         var data = this.list;
                         data.caseId = this.caseId;
+                        data = this.changeTime(data,true);
+                        // if (data.examBeginTime.toString().length>10)
+                        //    data.examBeginTime =  parseInt(data.examBeginTime/1000);
+                        // if (data.examEndTime.toString().length>10)
+                        //     data.examEndTime =  parseInt(data.examEndTime/1000);
+                        // if (data.caseBeginTime.toString().length>10)
+                        //     data.caseBeginTime =  parseInt(data.caseBeginTime/1000);
+                        // if (data.caseEndTime.toString().length>10)
+                        //     data.caseEndTime =  parseInt(data.caseEndTime/1000);
+                        // if (data.caseHappenTime.toString().length>10)
+                        //     data.caseHappenTime =  parseInt(data.caseHappenTime/1000);
 
-                        if (data.examBeginTime.toString().length>10)
-                           data.examBeginTime =  parseInt(data.examBeginTime/1000);
-                        if (data.examEndTime.toString().length>10)
-                            data.examEndTime =  parseInt(data.examEndTime/1000);
-                        if (data.caseBeginTime.toString().length>10)
-                            data.caseBeginTime =  parseInt(data.caseBeginTime/1000);
-                        if (data.caseEndTime.toString().length>10)
-                            data.caseEndTime =  parseInt(data.caseEndTime/1000);
-                        if (data.caseHappenTime.toString().length>10)
-                            data.caseHappenTime =  parseInt(data.caseHappenTime/1000);
                         if (data.caseHappenRegion.constructor === Array) {
                             data.caseHappenRegion = data.caseHappenRegion.slice(-1)[0]
                         }
@@ -1720,8 +1747,11 @@
                                         showClose: true,
                                         duration: 2000
                                     })
-                                    const id = response.id;
+
+                                    this.list = this.changeTime(this.list,false);
+
                                     if (toAddMaterial){
+                                        const id = response.id;
                                         this.isEdit=true;
                                         this.materialListForm.evidenceId = id;
                                         this.searchId = id;
