@@ -15,32 +15,42 @@
                     <span>{{ row.taskNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="步骤内容" >
+            <el-table-column label="任务类型" >
                 <template slot-scope="{row}">
                     <span>{{ row.stepName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="认领人" >
+            <el-table-column label="发送人" >
                 <template slot-scope="{row}">
                     <span>{{ row.stepHandler }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="任务开始时间"  align="center">
+            <el-table-column label="发送时间"  align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.taskArriveTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+                    <span>{{row.taskArriveTime!==''?(row.taskArriveTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}')):'' }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="任务结束时间"  align="center">
+            <!--<el-table-column label="任务结束时间"  align="center">-->
+                <!--<template slot-scope="{row}">-->
+                    <!--<span>{{row.taskEndTime!==''?(row.taskEndTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}')):''}}</span>-->
+                <!--</template>-->
+            <!--</el-table-column>-->
+            <el-table-column label="任务详情" >
                 <template slot-scope="{row}">
-                    <span>{{ row.taskEndTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+                    <span>{{ row.stepHandler }}</span>
                 </template>
             </el-table-column>
-
-            <el-table-column label="案件类别"  align="center">
+            <el-table-column label="状态"  align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.status | statusFilter }}</span>
                 </template>
             </el-table-column>
+            <el-table-column label="关联编号" >
+                <template slot-scope="{row}">
+                    <span>{{ row.stepHandler }}</span>
+                </template>
+            </el-table-column>
+
             <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <el-button type="primary" size="small" @click="handleAcceptTask(row)" v-if="row.status===1">
@@ -62,7 +72,7 @@
                 <!--@size-change="getList"-->
         <!--&gt;-->
         <!--</el-pagination>-->
-        <el-dialog title="接受任务" :visible.sync="dialogFormAccept" width="30%">
+        <el-dialog title="接受任务" :visible.sync="dialogFormAccept" width="50%">
             <el-form
                     ref="dataForm"
                     :model="acceptTaskFrom"
