@@ -43,12 +43,12 @@
             </el-table-column>
             <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <el-button type="primary" size="mini" @click="acceptTask(row)" v-if="row.status===1">
+                    <el-button type="primary" size="small" @click="handleAcceptTask(row)" v-if="row.status===1">
                         接受任务
                     </el-button>
-                    <router-link :to="'/task/show-case/'+row.id">
-                        <el-button type="primary" size="mini">查看</el-button>
-                    </router-link>
+                    <!--<router-link :to="'/task/show-case/'+row.id">-->
+                        <!--<el-button type="primary" size="mini">查看</el-button>-->
+                    <!--</router-link>-->
                 </template>
             </el-table-column>
         </el-table>
@@ -62,6 +62,37 @@
                 <!--@size-change="getList"-->
         <!--&gt;-->
         <!--</el-pagination>-->
+        <el-dialog title="接受任务" :visible.sync="dialogFormAccept" width="30%">
+            <el-form
+                    ref="dataForm"
+                    :model="acceptTaskFrom"
+                    label-position="left"
+                    label-width="100px"
+                    style="width: 400px; margin-left:50px;">
+
+                <el-form-item label="送检单位" prop="name">
+                    <el-input v-model="acceptTaskFrom.requireOrg"/>
+                </el-form-item>
+
+
+                <el-form-item label="送检时间" prop="sort">
+                    <el-date-picker
+                            v-model="acceptTaskFrom.requireTime"
+                            type="date"
+                            value-format="timestamp"
+                            placeholder="选择日期">
+                    </el-date-picker>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormAccept = false">
+                    取 消
+                </el-button>
+                <el-button type="primary" @click="acceptTask()">
+                    确 定
+                </el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -86,6 +117,12 @@
                 list:[],
                 tableKey:0,
                 listLoading:false,
+                dialogFormAccept:false,
+                acceptTaskFrom:{
+                    id:'',
+                    requireOrg:'',
+                    requireTime:'',
+                }
             }
         },
         created() {
@@ -94,7 +131,10 @@
         methods:{
             getList() {
                 this.listLoading = true;
-                taskList().then(response => {
+                const data={
+                    status:1
+                }
+                taskList(data).then(response => {
                     this.list = response.list;
                     // this.pages = response.pages
 
@@ -104,8 +144,15 @@
                     }, 1000)
                 })
             },
-            acceptTask(task){
-                accetpTask(task.id).then(response=>{
+            handleAcceptTask(task){
+                this.dialogFormAccept =true;
+                this.acceptTaskFrom.id = task.id
+            },
+            acceptTask(){
+                var  data = this.acceptTaskFrom;
+                if (data.requireTime.toString().length>10)
+                    data.requireTime =  parseInt(data.requireTime/1000);
+                accetpTask(data).then(response=>{
                     if (response.code === 200) {
                         this.$message({
                             message: '操作成功',

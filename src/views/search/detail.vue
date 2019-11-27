@@ -39,8 +39,8 @@
                 </el-steps>
             </el-col>
             <el-col :span="21" style="height: 100%">
-                <el-collapse>
-                    <el-collapse-item>
+                <el-collapse v-model="activeNames">
+                    <el-collapse-item name="痕检">
                         <template slot="title" >
                             <div style="color: #409EFF;font-size: 18px">
                                 痕检
@@ -89,7 +89,7 @@
 
         data(){
             return{
-
+                activeNames:['痕检']
             }
         }
     }

@@ -16,7 +16,7 @@
         </el-row>
         <el-row :gutter="20" class="mb10">
             <el-col :span="6">
-                发案日期：{{  list.caseHappenTime===''?(list.caseHappenTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):''}}
+                发案日期：{{  list.caseHappenTime!==''?(list.caseHappenTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):''}}
             </el-col>
             <el-col :span="6">
                 发案区划：{{ list.caseHappenRegion }}

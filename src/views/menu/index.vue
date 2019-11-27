@@ -24,6 +24,12 @@
           <el-button
             type="text"
             size="mini"
+            @click="() => handleAdd(data)">
+            修改
+          </el-button>
+          <el-button
+            type="text"
+            size="mini"
             @click="() => handleUpdate(data)">
             修改
           </el-button>
@@ -144,6 +150,7 @@ export default {
         title: '',
         redirect: '',
         icon: '',
+        parentId: '',
         hidden: false
       },
       menuId: [],
@@ -223,6 +230,15 @@ export default {
         parentId: '',
         hidden: false
       }
+    },
+    handleAdd(data) {
+      this.resetTemp()
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+      this.temp.parentId = data.id
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
     },
     handleCreate() {
       this.resetTemp()

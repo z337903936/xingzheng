@@ -12,7 +12,7 @@ export function taskList(query) {
 
 export function accetpTask(data) {
     return request({
-        url: '/v1/cp/case_step/' + data.id + '/',
+        url: '/v1/cp/task/' + data.id + '/',
         method: 'post',
         data
     })
