@@ -3,13 +3,16 @@
 
         <el-row>
             <el-col :span="3">
-                <el-steps direction="vertical" space="100px">
+                <el-steps direction="vertical" space="150px">
                     <el-step status="success">
                         <template slot="title">
                             痕检
                         </template>
                         <template slot="icon">
                             <i class="header-icon el-icon-check"></i>
+                        </template>
+                        <template slot="description">
+                            检测者 <br>任务接收时间 <br> 任务应完成时间 <br> 实际完成时间 <br> 当前任务状态
                         </template>
                     </el-step>
                     <el-step  status="wait">
@@ -19,6 +22,9 @@
                         <template slot="icon">
                             <i class="header-icon el-icon-check"></i>
                         </template>
+                        <template slot="description">
+                            检测者 <br>任务接收时间 <br> 任务应完成时间 <br> 实际完成时间 <br> 当前任务状态
+                        </template>
                     </el-step>
                     <el-step  status="success">
                         <template slot="title">
@@ -27,6 +33,9 @@
                         <template slot="icon">
                             <i class="header-icon el-icon-check"></i>
                         </template>
+                        <template slot="description">
+                            检测者 <br>任务接收时间 <br> 任务应完成时间 <br> 实际完成时间 <br> 当前任务状态
+                        </template>
                     </el-step>
                     <el-step status="process  " >
                         <template slot="title">
@@ -34,6 +43,9 @@
                         </template>
                         <template slot="icon">
                             <i class="header-icon el-icon-info"></i>
+                        </template>
+                        <template slot="description">
+                            检测者 <br>任务接收时间 <br> 任务应完成时间 <br> 实际完成时间 <br> 当前任务状态
                         </template>
                     </el-step>
                 </el-steps>

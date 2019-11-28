@@ -2,21 +2,21 @@
     <div>
         <el-row :gutter="20" class="mb10">
             <el-col :span="6">
-                勘查开始：{{ list.examBeginTime!==''?(list.examBeginTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):'' }}
+                勘查开始：{{ list.examBeginTime?(list.examBeginTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):'' }}
             </el-col>
             <el-col :span="6">
-                勘查结束：{{list.examEndTime!==''?(list.examEndTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):'' }}
+                勘查结束：{{list.examEndTime?(list.examEndTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):'' }}
             </el-col>
             <el-col :span="6">
-                案件开始：{{list.caseBeginTime!==''?(list.caseBeginTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):''}}
+                案件开始：{{list.caseBeginTime?(list.caseBeginTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):''}}
             </el-col>
             <el-col :span="6">
-                案件结束：{{ list.caseEndTime!==''?(list.caseEndTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):'' }}
+                案件结束：{{ list.caseEndTime?(list.caseEndTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):'' }}
             </el-col>
         </el-row>
         <el-row :gutter="20" class="mb10">
             <el-col :span="6">
-                发案日期：{{  list.caseHappenTime!==''?(list.caseHappenTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):''}}
+                发案日期：{{  list.caseHappenTime?(list.caseHappenTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):''}}
             </el-col>
             <el-col :span="6">
                 发案区划：{{ list.caseHappenRegion }}
@@ -280,37 +280,7 @@
         name: "searchDetail",
         data(){
             return{
-                list:{
-                    examBeginTime:'',
-                    examEndTime:'',
-                    caseBeginTime:'',
-                    caseEndTime:'',
-                    caseHappenTime:'',
-                    caseHappenRegion:'',
-                    sceneProtect:'',
-                    caseType:'',
-                    mainChargerUid:'',
-                    supporterUid:'',
-                    photographUid:'',
-                    cameraUid:'',
-                    medicalUid:'',
-                    sceneProtectUid:'',
-                    hasCamera:'',
-                    isTenCase:'',
-                    isDeathCase:'',
-                    sceneType:'',
-                    crimeTime:'',
-                    invadeType:'',
-                    escapeType:'',
-                    crimeTools:'',
-                    crimeDetail:'',
-                    crimePeoples:'',
-                    caseAddress:'',
-                    lostDetailList:[],
-                    concernedPersonList:[],
-                    materialList:[],
-
-                },
+                list:{},
                 sceneProtectType:[
                     {
                         id:1,
@@ -417,6 +387,7 @@
             getSearch(id) {
                 fetchSearch(id).then(response => {
                     this.list = response;
+                    console.log(this.list)
                     this.sceneProtectType.map(data=>{
                         if (data.id == this.list.sceneProtect){
                             this.list.sceneProtect = data.title
@@ -427,6 +398,7 @@
                             this.list.crimePeoples = data.title
                         }
                     })
+
 
                 })
             },

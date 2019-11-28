@@ -27,7 +27,7 @@
             </el-table-column>
             <el-table-column label="发送时间"  align="center">
                 <template slot-scope="{row}">
-                    <span>{{row.taskArriveTime!==''?(row.taskArriveTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}')):'' }}</span>
+                    <span>{{ row.taskArriveTime  }}</span>
                 </template>
             </el-table-column>
             <!--<el-table-column label="任务结束时间"  align="center">-->
@@ -54,6 +54,9 @@
             <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <el-button type="primary" size="small" @click="handleAcceptTask(row)" v-if="row.status===1">
+                        接受任务
+                    </el-button>
+                    <el-button type="primary" size="small" @click="handleAcceptTaskSeach(row)" v-if="row.status===1 && row.stepName==='痕检现勘'">
                         接受任务
                     </el-button>
                     <!--<router-link :to="'/task/show-case/'+row.id">-->
@@ -145,7 +148,10 @@
                     status:1
                 }
                 taskList(data).then(response => {
-                    this.list = response.list;
+                    this.list = response.list.map(data=>{
+                        data.taskArriveTime = this.getLocalTime(data.taskArriveTime)
+                        return data
+                    });
                     // this.pages = response.pages
 
                     // Just to simulate the time of the request
@@ -154,9 +160,34 @@
                     }, 1000)
                 })
             },
+            getLocalTime(nS) {
+                return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
+            },
             handleAcceptTask(task){
                 this.dialogFormAccept =true;
                 this.acceptTaskFrom.id = task.id
+            },
+            handleAcceptTaskSeach(task){
+                var  data = this.acceptTaskFrom;
+                data.id = task.id
+                accetpTask(data).then(response=>{
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.getList();
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                })
             },
             acceptTask(){
                 var  data = this.acceptTaskFrom;
@@ -170,6 +201,7 @@
                             showClose: true,
                             duration: 2000
                         })
+                        this.getList();
                     } else {
                         this.$message({
                             message: response.reason,

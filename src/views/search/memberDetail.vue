@@ -63,17 +63,18 @@
 
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="发案区划" prop="caseHappenRegion">
+                    <el-form-item label="案件类别" prop="caseCategory">
+
                         <el-cascader
-                                :options="caseHappenRegionList"
+                                :options="caseTypeList"
                                 filterable
-                                v-model="list.caseHappenRegion"
+                                v-model="list.caseCategory"
                                 :filter-method="filterSearch"
                                 :show-all-levels="false"
-                                style="width: 100%"
-                        >
+                                style="width: 100%">
                         </el-cascader>
                     </el-form-item>
+
                 </el-col>
             </el-row>
             <el-row :gutter="20">
@@ -90,15 +91,15 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="案件类别" prop="caseCategory">
-
+                    <el-form-item label="发案区划" prop="caseHappenRegion">
                         <el-cascader
-                                :options="caseTypeList"
+                                :options="caseHappenRegionList"
                                 filterable
-                                v-model="list.caseCategory"
+                                v-model="list.caseHappenRegion"
                                 :filter-method="filterSearch"
                                 :show-all-levels="false"
-                                style="width: 100%">
+                                style="width: 100%"
+                        >
                         </el-cascader>
                     </el-form-item>
                 </el-col>
@@ -130,7 +131,7 @@
                                    filterable
                                    :filter-method="filterUserSearch"
                                    @visible-change="restUserSearch"
-                                   placeholder="请选择" center
+                                   placeholder="请选择" center multiple
                                    style="width: 100%">
                             <el-option
                                     v-for="item in userShowList"
@@ -143,7 +144,7 @@
             </el-row>
             <el-row :gutter="20">
                 <el-col :span="12">
-                    <el-form-item label="照相员" prop="photographUid">
+                    <el-form-item label="照相" prop="photographUid">
 
                         <el-select v-model="list.photographUid"
                                    filterable
@@ -160,7 +161,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="录像员" prop="cameraUid">
+                    <el-form-item label="录像" prop="cameraUid">
                         <el-select v-model="list.cameraUid"
                                    filterable
                                    :filter-method="filterUserSearch"
@@ -229,7 +230,8 @@
                                 v-model="list.crimeTime"
                                 :filter-method="filterSearch"
                                 :show-all-levels="false"
-                                style="width: 100%">
+                                style="width: 100%"
+                                multiple>
                         </el-cascader>
                     </el-form-item>
                 </el-col>
@@ -279,6 +281,18 @@
                 <el-col :span="12">
                     <el-form-item label="作案工具" prop="crimeTools">
                         <el-input v-model="list.crimeTools"/>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="12">
+                    <el-form-item label="警情号" prop="thirdEvidenceNo">
+                        <el-input v-model="list.thirdEvidenceNo"/>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="案件编号" prop="selfEvidenceNo">
+                        <el-input v-model="list.selfEvidenceNo"/>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -1011,7 +1025,7 @@
                     crimeDetail:'',
                     crimePeoples:'',
                     caseAddress:'',
-                    thirdEvidenceNo:'',
+                    thirdEvidenceNo:this.$store.getters.evidenceNo,
                     selfEvidenceNo:'',
                     lostDetailList:[],
                     concernedPersonList:[],
@@ -1111,6 +1125,7 @@
                 this.fetchData(id);
 
             }
+            console.log(this.$store.getters.evidenceNo)
             this.list.mainChargerUid = this.$store.getters.id
 
             this.list.examBeginTime = (new Date()).valueOf();;

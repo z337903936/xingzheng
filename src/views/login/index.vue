@@ -66,7 +66,7 @@
           :disabled="sendSmsButtonDisable"
           type="primary"
           class="btn-primary"
-          @click="handleClickSendSms">{{ sendSmsButtonTitle }}
+          >{{ sendSmsButtonTitle }}
         </el-button>
       </el-form-item>
 

@@ -36,6 +36,35 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
+                    <el-form-item label="案件类别" prop="caseCategory" >
+                        <el-cascader
+                                :options="caseCategoryList"
+                                filterable
+                                v-model="postForm.caseCategory"
+                                :filter-method="remoteSearch"
+                                :show-all-levels="false"
+                                style="width: 100%">
+                        </el-cascader>
+                    </el-form-item>
+                    <el-form-item label="案发时间" prop="caseAddress">
+                        <el-date-picker
+                                v-model="postForm.examBeginTime"
+                                type="datetime"
+                                value-format="timestamp"
+                                placeholder="选择时间"
+                                style="width: 100%"
+                        />
+                    </el-form-item>
+                    <el-form-item label="案发地点" prop="caseAddress">
+                        <el-input v-model="postForm.caseAddress"/>
+                    </el-form-item>
+                    <el-form-item label="案发摘要" prop="caseDigest">
+                        <el-input v-model="postForm.caseDigest" placeholder="作案手法、侵入方式等"/>
+                    </el-form-item>
+                    <el-form-item label="损失情况" prop="lostDetail">
+                        <el-input v-model="postForm.lostDetail"/>
+                    </el-form-item>
+
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="技术值班队长" prop="monitorUid">
@@ -60,7 +89,7 @@
                                            filterable
                                            :filter-method="filterUserSearch"
                                            @visible-change="restUserSearch"
-                                           class="filter-item"
+                                           class="filter-item" multiple
                                            style="width: 100%">
                                     <el-option
                                             v-for="item in userShowList"
@@ -91,7 +120,7 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="接警人" prop="receiptUid">
-                                <el-select v-model="postForm.receiptUid" disabled class="filter-item"
+                                <el-select v-model="postForm.receiptUid" class="filter-item"
                                            style="width: 100%">
                                     <el-option
                                             v-for="item in userList"
@@ -131,27 +160,8 @@
                                   :value="smsContentChange" type="textarea"/>
                     </el-form-item>
                     <el-divider>案件信息</el-divider>
-                    <el-form-item label="警情号" prop="caseAddress">
-                        <el-input v-model="postForm.caseAddress"/>
-                    </el-form-item>
-                    <el-form-item label="案件类别" prop="caseCategory" >
-                            <el-cascader
-                                    :options="caseCategoryList"
-                                    filterable
-                                    v-model="postForm.caseCategory"
-                                    :filter-method="remoteSearch"
-                                    :show-all-levels="false"
-                                    style="width: 100%">
-                            </el-cascader>
-                    </el-form-item>
-                    <el-form-item label="案发地点" prop="caseAddress">
-                        <el-input v-model="postForm.caseAddress"/>
-                    </el-form-item>
-                    <el-form-item label="案发摘要" prop="caseDigest">
-                        <el-input v-model="postForm.caseDigest" placeholder="作案手法、侵入方式等"/>
-                    </el-form-item>
-                    <el-form-item label="损失情况" prop="lostDetail">
-                        <el-input v-model="postForm.lostDetail"/>
+                    <el-form-item label="警情号" prop="instanceNo">
+                        <el-input v-model="postForm.instanceNo"/>
                     </el-form-item>
 
                     <el-form-item style="margin-bottom: 40px;text-align: center;" label-width="100px">
@@ -203,6 +213,7 @@
                     caseCategory: '',
                     caseDigest: '',
                     lostDetail: '',
+                    instanceNo: '',
                 },
                 userList: [],
                 userShowList: [],
@@ -226,7 +237,7 @@
                         })
                     }
                     this.smsContentChange = this.postForm.receiptTimeShow + ' 接到' + this.postForm.reportOrg + ' ' + this.postForm.reporter + '(' + this.postForm.contactPhoneNumber + ")" +
-                        '报告在' + this.postForm.caseAddress + '发生一起' + this.postForm.caseCategory + ' 案件,损失情况：' + this.postForm.lostDetail + '。值班技术员：' + tech
+                        '报告在' + this.postForm.caseAddress + '发生一起' + this.postForm.caseCategory + ' 案件。值班技术员：' + tech
                 },
                 deep: true,
 
@@ -355,7 +366,7 @@
                 })
             },
             submitForm() {
-                console.log(this.postForm);
+
                 var data = this.postForm
                 data.smsContent = this.smsContentChange;
                 if (data.smsReceiverArray.length > 0) {
@@ -379,6 +390,7 @@
                                         showClose: true,
                                         duration: 1000
                                     })
+
                                 } else {
                                     this.$message({
                                         message: data.reason,
@@ -400,6 +412,12 @@
                                         type: 'success',
                                         showClose: true,
                                         duration: 1000
+                                    })
+                                    this.$router.push({
+                                        path: '/alarm/index',
+                                        query: {
+                                            t: +new Date()
+                                        }
                                     })
                                 } else {
                                     this.$message({

@@ -1,6 +1,6 @@
 import { loginByUsername, logout, getUserInfo } from '@/api/login'
 import { getToken, setToken, removeToken, getUID, setUID, removeUID } from '@/utils/auth'
-
+import { fetchList } from '@/api/paramConfig'
 const user = {
   state: {
     user: '',
@@ -13,6 +13,9 @@ const user = {
     name: '',
     avatar: '',
     introduction: '',
+    caseNo: '',
+    instanceNo: '',
+    evidenceNo: '',
     roles: [],
     setting: {
       articlePlatform: []
@@ -22,6 +25,15 @@ const user = {
   mutations: {
     SET_CODE: (state, code) => {
       state.code = code
+    },
+    SET_CASE: (state, caseNo) => {
+      state.caseNo = caseNo
+    },
+    SET_INSTANCE: (state, instanceNo) => {
+      state.instanceNo = instanceNo
+    },
+    SET_EVIDENCE: (state, evidenceNo) => {
+      state.evidenceNo = evidenceNo
     },
     SET_ID: (state, id) => {
       state.id = id
@@ -96,6 +108,23 @@ const user = {
         }).catch(error => {
           reject(error)
         })
+      })
+    },
+    GetSystemParam({ commit, state }){
+      return new Promise((resolve, reject) => {
+       fetchList().then(response=>{
+
+         response.list.map(data=>{
+           if (data.key ==='CASE_NO_PREFIX')
+             commit('SET_CASE', data.value)
+
+           if (data.key ==='INSTANCE_NO_PREFIX')
+             commit('SET_INSTANCE', data.value)
+
+           if (data.key ==='EVIDENCE_NO_PREFIX')
+             commit('SET_EVIDENCE', data.value)
+         })
+       })
       })
     },
 

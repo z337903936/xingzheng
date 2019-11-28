@@ -83,7 +83,7 @@
                     <span>{{ row.id }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="案件编号" min-width="90px">
+            <el-table-column label="案件编号" width="100px" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.taskNo }}</span>
                 </template>
