@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function fetchList(data) {
+export function alarmList(data) {
   return request({
     url: '/v1/cp/report_list/',
     method: 'post',
@@ -27,6 +27,14 @@ export function createAlarm(data) {
 export function updateAlarm(data) {
   return request({
     url: '/v1/cp/report/' + data.id + '/',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteAlarm(data) {
+  return request({
+    url: '/v1/cp/report/',
     method: 'post',
     data
   })

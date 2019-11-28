@@ -9,33 +9,52 @@
                     end-placeholder="结束时间"
                     value-format="timestamp"
             />
-                <el-select v-model="listQuery.leaderName" placeholder="带班领导" center>
+                <el-select v-model="listQuery.leaderName"
+                           filterable
+                           :filter-method="filterUserSearch"
+                           @visible-change="restUserSearch"
+                           placeholder="带班领导" center>
                     <el-option
-                            v-for="item in userList"
+                            v-for="item in userShowList"
                             :key="item.id"
                             :label="item.title"
                             :value="item.id"/>
                 </el-select>
-                <el-select v-model="listQuery.receiptName" placeholder="接警人" center>
+                <el-select v-model="listQuery.receiptName"
+                           filterable
+                           :filter-method="filterUserSearch"
+                           @visible-change="restUserSearch"
+                           placeholder="接警人" center>
                     <el-option
-                            v-for="item in userList"
+                            v-for="item in userShowList"
                             :key="item.id"
                             :label="item.title"
                             :value="item.id"/>
                 </el-select>
-                <el-select v-model="listQuery.reporterName" placeholder="报告人" center>
+                <el-select v-model="listQuery.reporterName"
+                           filterable
+                           :filter-method="filterUserSearch"
+                           @visible-change="restUserSearch"
+                           placeholder="报告人" center>
                     <el-option
-                            v-for="item in userList"
+                            v-for="item in userShowList"
                             :key="item.id"
                             :label="item.title"
                             :value="item.id"/>
                 </el-select>
                 <el-input v-model="listQuery.reporterOrg" placeholder="报告单位" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
-                <el-select v-model="listQuery.caseCategoryId" placeholder="案件类别" style="width: 140px">
-                    <el-option v-for="item in userList" :key="item.id"
-                               :label="item.title" :value="item.id"/>
-                </el-select>
+
+                <el-cascader
+                        placeholder="案件类别"
+                        :options="caseCategoryList"
+                        filterable
+                        v-model="listQuery.caseCategory"
+                        :filter-method="filterSearch"
+                        :show-all-levels="false"
+                        >
+                </el-cascader>
+
                 <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
                     搜索
                 </el-button>
@@ -64,12 +83,12 @@
                     <span>{{ row.id }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="案件编号" min-width="50px">
+            <el-table-column label="案件编号" min-width="90px">
                 <template slot-scope="{row}">
                     <span>{{ row.taskNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="接警时间" width="150px" align="center">
+            <el-table-column label="接警时间" width="160px" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.receiptTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
@@ -104,7 +123,7 @@
                     <router-link :to="'/alarm/edit-alarm/'+row.id">
                         <el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>
                     </router-link>
-
+                    <el-button v-waves  type="primary" size="mini" icon="el-icon-delete" @click="handleDelete(row)" :disabled="judge(row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -119,6 +138,20 @@
         >
         </el-pagination>
 
+
+
+        <el-dialog
+                title="提示"
+                :visible.sync="dialogDelete"
+                width="30%"
+        >
+            <span>是否确定删除该条数据</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogDelete = false">取 消</el-button>
+                <el-button type="primary" @click="deleteData()">确 定</el-button>
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -129,11 +162,11 @@
 </style>
 
 <script>
-    import {fetchList, fetchAlarm, createAlarm, updateAlarm} from '@/api/alarm'
+    import {alarmList, fetchAlarm, createAlarm, updateAlarm, deleteAlarm} from '@/api/alarm'
     import waves from '@/directive/waves' // waves directive
     import {parseTime} from '@/utils'
     import { fetchAdminMemberList} from '@/api/permissions'
-
+    import {fetchList} from '@/api/dictionary'
 
 
     export default {
@@ -146,6 +179,7 @@
                 pages: 0,
                 listLoading: true,
                 paginationShow: true,
+                dialogDelete: false,
                 searchTime: '',
                 limit: 20,
                 listQuery: {
@@ -159,16 +193,56 @@
                     caseCategoryId: undefined
                 },
                 rules:{},
+                userList: [],
+                userShowList: [],
+                caseCategoryList: [],
                 downloadLoading: false,
+                deleteId:'',
+                userId:''
             }
         },
         created() {
-            this.getList()
+
+            this.getList();
+            this.getUserList();
+            this.userId = this.$store.getters.id;
+            console.log(this.userId)
+            this.search('案件类别').then(data=>{
+                this.caseCategoryList = this.processData(data.list);
+            });
         },
         methods: {
+            judge(data){
+                if (this.userId===data.createUid )
+                    return false
+                else
+                    return true
+            },
+            search(parentName,filter=null){
+                return new Promise((resolve, reject) => {
+                    const data = {
+                        filter:filter,
+                        parentName:parentName
+                    };
+                    resolve(fetchList(data))
+                })
+
+            },
+            getUserList() {
+                fetchAdminMemberList({}).then(response => {
+                    this.userList = response.list.map(data => {
+                        return {
+                            id: data.id,
+                            title: data.realName,
+                            py: data.pinyinAbbr
+                        }
+                    })
+                    this.userShowList = this.userList;
+                })
+            },
             getList() {
                 this.listLoading = true;
-                fetchList(this.listQuery).then(response => {
+                alarmList(this.listQuery).then(response => {
                     this.list = response.list;
                     this.pages = response.pages
 
@@ -178,11 +252,89 @@
                     },1000)
                 })
             },
+            filterSearch(node,value){
+                var p =  /^[a-zA-Z]+$/;
+                if (p.test(value)){
+                    if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                        return true
+                }else{
+                    if (node.data.label.indexOf(value)>-1)
+                        return true
+                }
+            },
+            processData(data){
+                return data.map(item=>{
+                    var sendData = {
+                        value:item.name,
+                        label:item.name,
+                        py:item.pinyinAbbr,
+                    }
+                    if (item.children.length >0){
+                        sendData.children = this.processData(item.children);
+                    }
+
+                    return sendData;
+                })
+            },
+            filterUserSearch(value){
+                if (value) {
+                    this.userShowList = this.userList.filter(data=>{
+
+                        var p =  /^[a-zA-Z]+$/;
+                        if (p.test(value)) {
+                            if (data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                                return data
+                        }else{
+                            if (data.title.indexOf(value)>-1)
+                                return data
+                        }
+                    })
+                }else{
+                    this.userShowList = this.userList;
+                }
+            },
+            restUserSearch(change){
+                if (!change) {
+                    this.userShowList = this.userList;
+                }
+
+            },
+            handleDelete(data){
+                this.dialogDelete = true;
+                this.deleteId = data.id;
+            },
+            deleteData(){
+                const data={
+                    id:this.deleteId,
+                    operation:'del',
+                }
+                deleteAlarm(data).then(response=>{
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.dialogDelete = false;
+                        this.getList();
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                })
+            },
             handleFilter () {
-                if (this.searchTime[0].toString().length>10)
-                    this.listQuery.beginTime = this.searchTime[0]/1000;
-                if (this.searchTime[1].toString().length>10)
-                    this.listQuery.endTime = this.searchTime[1]/1000;
+                if (this.searchTime) {
+                    if (this.searchTime[0].toString().length > 10)
+                        this.listQuery.beginTime = this.searchTime[0] / 1000;
+                    if (this.searchTime[1].toString().length > 10)
+                        this.listQuery.endTime = this.searchTime[1] / 1000;
+                }
                 this.listQuery.page = 1;
                 this.getList()
             },

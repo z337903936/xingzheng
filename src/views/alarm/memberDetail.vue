@@ -131,6 +131,9 @@
                                   :value="smsContentChange" type="textarea"/>
                     </el-form-item>
                     <el-divider>案件信息</el-divider>
+                    <el-form-item label="警情号" prop="caseAddress">
+                        <el-input v-model="postForm.caseAddress"/>
+                    </el-form-item>
                     <el-form-item label="案件类别" prop="caseCategory" >
                             <el-cascader
                                     :options="caseCategoryList"
@@ -145,7 +148,7 @@
                         <el-input v-model="postForm.caseAddress"/>
                     </el-form-item>
                     <el-form-item label="案发摘要" prop="caseDigest">
-                        <el-input v-model="postForm.caseDigest"/>
+                        <el-input v-model="postForm.caseDigest" placeholder="作案手法、侵入方式等"/>
                     </el-form-item>
                     <el-form-item label="损失情况" prop="lostDetail">
                         <el-input v-model="postForm.lostDetail"/>

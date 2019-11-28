@@ -184,10 +184,12 @@
                 })
             },
             handleFilter () {
-                if (this.searchTime[0].toString().length>10)
-                    this.listQuery.beginTime = this.searchTime[0]/1000;
-                if (this.searchTime[1].toString().length>10)
-                    this.listQuery.endTime = this.searchTime[1]/1000;
+                if (this.searchTime) {
+                    if (this.searchTime[0].toString().length > 10)
+                        this.listQuery.beginTime = this.searchTime[0] / 1000;
+                    if (this.searchTime[1].toString().length > 10)
+                        this.listQuery.endTime = this.searchTime[1] / 1000;
+                }
                 this.listQuery.page = 1;
                 this.getList()
             },
