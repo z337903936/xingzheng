@@ -15,7 +15,15 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="报告单位" prop="reportOrg">
-                                <el-input v-model="postForm.reportOrg"/>
+
+                                <el-cascader
+                                        :options="reportOrgList"
+                                        filterable
+                                        v-model="postForm.reportOrg"
+                                        :filter-method="remoteSearch"
+                                        :show-all-levels="false"
+                                        style="width: 100%">
+                                </el-cascader>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -46,9 +54,9 @@
                                 style="width: 100%">
                         </el-cascader>
                     </el-form-item>
-                    <el-form-item label="案发时间" prop="caseAddress">
+                    <el-form-item label="案发时间" prop="caseTime">
                         <el-date-picker
-                                v-model="postForm.examBeginTime"
+                                v-model="postForm.caseTime"
                                 type="datetime"
                                 value-format="timestamp"
                                 placeholder="选择时间"
@@ -120,7 +128,7 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="接警人" prop="receiptUid">
-                                <el-select v-model="postForm.receiptUid" class="filter-item"
+                                <el-select v-model="postForm.techUidArray" class="filter-item" allow-create
                                            style="width: 100%">
                                     <el-option
                                             v-for="item in userList"
@@ -138,7 +146,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="短信通知" prop="sms">
+                            <el-form-item label="短信通知" prop="smsReceiverArray">
                                 <el-select v-model="postForm.smsReceiverArray"
                                            filterable
                                            :filter-method="filterUserSearch"
@@ -214,6 +222,11 @@
                     caseDigest: '',
                     lostDetail: '',
                     instanceNo: '',
+                    caseTime: '',
+                    receiptUid:'',
+                    receiptName:'',
+
+
                 },
                 userList: [],
                 userShowList: [],
@@ -221,6 +234,7 @@
                 loading: false,
                 smsContentChange: '',
                 caseCategoryList: [],
+                reportOrgList: [],
             }
         },
         computed: {
@@ -247,7 +261,12 @@
         created() {
             this.getUserList()
             this.restForm()
-            this.search('案件类别');
+            this.search('案件类别').then(response=>{
+                this.caseCategoryList = this.processData(response.list)
+            });
+            this.search('报告单位').then(response=>{
+                this.reportOrgList = this.processData(response.list)
+            });
             if (this.isEdit) {
                 const id = this.$route.params && this.$route.params.id
                 this.postForm.id = id;
@@ -307,17 +326,23 @@
                     caseCategory: '',
                     caseDigest: '',
                     lostDetail: '',
+                    instanceNo: '',
+                    caseTime: '',
+                    receiptUid:'',
+                    receiptName:'',
                 }
             },
             search(parentName,filter=null){
-                const data = {
-                    filter:filter,
-                    parentName:parentName
-                };
-                fetchList(data).then(response=>{
-                    this.caseCategoryList = this.processData(response.list)
+                return new Promise((resolve, reject) => {
+                    const data = {
+                        filter:filter,
+                        parentName:parentName
+                    };
+                    resolve(fetchList(data))
                 })
+
             },
+
             processData(data){
                 return data.map(item=>{
                     var sendData = {
@@ -359,6 +384,9 @@
                     this.postForm.smsReceiverArray = this.postForm.smsReceiver.split(",").map(data => {
                         return parseInt(data);
                     });
+                    this.postForm.techUidArray = this.postForm.techUid.split(",").map(data => {
+                        return parseInt(data);
+                    });
                     var d = new Date(this.postForm.receiptTime * 1000);
                     this.postForm.receiptTimeShow = this.formatDate(d)
                 }).catch(err => {
@@ -372,9 +400,16 @@
                 if (data.smsReceiverArray.length > 0) {
                     data.smsReceiver = data.smsReceiverArray.join(',');
                 }
+                if (data.techUidArray.length > 0) {
+                    data.techUid = data.techUidArray.join(',');
+                }
                 data.receiptTime = Date.parse(data.receiptTimeShow) / 1000;
                 if (data.caseCategory.constructor === Array) {
                     data.caseCategory = data.caseCategory.slice(-1)[0]
+                }
+                
+                if (!/^[1-9]+[0-9]*]*$/.test(data.receiptUid)) {
+                    data.receiptName = data.receiptUid;
                 }
 
                 this.$refs.postForm.validate(valid => {
