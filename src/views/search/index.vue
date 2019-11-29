@@ -38,7 +38,7 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="勘查号" prop="id" align="center" width="220">
+            <el-table-column label="勘查号" prop="id" align="center" width="120">
                 <template slot-scope="{row}">
                     <span>{{ row.selfEvidenceNo }}</span>
                 </template>
