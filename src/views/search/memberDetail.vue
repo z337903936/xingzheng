@@ -287,13 +287,13 @@
             </el-row>
             <el-row :gutter="20">
                 <el-col :span="12">
-                    <el-form-item label="警情号" prop="thirdEvidenceNo">
-                        <el-input v-model="list.thirdEvidenceNo"/>
+                    <el-form-item label="警情号" prop="instanceNo">
+                        <el-input v-model="list.instanceNo"/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="案件编号" prop="selfEvidenceNo">
-                        <el-input v-model="list.selfEvidenceNo"/>
+                    <el-form-item label="案件编号" prop="caseNo">
+                        <el-input v-model="list.caseNo"/>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -1030,6 +1030,8 @@
                     crimeDetail:'',
                     crimePeoples:'',
                     caseAddress:'',
+                    instanceNo:this.$store.getters.instanceNo,
+                    caseNo:this.$store.getters.caseNo,
                     thirdEvidenceNo:this.$store.getters.evidenceNo,
                     selfEvidenceNo:'',
                     lostDetailList:[],

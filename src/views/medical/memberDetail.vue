@@ -31,7 +31,9 @@
                         filterable
                         v-model="postForm.caseCategory"
                         :filter-method="remoteSearch"
-                        :show-all-levels="false">
+                        :show-all-levels="false"
+                        style="width: 100%"
+                >
                 </el-cascader>
               </el-form-item>
             </el-col>
@@ -58,7 +60,7 @@
             <el-col :span="12">
               <el-form-item label="受理人" prop="supportName22" >
 
-                <el-select v-model="postForm.supportName22" disabled placeholder="请选择">
+                <el-select v-model="postForm.supportName22" disabled placeholder="请选择" style="width: 100%">
                   <el-option
                           v-for="item in userList"
                           :key="item.id"
@@ -103,7 +105,8 @@
                   <el-date-picker
                           v-model="postForm.documentNo22"
                           type="date"
-                          placeholder="选择日期">
+                          placeholder="选择日期"
+                          style="width: 100%">
                   </el-date-picker>
               </el-form-item>
             </el-col>
