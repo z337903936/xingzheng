@@ -38,45 +38,45 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="勘查号" prop="id" align="center" width="80">
+            <el-table-column label="勘查号" prop="id" align="center" width="220">
                 <template slot-scope="{row}">
                     <span>{{ row.selfEvidenceNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="案件性质">
+            <el-table-column label="案件性质" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.caseCategory }}</span>
                 </template>
             </el-table-column>
- <el-table-column label="发案地址">
+            <el-table-column label="发案地址" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.caseAddress }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="发案日期"  align="center">
+            <el-table-column label="发案日期"  align="center" width="100">
                 <template slot-scope="{row}">
                     <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="发案区划">
+            <el-table-column label="发案区划" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.caseHappenRegion }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="主办">
+            <el-table-column label="主办" align="center" width="100">
                 <template slot-scope="{row}">
                     <span>{{ row.mainChargerName }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="协办">
+            <el-table-column label="协办" align="center" width="150">
                 <template slot-scope="{row}">
                     <span>{{ row.supporterName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="法医">
+            <el-table-column label="法医" align="center" width="100">
                 <template slot-scope="{row}">
                     <span>{{ row.medicalName }}</span>
                 </template>
@@ -86,7 +86,7 @@
                     <!--<span>{{ row.caseHappenRegion }}</span>-->
                 <!--</template>-->
             <!--</el-table-column>-->
-            <el-table-column label="是否死亡">
+            <el-table-column label="是否死亡" align="center" width="80">
                 <template slot-scope="{row}">
                     <span>{{ row.isDeathCase?'是':'否' }}</span>
                 </template>

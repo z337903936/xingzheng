@@ -56,7 +56,7 @@
                     <span>{{ row.place }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="操作说明" >
+            <el-table-column label="操作说明" align="center">
                 <template slot-scope="{row}">
 
                     <span>{{ row.note }}</span>

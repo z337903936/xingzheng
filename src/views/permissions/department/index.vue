@@ -25,22 +25,22 @@
                     <span>{{ row.id }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="名称" min-width="50px">
+            <el-table-column label="名称" align="center"  min-width="50px">
                 <template slot-scope="{row}">
                     <span>{{ row.name }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="备注" min-width="50px">
+            <el-table-column label="备注" align="center" min-width="50px">
                 <template slot-scope="{row}">
                     <span>{{ row.note }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="成员数" min-width="50px">
+            <el-table-column label="成员数" align="center" min-width="50px">
                 <template slot-scope="{row}">
                     <span>{{ row.members }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" align="center" width="330" class-name="small-padding fixed-width">
+            <el-table-column label="操作" align="center" width="330" class-name="small-padding fixed-width" >
                 <template slot-scope="{row}">
                     <el-button type="primary" size="small" @click="handleUpdate(row)">
                         编辑

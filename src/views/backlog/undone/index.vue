@@ -15,12 +15,12 @@
                     <span>{{ row.taskNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="任务类型" >
+            <el-table-column label="任务类型" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.stepName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="发送人" >
+            <el-table-column label="发送人" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.stepHandler }}</span>
                 </template>
@@ -35,7 +35,7 @@
                     <!--<span>{{row.taskEndTime!==''?(row.taskEndTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}')):''}}</span>-->
                 <!--</template>-->
             <!--</el-table-column>-->
-            <el-table-column label="任务详情" >
+            <el-table-column label="任务详情" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.stepHandler }}</span>
                 </template>
@@ -45,7 +45,7 @@
                     <span>{{ row.status | statusFilter }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="关联编号" >
+            <el-table-column label="关联编号" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.stepHandler }}</span>
                 </template>

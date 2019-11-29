@@ -51,43 +51,43 @@
                     <span>{{ row.fromName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="接收人" width="120" align="center">
+            <el-table-column label="接收人" width="100" align="center">
                 <template slot-scope="{row}" >
                     <span>{{ row.toName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证编号" width="120"  align="center">
+            <el-table-column label="物证编号" width="220"  align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.materialNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="统一物证编号" >
+            <el-table-column label="统一物证编号" width="220"  align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.thirdMaterialNo }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="任务号" >
+            <el-table-column label="任务号" width="220"  align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.taskNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证名字" >
+            <el-table-column label="物证名字" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.name }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证备注" >
+            <el-table-column label="物证备注" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.note }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证分类" >
+            <el-table-column label="物证分类" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.materialCategory }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证类型" >
+            <el-table-column label="物证类型" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.materialType }}</span>
                 </template>

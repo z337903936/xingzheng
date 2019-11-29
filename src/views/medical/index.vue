@@ -58,22 +58,22 @@
                 style="width: 100%;"
 
         >
-            <el-table-column label="任务号" prop="id" align="center" width="80">
+            <el-table-column label="任务号" prop="id" align="center" width="200">
                 <template slot-scope="{row}">
                     <span>{{ row.taskNo</span>
                 </template>
             </el-table-column>
-            <el-table-column label="委托单位" >
+            <el-table-column label="委托单位" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.delegateOrg }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="委托人"  align="center">
+            <el-table-column label="委托人"  align="center" width="100">
                 <template slot-scope="{row}">
                     <span>{{ row.delegateName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="受理日期" >
+            <el-table-column label="受理日期" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
                 </template>
@@ -88,7 +88,7 @@
                     <span>{{ row.contactPhoneNumber }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="鉴定人"  align="center">
+            <el-table-column label="鉴定人"  align="center" width="100">
                 <template slot-scope="{row}">
                     <span>{{ row.refereeName }}</span>
                 </template>
