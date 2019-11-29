@@ -75,7 +75,6 @@
             </el-table-column>
             <el-table-column label="受理日期" >
                 <template slot-scope="{row}">
-
                     <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
                 </template>
             </el-table-column>

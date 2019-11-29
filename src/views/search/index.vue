@@ -40,12 +40,12 @@
         >
             <el-table-column label="勘查号" prop="id" align="center" width="80">
                 <template slot-scope="{row}">
-                    <span>{{ row.caseId }}</span>
+                    <span>{{ row.selfEvidenceNo }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="案件性质">
                 <template slot-scope="{row}">
-                    <span>{{ row.caseType }}</span>
+                    <span>{{ row.caseCategory }}</span>
                 </template>
             </el-table-column>
  <el-table-column label="发案地址">

@@ -16,7 +16,7 @@
       node-key="id"
       default-expand-all
       style="width: 30%"
-      v-loading="listLoading"
+
     >
       <span slot-scope="{ node, data }" class="custom-tree-node">
         <span>{{ data.title}}</span>
@@ -178,7 +178,7 @@ export default {
   },
   methods: {
     getList() {
-      this.listLoading = true
+
       fetchList({}).then(response => {
         this.list = response.list;
          var menu = response.list.map(data=>{
@@ -202,9 +202,7 @@ export default {
 
 
         // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
+
       })
     },
 
@@ -313,6 +311,7 @@ export default {
           duration: 2000
         })
         this.$store.dispatch('GenerateRoutes')
+        this.deleteMenuDialog = false
         this.getList()
       })
     },

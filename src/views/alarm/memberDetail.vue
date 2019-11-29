@@ -93,11 +93,12 @@
                         <el-col :span="12">
                             <el-form-item label="值班技术员" prop="techUid">
 
-                                <el-select v-model="postForm.techUid"
+                                <el-select v-model="postForm.techUidArray"
                                            filterable
                                            :filter-method="filterUserSearch"
                                            @visible-change="restUserSearch"
                                            class="filter-item" multiple
+                                           @change="selectUpdate"
                                            style="width: 100%">
                                     <el-option
                                             v-for="item in userShowList"
@@ -128,7 +129,10 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="接警人" prop="receiptUid">
-                                <el-select v-model="postForm.techUidArray" class="filter-item" allow-create
+                                <el-select v-model="postForm.receiptUid"
+                                           class="filter-item"
+                                           allow-create
+                                           filterable
                                            style="width: 100%">
                                     <el-option
                                             v-for="item in userList"
@@ -152,6 +156,7 @@
                                            :filter-method="filterUserSearch"
                                            @visible-change="restUserSearch"
                                            class="filter-item" multiple
+                                           @change="selectUpdate"
                                            style="width: 100%">
                                     <el-option
                                             v-for="item in userShowList"
@@ -211,17 +216,18 @@
                     driverName: '',
                     monitorUid: '',
                     techUid: '',
+                    techUidArray: [],
                     leaderUid: '',
                     receiptTimeShow: '',
                     receiptTime: '',
                     smsContent: "",
-                    smsReceiverArray: '',
+                    smsReceiverArray: [],
                     smsReceiver: '',
                     caseAddress: '',
                     caseCategory: '',
                     caseDigest: '',
                     lostDetail: '',
-                    instanceNo: '',
+                    instanceNo: this.$store.getters.instanceNo,
                     caseTime: '',
                     receiptUid:'',
                     receiptName:'',
@@ -260,7 +266,7 @@
         },
         created() {
             this.getUserList()
-            this.restForm()
+
             this.search('案件类别').then(response=>{
                 this.caseCategoryList = this.processData(response.list)
             });
@@ -271,10 +277,15 @@
                 const id = this.$route.params && this.$route.params.id
                 this.postForm.id = id;
                 this.fetchData(id)
+            }else{
+                this.restForm()
             }
             this.postForm.receiptUid = this.$store.getters.id;
         },
         methods: {
+            selectUpdate(val){
+              this.$forceUpdate();
+            },
             filterUserSearch(value){
                 if (value) {
                     this.userShowList = this.userList.filter(data=>{
@@ -316,17 +327,18 @@
                     driverName: '',
                     monitorUid: '',
                     techUid: '',
+                    techUidArray: [],
                     leaderUid: '',
                     receiptTimeShow: '',
                     receiptTime: '',
                     smsContent: "",
-                    smsReceiverArray: '',
+                    smsReceiverArray: [],
                     smsReceiver: '',
                     caseAddress: '',
                     caseCategory: '',
                     caseDigest: '',
                     lostDetail: '',
-                    instanceNo: '',
+                    instanceNo: this.$store.getters.instanceNo,
                     caseTime: '',
                     receiptUid:'',
                     receiptName:'',
@@ -385,10 +397,15 @@
                         return parseInt(data);
                     });
                     this.postForm.techUidArray = this.postForm.techUid.split(",").map(data => {
-                        return parseInt(data);
+                       return parseInt(data);
                     });
+
+                    if (this.postForm.caseTime.toString().length===10)
+                        this.postForm.caseTime =  data.caseTime*1000;
                     var d = new Date(this.postForm.receiptTime * 1000);
+
                     this.postForm.receiptTimeShow = this.formatDate(d)
+                    console.log(this.postForm.techUidArray)
                 }).catch(err => {
                     console.log(err)
                 })
@@ -396,6 +413,7 @@
             submitForm() {
 
                 var data = this.postForm
+
                 data.smsContent = this.smsContentChange;
                 if (data.smsReceiverArray.length > 0) {
                     data.smsReceiver = data.smsReceiverArray.join(',');
@@ -404,13 +422,21 @@
                     data.techUid = data.techUidArray.join(',');
                 }
                 data.receiptTime = Date.parse(data.receiptTimeShow) / 1000;
+                if (data.caseTime.toString().length>10)
+                    data.caseTime =  parseInt(data.caseTime/1000);
+
                 if (data.caseCategory.constructor === Array) {
                     data.caseCategory = data.caseCategory.slice(-1)[0]
+                }
+                if (data.reportOrg.constructor === Array) {
+                    data.reportOrg = data.reportOrg.slice(-1)[0]
                 }
                 
                 if (!/^[1-9]+[0-9]*]*$/.test(data.receiptUid)) {
                     data.receiptName = data.receiptUid;
                 }
+                if (data.instanceNo === this.$store.getters.instanceNo)
+                    data.instanceNo=''
 
                 this.$refs.postForm.validate(valid => {
                     if (valid) {

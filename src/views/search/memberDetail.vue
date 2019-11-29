@@ -133,6 +133,7 @@
                                    :filter-method="filterUserSearch"
                                    @visible-change="restUserSearch"
                                    placeholder="请选择" center multiple
+                                   @change="selectUpdate"
                                    style="width: 100%">
                             <el-option
                                     v-for="item in userShowList"
@@ -232,6 +233,7 @@
                                 :filter-method="filterSearch"
                                 :show-all-levels="false"
                                 style="width: 100%"
+
                                 :props="props">
                         </el-cascader>
                     </el-form-item>
@@ -824,6 +826,9 @@
                 <el-form-item label="特征描述" prop="note">
                     <el-input type="textarea" v-model="materialListForm.note"/>
                 </el-form-item>
+                <el-form-item label="是否转移" prop="hasTransfered">
+                    <el-checkbox v-model="materialListForm.hasTransfered"></el-checkbox>
+                </el-form-item>
                 <el-form-item label="物证图片" prop="registerName">
                     <Upload @tell='setStayPart' v-model="materialListForm.imgUrl"/>
                 </el-form-item>
@@ -1085,6 +1090,7 @@
                 materialListForm: {
                     id: '',
                     evidenceId: '',
+                    hasTransfered:false,
                     materialNo: '',
                     thirdMaterialNo: '',
                     materialCategory: '',
@@ -1177,6 +1183,9 @@
             });
         },
         methods:{
+            selectUpdate(val){
+                this.$forceUpdate();
+            },
             caseCategoryResulte(val){
                 val.map(data=>{
                     if (data === '十类案件'){
@@ -1225,9 +1234,8 @@
                     this.list.supporterUidArray = this.list.supporterUid.split(",").map(data => {
                         return parseInt(data);
                     });
-                    this.list.crimeTimeArray = this.list.crimeTime.split(",").map(data => {
-                        return data;
-                    });
+                    this.list.crimeTimeArray = JSON.parse(this.list.crimeTime);
+
                 }).catch(err => {
                     console.log(err)
                 })
@@ -1544,6 +1552,7 @@
                 const change  = {
                     id: '',
                     materialNo: '',
+                    hasTransfered: false,
                     thirdMaterialNo: '',
                     materialCategory: '',
                     materialType: '',
@@ -1703,6 +1712,7 @@
             },
             changeTime(data,type){
                 if (type) {
+
                     if (data.examBeginTime.toString().length>10)
                         data.examBeginTime =  parseInt(data.examBeginTime/1000);
                     if (data.examEndTime.toString().length>10)
@@ -1732,31 +1742,28 @@
             submitForm(toAddMaterial=false) {
                 this.$refs.listForm.validate(valid => {
                     if (valid) {
-                        var data = this.list;
+                        var data = Object.assign({}, this.list);
                         data.caseId = this.caseId;
                         data = this.changeTime(data,true);
-                        // if (data.examBeginTime.toString().length>10)
-                        //    data.examBeginTime =  parseInt(data.examBeginTime/1000);
-                        // if (data.examEndTime.toString().length>10)
-                        //     data.examEndTime =  parseInt(data.examEndTime/1000);
-                        // if (data.caseBeginTime.toString().length>10)
-                        //     data.caseBeginTime =  parseInt(data.caseBeginTime/1000);
-                        // if (data.caseEndTime.toString().length>10)
-                        //     data.caseEndTime =  parseInt(data.caseEndTime/1000);
-                        // if (data.caseHappenTime.toString().length>10)
-                        //     data.caseHappenTime =  parseInt(data.caseHappenTime/1000);
-
+                        if (data.instanceNo ===this.$store.getters.instanceNo ){
+                            data.instanceNo ='';
+                        }if (data.caseNo ===this.$store.getters.caseNo ){
+                            data.caseNo ='';
+                        }if (data.thirdEvidenceNo ===this.$store.getters.evidenceNo ){
+                            data.thirdEvidenceNo ='';
+                        }
                         if (data.supporterUidArray.length > 0) {
                             data.supporterUid = data.supporterUidArray.join(',');
                         }
-
                         if (data.crimeTimeArray.length > 0) {
-                            var itemArray = [];
-                            data.crimeTimeArray.map(item=>{
-                                itemArray.push(item.slice(-1)[0])
-                            })
-                            data.crimeTime = itemArray.join(',');
+                            // var itemArray = [];
+                            // data.crimeTimeArray.map(item=>{
+                            //     itemArray.push(item.slice(-1)[0])
+                            // });
+                            // data.crimeTime = itemArray.join(',');
+                            data.crimeTime = JSON.stringify(data.crimeTimeArray);
                         }
+
                         if (data.caseHappenRegion.constructor === Array) {
                             data.caseHappenRegion = data.caseHappenRegion.slice(-1)[0]
                         }
@@ -1766,17 +1773,13 @@
                         if (data.sceneType.constructor === Array) {
                             data.sceneType = data.sceneType.slice(-1)[0]
                         }
-                        // if (data.crimeTime.constructor === Array) {
-                        //     data.crimeTime = data.crimeTime.slice(-1)[0]
-                        // }
+
                         if (data.invadeType.constructor === Array) {
                             data.invadeType = data.invadeType.slice(-1)[0]
                         }
                         if (data.escapeType.constructor === Array) {
                             data.escapeType = data.escapeType.slice(-1)[0]
                         }
-                        console.log(data);
-                        return;
                         this.loading = true
                         if (this.isEdit) {
                             updateSearch(data).then(response => {
@@ -1818,6 +1821,12 @@
                                         this.list.id = id;
                                         this.dialogPoint=false;
                                     }
+                                    this.$router.push({
+                                        path: '/search/index',
+                                        query: {
+                                            t: +new Date()
+                                        }
+                                    })
                                 }else{
                                     this.$message({
                                         message: response.reason,
