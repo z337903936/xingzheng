@@ -44,30 +44,41 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-form-item label="案件类别" prop="caseCategory" >
-                        <el-cascader
-                                :options="caseCategoryList"
-                                filterable
-                                v-model="postForm.caseCategory"
-                                :filter-method="remoteSearch"
-                                :show-all-levels="false"
-                                style="width: 100%">
-                        </el-cascader>
-                    </el-form-item>
-                    <el-form-item label="案发时间" prop="caseTime">
-                        <el-date-picker
-                                v-model="postForm.caseTime"
-                                type="datetime"
-                                value-format="timestamp"
-                                placeholder="选择时间"
-                                style="width: 100%"
-                        />
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="案件类别" prop="caseCategory" >
+                                <el-cascader
+                                        :options="caseCategoryList"
+                                        filterable
+                                        v-model="postForm.caseCategory"
+                                        :filter-method="remoteSearch"
+                                        :show-all-levels="false"
+                                        style="width: 100%">
+                                </el-cascader>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="案发时间" prop="caseTime">
+                                <el-date-picker
+                                        v-model="postForm.caseTime"
+                                        type="datetime"
+                                        value-format="timestamp"
+                                        placeholder="选择时间"
+                                        style="width: 100%"
+                                />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+
+                    <el-form-item label="警情号" prop="instanceNo">
+                        <el-input v-model="postForm.instanceNo"/>
                     </el-form-item>
                     <el-form-item label="案发地点" prop="caseAddress">
                         <el-input v-model="postForm.caseAddress"/>
                     </el-form-item>
                     <el-form-item label="案发摘要" prop="caseDigest">
-                        <el-input v-model="postForm.caseDigest" placeholder="作案手法、侵入方式等"/>
+                        <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="postForm.caseDigest" placeholder="作案手法、侵入方式等"/>
                     </el-form-item>
                     <el-form-item label="损失情况" prop="lostDetail">
                         <el-input v-model="postForm.lostDetail"/>
@@ -169,13 +180,10 @@
                     </el-row>
 
                     <el-form-item label="短信内容" prop="smsContent">
-                        <el-input v-model="postForm.smsContent" :autosize="{ minRows: 2, maxRows: 4}"
-                                  :value="smsContentChange" type="textarea"/>
+                        <el-input v-model="postForm.smsContent" type="textarea" :autosize="{ minRows: 2, maxRows: 4}"
+                                  :value="smsContentChange" />
                     </el-form-item>
-                    <el-divider>案件信息</el-divider>
-                    <el-form-item label="警情号" prop="instanceNo">
-                        <el-input v-model="postForm.instanceNo"/>
-                    </el-form-item>
+
 
                     <el-form-item style="margin-bottom: 40px;text-align: center;" label-width="100px">
                         <el-button v-loading="loading"  style="width: 200px" type="primary"
