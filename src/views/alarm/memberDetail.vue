@@ -276,7 +276,7 @@
                     if (this.postForm.lostDetail != ''){
                         lost ='损失情况：'+ this.postForm.lostDetail
                     }
-                  
+
                     this.smsContentChange =  this.formatDate(this.postForm.receiptTimeShow) + ' 接到' + this.postForm.reportOrg + ' ' + this.postForm.reporter + '(' + this.postForm.contactPhoneNumber + ")" +
                         '报告在' + this.postForm.caseAddress + '发生一起' + category+ ' 案件。'+lost+',值班技术员：' + tech
 
@@ -306,6 +306,7 @@
             this.postForm.receiptUid = this.$store.getters.id;
         },
         methods: {
+
             selectUpdate(val){
               this.$forceUpdate();
             },
@@ -511,6 +512,7 @@
                                             t: +new Date()
                                         }
                                     })
+                                    this.$store.dispatch('delView', this.$route)
                                 } else {
                                     this.$message({
                                         message: data.reason,

@@ -321,7 +321,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="是否有监控" prop="hasCamera">
-            <el-checkbox v-model="list.hasCamera"/>
+            <el-checkbox v-model="list.hasCamera" disabled/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -331,7 +331,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="是否死亡案件" prop="isDeathCase">
-            <el-checkbox v-model="list.isDeathCase"/>
+            <el-checkbox v-model="list.isDeathCase" disabled/>
           </el-form-item>
         </el-col>
       </el-row>
@@ -387,20 +387,6 @@
             label="常住地址" align="center">
             <template slot-scope="{row}">
               <span>{{ row.residence }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="huji"
-            label="户籍" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.huji }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="registerName" width="80"
-            label="登记人" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.registerName }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="150" align="center">
@@ -671,13 +657,13 @@
           <el-input v-model="concernedPersonListForm.idNo"/>
         </el-form-item>
         <el-form-item label="性别" prop="sex">
-          <el-select v-model="concernedPersonListForm.sex" placeholder="请选择" center>
+          <el-select v-model="concernedPersonListForm.sex" placeholder="请选择" center style="width: 100%">
             <el-option
               v-for="item in sex"
               :key="item.id"
               :label="item.title"
               :value="item.id"
-              style="width: 100%"/>
+              />
           </el-select>
         </el-form-item>
         <el-form-item label="联系电话" prop="contactNumber">
@@ -686,12 +672,7 @@
         <el-form-item label="常住地址" prop="residence">
           <el-input v-model="concernedPersonListForm.residence"/>
         </el-form-item>
-        <el-form-item label="户籍" prop="huji">
-          <el-input v-model="concernedPersonListForm.huji"/>
-        </el-form-item>
-        <el-form-item label="登记人" prop="registerName">
-          <el-input v-model="concernedPersonListForm.registerName"/>
-        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogConcernedPersonListForm = false">
@@ -1080,8 +1061,7 @@ export default {
         sex: '',
         contactNumber: '',
         residence: '',
-        huji: '',
-        registerName: ''
+
       },
       materialListForm: {
         id: '',
@@ -1131,10 +1111,22 @@ export default {
     'list.concernedPersonList': {
       handler(newData, oldData) {
         if (newData.length > 0) {
-          this.list.isDeathCase = true
+          newData.map(item=>{
+            if (item.idType === '死者'){
+              this.list.isDeathCase = true
+            }
+          })
+
         } else {
           this.list.isDeathCase = false
         }
+      },
+      deep: true,
+      immediate: true
+    },
+    'list.caseAddress': {
+      handler(newData, oldData) {
+          this.concernedPersonListForm.residence = newData;
       },
       deep: true,
       immediate: true
@@ -1142,16 +1134,16 @@ export default {
   },
   created() {
     if (this.isEdit) {
-      const id = this.$route.params && this.$route.params.id
+      const id = this.$route.params && this.$route.params.id;
       this.fetchData(id)
       this.list.id = id
-      console.log(this.list)
+
     }
 
     this.list.mainChargerUid = this.$store.getters.id
 
-    this.list.examBeginTime = (new Date() + 30 * 60 * 1000).valueOf()
-    this.list.examBeginTime = (new Date() + 120 * 60 * 1000).valueOf()
+    this.list.examBeginTime = (new Date() + 30 * 60 * 1000).valueOf();
+    this.list.examBeginTime = (new Date() + 120 * 60 * 1000).valueOf();
     this.list.caseHappenTime = (new Date()).valueOf()
     this.getUserList()
     this.search('案件类别').then(data => {
@@ -1424,9 +1416,8 @@ export default {
         idNo: '',
         sex: '',
         contactNumber: '',
-        residence: '',
-        huji: '',
-        registerName: ''
+        residence: this.list.caseAddress,
+
       }
       this.dialogConcernedPersonListFormMethod = 'add'
       this.dialogConcernedPersonListFormIndex = ''
@@ -1799,6 +1790,7 @@ export default {
                     t: +new Date()
                   }
                 })
+                this.$store.dispatch('delView', this.$route)
               } else {
                 this.$message({
                   message: response.reason,
