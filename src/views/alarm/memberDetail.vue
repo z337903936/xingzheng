@@ -144,6 +144,7 @@
                                            class="filter-item"
                                            allow-create
                                            filterable
+                                           default-first-option
                                            style="width: 100%">
                                     <el-option
                                             v-for="item in userList"
@@ -257,15 +258,27 @@
         watch: {
             postForm: {
                 handler() {
-                    var tech = '';
-                    if (this.postForm.techUid != '') {
-                        this.userList.filter(data => {
-                            if (this.postForm.techUid === data.id)
-                                tech = data.title
-                        })
+                    var tech = ''
+                    var category = ''
+                    var lost= '';
+                    console.log(this.postForm.techUidArray.length);
+                    if (this.postForm.techUidArray.length > 0) {
+                         this.postForm.techUidArray.map(item=>{
+                            this.userList.map(value=>{
+                               
+                            })
+                        });
                     }
+                    if (this.postForm.caseCategory != ''){
+                        category = this.postForm.caseCategory.slice(-1)[0]
+                    }
+                    if (this.postForm.lostDetail != ''){
+                        lost ='损失情况：'+ this.postForm.lostDetail
+                    }
+
+
                     this.smsContentChange = this.postForm.receiptTimeShow + ' 接到' + this.postForm.reportOrg + ' ' + this.postForm.reporter + '(' + this.postForm.contactPhoneNumber + ")" +
-                        '报告在' + this.postForm.caseAddress + '发生一起' + this.postForm.caseCategory + ' 案件。值班技术员：' + tech
+                        '报告在' + this.postForm.caseAddress + '发生一起' + category+ ' 案件。'+lost+',值班技术员：' + tech
                 },
                 deep: true,
 

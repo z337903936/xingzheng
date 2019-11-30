@@ -120,12 +120,13 @@
           <span>{{ row.techName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="270" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <router-link :to="'/alarm/edit-alarm/'+row.id">
             <el-button v-waves type="primary" size="mini" icon="el-icon-edit">编辑</el-button>
           </router-link>
           <el-button v-waves :disabled="judge(row)" type="primary" size="mini" icon="el-icon-delete" @click="handleDelete(row)">删除</el-button>
+          <el-button v-waves :disabled="judgeG(row)" type="primary" size="mini" style="width: 80px" >接收任务</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -211,6 +212,9 @@ export default {
   methods: {
     judge(data) {
       if (this.userId === data.createUid) { return false } else { return true }
+    },
+    judgeG(data) {
+      if (this.$store.getters.groupName.indexOf('现勘') > -1) { return false } else { return true }
     },
     search(parentName, filter = null) {
       return new Promise((resolve, reject) => {

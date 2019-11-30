@@ -1142,8 +1142,9 @@ export default {
   created() {
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
-      this.list.id = id
       this.fetchData(id)
+      this.list.id = id
+      console.log(this.list)
     }
 
     this.list.mainChargerUid = this.$store.getters.id
@@ -1182,8 +1183,10 @@ export default {
     caseCategoryResulte(val) {
       val.map(data => {
         if (data === '十类案件') {
-          console.log(1)
+
           this.list.isTenCase = true
+        }else{
+          this.list.isTenCase = false
         }
       })
     },
@@ -1223,9 +1226,20 @@ export default {
       fetchSearch(id).then(data => {
         this.list = data
         this.list = this.changeTime(this.list, false)
-        this.list.supporterUidArray = this.list.supporterUid.split(',').map(data => {
-          return parseInt(data)
-        })
+        if (this.list.supporterUid !=''){
+          this.list.supporterUidArray = this.list.supporterUid.split(',').map(data => {
+            return parseInt(data)
+          })
+        }
+        if (this.list.sceneProtect === 0)
+          this.list.sceneProtect = '';
+        if (this.list.photographUid === 0)
+          this.list.photographUid = '';
+        if (this.list.medicalUid === 0)
+          this.list.medicalUid = '';
+        if (this.list.cameraUid === 0)
+          this.list.cameraUid = '';
+
         this.list.crimeTimeArray = JSON.parse(this.list.crimeTime)
       }).catch(err => {
         console.log(err)
