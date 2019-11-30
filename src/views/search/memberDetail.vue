@@ -354,55 +354,56 @@
           </el-table-column>
           <el-table-column
             prop="idType"
-            label="证件类型"
+            label="身份类型"
+            align="center"
           >
             <template slot-scope="{row}">
               <span>{{ row.idType }}</span>
             </template>
           </el-table-column>
           <el-table-column
-            prop="idNo"
-            label="证件号">
+            prop="idNo" align="center"
+            label="证件号" width="175">
             <template slot-scope="{row}">
               <span>{{ row.idNo }}</span>
             </template>
           </el-table-column>
           <el-table-column
             prop="sex"
-            label="性别">
+            label="性别" align="center">
             <template slot-scope="{row}">
               <span>{{ row.sexShow }}</span>
             </template>
           </el-table-column>
           <el-table-column
-            prop="contactNumber"
-            label="联系电话">
+            prop="contactNumber" width="120"
+            label="联系电话" align="center">
             <template slot-scope="{row}">
               <span>{{ row.contactNumber }}</span>
             </template>
           </el-table-column>
           <el-table-column
-            prop="residence"
-            label="常住地址">
+            prop="residence"  width="160"
+            label="常住地址" align="center">
             <template slot-scope="{row}">
               <span>{{ row.residence }}</span>
             </template>
           </el-table-column>
           <el-table-column
             prop="huji"
-            label="户籍">
+            label="户籍" align="center">
             <template slot-scope="{row}">
               <span>{{ row.huji }}</span>
             </template>
           </el-table-column>
           <el-table-column
-            prop="registerName"
-            label="登记人">
+            prop="registerName" width="80"
+            label="登记人" align="center">
             <template slot-scope="{row}">
               <span>{{ row.registerName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" fixed="right" width="150">
+          <el-table-column label="操作" fixed="right" width="150" align="center">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -425,7 +426,7 @@
           style="width: 100%">
           <el-table-column
             prop="name"
-            label="名字"
+            label="名字" align="center"
           >
             <template slot-scope="{row}">
               <span>{{ row.name }}</span>
@@ -433,7 +434,7 @@
           </el-table-column>
           <el-table-column
             prop="model"
-            label="型号"
+            label="型号" align="center"
           >
             <template slot-scope="{row}">
               <span>{{ row.model }}</span>
@@ -441,33 +442,33 @@
           </el-table-column>
           <el-table-column
             prop="feather"
-            label="特征">
+            label="特征" align="center">
             <template slot-scope="{row}">
               <span>{{ row.feather }}</span>
             </template>
           </el-table-column>
           <el-table-column
             prop="value"
-            label="价值">
+            label="价值" align="center">
             <template slot-scope="{row}">
               <span>{{ row.value }}</span>
             </template>
           </el-table-column>
           <el-table-column
             prop="amount"
-            label="数量">
+            label="数量" align="center">
             <template slot-scope="{row}">
               <span>{{ row.amount }}</span>
             </template>
           </el-table-column>
           <el-table-column
             prop="regName"
-            label="登记人">
+            label="登记人" align="center">
             <template slot-scope="{row}">
               <span>{{ row.regName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" fixed="right" width="150">
+          <el-table-column label="操作" fixed="right" width="150" align="center">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -499,7 +500,7 @@
             width="55"/>
           <el-table-column
             prop="materialNo"
-            label="物证编码"
+            label="物证编码" align="center"
             width="140"
           >
             <template slot-scope="{row}">
@@ -508,7 +509,7 @@
           </el-table-column>
           <el-table-column
             prop="thirdMaterialNo"
-            label="物证库编号"
+            label="物证库编号" align="center"
             width="140"
           >
             <template slot-scope="{row}">
@@ -516,7 +517,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="materialCategory"
+            prop="materialCategory" align="center"
             label="物证类别">
             <template slot-scope="{row}">
 
@@ -524,7 +525,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="materialType"
+            prop="materialType" align="center"
             label="物证类型">
             <template slot-scope="{row}">
               <span>{{ row.materialType }}</span>
@@ -532,7 +533,7 @@
           </el-table-column>
           <el-table-column
             prop="extractTime"
-            label="提取日期"
+            label="提取日期" align="center"
             width="100px">
             <template slot-scope="{row}">
               <span v-if="row.extractTime !== ''">{{ row.extractTime*1000 | parseTime('{y}-{m}-{d}') }}</span>
@@ -540,14 +541,14 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="extractMethod"
+            prop="extractMethod" align="center"
             label="提取方法">
             <template slot-scope="{row}">
               <span>{{ row.extractMethod }}</span>
             </template>
           </el-table-column>
           <el-table-column
-            prop="extractUid"
+            prop="extractUid" align="center"
             label="提取人">
             <template slot-scope="{row}">
               <span>{{ row.extractName }}</span>
@@ -555,13 +556,13 @@
           </el-table-column>
           <el-table-column
             prop="extractUid"
-            label="图片"
+            label="图片" align="center"
             width="200">
             <template slot-scope="{row}">
               <span><img :src="row.imgUrl" height="100"></span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" fixed="right" width="150">
+          <el-table-column label="操作" fixed="right" width="150" align="center">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -1148,7 +1149,9 @@ export default {
 
     this.list.mainChargerUid = this.$store.getters.id
 
-    this.list.examBeginTime = (new Date()).valueOf()
+    this.list.examBeginTime = (new Date() + 30 * 60 * 1000).valueOf()
+    this.list.examBeginTime = (new Date() + 120 * 60 * 1000).valueOf()
+    this.list.caseHappenTime = (new Date()).valueOf()
     this.getUserList()
     this.search('案件类别').then(data => {
       this.caseTypeList = this.processData(data.list)
