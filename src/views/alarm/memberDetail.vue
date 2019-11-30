@@ -229,7 +229,7 @@
                     leaderUid: '',
                     receiptTimeShow: '',
                     receiptTime: '',
-                    smsContent: "",
+                    smsContent: '',
                     smsReceiverArray: [],
                     smsReceiver: '',
                     caseAddress: '',
@@ -275,10 +275,9 @@
                     if (this.postForm.lostDetail != ''){
                         lost ='损失情况：'+ this.postForm.lostDetail
                     }
-
-
                     this.smsContentChange = this.postForm.receiptTimeShow + ' 接到' + this.postForm.reportOrg + ' ' + this.postForm.reporter + '(' + this.postForm.contactPhoneNumber + ")" +
                         '报告在' + this.postForm.caseAddress + '发生一起' + category+ ' 案件。'+lost+',值班技术员：' + tech
+
                 },
                 deep: true,
 
@@ -301,11 +300,20 @@
             }else{
                 this.restForm()
             }
+            this.initDateTime()
             this.postForm.receiptUid = this.$store.getters.id;
         },
         methods: {
             selectUpdate(val){
               this.$forceUpdate();
+            },
+            initDateTime(){
+              // var rightNow = this.formatDate()
+              // console.log(rightNow)
+              var rightNow = new Date()
+                this.postForm.receiptTimeShow = rightNow
+                this.postForm.receiptTime = rightNow / 1000
+                this.postForm.caseTime = rightNow
             },
             filterUserSearch(value){
                 if (value) {
@@ -452,7 +460,7 @@
                 if (data.reportOrg.constructor === Array) {
                     data.reportOrg = data.reportOrg.slice(-1)[0]
                 }
-                
+
                 if (!/^[1-9]+[0-9]*]*$/.test(data.receiptUid)) {
                     data.receiptName = data.receiptUid;
                 }
