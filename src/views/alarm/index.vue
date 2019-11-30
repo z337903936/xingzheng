@@ -87,7 +87,7 @@
     >
       <el-table-column label="接警号" width="120px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.taskNo }}</span>
+          <span>{{ row.caseNo }}</span>
         </template>
       </el-table-column>
       <el-table-column label="接警时间" width="160px" align="center">
