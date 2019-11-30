@@ -1,48 +1,6 @@
 <template>
-    <div class="app-container">
-        <div class="filter-container">
-            <div><el-date-picker
-                    v-model="searchTime"
-                    type="datetimerange"
-                    range-separator="至"
-                    start-placeholder="开始时间"
-                    end-placeholder="结束时间"
-                    value-format="timestamp"
-            />
-                <el-select v-model="listQuery.leaderName" placeholder="移交人" center>
-                    <el-option
-                            v-for="item in userList"
-                            :key="item.id"
-                            :label="item.title"
-                            :value="item.id"/>
-                </el-select>
-                <el-input v-model="listQuery.taskNo" placeholder="DNA编号" class="mb10" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.taskNo" placeholder="物证类型" class="mb10" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.taskNo" placeholder="勘查号" class="mb10" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.taskNo" placeholder="任务号" class="mb10" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.taskNo" placeholder="检验结果" class="mb10" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.taskNo" placeholder="移交人" class="mb10" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.taskNo" placeholder="关键字" class="mb10" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
-                <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
-                    搜索
-                </el-button>
-                <router-link :to="''">
-                    <el-button v-waves type="primary"  icon="el-icon-edit">添加</el-button>
-                </router-link>
-
-
-                <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
-                <!--导出-->
-                <!--</el-button>-->
-            </div>
-        </div>
+    <div>
+        <el-divider content-position="center">待办任务</el-divider>
 
         <el-table
                 v-loading="listLoading"
@@ -53,69 +11,43 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="DNA编号" prop="id" align="center" width="180">
+            <el-table-column label="任务单号" prop="id" align="center" width="350">
                 <template slot-scope="{row}">
                     <span>{{ row.id }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证名称" align="center" width="100px">
+            <el-table-column label="系统编号" align="center" width="350">
                 <template slot-scope="{row}">
                     <span>{{ row.taskNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证类型" width="150" align="center">
+            <el-table-column label="勘查号" width="350" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.receiptTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="提取人" align="center" min-width="100">
+            <el-table-column label="物证类别" align="center" >
                 <template slot-scope="{row}">
                     <span>{{ row.reporter }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="提取日期"  width="180" align="center">
+            <el-table-column label="日期"  width="180" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.reportOrg }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="勘查号" width="210" align="center">
+            <el-table-column label="移交人" width="110" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.contactPhoneNumber }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="任务号" width="210px" align="center">
+             <el-table-column label="任务状态" width="110" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.caseCategory }}</span>
+                    <span>{{ row.contactPhoneNumber }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="移交人" width="100" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.techName }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="检验结果" width="210" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.techName }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="文书去向" width="110" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.techName }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="物证编号" width="210" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.techName }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-                <template slot-scope="{row}">
-                    <router-link :to="'/alarm/edit-alarm/'+row.id">
-                        <el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>
-                    </router-link>
 
-                </template>
-            </el-table-column>
+
         </el-table>
         <el-pagination
                 background
@@ -128,14 +60,59 @@
         >
         </el-pagination>
 
+        <el-row :gutter="20" style="margin-top: 25px">
+            <el-col :span="16">
+                <el-table
+                        v-loading="listLoading"
+                        :key="tableKey"
+                        :data="list"
+                        border
+                        fit
+                        highlight-current-row
+                        style="width: 100%;"
+                >
+                    <el-table-column label="物证室名" prop="id" align="center" >
+                        <template slot-scope="{row}">
+                            <span>{{ row.id }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="物证数量" align="center" width="200">
+                        <template slot-scope="{row}">
+                            <span>{{ row.taskNo }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="借出数量" width="150" align="center">
+                        <template slot-scope="{row}">
+                            <span>{{ row.receiptTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="逾期数量" align="center" width="100">
+                        <template slot-scope="{row}">
+                            <span>{{ row.reporter }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="状态"  width="180" align="center">
+                        <template slot-scope="{row}">
+                            <span>{{ row.reportOrg }}</span>
+                        </template>
+                    </el-table-column>
+
+                </el-table>
+
+            </el-col>
+            <el-col :span="8">
+                <el-card class="box-card">
+                    <div slot="header" class="clearfix">
+                        <span>物证库环境监测</span>
+                    </div>
+                    <div v-for="o in 4" :key="o" class="text item">
+                        {{'列表内容 ' + o }}
+                    </div>
+                </el-card>
+            </el-col>
+        </el-row>
     </div>
 </template>
-
-<style>
-    .mb10 {
-        margin-bottom: 10px;
-    }
-</style>
 
 <script>
     import {fetchList, fetchAlarm, createAlarm, updateAlarm} from '@/api/alarm'
@@ -146,12 +123,13 @@
 
 
     export default {
-        name: 'Dna',
+        name: 'MaterialHome',
         directives: {waves},
         data() {
             return {
                 tableKey: 0,
                 list: null,
+                activeName: 'first',
                 pages: 0,
                 listLoading: false,
                 paginationShow: true,
@@ -219,7 +197,11 @@
             //         }
             //     }))
             // },
-            
+
         }
     }
 </script>
+
+<style scoped>
+
+</style>

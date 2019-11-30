@@ -104,8 +104,15 @@
         methods:{
             getList() {
                 this.listLoading = true;
-                taskList().then(response => {
-                    this.list = response.list;
+                const data={
+                    status:2
+                }
+                taskList(data).then(response => {
+
+                    this.list = response.list.map(data=>{
+                        data.taskArriveTime = this.getLocalTime(data.taskArriveTime)
+                        return data
+                    });
                     // this.pages = response.pages
 
                     // Just to simulate the time of the request
