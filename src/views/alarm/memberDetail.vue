@@ -265,7 +265,8 @@
                     if (this.postForm.techUidArray.length > 0) {
                          this.postForm.techUidArray.map(item=>{
                             this.userList.map(value=>{
-                               
+                               if (item === value.id)
+                                   tech += value.title+' '
                             })
                         });
                     }
@@ -275,7 +276,8 @@
                     if (this.postForm.lostDetail != ''){
                         lost ='损失情况：'+ this.postForm.lostDetail
                     }
-                    this.smsContentChange = this.postForm.receiptTimeShow + ' 接到' + this.postForm.reportOrg + ' ' + this.postForm.reporter + '(' + this.postForm.contactPhoneNumber + ")" +
+                  
+                    this.smsContentChange =  this.formatDate(this.postForm.receiptTimeShow) + ' 接到' + this.postForm.reportOrg + ' ' + this.postForm.reporter + '(' + this.postForm.contactPhoneNumber + ")" +
                         '报告在' + this.postForm.caseAddress + '发生一起' + category+ ' 案件。'+lost+',值班技术员：' + tech
 
                 },
