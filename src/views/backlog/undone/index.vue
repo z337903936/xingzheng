@@ -101,6 +101,65 @@
                     </el-date-picker>
                 </el-form-item>
             </el-form>
+            <el-divider content-position="center">物证信息</el-divider>
+            <el-row :gutter="20">
+                <el-col :span="12">
+                    物证编号：
+                </el-col>
+                <el-col :span="12">
+                    类型：
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="12">
+                    遗留部位：
+                </el-col>
+                <el-col :span="12">
+                    提取方法：
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="12">
+                    提取日期：
+                </el-col>
+                <el-col :span="12">
+                    提取人：
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="12">
+                    可靠程度：
+                </el-col>
+                <el-col :span="12">
+                    利用情况：
+                </el-col>
+            </el-row>
+            <el-divider content-position="center">案件信息</el-divider>
+            <el-row :gutter="20">
+                <el-col :span="12">
+                    勘查号：
+                </el-col>
+                <el-col :span="12">
+                    现勘号：
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="12">
+                    案件编号：
+                </el-col>
+                <el-col :span="12">
+                    案件类别：
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="12">
+                    案发地点：
+                </el-col>
+                <el-col :span="12">
+                    案发时间：
+                </el-col>
+            </el-row>
+
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormAccept = false">
                     取 消
@@ -171,13 +230,13 @@
                 listLoading:false,
                 dialogFormAccept:false,
                 acceptTaskFrom:{
-                    id:'',
+                    stepId :'',
                     requireOrg:'',
                     requireTime:'',
                 },
                 dialogResultFrom:false,
                 ResultFrom:{
-                    id:'',
+                    stepId :'',
                     result:'',
                     documentNo:'',
                     documentDate:'',
@@ -209,9 +268,12 @@
             getLocalTime(nS) {
                 return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
             },
+            getDetail(){
+
+            },
             handleWriteResult(task){
                 this.dialogResultFrom =true;
-                this.ResultFrom.id = task.id
+                this.ResultFrom.stepId  = task.id
             },
             writeResult(){
                 let data = Object.assign({}, this.ResultFrom)
@@ -239,7 +301,7 @@
 
             handleAcceptTaskSeach(task){
                 let  data = this.acceptTaskFrom;
-                data.id = task.id
+                data.stepId  = task.id
                 accetpTask(data).then(response=>{
                     if (response.code === 200) {
                         this.$message({
@@ -261,7 +323,7 @@
             },
             handleAcceptTask(task){
                 this.dialogFormAccept =true;
-                this.acceptTaskFrom.id = task.id
+                this.acceptTaskFrom.stepId  = task.id
             },
             acceptTask(){
                 let  data = this.acceptTaskFrom;

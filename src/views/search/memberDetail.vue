@@ -1165,12 +1165,17 @@ export default {
       this.fetchData(id)
       this.list.id = id
 
+    }else{
+      this.list.mainChargerUid = this.$store.getters.id;
+      this.list.examBeginTime = (new Date() ).valueOf()+ 30 * 60 * 1000;
+      this.list.examEndTime = (new Date()).valueOf() + 120 * 60 * 1000;
+      this.list.caseHappenTime = (new Date()).valueOf();
+      this.list.caseBeginTime = (new Date()).valueOf();
+      this.list.caseEndTime = (new Date()).valueOf();
     }
-    this.list.mainChargerUid = this.$store.getters.id
-    this.list.examBeginTime = (new Date() + 30 * 60 * 1000).valueOf();
-    this.list.examBeginTime = (new Date() + 120 * 60 * 1000).valueOf();
-    this.list.caseHappenTime = (new Date()).valueOf()
-    this.getUserList()
+
+
+    this.getUserList();
     this.search('案件类别').then(data => {
       this.caseTypeList = this.processData(data.list)
     })

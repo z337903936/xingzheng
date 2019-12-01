@@ -98,7 +98,7 @@
                     <span>{{ row.caseCategory }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+            <el-table-column label="操作" align="center" fixed="right" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <router-link :to="'/medical/edit-medical/'+row.id">
                         <el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>

@@ -12,7 +12,6 @@
                           @keyup.enter.native="handleFilter"/>
                 <el-input v-model="listQuery.caseId" placeholder="案件ID" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
-
                 <el-cascader
                         :options="caseTypeList"
                         filterable
@@ -112,7 +111,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
+            <el-table-column label="操作" align="center" fixed="right" width="200" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <router-link :to="'/search/update-search/'+row.id">
                         <el-button type="primary" size="mini" >编辑</el-button>

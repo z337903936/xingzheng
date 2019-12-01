@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
+    <div class="filter-container" style="margin-bottom: 20px">
       <div><el-date-picker
         v-model="searchTime"
         type="datetimerange"
@@ -48,37 +48,40 @@
             :label="item.title"
             :value="item.id"/>
         </el-select>
-        <el-input
-          v-model="listQuery.reporterOrg"
-          placeholder="报告单位"
-          style="width: 200px;"
-          @keyup.enter.native="handleFilter"/>
+        <div style="margin-top: 10px">
+          <el-input
+                  v-model="listQuery.reporterOrg"
+                  placeholder="报告单位"
+                  style="width: 200px;"
+                  @keyup.enter.native="handleFilter"/>
 
-        <el-cascader
-          :options="caseCategoryList"
-          v-model="listQuery.caseCategory"
-          :filter-method="filterSearch"
-          :show-all-levels="false"
-          placeholder="案件类别"
-          filterable
-        />
-        <el-select
-                v-model="listQuery.status"
-                placeholder="状态"
-                center
-                >
-          <el-option
-                  v-for="item in statusList"
-                  :key="item.id"
-                  :label="item.title"
-                  :value="item.id"/>
-        </el-select>
-        <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
-          搜索
-        </el-button>
-        <router-link :to="'/alarm/create-alarm/'">
-          <el-button v-waves type="primary" icon="el-icon-edit">添加</el-button>
-        </router-link>
+          <el-cascader
+                  :options="caseCategoryList"
+                  v-model="listQuery.caseCategory"
+                  :filter-method="filterSearch"
+                  :show-all-levels="false"
+                  placeholder="案件类别"
+                  filterable
+          />
+          <el-select
+                  v-model="listQuery.status"
+                  placeholder="状态"
+                  center
+          >
+            <el-option
+                    v-for="item in statusList"
+                    :key="item.id"
+                    :label="item.title"
+                    :value="item.id"/>
+          </el-select>
+          <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter" style="float: right;margin-right: 20px">
+            搜索
+          </el-button>
+          <router-link :to="'/alarm/create-alarm/'" style="float: right;margin-right: 10px">
+            <el-button v-waves type="primary" icon="el-icon-edit">添加</el-button>
+          </router-link>
+        </div>
+
 
         <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
         <!--导出-->
@@ -168,38 +171,6 @@
       </span>
     </el-dialog>
 
-    <el-dialog title="接受任务" :visible.sync="dialogFormAccept" width="50%">
-      <el-form
-              ref="acceptTaskFrom"
-              :model="acceptTaskFrom"
-              label-position="left"
-              label-width="100px"
-              style="width: 400px; margin-left:50px;">
-
-        <el-form-item label="送检单位" prop="name">
-          <el-input v-model="acceptTaskFrom.requireOrg"/>
-        </el-form-item>
-
-
-        <el-form-item label="送检时间" prop="sort">
-          <el-date-picker
-                  v-model="acceptTaskFrom.requireTime"
-                  type="date"
-                  value-format="timestamp"
-                  placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormAccept = false">
-          取 消
-        </el-button>
-        <el-button type="primary" @click="acceptTask()">
-          确 定
-        </el-button>
-      </div>
-    </el-dialog>
-
   </div>
 </template>
 
@@ -279,9 +250,7 @@ export default {
       userId: '',
       dialogFormAccept:false,
       acceptTaskFrom:{
-        id:'',
-        requireOrg:'',
-        requireTime:'',
+        recordNo:'',
       },
     }
   },
@@ -296,13 +265,8 @@ export default {
   },
   methods: {
     handleAcceptTask(task){
-      this.dialogFormAccept =true;
-      this.acceptTaskFrom.id = task.id
-    },
-    acceptTask(){
-      let  data = this.acceptTaskFrom;
-      if (data.requireTime.toString().length>10)
-        data.requireTime =  parseInt(data.requireTime/1000);
+      let data = this.acceptTaskFrom;
+      data.recordNo = task.recordNo;
       accetpTask(data).then(response=>{
         if (response.code === 200) {
           this.$message({
@@ -311,7 +275,12 @@ export default {
             showClose: true,
             duration: 2000
           })
-          this.getList();
+          this.$router.push({
+            path: '/search/update-search/'+response.evidenceId,
+            query: {
+              t: +new Date()
+            }
+          })
         } else {
           this.$message({
             message: response.reason,
@@ -321,6 +290,9 @@ export default {
           })
         }
       })
+    },
+    acceptTask(){
+
     },
     judge(data) {
       if (this.userId === data.createUid) { return false } else { return true }
