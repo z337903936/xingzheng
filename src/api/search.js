@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function fetchList(data) {
+export function searchList(data) {
     return request({
         url: '/v1/cp/evidence_list/',
         method: 'post',

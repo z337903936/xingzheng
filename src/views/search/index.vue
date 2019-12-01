@@ -12,10 +12,29 @@
                           @keyup.enter.native="handleFilter"/>
                 <el-input v-model="listQuery.caseId" placeholder="案件ID" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.caseType" placeholder="案件类别" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
+
+                <el-cascader
+                        :options="caseTypeList"
+                        filterable
+                        v-model="listQuery.caseType"
+                        :filter-method="remoteSearch"
+                        :show-all-levels="false"
+                        placeholder="案件类别"
+                        style="width: 200px;">
+                </el-cascader>
                 <el-input v-model="listQuery.chargerUid" placeholder="主办人" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
+                <el-select
+                        v-model="listQuery.status"
+                        placeholder="状态"
+                        center
+                >
+                    <el-option
+                            v-for="item in statusList"
+                            :key="item.id"
+                            :label="item.title"
+                            :value="item.id"/>
+                </el-select>
                 <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
                     搜索
                 </el-button>
@@ -81,14 +100,15 @@
                     <span>{{ row.medicalName }}</span>
                 </template>
             </el-table-column>
-            <!--<el-table-column label="三录情况">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.caseHappenRegion }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
+
             <el-table-column label="是否死亡" align="center" width="80">
                 <template slot-scope="{row}">
                     <span>{{ row.isDeathCase?'是':'否' }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="状态" align="center" width="150">
+                <template slot-scope="{row}">
+                    <span>{{ row.status | statusFilter }}</span>
                 </template>
             </el-table-column>
 
@@ -126,14 +146,41 @@
 </template>
 
 <script>
-    import {fetchList} from '@/api/search'
+    import {searchList} from '@/api/search'
     import waves from '@/directive/waves' // waves directive
-    import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+    import {fetchList} from '@/api/dictionary'
+
+    const statusMap =[
+        {
+            id:0,
+            title:'全部'
+        },
+        {
+            id:1,
+            title:'未领取'
+        },{
+            id:2,
+            title:'进行中'
+        },{
+            id:3,
+            title:'已完成'
+        },
+    ];
 
     export default {
         name: "Search",
-        components: {Pagination},
+
         directives: {waves},
+        filters: {
+            statusFilter(status) {
+                const statusMap = {
+                    1: '未领取',
+                    2: '进行中',
+                    3: '已完成'
+                }
+                return statusMap[status]
+            }
+        },
         data() {
             return {
                 tableKey: 0,
@@ -151,18 +198,24 @@
                     chargerUid: undefined,
                     beginTime: undefined,
                     endTime: undefined,
+                    status: 0,
                 },
+                caseTypeList:[],
+                statusList: statusMap,
                 calendarTypeOptions:{},
 
             }
         },
         created() {
             this.getList()
+            this.search('案件类别').then(response=>{
+                this.caseTypeList = this.processData(response.list)
+            });
         },
         methods: {
             getList() {
                 this.listLoading = true;
-                fetchList(this.listQuery).then(response => {
+                searchList(this.listQuery).then(response => {
                     this.list = response.list;
                     this.pages = response.pages;
 
@@ -176,6 +229,41 @@
                 this.listQuery.page = 1
                 this.getList()
             },
+            search(parentName,filter=null){
+                return new Promise((resolve, reject) => {
+                    const data = {
+                        filter:filter,
+                        parentName:parentName
+                    };
+                    resolve(fetchList(data))
+                })
+
+            },
+            remoteSearch(node,value){
+                var p =  /^[a-zA-Z]+$/;
+                if (p.test(value)){
+                    if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                        return true
+                }else{
+                    if (node.data.label.indexOf(value)>-1)
+                        return true
+                }
+            },
+            processData(data){
+                return data.map(item=>{
+                    var sendData = {
+                        value:item.name,
+                        label:item.name,
+                        py:item.pinyinAbbr,
+                    }
+                    if (item.children.length >0){
+                        sendData.children = this.processData(item.children);
+                    }
+
+                    return sendData;
+                })
+            },
+
 
         }
     }

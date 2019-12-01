@@ -53,9 +53,9 @@
 
             <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <el-button type="primary" size="small" @click="handleAcceptTask(row)" v-if="row.status===1">
-                        接受任务
-                    </el-button>
+                    <!--<el-button type="primary" size="small" @click="handleAcceptTask(row)" v-if="row.status===1">-->
+                        <!--接受任务-->
+                    <!--</el-button>-->
                     <!--<router-link :to="'/task/show-case/'+row.id">-->
                     <!--<el-button type="primary" size="mini">查看</el-button>-->
                     <!--</router-link>-->

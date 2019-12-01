@@ -257,11 +257,11 @@
         },
         watch: {
             postForm: {
-                handler() {
+                handler(newData, oldData) {
                     var tech = ''
                     var category = ''
                     var lost= '';
-                    console.log(this.postForm.techUidArray.length);
+                    var date= '';
                     if (this.postForm.techUidArray.length > 0) {
                          this.postForm.techUidArray.map(item=>{
                             this.userList.map(value=>{
@@ -271,14 +271,23 @@
                         });
                     }
                     if (this.postForm.caseCategory != ''){
-                        category = this.postForm.caseCategory.slice(-1)[0]
+                        if (this.isEdit) {
+                            category = this.postForm.caseCategory
+                        }else{
+                            category = this.postForm.caseCategory.slice(-1)[0]
+                        }
                     }
                     if (this.postForm.lostDetail != ''){
-                        lost ='损失情况：'+ this.postForm.lostDetail
+                        lost ='损失情况：'+ this.postForm.lostDetail +','
+                    }
+                    if (this.isEdit) {
+                        date = this.postForm.receiptTimeShow;
+                    }else{
+                        date = this.formatDate(this.postForm.receiptTimeShow)
                     }
 
-                    this.smsContentChange =  this.formatDate(this.postForm.receiptTimeShow) + ' 接到' + this.postForm.reportOrg + ' ' + this.postForm.reporter + '(' + this.postForm.contactPhoneNumber + ")" +
-                        '报告在' + this.postForm.caseAddress + '发生一起' + category+ ' 案件。'+lost+',值班技术员：' + tech
+                    this.smsContentChange =  date + ' 接到' + this.postForm.reportOrg + ' ' + this.postForm.reporter + '(' + this.postForm.contactPhoneNumber + ")" +
+                        '报告在' + this.postForm.caseAddress + '发生一起' + category+ ' 案件。'+lost+'值班技术员：' + tech
 
                 },
                 deep: true,
@@ -437,7 +446,10 @@
                     var d = new Date(this.postForm.receiptTime * 1000);
 
                     this.postForm.receiptTimeShow = this.formatDate(d)
-                    console.log(this.postForm.techUidArray)
+                    if (this.postForm.receiptUid === 0) {
+                        data.receiptUid = data.receiptName;
+                    }
+                    this.postForm.smsContentChange = this.postForm.smsContent;
                 }).catch(err => {
                     console.log(err)
                 })
@@ -466,6 +478,7 @@
 
                 if (!/^[1-9]+[0-9]*]*$/.test(data.receiptUid)) {
                     data.receiptName = data.receiptUid;
+                    data.receiptUid = 0;
                 }
                 if (data.instanceNo === this.$store.getters.instanceNo)
                     data.instanceNo=''

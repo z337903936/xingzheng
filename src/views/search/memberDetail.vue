@@ -72,7 +72,7 @@
               :show-all-levels="false"
               filterable
               style="width: 100%"
-              @change="caseCategoryResulte"/>
+              />
           </el-form-item>
 
         </el-col>
@@ -311,7 +311,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="勘查号" prop="selfEvidenceNo" >
-            <el-input v-model="list.selfEvidenceNo" disabled/>
+            <el-input v-model="list.selfEvidenceNo" placeholder="系统自动生成" disabled/>
           </el-form-item>
         </el-col>
       </el-row>
@@ -321,7 +321,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="是否有监控" prop="hasCamera">
-            <el-checkbox v-model="list.hasCamera" disabled/>
+            <el-checkbox v-model="list.hasCamera"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -998,7 +998,7 @@ export default {
         caseCategory: '',
         mainChargerUid: '',
         supporterUid: '',
-        supporterUidArray: '',
+        supporterUidArray: [],
         photographUid: '',
         cameraUid: '',
         medicalUid: '',
@@ -1008,7 +1008,7 @@ export default {
         isDeathCase: '',
         sceneType: '',
         crimeTime: '',
-        crimeTimeArray: '',
+        crimeTimeArray: [],
         invadeType: '',
         escapeType: '',
         crimeTools: '',
@@ -1111,12 +1111,16 @@ export default {
     'list.concernedPersonList': {
       handler(newData, oldData) {
         if (newData.length > 0) {
+         var count = 0;
           newData.map(item=>{
             if (item.idType === '死者'){
-              this.list.isDeathCase = true
+              count++
             }
           })
-
+          if (count)
+            this.list.isDeathCase = true;
+          else
+            this.list.isDeathCase = false
         } else {
           this.list.isDeathCase = false
         }
@@ -1130,7 +1134,30 @@ export default {
       },
       deep: true,
       immediate: true
-    }
+    },
+    'list.caseCategory': {
+      handler(newData, oldData) {
+        if (newData.indexOf("十类案件") > -1) {
+          this.list.isTenCase = true
+        }else{
+          this.list.isTenCase = false
+        }
+
+      },
+      deep: true,
+      immediate: true
+    },
+    'list.supporterUidArray': {
+      handler(newData, oldData) {
+        if (newData.length > 0) {
+          this.list.photographUid = newData[0]
+        }else{
+          this.list.photographUid = '';
+        }
+      },
+      deep: true,
+      immediate: true
+    },
   },
   created() {
     if (this.isEdit) {
@@ -1139,9 +1166,7 @@ export default {
       this.list.id = id
 
     }
-
     this.list.mainChargerUid = this.$store.getters.id
-
     this.list.examBeginTime = (new Date() + 30 * 60 * 1000).valueOf();
     this.list.examBeginTime = (new Date() + 120 * 60 * 1000).valueOf();
     this.list.caseHappenTime = (new Date()).valueOf()
@@ -1175,16 +1200,7 @@ export default {
     selectUpdate(val) {
       this.$forceUpdate()
     },
-    caseCategoryResulte(val) {
-      val.map(data => {
-        if (data === '十类案件') {
 
-          this.list.isTenCase = true
-        }else{
-          this.list.isTenCase = false
-        }
-      })
-    },
     setStayPart(val) {
       this.materialListForm.stayPart = val.originalFileName
       this.materialListForm.imgUrl = val.imgUrl
@@ -1326,7 +1342,8 @@ export default {
               showClose: true,
               duration: 2000
             })
-
+            if (this.isEdit)
+              this.submitForm()
             this.dialogLostDetailListForm = false
             this.resetLostDetailListForm()
             this.fetchData(this.list.id)
@@ -1361,6 +1378,8 @@ export default {
               showClose: true,
               duration: 2000
             })
+            if (this.isEdit)
+              this.submitForm()
             this.fetchData(this.list.id)
             this.dialogLostDetailListForm = false
             this.resetLostDetailListForm()
@@ -1394,6 +1413,8 @@ export default {
               showClose: true,
               duration: 2000
             })
+            if (this.isEdit)
+              this.submitForm()
             this.fetchData(this.list.id)
           } else {
             this.$message({
@@ -1436,6 +1457,8 @@ export default {
               showClose: true,
               duration: 2000
             })
+            if (this.isEdit)
+              this.submitForm()
             this.fetchData(this.list.id)
             this.dialogConcernedPersonListForm = false
             this.resetConcernedPersonListForm()
@@ -1479,6 +1502,8 @@ export default {
               showClose: true,
               duration: 2000
             })
+            if (this.isEdit)
+              this.submitForm()
             this.fetchData(this.list.id)
             this.dialogConcernedPersonListForm = false
             this.resetConcernedPersonListForm()
@@ -1518,6 +1543,8 @@ export default {
               showClose: true,
               duration: 2000
             })
+            if (this.isEdit)
+              this.submitForm()
             this.fetchData(this.list.id)
           } else {
             this.$message({
@@ -1582,6 +1609,8 @@ export default {
             showClose: true,
             duration: 2000
           })
+          if (this.isEdit)
+            this.submitForm()
           this.fetchData(this.list.id)
           this.dialogMaterialListForm = false
           this.resetMaterialListForm()
@@ -1612,7 +1641,6 @@ export default {
       // }
     },
     handleEditMaterialListForm(row) {
-      console.log(row)
       row.extractTime = row.extractTime * 1000
       this.materialListForm = Object.assign({}, row) // copy obj
       this.dialogMaterialListFormMethod = 'edit'
@@ -1630,6 +1658,8 @@ export default {
             showClose: true,
             duration: 2000
           })
+          if (this.isEdit)
+            this.submitForm()
           this.fetchData(this.list.id)
           this.dialogMaterialListForm = false
           this.resetMaterialListForm()
@@ -1672,6 +1702,8 @@ export default {
             showClose: true,
             duration: 2000
           })
+          if (this.isEdit)
+            this.submitForm()
           this.fetchData(this.list.id)
         } else {
           this.$message({
@@ -1694,7 +1726,7 @@ export default {
         if (data.caseEndTime.toString().length > 10) { data.caseEndTime = parseInt(data.caseEndTime / 1000) }
         if (data.caseHappenTime.toString().length > 10) { data.caseHappenTime = parseInt(data.caseHappenTime / 1000) }
       } else {
-        console.log(data.examBeginTime.toString().length)
+
         if (data.examBeginTime.toString().length === 10) { data.examBeginTime = parseInt(data.examBeginTime * 1000) }
         if (data.examEndTime.toString().length === 10) { data.examEndTime = parseInt(data.examEndTime * 1000) }
         if (data.caseBeginTime.toString().length === 10) { data.caseBeginTime = parseInt(data.caseBeginTime * 1000) }
@@ -1783,14 +1815,16 @@ export default {
                   this.searchId = id
                   this.list.id = id
                   this.dialogPoint = false
+                }else{
+                  this.$router.push({
+                    path: '/search/index',
+                    query: {
+                      t: +new Date()
+                    }
+                  })
+                  this.$store.dispatch('delView', this.$route)
                 }
-                this.$router.push({
-                  path: '/search/index',
-                  query: {
-                    t: +new Date()
-                  }
-                })
-                this.$store.dispatch('delView', this.$route)
+
               } else {
                 this.$message({
                   message: response.reason,

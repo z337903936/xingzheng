@@ -62,7 +62,17 @@
           placeholder="案件类别"
           filterable
         />
-
+        <el-select
+                v-model="listQuery.status"
+                placeholder="状态"
+                center
+                >
+          <el-option
+                  v-for="item in statusList"
+                  :key="item.id"
+                  :label="item.title"
+                  :value="item.id"/>
+        </el-select>
         <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
           搜索
         </el-button>
@@ -120,13 +130,19 @@
           <span>{{ row.techName }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="状态" align="center" width="150">
+        <template slot-scope="{row}">
+          <span>{{ row.status | statusFilter }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="270" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <router-link :to="'/alarm/edit-alarm/'+row.id">
             <el-button v-waves type="primary" size="mini" icon="el-icon-edit">编辑</el-button>
           </router-link>
           <el-button v-waves :disabled="judge(row)" type="primary" size="mini" icon="el-icon-delete" @click="handleDelete(row)">删除</el-button>
-          <el-button v-waves :disabled="judgeG(row)" type="primary" size="mini" style="width: 80px" >接收任务</el-button>
+          <el-button v-waves :disabled="judgeG(row)" type="primary" size="mini" style="width: 80px" v-if="row.status === 1"  @click="handleAcceptTask(row)">接收任务</el-button>
+
         </template>
       </el-table-column>
     </el-table>
@@ -152,6 +168,38 @@
       </span>
     </el-dialog>
 
+    <el-dialog title="接受任务" :visible.sync="dialogFormAccept" width="50%">
+      <el-form
+              ref="acceptTaskFrom"
+              :model="acceptTaskFrom"
+              label-position="left"
+              label-width="100px"
+              style="width: 400px; margin-left:50px;">
+
+        <el-form-item label="送检单位" prop="name">
+          <el-input v-model="acceptTaskFrom.requireOrg"/>
+        </el-form-item>
+
+
+        <el-form-item label="送检时间" prop="sort">
+          <el-date-picker
+                  v-model="acceptTaskFrom.requireTime"
+                  type="date"
+                  value-format="timestamp"
+                  placeholder="选择日期">
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormAccept = false">
+          取 消
+        </el-button>
+        <el-button type="primary" @click="acceptTask()">
+          确 定
+        </el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -167,13 +215,43 @@ import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import { fetchAdminMemberList } from '@/api/permissions'
 import { fetchList } from '@/api/dictionary'
+import { accetpTask } from '@/api/backlog'
+
+const statusMap =[
+  {
+    id:0,
+    title:'全部'
+  },
+  {
+    id:1,
+    title:'未领取'
+  },{
+    id:2,
+    title:'进行中'
+  },{
+    id:3,
+    title:'已完成'
+  },
+];
+
 
 export default {
   name: 'Alarm',
   directives: { waves },
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        1: '未领取',
+        2: '进行中',
+        3: '已完成'
+      }
+      return statusMap[status]
+    }
+  },
   data() {
     return {
       tableKey: 0,
+      statusList: statusMap,
       list: null,
       pages: 0,
       listLoading: true,
@@ -189,7 +267,8 @@ export default {
         receiptName: undefined,
         reporterOrg: undefined,
         reporterName: undefined,
-        caseCategoryId: undefined
+        caseCategoryId: undefined,
+        status: 0
       },
       rules: {},
       userList: [],
@@ -197,24 +276,57 @@ export default {
       caseCategoryList: [],
       downloadLoading: false,
       deleteId: '',
-      userId: ''
+      userId: '',
+      dialogFormAccept:false,
+      acceptTaskFrom:{
+        id:'',
+        requireOrg:'',
+        requireTime:'',
+      },
     }
   },
   created() {
     this.getList()
     this.getUserList()
     this.userId = this.$store.getters.id
-    console.log(this.userId)
+
     this.search('案件类别').then(data => {
       this.caseCategoryList = this.processData(data.list)
     })
   },
   methods: {
+    handleAcceptTask(task){
+      this.dialogFormAccept =true;
+      this.acceptTaskFrom.id = task.id
+    },
+    acceptTask(){
+      let  data = this.acceptTaskFrom;
+      if (data.requireTime.toString().length>10)
+        data.requireTime =  parseInt(data.requireTime/1000);
+      accetpTask(data).then(response=>{
+        if (response.code === 200) {
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            showClose: true,
+            duration: 2000
+          })
+          this.getList();
+        } else {
+          this.$message({
+            message: response.reason,
+            type: 'success',
+            showClose: true,
+            duration: 2000
+          })
+        }
+      })
+    },
     judge(data) {
       if (this.userId === data.createUid) { return false } else { return true }
     },
     judgeG(data) {
-      if (this.$store.getters.groupName.indexOf('现勘') > -1) { return false } else { return true }
+      if (this.$store.getters.groupName.indexOf('痕检') > -1) { return false } else { return true }
     },
     search(parentName, filter = null) {
       return new Promise((resolve, reject) => {

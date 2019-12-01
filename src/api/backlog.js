@@ -17,3 +17,12 @@ export function accetpTask(data) {
         data
     })
 }
+
+
+export function writeResult(data) {
+    return request({
+        url: '/v1/cp/task_result/' + data.id + '/',
+        method: 'post',
+        data
+    })
+}
