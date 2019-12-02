@@ -187,9 +187,9 @@ export default {
         });
         this.parentId = menu.flat(Infinity);
         // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
+
+        this.listLoading = false
+
       })
     },
     filterNode(value, data) {

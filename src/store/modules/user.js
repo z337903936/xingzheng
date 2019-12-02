@@ -1,6 +1,7 @@
 import { loginByUsername, logout, getUserInfo } from '@/api/login'
 import { getToken, setToken, removeToken, getUID, setUID, removeUID } from '@/utils/auth'
 import { fetchList } from '@/api/paramConfig'
+import { userDictList,userUseDict,delUserUseDict } from '@/api/dictionary'
 const user = {
   state: {
     user: '',
@@ -125,6 +126,17 @@ const user = {
              commit('SET_EVIDENCE', data.value)
          })
        })
+      })
+    },
+
+    PostUserUseDict({ commit, state },dict) {
+      return new Promise((resolve, reject) => {
+        userUseDict(dict).then(data => {
+
+          resolve(data)
+        }).catch(error => {
+          reject(error)
+        })
       })
     },
 

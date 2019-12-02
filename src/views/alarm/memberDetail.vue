@@ -21,6 +21,7 @@
                                         filterable
                                         v-model="postForm.reportOrg"
                                         :filter-method="remoteSearch"
+                                        @change="countDict"
                                         :show-all-levels="false"
                                         style="width: 100%">
                                 </el-cascader>
@@ -69,8 +70,6 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-
-
                     <el-form-item label="警情号" prop="instanceNo">
                         <el-input v-model="postForm.instanceNo"/>
                     </el-form-item>
@@ -83,7 +82,6 @@
                     <el-form-item label="损失情况" prop="lostDetail">
                         <el-input v-model="postForm.lostDetail"/>
                     </el-form-item>
-
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="技术值班队长" prop="monitorUid">
@@ -315,7 +313,9 @@
             this.postForm.receiptUid = this.$store.getters.id;
         },
         methods: {
+            countDict(val){
 
+            },
             selectUpdate(val){
               this.$forceUpdate();
             },
@@ -401,6 +401,7 @@
                     var sendData = {
                         value:item.name,
                         label:item.name,
+                        id:item.id,
                         py:item.pinyinAbbr,
                     }
                     if (item.children.length >0){
@@ -434,12 +435,29 @@
             fetchData(id) {
                 fetchAlarm(id).then(data => {
                     this.postForm = Object.assign({}, data);
-                    this.postForm.smsReceiverArray = this.postForm.smsReceiver.split(",").map(data => {
-                        return parseInt(data);
-                    });
-                    this.postForm.techUidArray = this.postForm.techUid.split(",").map(data => {
-                       return parseInt(data);
-                    });
+
+
+
+
+                    if (this.postForm.monitorUid === 0)
+                        this.postForm.monitorUid = '';
+                    if (this.postForm.leaderUid === 0)
+                        this.postForm.leaderUid = '';
+                    if (this.postForm.techUid === ''){
+                        this.postForm.techUidArray = [];
+                    }else{
+                        this.postForm.techUidArray = this.postForm.techUid.split(",").map(data => {
+                            return parseInt(data);
+                        });
+                    }
+
+                    if (this.postForm.smsReceiver  === ''){
+                        this.postForm.smsReceiverArray = [];
+                    }else{
+                        this.postForm.smsReceiverArray = this.postForm.smsReceiver.split(",").map(data => {
+                            return parseInt(data);
+                        });
+                    }
 
                     if (this.postForm.caseTime.toString().length===10)
                         this.postForm.caseTime =  data.caseTime*1000;

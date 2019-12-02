@@ -749,7 +749,17 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="提取方法" prop="extractMethod">
-              <el-input v-model="materialListForm.extractMethod"/>
+              <el-select v-model="materialListForm.extractMethod"
+                         filterable
+                         allow-create
+                         default-first-option
+                         placeholder="请选择">
+                <el-option
+                        v-for="item in extractMethodList"
+                        :key="item.value"
+                        :label="item.value"
+                        :value="item.value"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -1103,7 +1113,8 @@ export default {
       crimeTimeList: [],
       invadeTypeList: [],
       escapeTypeList: [],
-      idTypeList: []
+      idTypeList: [],
+      extractMethodList: []
 
     }
   },
@@ -1149,11 +1160,14 @@ export default {
     },
     'list.supporterUidArray': {
       handler(newData, oldData) {
-        if (newData.length > 0) {
-          this.list.photographUid = newData[0]
-        }else{
-          this.list.photographUid = '';
+        if (newData){
+          if (newData.length > 0) {
+            this.list.photographUid = newData[0]
+          }else{
+            this.list.photographUid = '';
+          }
         }
+
       },
       deep: true,
       immediate: true
@@ -1200,6 +1214,9 @@ export default {
     this.search('物证类别').then(data => {
       this.materialCategoryList = this.processData(data.list)
     })
+    this.search('提取方法').then(data => {
+      this.extractMethodList = this.processData(data.list)
+    })
   },
   methods: {
     selectUpdate(val) {
@@ -1242,11 +1259,13 @@ export default {
       fetchSearch(id).then(data => {
         this.list = data
         this.list = this.changeTime(this.list, false)
-        if (this.list.supporterUid !=''){
+
+        if (this.list.supporterUid){
           this.list.supporterUidArray = this.list.supporterUid.split(',').map(data => {
             return parseInt(data)
           })
         }
+
         if (this.list.sceneProtect === 0)
           this.list.sceneProtect = '';
         if (this.list.photographUid === 0)
@@ -1256,7 +1275,10 @@ export default {
         if (this.list.cameraUid === 0)
           this.list.cameraUid = '';
 
-        this.list.crimeTimeArray = JSON.parse(this.list.crimeTime)
+        if (this.list.crimeTime){
+          this.list.crimeTimeArray = JSON.parse(this.list.crimeTime)
+        }
+
       }).catch(err => {
         console.log(err)
       })
@@ -1663,11 +1685,12 @@ export default {
             showClose: true,
             duration: 2000
           })
+          this.dialogMaterialListForm = false
+          this.resetMaterialListForm()
           if (this.isEdit)
             this.submitForm()
           this.fetchData(this.list.id)
-          this.dialogMaterialListForm = false
-          this.resetMaterialListForm()
+
         } else {
           this.$message({
             message: response.reason,
@@ -1753,17 +1776,19 @@ export default {
           } if (data.thirdEvidenceNo === this.$store.getters.evidenceNo) {
             data.thirdEvidenceNo = ''
           }
-          if (data.supporterUidArray.length > 0) {
-            data.supporterUid = data.supporterUidArray.join(',')
+
+          if (data.supporterUidArray){
+            if (data.supporterUidArray.length > 0) {
+              data.supporterUid = data.supporterUidArray.join(',')
+            }
           }
-          if (data.crimeTimeArray.length > 0) {
-            // var itemArray = [];
-            // data.crimeTimeArray.map(item=>{
-            //     itemArray.push(item.slice(-1)[0])
-            // });
-            // data.crimeTime = itemArray.join(',');
-            data.crimeTime = JSON.stringify(data.crimeTimeArray)
+
+          if (data.crimeTimeArray) {
+            if (data.crimeTimeArray.length > 0) {
+              data.crimeTime = JSON.stringify(data.crimeTimeArray)
+            }
           }
+
 
           if (data.caseHappenRegion.constructor === Array) {
             data.caseHappenRegion = data.caseHappenRegion.slice(-1)[0]

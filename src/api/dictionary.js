@@ -39,3 +39,30 @@ export function delArticle(data) {
     })
 }
 
+
+export function userDictList(query) {
+    return request({
+        url: '/v1/cp/user_dict_list/',
+        method: 'get',
+        params: query
+    })
+}
+
+export function userUseDict(data) {
+    return request({
+        url: '/v1/cp/user_dict/new/',
+        method: 'post',
+        data
+    })
+}
+
+
+export function delUserUseDict(data) {
+    return request({
+        url: '/v1/cp/user_dict/',
+        method: 'post',
+        data
+    })
+}
+
+
