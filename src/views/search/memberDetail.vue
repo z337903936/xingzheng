@@ -70,6 +70,7 @@
               v-model="list.caseCategory"
               :filter-method="filterSearch"
               :show-all-levels="false"
+              @change="countDict"
               filterable
               style="width: 100%"
               />
@@ -97,6 +98,7 @@
               v-model="list.caseHappenRegion"
               :filter-method="filterSearch"
               :show-all-levels="false"
+              @change="countDict"
               filterable
               style="width: 100%"
             />
@@ -226,6 +228,7 @@
               v-model="list.sceneType"
               :filter-method="filterSearch"
               :show-all-levels="false"
+              @change="countDict"
               filterable
               style="width: 100%"/>
           </el-form-item>
@@ -238,6 +241,7 @@
               v-model="list.crimeTimeArray"
               :filter-method="filterSearch"
               :show-all-levels="false"
+              @change="countDict"
               :props="props"
               filterable
 
@@ -255,6 +259,7 @@
               v-model="list.invadeType"
               :filter-method="filterSearch"
               :show-all-levels="false"
+              @change="countDict"
               filterable
               style="width: 100%"/>
           </el-form-item>
@@ -267,6 +272,7 @@
               v-model="list.escapeType"
               :filter-method="filterSearch"
               :show-all-levels="false"
+              @change="countDict"
               filterable
               style="width: 100%"/>
           </el-form-item>
@@ -648,6 +654,7 @@
             :options="idTypeList"
             v-model="concernedPersonListForm.idType"
             :filter-method="filterSearch"
+            @change="countDict"
             :show-all-levels="false"
             filterable
             style="width: 100%"/>
@@ -718,6 +725,7 @@
                 v-model="materialListForm.materialCategory"
                 :filter-method="filterSearch"
                 :show-all-levels="false"
+                @change="countDict"
                 filterable
                 style="width: 100%"/>
             </el-form-item>
@@ -752,6 +760,7 @@
               <el-select v-model="materialListForm.extractMethod"
                          filterable
                          allow-create
+                         @change="countDictSelect"
                          default-first-option
                          placeholder="请选择">
                 <el-option
@@ -1219,6 +1228,19 @@ export default {
     })
   },
   methods: {
+    countDict(val){
+      val = val.slice(-1)[0]
+      const send={
+        name:val
+      };
+      this.$store.dispatch('PostUserUseDict', send)
+    },
+    countDictSelect(val){
+      const send={
+        name:val
+      };
+      this.$store.dispatch('PostUserUseDict', send)
+    },
     selectUpdate(val) {
       this.$forceUpdate()
     },

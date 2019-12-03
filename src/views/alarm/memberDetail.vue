@@ -48,14 +48,30 @@
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="案件类别" prop="caseCategory" >
-                                <el-cascader
-                                        :options="caseCategoryList"
-                                        filterable
-                                        v-model="postForm.caseCategory"
-                                        :filter-method="remoteSearch"
-                                        :show-all-levels="false"
-                                        style="width: 100%">
-                                </el-cascader>
+
+                                <el-popover
+                                        placement="left"
+                                        title="标题"
+                                        width="200"
+                                        trigger="manual"
+                                        content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+                                        v-model="caseCategoryPopover">
+                                    <el-cascader
+                                            :options="caseCategoryList"
+                                            filterable
+                                            @change="countDict"
+                                            @visible-change="caseCategoryPopover = !caseCategoryPopover"
+                                            v-model="postForm.caseCategory"
+                                            :filter-method="remoteSearch"
+                                            :show-all-levels="false"
+                                            slot="reference"
+                                            style="width: 100%">
+                                    </el-cascader>
+                                </el-popover>
+
+
+
+
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -196,6 +212,7 @@
 
             <div class="btn-container"/>
         </el-form>
+
     </div>
 </template>
 
@@ -245,6 +262,7 @@
                 userShowList: [],
                 rules: {},
                 loading: false,
+                caseCategoryPopover: false,
                 smsContentChange: '',
                 caseCategoryList: [],
                 reportOrgList: [],
@@ -313,8 +331,16 @@
             this.postForm.receiptUid = this.$store.getters.id;
         },
         methods: {
+            showPopover(val){
+                console.log(val)
+            },
             countDict(val){
 
+                val = val.slice(-1)[0]
+                const send={
+                    name:val
+                };
+                this.$store.dispatch('PostUserUseDict', send)
             },
             selectUpdate(val){
               this.$forceUpdate();

@@ -15,6 +15,7 @@
                 <el-cascader
                         :options="caseTypeList"
                         filterable
+                        @change="countDict"
                         v-model="listQuery.caseType"
                         :filter-method="remoteSearch"
                         :show-all-levels="false"
@@ -212,6 +213,13 @@
             });
         },
         methods: {
+            countDict(val){
+                val = val.slice(-1)[0]
+                const send={
+                    name:val
+                };
+                this.$store.dispatch('PostUserUseDict', send)
+            },
             getList() {
                 this.listLoading = true;
                 searchList(this.listQuery).then(response => {

@@ -8,8 +8,9 @@
                 fit
                 highlight-current-row
                 style="width: 100%;"
+
         >
-            <el-table-column type="expand" >
+            <el-table-column type="expand" ref="expand222">
                 <template slot-scope="{row}" >
                     <el-form label-position="left" inline class="table-expand" v-if="row.fromStep === '接警'">
                         <el-form-item label="报告人">
@@ -404,8 +405,12 @@
     </div>
 </template>
 <style scoped>
+    .el-table >>> .el-table__expanded-cell[class*="cell"] {
+        background-color: #f0f0f0 !important;
+    }
     .table-expand {
         font-size: 0;
+
     }
     .table-expand label {
         width: 90px;
@@ -481,6 +486,7 @@
         },
         created() {
             this.getList();
+
         },
         methods:{
             pareTime(time){

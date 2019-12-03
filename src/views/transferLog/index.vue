@@ -9,12 +9,12 @@
                     end-placeholder="结束时间"
                     value-format="timestamp"
             />
-                <el-input v-model="listQuery.taskNo" placeholder="操作人" class="mb10" style="width: 200px;"/>
-                <el-input v-model="listQuery.materialNo" placeholder="操作人" class="mb10" style="width: 200px;"/>
-                <el-input v-model="listQuery.thirdMaterialNo" placeholder="操作人" class="mb10" style="width: 200px;"/>
-                <el-input v-model="listQuery.name" placeholder="操作人" class="mb10" style="width: 200px;"/>
-                <el-input v-model="listQuery.fromName" placeholder="操作人" class="mb10" style="width: 200px;"/>
-                <el-input v-model="listQuery.toName" placeholder="操作人" class="mb10" style="width: 200px;"/>
+                <el-input v-model="listQuery.taskNo" placeholder="任务编号" class="mb10" style="width: 200px;"/>
+                <el-input v-model="listQuery.materialNo" placeholder="物证编号" class="mb10" style="width: 200px;"/>
+                <el-input v-model="listQuery.thirdMaterialNo" placeholder="统一物证编号" class="mb10" style="width: 200px;"/>
+                <el-input v-model="listQuery.name" placeholder="转移人" class="mb10" style="width: 200px;"/>
+                <el-input v-model="listQuery.fromName" placeholder="接收人" class="mb10" style="width: 200px;"/>
+                <el-input v-model="listQuery.toName" placeholder="物证名称" class="mb10" style="width: 200px;"/>
                 <!--<el-select v-model="listQuery.adminId"-->
                            <!--placeholder="操作人"-->
                            <!--filterable-->

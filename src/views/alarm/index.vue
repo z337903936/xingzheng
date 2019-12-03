@@ -60,6 +60,7 @@
                   v-model="listQuery.caseCategory"
                   :filter-method="filterSearch"
                   :show-all-levels="false"
+                  @change="countDict"
                   placeholder="案件类别"
                   filterable
           />
@@ -264,6 +265,13 @@ export default {
     })
   },
   methods: {
+    countDict(val){
+      val = val.slice(-1)[0]
+      const send={
+        name:val
+      };
+      this.$store.dispatch('PostUserUseDict', send)
+    },
     handleAcceptTask(task){
       let data = this.acceptTaskFrom;
       data.recordNo = task.recordNo;
