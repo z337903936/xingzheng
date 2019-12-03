@@ -6,7 +6,7 @@
 import MemberDetail from './memberDetail'
 
 export default {
-  name: 'CreateAlarm',
+  name: 'CreateDna',
   components: { MemberDetail }
 }
 </script>

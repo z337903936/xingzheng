@@ -74,11 +74,6 @@
                 </el-button>
             </div>
 
-
-
-            <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
-            <!--导出-->
-            <!--</el-button>-->
         </div>
 
         <el-table
@@ -172,6 +167,7 @@
 
 <script>
     import {searchList} from '@/api/search'
+    import { fetchAdminMemberList } from '@/api/permissions'
     import waves from '@/directive/waves' // waves directive
     import {fetchList} from '@/api/dictionary'
 
@@ -246,11 +242,14 @@
         },
         methods: {
             countDict(val){
-                val = val.slice(-1)[0]
-                const send={
-                    name:val
-                };
-                this.$store.dispatch('PostUserUseDict', send)
+                if (val){
+                    val = val.slice(-1)[0]
+                    const send={
+                        name:val
+                    };
+                    this.$store.dispatch('PostUserUseDict', send)
+                }
+
             },
             getList() {
                 this.listLoading = true;

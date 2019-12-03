@@ -229,11 +229,7 @@
                     <span>{{ row.taskArriveTime  }}</span>
                 </template>
             </el-table-column>
-            <!--<el-table-column label="任务结束时间"  align="center">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{row.taskEndTime!==''?(row.taskEndTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}')):''}}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
+
             <el-table-column label="任务详情" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.stepHandler }}</span>
@@ -277,7 +273,7 @@
                 <!--@size-change="getList"-->
         <!--&gt;-->
         <!--</el-pagination>-->
-        <el-dialog title="接受任务" :visible.sync="dialogFormAccept" width="50%">
+        <el-dialog title="接受任务" :close-on-click-modal="false" :visible.sync="dialogFormAccept" width="50%">
             <el-form
                     ref="acceptTaskFrom"
                     :model="acceptTaskFrom"
@@ -295,68 +291,12 @@
                             v-model="acceptTaskFrom.requireTime"
                             type="date"
                             value-format="timestamp"
-                            placeholder="选择日期">
+                            placeholder="选择日期"
+                            style="width: 100%"
+                    >
                     </el-date-picker>
                 </el-form-item>
             </el-form>
-            <el-divider content-position="center">物证信息</el-divider>
-            <el-row :gutter="20">
-                <el-col :span="12">
-                    物证编号：{{ detail.material.thirdMaterialNo }}
-                </el-col>
-                <el-col :span="12">
-                    物证类别：{{ detail.material.materialCategory }}
-                </el-col>
-            </el-row>
-            <el-row :gutter="20">
-                <el-col :span="12">
-                    遗留部位：{{ detail.material.stayPart }}
-                </el-col>
-                <el-col :span="12">
-                    提取方法：{{ detail.material.extractMethod }}
-                </el-col>
-            </el-row>
-            <el-row :gutter="20">
-                <el-col :span="12">
-                    提取日期：{{  pareTime(detail.material.extractTime) }}
-                </el-col>
-                <el-col :span="12">
-                    提取人：{{ detail.material.extractName }}
-                </el-col>
-            </el-row>
-            <el-row :gutter="20">
-                <el-col :span="12">
-                    可靠程度：{{ detail.material.reliabilityLevel }}
-                </el-col>
-                <el-col :span="12">
-                    利用情况：{{ detail.material.usedType }}
-                </el-col>
-            </el-row>
-            <el-divider content-position="center">案件信息</el-divider>
-            <el-row :gutter="20">
-                <el-col :span="12">
-                    勘查号：{{ detail.evidence.selfEvidenceNo }}
-                </el-col>
-                <el-col :span="12">
-                    现勘号：{{ detail.evidence.thirdEvidenceNo }}
-                </el-col>
-            </el-row>
-            <el-row :gutter="20">
-                <el-col :span="12">
-                    案件编号：{{ detail.evidence.caseNo }}
-                </el-col>
-                <el-col :span="12">
-                    案件类别：{{ detail.evidence.caseCategory }}
-                </el-col>
-            </el-row>
-            <el-row :gutter="20">
-                <el-col :span="12">
-                    案发地点：{{ detail.evidence.crimeTools }}
-                </el-col>
-                <el-col :span="12">
-                    案发时间：{{  pareTime(detail.evidence.caseBeginTime) }}
-                </el-col>
-            </el-row>
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormAccept = false">
@@ -368,7 +308,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="填写结果" :visible.sync="dialogResultFrom" width="50%">
+        <el-dialog title="填写结果" :close-on-click-modal="false" :visible.sync="dialogResultFrom" width="50%">
             <el-form
                     ref="ResultFrom"
                     :model="ResultFrom"
@@ -383,15 +323,58 @@
                     <el-input v-model="ResultFrom.documentNo"/>
                 </el-form-item>
 
-
                 <el-form-item label="文书日期" prop="sort">
                     <el-date-picker
                             v-model="ResultFrom.documentDate"
                             type="date"
                             value-format="timestamp"
-                            placeholder="选择日期">
+                            placeholder="选择日期"
+                            style="width: 100%">
                     </el-date-picker>
                 </el-form-item>
+                <div v-if="isForensic">
+                    <el-form-item label="委托单位" prop="delegateOrg">
+                        <el-input v-model="ResultFrom.delegateOrg"/>
+                    </el-form-item>
+                    <el-form-item label="委托人" prop="delegateName">
+                        <el-input v-model="ResultFrom.delegateName"/>
+                    </el-form-item>
+                    <el-form-item label="简要案情" prop="digest">
+                        <el-input v-model="ResultFrom.digest"/>
+                    </el-form-item>
+                    <el-form-item label="伤者情况" prop="deathDetail">
+                        <el-input v-model="ResultFrom.deathDetail"/>
+                    </el-form-item>
+                    <el-form-item label="委托目的" prop="delegateReason">
+                        <el-input v-model="ResultFrom.delegateReason"/>
+                    </el-form-item>
+                    <el-form-item label="鉴定结论" prop="conclusion">
+                        <el-input v-model="ResultFrom.conclusion"/>
+                    </el-form-item>
+                    <el-form-item label="鉴定人" prop="examName">
+                        <el-input v-model="ResultFrom.examName"/>
+                    </el-form-item>
+                    <el-form-item label="协办" prop="supportName">
+                        <el-input v-model="ResultFrom.supportName"/>
+                    </el-form-item>
+                    <el-form-item label="案件类别" prop="caseCategory">
+                        <el-cascader
+                                :options="caseCategoryList"
+                                filterable
+                                @change="countDict"
+                                v-model="ResultFrom.caseCategory"
+                                :filter-method="remoteSearch"
+                                :show-all-levels="false"
+                                placeholder="案件类别"
+                                style="width: 100%;">
+                        </el-cascader>
+
+                    </el-form-item>
+                    <el-form-item label="是否移交" prop="hasTransfered">
+                        <el-checkbox v-model="ResultFrom.hasTransfered"></el-checkbox>
+                    </el-form-item>
+                </div>
+
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogResultFrom = false">
@@ -456,39 +439,41 @@
                     requireTime:'',
                 },
                 dialogResultFrom:false,
+                isForensic:false,
                 ResultFrom:{
                     stepId :'',
                     result:'',
                     documentNo:'',
                     documentDate:'',
+                    delegateOrg:'',
+                    delegateName:'',
+                    digest:'',
+                    deathDetail:'',
+                    delegateReason:'',
+                    conclusion:'',
+                    examName:'',
+                    supportName:'',
+                    caseCategory:'',
+                    hasTransfered:'',
                 },
-                detail:{
-                    evidence:{
-                        selfEvidenceNo:'',
-                        thirdEvidenceNo:'',
-                        caseNo:'',
-                        caseCategory:'',
-                        crimeTools:'',
-                        caseBeginTime:'',
-                    },
-                    material:{
-                        thirdMaterialNo:'',
-                        materialCategory:'',
-                        stayPart:'',
-                        extractTime:'',
-                        extractMethod:'',
-                        extractName:'',
-                        reliabilityLevel:'',
-                        usedType:'',
-                    }
-                }
+                caseCategoryList:[],
+
             }
         },
         created() {
             this.getList();
-
+            this.search('案件类别').then(response=>{
+                this.caseCategoryList = this.processData(response.list)
+            });
         },
         methods:{
+            countDict(val){
+                val = val.slice(-1)[0]
+                const send={
+                    name:val
+                };
+                this.$store.dispatch('PostUserUseDict', send)
+            },
             pareTime(time){
                 if (time) {
                     return this.formatDate(time*1000)
@@ -527,11 +512,53 @@
             getLocalTime(nS) {
                 return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
             },
-            getDetail(){
+            search(parentName, filter = null) {
+                return new Promise((resolve, reject) => {
+                    const data = {
+                        filter: filter,
+                        parentName: parentName
+                    }
+                    resolve(fetchList(data))
+                })
+            },
+            remoteSearch(node,value){
+                var p =  /^[a-zA-Z]+$/;
+                if (p.test(value)){
+                    if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                        return true
+                }else{
+                    if (node.data.label.indexOf(value)>-1)
+                        return true
+                }
+            },
+            processData(data) {
+                return data.map(item => {
+                    var sendData = {
+                        value: item.name,
+                        label: item.name,
+                        py: item.pinyinAbbr
+                    }
+                    if (item.children.length > 0) {
+                        sendData.children = this.processData(item.children)
+                    }
 
+                    return sendData
+                })
+            },
+            filterSearch(node, value) {
+                var p = /^[a-zA-Z]+$/
+                if (p.test(value)) {
+                    if (node.data.py.toLowerCase().indexOf(value.toLowerCase()) > -1) { return true }
+                } else {
+                    if (node.data.label.indexOf(value) > -1) { return true }
+                }
             },
             handleWriteResult(task){
                 this.dialogResultFrom =true;
+                if (task.stepName === '法医现勘')
+                    this.isForensic =true
+                else
+                    this.isForensic =false
                 this.ResultFrom.stepId  = task.id
             },
             writeResult(){
@@ -545,7 +572,8 @@
                             type: 'success',
                             showClose: true,
                             duration: 2000
-                        })
+                        });
+                        this.dialogResultFrom =false;
                         this.getList();
                     } else {
                         this.$message({
@@ -582,7 +610,6 @@
             },
             handleAcceptTask(task){
                 this.dialogFormAccept =true;
-                this.detail = task;
                 this.acceptTaskFrom.stepId  = task.id
             },
             acceptTask(){
@@ -597,7 +624,9 @@
                             showClose: true,
                             duration: 2000
                         })
+                        this.dialogFormAccept =false;
                         this.getList();
+
                     } else {
                         this.$message({
                             message: response.reason,

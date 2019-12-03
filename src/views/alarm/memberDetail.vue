@@ -220,6 +220,7 @@
     import {fetchAlarm, createAlarm, updateAlarm} from '@/api/alarm'
     import {fetchList} from '@/api/dictionary'
     import {fetchAdminMemberList} from '@/api/permissions'
+    import {parseTime} from '@/utils'
 
     export default {
         name: 'Detail',
@@ -463,8 +464,6 @@
                     this.postForm = Object.assign({}, data);
 
 
-
-
                     if (this.postForm.monitorUid === 0)
                         this.postForm.monitorUid = '';
                     if (this.postForm.leaderUid === 0)
@@ -500,7 +499,7 @@
             },
             submitForm() {
 
-                var data = this.postForm
+                var data =Object.assign({}, this.postForm);
 
                 data.smsContent = this.smsContentChange;
                 if (data.smsReceiverArray.length > 0) {

@@ -757,11 +757,13 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="提取方法" prop="extractMethod">
+              <el-input v-if="isInput" v-model="materialListForm.extractMethod"/>
               <el-select v-model="materialListForm.extractMethod"
                          filterable
                          allow-create
                          @change="countDictSelect"
                          default-first-option
+                         v-if="!isInput"
                          placeholder="请选择">
                 <el-option
                         v-for="item in extractMethodList"
@@ -854,6 +856,7 @@ import { createSearch, fetchSearch, updateSearch, createPerson, updatePerson, de
 import { fetchList } from '@/api/dictionary'
 import { fetchAdminMemberList } from '@/api/permissions'
 import Upload from '@/components/Upload/SingleImage3'
+import {parseTime} from '@/utils'
 
 export default {
   name: 'MenberDetail',
@@ -1123,7 +1126,12 @@ export default {
       invadeTypeList: [],
       escapeTypeList: [],
       idTypeList: [],
-      extractMethodList: []
+      handprintMethodList: [],
+      footprintMethodList: [],
+      toolMethodList: [],
+      bulletMethodList: [],
+      extractMethodList: [],
+      isInput:false
 
     }
   },
@@ -1143,6 +1151,32 @@ export default {
             this.list.isDeathCase = false
         } else {
           this.list.isDeathCase = false
+        }
+      },
+      deep: true,
+      immediate: true
+    },
+    'materialListForm.materialCategory': {
+      handler(newData, oldData) {
+        if (newData){
+          if (newData.constructor === Array) {
+            var value = newData.slice(-1)[0]
+            if (value === '手印物证') {
+              this.isInput = false
+              this.extractMethodList = this.handprintMethodList;
+            }else if (value === '足迹物证'){
+              this.isInput = false
+              this.extractMethodList = this.footprintMethodList;
+            } else if (value === '工具痕迹'){
+              this.isInput = false
+              this.extractMethodList = this.toolMethodList;
+            } else if (value === '枪弹物证'){
+              this.isInput = false
+              this.extractMethodList = this.bulletMethodList;
+            }else{
+              this.isInput = true
+            }
+          }
         }
       },
       deep: true,
@@ -1223,23 +1257,40 @@ export default {
     this.search('物证类别').then(data => {
       this.materialCategoryList = this.processData(data.list)
     })
-    this.search('提取方法').then(data => {
-      this.extractMethodList = this.processData(data.list)
+    this.search('手印提取方法').then(data => {
+      this.handprintMethodList = this.processData(data.list)
     })
+    this.search('足迹提取方法').then(data => {
+      this.footprintMethodList = this.processData(data.list)
+    })
+   this.search('工具提取方法').then(data => {
+      this.toolMethodList = this.processData(data.list)
+    })
+   this.search('枪弹提取方法').then(data => {
+      this.bulletMethodList = this.processData(data.list)
+    })
+
+
   },
   methods: {
     countDict(val){
-      val = val.slice(-1)[0]
-      const send={
-        name:val
-      };
-      this.$store.dispatch('PostUserUseDict', send)
+      if (val){
+        val = val.slice(-1)[0]
+        const send={
+          name:val
+        };
+        this.$store.dispatch('PostUserUseDict', send)
+      }
+
     },
     countDictSelect(val){
-      const send={
-        name:val
-      };
-      this.$store.dispatch('PostUserUseDict', send)
+      if (val) {
+        const send={
+          name:val
+        };
+        this.$store.dispatch('PostUserUseDict', send)
+      }
+
     },
     selectUpdate(val) {
       this.$forceUpdate()
@@ -1645,7 +1696,7 @@ export default {
       }
     },
     addMaterialListForm() {
-      var data = this.materialListForm
+      var data =Object.assign({}, this.materialListForm)
       if (data.materialCategory.constructor === Array) {
         data.materialCategory = data.materialCategory.slice(-1)[0]
       }
