@@ -60,7 +60,7 @@
         >
             <el-table-column label="任务号" prop="id" align="center" width="200">
                 <template slot-scope="{row}">
-                    <span>{{ row.taskNo</span>
+                    <span>{{ row.taskNo }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="委托单位" align="center">
