@@ -10,8 +10,8 @@
                 style="width: 100%;"
 
         >
-            <el-table-column type="expand" ref="expand222">
-                <template slot-scope="{row}" >
+            <el-table-column type="expand" ref="expand">
+                <template slot-scope="{row}">
                     <el-form label-position="left" inline class="table-expand" v-if="row.fromStep === '接警'">
                         <el-form-item label="报告人">
                             <span>{{ row.record.reporter }}</span>
@@ -111,6 +111,13 @@
                     </el-form>
 
                     <el-form label-position="left" inline class="table-expand"  v-else-if="row.fromStep === '痕检'">
+                        <el-form-item label="任务号">
+                            <span>{{ row.evidence.thirdEvidenceNo }}</span>
+                        </el-form-item>
+
+                        <el-form-item label="尸检号">
+                            <span>{{ row.evidence.selfEvidenceNo }}</span>
+                        </el-form-item>
                         <el-form-item label="勘查开始">
                             <span>{{   pareTime(row.evidence.examBeginTime) }}</span>
                         </el-form-item>
@@ -322,7 +329,15 @@
                 <el-form-item label="文书号" prop="name">
                     <el-input v-model="ResultFrom.documentNo"/>
                 </el-form-item>
-
+                <el-form-item label="利用情况" prop="usedType">
+                    <el-select v-model="ResultFrom.usedType" placeholder="请选择">
+                        <el-option
+                                v-for="item in usedType"
+                                :key="item.title"
+                                :label="item.title"
+                                :value="item.title"/>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="文书日期" prop="sort">
                     <el-date-picker
                             v-model="ResultFrom.documentDate"
@@ -331,6 +346,9 @@
                             placeholder="选择日期"
                             style="width: 100%">
                     </el-date-picker>
+                </el-form-item>
+                <el-form-item label="是否推送给主办痕检" prop="needToPushToCharger">
+                    <el-checkbox v-model="ResultFrom.needToPushToCharger"></el-checkbox>
                 </el-form-item>
                 <div v-if="isForensic">
                     <el-form-item label="委托单位" prop="delegateOrg">
@@ -413,6 +431,9 @@
 
 <script>
     import { accetpTask,taskList,writeResult } from '@/api/backlog'
+    import {parseTime} from '@/utils'
+    import { fetchAdminMemberList} from '@/api/permissions'
+    import {fetchList} from '@/api/dictionary'
 
     export default {
         name: "Backlog",
@@ -429,6 +450,21 @@
         },
         data(){
             return{
+                usedType: [
+                    {
+                        title: '查档认定'
+                    }, {
+                        title: '鉴定认定'
+                    }, {
+                        title: '串并认定'
+                    }, {
+                        title: '排除嫌疑'
+                    }, {
+                        title: '其他利用'
+                    }, {
+                        title: '尚未利用'
+                    }
+                ],
                 list:[],
                 tableKey:0,
                 listLoading:false,
@@ -455,6 +491,8 @@
                     supportName:'',
                     caseCategory:'',
                     hasTransfered:'',
+                    needToPushToCharger:'',
+                    usedType:'',
                 },
                 caseCategoryList:[],
 

@@ -195,7 +195,7 @@
                     crimeDetail: undefined,
                     beginTime: undefined,
                     endTime: undefined,
-                    status: 3,
+                    status: 4,
                 },
                 rules: {},
                 downloadLoading: false,

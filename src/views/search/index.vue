@@ -24,17 +24,9 @@
                 </el-cascader>
                 <el-input v-model="listQuery.chargerUid" placeholder="主办人" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
-                <el-select
-                        v-model="listQuery.status"
-                        placeholder="状态"
-                        center
-                >
-                    <el-option
-                            v-for="item in statusList"
-                            :key="item.id"
-                            :label="item.title"
-                            :value="item.id"/>
-                </el-select>
+                <el-input v-model="listQuery.selfEvidenceNo" placeholder="勘查号" style="width: 200px;"
+                          @keyup.enter.native="handleFilter"/>
+
                 <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
                     搜索
                 </el-button>
@@ -151,22 +143,7 @@
     import {fetchList} from '@/api/dictionary'
     import {parseTime} from '@/utils'
 
-    const statusMap =[
-        {
-            id:0,
-            title:'全部'
-        },
-        {
-            id:1,
-            title:'未领取'
-        },{
-            id:2,
-            title:'进行中'
-        },{
-            id:3,
-            title:'已完成'
-        },
-    ];
+
 
     export default {
         name: "Search",
@@ -199,10 +176,11 @@
                     chargerUid: undefined,
                     beginTime: undefined,
                     endTime: undefined,
+                    selfEvidenceNo: undefined,
                     status: 0,
                 },
                 caseTypeList:[],
-                statusList: statusMap,
+
                 calendarTypeOptions:{},
 
             }

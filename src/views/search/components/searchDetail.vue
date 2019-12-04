@@ -2,21 +2,21 @@
     <div>
         <el-row :gutter="20" class="mb10">
             <el-col :span="6">
-                勘查开始：{{ list.examBeginTime?(list.examBeginTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):'' }}
+                勘查开始：{{ list.examBeginTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
             </el-col>
             <el-col :span="6">
-                勘查结束：{{list.examEndTime?(list.examEndTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):'' }}
+                勘查结束：{{list.examEndTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
             </el-col>
             <el-col :span="6">
-                案件开始：{{list.caseBeginTime?(list.caseBeginTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):''}}
+                案件开始：{{list.caseBeginTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
             </el-col>
             <el-col :span="6">
-                案件结束：{{ list.caseEndTime?(list.caseEndTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):'' }}
+                案件结束：{{ list.caseEndTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
             </el-col>
         </el-row>
         <el-row :gutter="20" class="mb10">
             <el-col :span="6">
-                发案日期：{{  list.caseHappenTime?(list.caseHappenTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}')):''}}
+                发案日期：{{  list.caseHappenTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
             </el-col>
             <el-col :span="6">
                 发案区划：{{ list.caseHappenRegion }}
@@ -276,11 +276,19 @@
 
 <script>
     import {fetchSearch} from '@/api/search'
+    import { parseTime } from '@/utils'
+
     export default {
         name: "searchDetail",
+        props: {
+            list: {
+                type: Object,
+                default: {}
+            }
+        },
         data(){
             return{
-                list:{},
+
                 sceneProtectType:[
                     {
                         id:1,
@@ -380,28 +388,28 @@
             }
         },
         created() {
-            const id = this.$route.params && this.$route.params.id;
-            this.getSearch(id)
+            // const id = this.$route.params && this.$route.params.id;
+            // this.getSearch(id)
         },
         methods: {
-            getSearch(id) {
-                fetchSearch(id).then(response => {
-                    this.list = response;
-                    console.log(this.list)
-                    this.sceneProtectType.map(data=>{
-                        if (data.id == this.list.sceneProtect){
-                            this.list.sceneProtect = data.title
-                        }
-                    });
-                    this.crimePeoplesType.map(data=>{
-                        if (data.id == this.list.crimePeoples){
-                            this.list.crimePeoples = data.title
-                        }
-                    })
-
-
-                })
-            },
+            // getSearch(id) {
+            //     fetchSearch(id).then(response => {
+            //         this.list = response;
+            //         console.log(this.list)
+            //         this.sceneProtectType.map(data=>{
+            //             if (data.id == this.list.sceneProtect){
+            //                 this.list.sceneProtect = data.title
+            //             }
+            //         });
+            //         this.crimePeoplesType.map(data=>{
+            //             if (data.id == this.list.crimePeoples){
+            //                 this.list.crimePeoples = data.title
+            //             }
+            //         })
+            //
+            //
+            //     })
+            // },
         }
     }
 </script>

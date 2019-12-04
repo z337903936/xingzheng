@@ -181,23 +181,7 @@ export default {
 
       fetchList({}).then(response => {
         this.list = response.list;
-         var menu = response.list.map(data=>{
-            var menuData = [];
-            if (data.children){
-                menuData = data.children.map(item=>{
-                    return {
-                        id:item.id,
-                        title:item.title,
-                    };
-                })
-            }
-            menuData = menuData.concat([{
-                id:data.id,
-                title:data.title,
-            }]);
-
-            return menuData;
-        });
+         var menu = this.processData(response.list);
           this.menuId = menu.flat(Infinity);
 
 
@@ -205,7 +189,19 @@ export default {
 
       })
     },
+    processData(data) {
+      return data.map(item => {
+        var sendData = {
+          id:item.id,
+          title:item.title,
+        }
+        if (item.children.length > 0) {
+          sendData.children = this.processData(item.children)
+        }
 
+        return sendData
+      })
+    },
     handleModifyStatus(row, status) {
       if (status === 'del') {
         this.deleteData = {
