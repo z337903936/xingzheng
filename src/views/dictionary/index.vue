@@ -168,29 +168,26 @@ export default {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.list
-        var menu = response.list.map(data=>{
-          var menuData = [];
-          if (data.children){
-            menuData = data.children.map(item=>{
-              return {
-                id:item.id,
-                title:item.name,
-              };
-            })
-          }
-          menuData = menuData.concat([{
-            id:data.id,
-            title:data.name,
-          }]);
 
-          return menuData;
-        });
-        this.parentId = menu.flat(Infinity);
+        this.parentId = this.processData(response.list);
         // Just to simulate the time of the request
 
         this.listLoading = false
 
       })
+    },
+    processData(data) {
+      var sendData = [];
+      data.map(item => {
+        sendData.push({
+          id:item.id,
+          title:item.name,
+        })
+        if (item.children.length > 0) {
+          sendData = sendData.concat(this.processData(item.children));
+        }
+      })
+      return sendData
     },
     filterNode(value, data) {
       if (!value) return true;
