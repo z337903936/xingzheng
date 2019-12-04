@@ -38,6 +38,7 @@
                                 DNA信息
                             </div>
                         </template>
+
                     </el-collapse-item>
                     <el-collapse-item>
                         <template slot="title">
@@ -184,7 +185,11 @@
                     },
                 ],
                 activeNames:['痕检'],
-                list:{}
+                list:{},
+                dnaList:[],
+                forensicList:[],
+                fingerprintist:[],
+                physicocheList:[],
             }
         },
         created() {
@@ -205,6 +210,22 @@
                             this.list.crimePeoples = data.title
                         }
                     })
+                    if (response.materialList.length>0) {
+                        response.materialList.map(item=>{
+                            if (item.stepName === 'DNA检测') {
+                                this.dnaList.push(item)
+                            }
+                            if (item.stepName === '指纹检测') {
+                                this.fingerprintist.push(item)
+                            }
+                            if (item.stepName === '法医现勘') {
+                                this.forensicList.push(item)
+                            }
+                            if (item.stepName === '理化检测') {
+                                this.physicocheList.push(item)
+                            }
+                        })
+                    }
 
 
                 })
