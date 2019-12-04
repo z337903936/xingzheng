@@ -388,28 +388,41 @@
             }
         },
         created() {
-            // const id = this.$route.params && this.$route.params.id;
-            // this.getSearch(id)
+            if (this.list.sceneProtect){
+                this.sceneProtectType.map(data=>{
+                    if (data.id == this.list.sceneProtect){
+                        this.list.sceneProtect = data.title
+                    }
+                });
+            }
+            if (this.list.crimePeoples){
+                this.crimePeoplesType.map(data=>{
+                    if (data.id == this.list.crimePeoples){
+                        this.list.crimePeoples = data.title
+                    }
+                });
+            }
+            if (this.list.concernedPersonList){
+                this.list.concernedPersonList = this.list.concernedPersonList.map(item=>{
+                    this.sex.map(data=>{
+                        if (data.id == item.sex){
+                            item.sex = data.title
+                        }
+                    });
+                    return item;
+                })
+            }
+            if (this.list.crimeTime){
+                let text = [];
+                let crimeTime = JSON.parse(this.list.crimeTime)
+                crimeTime.map(data=>{
+                    text.push(data.slice(-1)[0])
+                })
+                this.list.crimeTime = text.join(',');
+            }
         },
         methods: {
-            // getSearch(id) {
-            //     fetchSearch(id).then(response => {
-            //         this.list = response;
-            //         console.log(this.list)
-            //         this.sceneProtectType.map(data=>{
-            //             if (data.id == this.list.sceneProtect){
-            //                 this.list.sceneProtect = data.title
-            //             }
-            //         });
-            //         this.crimePeoplesType.map(data=>{
-            //             if (data.id == this.list.crimePeoples){
-            //                 this.list.crimePeoples = data.title
-            //             }
-            //         })
-            //
-            //
-            //     })
-            // },
+
         }
     }
 </script>

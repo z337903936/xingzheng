@@ -116,7 +116,7 @@
                         </el-form-item>
 
                         <el-form-item label="尸检号">
-                            <span>{{ row.evidence.selfEvidenceNo }}</span>
+                            <span>{{ row.evidence.autopsyNo }}</span>
                         </el-form-item>
                         <el-form-item label="勘查开始">
                             <span>{{   pareTime(row.evidence.examBeginTime) }}</span>

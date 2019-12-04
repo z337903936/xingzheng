@@ -38,15 +38,15 @@
                                 DNA信息
                             </div>
                         </template>
-
+                        <material-detail :detailList="dnaList"></material-detail>
                     </el-collapse-item>
                     <el-collapse-item>
                         <template slot="title">
                             <div style="color: #409EFF;font-size: 18px">
                                 法医勘查
                             </div>
-
                         </template>
+                        <forensicDetail :detailList="forensicList"></forensicDetail>
                     </el-collapse-item>
                     <el-collapse-item >
                         <template slot="title">
@@ -54,6 +54,7 @@
                                 指纹信息
                             </div>
                         </template>
+                        <material-detail :detailList="fingerprintist"></material-detail>
                     </el-collapse-item>
                     <el-collapse-item >
                         <template slot="title">
@@ -61,6 +62,7 @@
                                 理化检测
                             </div>
                         </template>
+                        <material-detail :detailList="physicocheList"></material-detail>
                     </el-collapse-item>
                     <el-collapse-item >
                         <template slot="title">
@@ -68,6 +70,7 @@
                                 电子物证
                             </div>
                         </template>
+                        <material-detail :detailList="electronicList"></material-detail>
                     </el-collapse-item>
                 </el-collapse>
             </el-col>
@@ -80,11 +83,13 @@
 
 <script>
     import searchDetail from './components/searchDetail'
+    import materialDetail from './components/materialDetail'
+    import forensicDetail from './components/forensicDetail'
     import {fetchSearch} from '@/api/search'
     import { parseTime } from '@/utils'
     export default {
         name: "detail",
-        components: { searchDetail },
+        components: { searchDetail,materialDetail,forensicDetail },
 
         data(){
             return{
@@ -190,6 +195,7 @@
                 forensicList:[],
                 fingerprintist:[],
                 physicocheList:[],
+                electronicList:[],
             }
         },
         created() {
@@ -200,18 +206,9 @@
             getSearch(id) {
                 fetchSearch(id).then(response => {
                     this.list = response;
-                    this.sceneProtectType.map(data=>{
-                        if (data.id == this.list.sceneProtect){
-                            this.list.sceneProtect = data.title
-                        }
-                    });
-                    this.crimePeoplesType.map(data=>{
-                        if (data.id == this.list.crimePeoples){
-                            this.list.crimePeoples = data.title
-                        }
-                    })
-                    if (response.materialList.length>0) {
-                        response.materialList.map(item=>{
+
+                    if (response.stepList.length>0) {
+                        response.stepList.map(item=>{
                             if (item.stepName === 'DNA检测') {
                                 this.dnaList.push(item)
                             }
@@ -219,13 +216,17 @@
                                 this.fingerprintist.push(item)
                             }
                             if (item.stepName === '法医现勘') {
-                                this.forensicList.push(item)
+                                this.forensicList = response.concernedPersonList
                             }
                             if (item.stepName === '理化检测') {
                                 this.physicocheList.push(item)
                             }
+                            if (item.stepName === '电子物证检测') {
+                                this.electronicList.push(item)
+                            }
                         })
                     }
+
 
 
                 })
