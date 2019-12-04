@@ -477,6 +477,7 @@
                 dialogResultFrom:false,
                 isForensic:false,
                 ResultFrom:{
+                    id:'',
                     stepId :'',
                     result:'',
                     documentNo:'',
@@ -595,6 +596,7 @@
                 else
                     this.isForensic =false
                 this.ResultFrom.stepId  = task.id
+                this.ResultFrom.id  = task.id
             },
             writeResult(){
                 let data = Object.assign({}, this.ResultFrom)
