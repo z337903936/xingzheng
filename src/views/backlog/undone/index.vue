@@ -233,7 +233,7 @@
             </el-table-column>
             <el-table-column label="发送时间"  align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.taskArriveTime  }}</span>
+                    <span>{{ row.taskArriveTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')  }}</span>
                 </template>
             </el-table-column>
 
@@ -535,10 +535,7 @@
                     status:1
                 }
                 taskList(data).then(response => {
-                    this.list = response.list.map(data=>{
-                        data.taskArriveTime = this.getLocalTime(data.taskArriveTime)
-                        return data
-                    });
+                    this.list = response.list
                     // this.pages = response.pages
 
                     // Just to simulate the time of the request
