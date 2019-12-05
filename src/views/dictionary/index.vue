@@ -21,10 +21,14 @@
             :data="list"
             :expand-on-click-node="false"
             node-key="id"
-            style="width: 30%"
+            style="width: 40%"
             v-loading="listLoading"
             :filter-node-method="filterNode"
             ref="tree"
+            draggable
+            @node-drop="handleDrop"
+
+
     >
       <span slot-scope="{ node, data }" class="custom-tree-node">
         <span>{{ data.name}}</span>
@@ -141,6 +145,7 @@ export default {
         create: '新增'
       },
       temp: {
+        id: undefined,
         name: '',
         sort: 99,
         parentId: ''
@@ -164,6 +169,26 @@ export default {
     }
   },
   methods: {
+    handleDrop(draggingNode, dropNode, dropType, ev) {
+      const tempData = {
+        id: draggingNode.data.id,
+        name: draggingNode.data.name,
+        sort: draggingNode.data.sort,
+        parentId: dropNode.data.parentId
+      }
+      updateArticle(tempData).then(response => {
+        if (response.code === 200) {
+
+          this.$notify({
+            title: 'Success',
+            message: '修改成功',
+            type: 'success',
+            duration: 2000
+          })
+          this.getList()
+        }
+      })
+    },
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
@@ -213,6 +238,7 @@ export default {
     },
     resetTemp() {
       this.temp = {
+        id: undefined,
         name: '',
         sort: 99,
         parentId: ''
