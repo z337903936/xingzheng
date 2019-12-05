@@ -27,7 +27,7 @@
             </el-table-column>
             <el-table-column label="发送时间"  align="center">
                 <template slot-scope="{row}">
-                    <span>{{row.taskArriveTime!==''?(row.taskArriveTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}')):'' }}</span>
+                    <span>{{row.taskArriveTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
                 </template>
             </el-table-column>
             <!--<el-table-column label="任务结束时间"  align="center">-->
@@ -76,8 +76,10 @@
 </template>
 
 <script>
-    import { accetpTask,taskList } from '@/api/backlog'
-
+    import { accetpTask,taskList,writeResult } from '@/api/backlog'
+    import {parseTime} from '@/utils'
+    import { fetchAdminMemberList} from '@/api/permissions'
+    import {fetchList} from '@/api/dictionary'
     export default {
         name: "Complete",
         filters: {
@@ -109,10 +111,7 @@
                 }
                 taskList(data).then(response => {
 
-                    this.list = response.list.map(data=>{
-                        data.taskArriveTime = this.getLocalTime(data.taskArriveTime)
-                        return data
-                    });
+                    this.list = response.list
                     // this.pages = response.pages
 
                     // Just to simulate the time of the request

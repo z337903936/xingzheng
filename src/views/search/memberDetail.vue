@@ -230,6 +230,7 @@
               :show-all-levels="false"
               @change="countDict"
               filterable
+              :props="props"
               style="width: 100%"/>
           </el-form-item>
         </el-col>
@@ -261,6 +262,7 @@
               :show-all-levels="false"
               @change="countDict"
               filterable
+              :props="props"
               style="width: 100%"/>
           </el-form-item>
         </el-col>
@@ -274,6 +276,7 @@
               :show-all-levels="false"
               @change="countDict"
               filterable
+              :props="props"
               style="width: 100%"/>
           </el-form-item>
         </el-col>
@@ -1351,6 +1354,15 @@ export default {
         if (this.list.crimeTime){
           this.list.crimeTimeArray = JSON.parse(this.list.crimeTime)
         }
+        if (this.list.sceneType){
+          this.list.sceneType = JSON.parse(this.list.sceneType)
+        }
+        if (this.list.invadeType){
+          this.list.invadeType = JSON.parse(this.list.invadeType)
+        }
+        if (this.list.escapeType){
+          this.list.escapeType = JSON.parse(this.list.escapeType)
+        }
 
       }).catch(err => {
         console.log(err)
@@ -1855,10 +1867,27 @@ export default {
               data.supporterUid = data.supporterUidArray.join(',')
             }
           }
-
           if (data.crimeTimeArray) {
             if (data.crimeTimeArray.length > 0) {
               data.crimeTime = JSON.stringify(data.crimeTimeArray)
+            }
+          }
+
+          if (data.sceneType) {
+            if (data.sceneType.length > 0) {
+              data.sceneType = JSON.stringify(data.sceneType)
+            }
+          }
+
+          if (data.invadeType) {
+            if (data.invadeType.length > 0) {
+              data.invadeType = JSON.stringify(data.invadeType)
+            }
+          }
+
+          if (data.escapeType) {
+            if (data.escapeType.length > 0) {
+              data.escapeType = JSON.stringify(data.escapeType)
             }
           }
 
