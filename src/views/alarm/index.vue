@@ -99,6 +99,36 @@
       highlight-current-row
       style="width: 100%;"
     >
+      <el-table-column type="expand">
+        <template slot-scope="{row}">
+          <el-form label-position="left" inline class="table-expand">
+            <el-form-item label="案发地">
+              <span>{{ row.caseAddress }}</span>
+            </el-form-item>
+            <el-form-item label="案件摘要">
+              <span>{{ row.caseDigest }}</span>
+            </el-form-item>
+            <el-form-item label="联系电话">
+              <span>{{ row.contactPhoneNumber }}</span>
+            </el-form-item>
+            <el-form-item label="损失情况">
+              <span>{{ row.lostDetail }}</span>
+            </el-form-item>
+            <el-form-item label="接警人">
+              <span>{{ row.receiptName }}</span>
+            </el-form-item>
+            <el-form-item label="驾驶员">
+              <span>{{ row.driverName }}</span>
+            </el-form-item>
+            <el-form-item label="技术值班队长">
+              <span>{{ row.monitorName }}</span>
+            </el-form-item>
+            <el-form-item label="大队值班领导">
+              <span>{{ row.leaderName }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
       <el-table-column label="接警号" width="120px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.recordNo }}</span>
@@ -175,9 +205,25 @@
   </div>
 </template>
 
-<style>
+<style scoped>
     .mb10 {
         margin-bottom: 10px;
+    }
+    .el-table >>> .el-table__expanded-cell[class*="cell"] {
+      background-color: #f0f0f0 !important;
+    }
+    .table-expand {
+      font-size: 0;
+
+    }
+    .table-expand label {
+      width: 90px;
+      color: #99a9bf;
+    }
+    .table-expand .el-form-item {
+      margin-right: 0;
+      margin-bottom: 0;
+      width: 50%;
     }
 </style>
 
