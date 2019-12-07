@@ -15,16 +15,28 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="报告单位" prop="reportOrg">
-
+                                <el-popover
+                                        placement="left"
+                                        width="200"
+                                        trigger="manual"
+                                        v-model="reportOrgPopover">
+                                    常用字典
+                                    <ul>
+                                        <li v-for="item in reportOrgUserList"><el-link @click="postForm.reportOrg=item.dictName" >{{ item.dictName }}</el-link></li>
+                                    </ul>
                                 <el-cascader
                                         :options="reportOrgList"
                                         filterable
+                                        slot="reference"
+                                        :props="emitProps"
                                         v-model="postForm.reportOrg"
                                         :filter-method="remoteSearch"
-                                        @change="countDict"
+                                        @change="countDict($event,'报告单位')"
+                                        @visible-change="reportOrgPopover = !reportOrgPopover"
                                         :show-all-levels="false"
                                         style="width: 100%">
                                 </el-cascader>
+                                </el-popover>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -51,15 +63,18 @@
 
                                 <el-popover
                                         placement="left"
-                                        title="标题"
                                         width="200"
                                         trigger="manual"
-                                        content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
                                         v-model="caseCategoryPopover">
+                                    常用字典
+                                    <ul>
+                                        <li v-for="item in caseCategoryUserList"><el-link @click="postForm.caseCategory=item.dictName" >{{ item.dictName }}</el-link></li>
+                                    </ul>
                                     <el-cascader
                                             :options="caseCategoryList"
                                             filterable
-                                            @change="countDict"
+                                            :props="emitProps"
+                                            @change="countDict($event,'案件类别')"
                                             @visible-change="caseCategoryPopover = !caseCategoryPopover"
                                             v-model="postForm.caseCategory"
                                             :filter-method="remoteSearch"
@@ -218,7 +233,7 @@
 
 <script>
     import {fetchAlarm, createAlarm, updateAlarm} from '@/api/alarm'
-    import {fetchList} from '@/api/dictionary'
+    import {fetchList,userDictList} from '@/api/dictionary'
     import {fetchAdminMemberList} from '@/api/permissions'
     import {parseTime} from '@/utils'
 
@@ -256,17 +271,21 @@
                     caseTime: '',
                     receiptUid:'',
                     receiptName:'',
-
-
+                },
+                emitProps:{
+                    emitPath:false
                 },
                 userList: [],
                 userShowList: [],
                 rules: {},
                 loading: false,
                 caseCategoryPopover: false,
+                reportOrgPopover: false,
                 smsContentChange: '',
                 caseCategoryList: [],
+                caseCategoryUserList: [],
                 reportOrgList: [],
+                reportOrgUserList: [],
             }
         },
         computed: {
@@ -302,6 +321,23 @@
                     }else{
                         date = this.formatDate(this.postForm.receiptTimeShow)
                     }
+                    if (this.postForm.monitorUid){
+                        if (this.postForm.smsReceiverArray.indexOf(this.postForm.monitorUid) === -1)
+                            this.postForm.smsReceiverArray.push(this.postForm.monitorUid)
+                    }
+
+                    if (this.postForm.leaderUid){
+                        if (this.postForm.smsReceiverArray.indexOf(this.postForm.leaderUid) === -1)
+                            this.postForm.smsReceiverArray.push(this.postForm.leaderUid)
+                    }
+
+                    if (this.postForm.techUidArray.length >0){
+                        this.postForm.techUidArray.map(data=>{
+                            if (this.postForm.smsReceiverArray.indexOf(data) === -1)
+                                this.postForm.smsReceiverArray.push(data)
+                        })
+
+                    }
 
                     this.smsContentChange =  date + ' 接到' + this.postForm.reportOrg + ' ' + this.postForm.reporter + '(' + this.postForm.contactPhoneNumber + ")" +
                         '报告在' + this.postForm.caseAddress + '发生一起' + category+ ' 案件。'+lost+'值班技术员：' + tech
@@ -318,8 +354,14 @@
             this.search('案件类别').then(response=>{
                 this.caseCategoryList = this.processData(response.list)
             });
+            this.getUserDict('案件类别').then(response=>{
+                this.caseCategoryUserList = response.list;
+            });
             this.search('报告单位').then(response=>{
                 this.reportOrgList = this.processData(response.list)
+            });
+            this.getUserDict('报告单位').then(response=>{
+                this.reportOrgUserList = response.list;
             });
             if (this.isEdit) {
                 const id = this.$route.params && this.$route.params.id
@@ -332,14 +374,18 @@
             this.postForm.receiptUid = this.$store.getters.id;
         },
         methods: {
-            showPopover(val){
-                console.log(val)
+            getUserDict(parentName){
+                return new Promise((resolve, reject) => {
+                    const data = {
+                        cateName:parentName
+                    };
+                    resolve(userDictList(data))
+                })
             },
-            countDict(val){
-
-                val = val.slice(-1)[0]
+            countDict(val,type){
                 const send={
-                    name:val
+                    name:val,
+                    cateName:type
                 };
                 this.$store.dispatch('PostUserUseDict', send)
             },
@@ -512,12 +558,12 @@
                 if (data.caseTime.toString().length>10)
                     data.caseTime =  parseInt(data.caseTime/1000);
 
-                if (data.caseCategory.constructor === Array) {
-                    data.caseCategory = data.caseCategory.slice(-1)[0]
-                }
-                if (data.reportOrg.constructor === Array) {
-                    data.reportOrg = data.reportOrg.slice(-1)[0]
-                }
+                // if (data.caseCategory.constructor === Array) {
+                //     data.caseCategory = data.caseCategory.slice(-1)[0]
+                // }
+                // if (data.reportOrg.constructor === Array) {
+                //     data.reportOrg = data.reportOrg.slice(-1)[0]
+                // }
 
                 if (!/^[1-9]+[0-9]*]*$/.test(data.receiptUid)) {
                     data.receiptName = data.receiptUid;

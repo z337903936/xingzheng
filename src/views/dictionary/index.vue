@@ -170,11 +170,29 @@ export default {
   },
   methods: {
     handleDrop(draggingNode, dropNode, dropType, ev) {
-      const tempData = {
-        id: draggingNode.data.id,
-        name: draggingNode.data.name,
-        sort: draggingNode.data.sort,
-        parentId: dropNode.data.parentId
+      console.log(draggingNode)
+      console.log(dropNode)
+      console.log(dropType)
+      var parentId;
+      if (dropType==='inner'){
+        parentId = dropNode.data.id
+        const tempData = {
+          id: draggingNode.data.id,
+          name: draggingNode.data.name,
+          sort: draggingNode.data.sort,
+          parentId: parentId
+        };
+      } else{
+        parentId = dropNode.data.parentId
+        const tempData = {
+          id: draggingNode.data.id,
+          name: draggingNode.data.name,
+          sort: draggingNode.data.sort,
+          parentId: parentId,
+          place: dropType,
+          prependDictId: draggingNode.data.id
+
+        };
       }
       updateArticle(tempData).then(response => {
         if (response.code === 200) {

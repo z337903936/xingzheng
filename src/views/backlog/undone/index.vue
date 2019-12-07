@@ -360,7 +360,7 @@
                     <el-form-item label="简要案情" prop="digest">
                         <el-input v-model="ResultFrom.digest"/>
                     </el-form-item>
-                    <el-form-item label="伤者情况" prop="deathDetail">
+                    <el-form-item label="死者情况" prop="deathDetail">
                         <el-input v-model="ResultFrom.deathDetail"/>
                     </el-form-item>
                     <el-form-item label="委托目的" prop="delegateReason">
@@ -390,6 +390,12 @@
                     </el-form-item>
                     <el-form-item label="是否移交" prop="hasTransfered">
                         <el-checkbox v-model="ResultFrom.hasTransfered"></el-checkbox>
+                    </el-form-item>
+                    <el-form-item label="文书发放" prop="hasTransfered">
+                        <el-checkbox v-model="ResultFrom.hasTransfered"></el-checkbox>
+                    </el-form-item>
+                    <el-form-item label="备注栏" prop="deathDetail">
+                        <el-input v-model="ResultFrom.deathDetail" type="textarea" :autosize="{ minRows: 2, maxRows: 4}"/>
                     </el-form-item>
                 </div>
 
@@ -591,10 +597,15 @@
             },
             handleWriteResult(task){
                 this.dialogResultFrom =true;
-                if (task.stepName === '法医现勘')
+                if (task.stepName === '法医现勘'){
                     this.isForensic =true
-                else
+                    this.ResultFrom.caseCategory = task.evidence.caseCategory
+                    this.ResultFrom.selfEvidenceNo = task.evidence.selfEvidenceNo
+                    this.ResultFrom.caseCategory = task.evidence.caseCategory
+                    this.ResultFrom.caseCategory = task.evidence.caseCategory
+                } else{
                     this.isForensic =false
+                }
                 this.ResultFrom.stepId  = task.id
                 this.ResultFrom.id  = task.id
             },

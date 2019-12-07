@@ -7,6 +7,7 @@
       :on-success="handleImageSuccess"
       class="image-uploader"
       drag
+      multiple
       action="/v1/cp/upload/">
       <i class="el-icon-upload"/>
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -61,6 +62,7 @@ export default {
       this.$emit('input', val)
     },
     handleImageSuccess(res) {
+      console.log(res);
       this.emitInput(res.imgUrl);
       this.$emit('tell',res)
 

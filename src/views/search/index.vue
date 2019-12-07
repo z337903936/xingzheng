@@ -8,31 +8,70 @@
                     start-placeholder="开始时间"
                     end-placeholder="结束时间"
             />
-                <el-input v-model="listQuery.caseNo" placeholder="案件编号" style="width: 200px;margin-left: 5px"
-                          @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.caseId" placeholder="案件ID" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
+
                 <el-cascader
                         :options="caseTypeList"
-                        filterable
-                        @change="countDict"
-                        v-model="listQuery.caseType"
-                        :filter-method="remoteSearch"
+                        v-model="listQuery.caseCategory"
+                        :filter-method="filterSearch"
                         :show-all-levels="false"
                         placeholder="案件类别"
-                        style="width: 200px;">
-                </el-cascader>
-                <el-input v-model="listQuery.chargerUid" placeholder="主办人" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.selfEvidenceNo" placeholder="勘查号" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
+                        @change="countDict($event,'案件类别')"
+                        filterable
+                        style="width: 200px"
+                        :props="emitProps"
+                />
+                <el-cascader
+                        :options="caseHappenRegionList"
+                        v-model="listQuery.caseHappenRegion"
+                        :filter-method="filterSearch"
+                        :show-all-levels="false"
+                        placeholder="案发区划"
+                        @change="countDict($event,'行政区划')"
+                        :props="emitProps"
+                        filterable
+                        style="width: 200px"
+                />
+                <div style="margin-top: 15px">
+                    <el-select
+                            v-model="listQuery.mainChargerName"
+                            :filter-method="filterUserSearch"
+                            filterable
+                            placeholder="主办人"
+                            center
+                            @visible-change="restUserSearch">
+                        <el-option
+                                v-for="item in userShowList"
+                                :key="item.id"
+                                :label="item.title"
+                                :value="item.id"/>
+                    </el-select>
+                    <el-select
+                            v-model="listQuery.supporterName"
+                            :filter-method="filterUserSearch"
+                            filterable
+                            placeholder="协办人"
+                            center
+                            @visible-change="restUserSearch">
+                        <el-option
+                                v-for="item in userShowList"
+                                :key="item.id"
+                                :label="item.title"
+                                :value="item.id"/>
+                    </el-select>
+                    <el-input v-model="listQuery.filters" placeholder="关键字" style="width: 200px;"
+                              @keyup.enter.native="handleFilter"/>
+                    <el-button v-waves type="primary" icon="el-icon-search" @click="reset"
+                               style="float: right;margin-right: 20px">
+                        清空搜索条件
+                    </el-button>
+                    <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter"  style="float: right;margin-right: 20px">
+                        搜索
+                    </el-button>
+                    <router-link :to="'/search/create-search/'" style="float: right;margin-right: 10px">
+                        <el-button type="primary" icon="el-icon-edit">添加</el-button>
+                    </router-link>
+                </div>
 
-                <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
-                    搜索
-                </el-button>
-                <router-link :to="'/search/create-search/'">
-                    <el-button type="primary" icon="el-icon-edit">添加</el-button>
-                </router-link>
                 <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
                 <!--导出-->
                 <!--</el-button>-->
@@ -49,7 +88,7 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="勘查号" prop="id" align="center" width="120">
+            <el-table-column label="勘查号"  align="center" width="120">
                 <template slot-scope="{row}">
                     <span>{{ row.selfEvidenceNo }}</span>
                 </template>
@@ -98,11 +137,6 @@
                     <span>{{ row.isDeathCase?'是':'否' }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="状态" align="center" width="150">
-                <template slot-scope="{row}">
-                    <span>{{ row.status | statusFilter }}</span>
-                </template>
-            </el-table-column>
 
             <el-table-column label="操作" align="center" fixed="right" width="200" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
@@ -142,7 +176,7 @@
     import waves from '@/directive/waves' // waves directive
     import {fetchList} from '@/api/dictionary'
     import {parseTime} from '@/utils'
-
+    import {fetchAdminMemberList} from '@/api/permissions'
 
 
     export default {
@@ -150,17 +184,20 @@
 
         directives: {waves},
         filters: {
-            statusFilter(status) {
-                const statusMap = {
-                    1: '未领取',
-                    2: '进行中',
-                    3: '已完成'
-                }
-                return statusMap[status]
-            }
+            // statusFilter(status) {
+            //     const statusMap = {
+            //         1: '未领取',
+            //         2: '进行中',
+            //         3: '已完成'
+            //     }
+            //     return statusMap[status]
+            // }
         },
         data() {
             return {
+                emitProps: {
+                    emitPath: false
+                },
                 tableKey: 0,
                 list: null,
                 pages: 0,
@@ -170,16 +207,18 @@
                 limit: 20,
                 listQuery: {
                     page: 1,
-                    caseNo: undefined,
-                    caseId: undefined,
-                    caseType: undefined,
-                    chargerUid: undefined,
+                    caseHappenRegion: undefined,
+                    caseCategory: undefined,
+                    mainChargerName: undefined,
+                    supporterName: undefined,
                     beginTime: undefined,
                     endTime: undefined,
-                    selfEvidenceNo: undefined,
+                    filters: undefined,
                     status: 0,
                 },
                 caseTypeList:[],
+                userShowList: [],
+                caseHappenRegionList:[],
 
                 calendarTypeOptions:{},
 
@@ -187,17 +226,47 @@
         },
         created() {
             this.getList()
+            this.getUserList()
             this.search('案件类别').then(response=>{
                 this.caseTypeList = this.processData(response.list)
             });
+            this.search('行政区划').then(data => {
+                this.caseHappenRegionList = this.processData(data.list)
+            })
         },
         methods: {
-            countDict(val){
-                val = val.slice(-1)[0]
-                const send={
-                    name:val
+            reset() {
+                this.listQuery = {
+                    page: 1,
+                    caseHappenRegion: undefined,
+                    caseCategory: undefined,
+                    mainChargerName: undefined,
+                    supporterName: undefined,
+                    beginTime: undefined,
+                    endTime: undefined,
+                    filters: undefined,
+                    status: 0,
                 };
-                this.$store.dispatch('PostUserUseDict', send)
+                this.searchTime = '';
+            },
+            countDict(val,type){
+                if (val) {
+                    if (val.constructor === Array){
+                        val.map(data=>{
+                            const send={
+                                name:data,
+                                cateName:type
+                            };
+                            this.$store.dispatch('PostUserUseDict', send)
+                        })
+                    }else{
+                        const send={
+                            name:val,
+                            cateName:type
+                        };
+                        this.$store.dispatch('PostUserUseDict', send)
+                    }
+                }
             },
             getList() {
                 this.listLoading = true;
@@ -209,6 +278,18 @@
 
                     this.listLoading = false
 
+                })
+            },
+            getUserList() {
+                fetchAdminMemberList({}).then(response => {
+                    this.userList = response.list.map(data => {
+                        return {
+                            id: data.id,
+                            title: data.realName,
+                            py: data.pinyinAbbr
+                        }
+                    })
+                    this.userShowList = this.userList
                 })
             },
             handleFilter () {
@@ -235,6 +316,18 @@
                         return true
                 }
             },
+            filterSearch(node, value) {
+                var p = /^[a-zA-Z]+$/
+                if (p.test(value)) {
+                    if (node.data.py.toLowerCase().indexOf(value.toLowerCase()) > -1) {
+                        return true
+                    }
+                } else {
+                    if (node.data.label.indexOf(value) > -1) {
+                        return true
+                    }
+                }
+            },
             processData(data){
                 return data.map(item=>{
                     var sendData = {
@@ -248,6 +341,29 @@
 
                     return sendData;
                 })
+            },
+            filterUserSearch(value) {
+                if (value) {
+                    this.userShowList = this.userList.filter(data => {
+                        var p = /^[a-zA-Z]+$/
+                        if (p.test(value)) {
+                            if (data.py.toLowerCase().indexOf(value.toLowerCase()) > -1) {
+                                return data
+                            }
+                        } else {
+                            if (data.title.indexOf(value) > -1) {
+                                return data
+                            }
+                        }
+                    })
+                } else {
+                    this.userShowList = this.userList
+                }
+            },
+            restUserSearch(change) {
+                if (!change) {
+                    this.userShowList = this.userList
+                }
             },
 
 

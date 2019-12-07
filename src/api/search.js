@@ -116,6 +116,22 @@ export function submitMaterial(data) {
     })
 }
 
+export function submitMaterialOutStock(data) {
+    return request({
+        url: '/v1/cp/batch_apply_material_out_stock/',
+        method: 'post',
+        data
+    })
+}
+export function submitMaterialinStock(data) {
+    return request({
+        url: '/v1/cp/batch_apply_material_in_stock/',
+        method: 'post',
+        data
+    })
+}
+
+
 //文书
 export function createDocument(data) {
     return request({
@@ -136,6 +152,32 @@ export function updateDocument(data) {
 export function delDocument(data) {
     return request({
         url: '/v1/cp/evidence_document/',
+        method: 'post',
+        data
+    })
+}
+
+//嫌疑人
+
+export function createSuspect(data) {
+    return request({
+        url: '/v1/cp/evidence_suspect_person/new/',
+        method: 'post',
+        data
+    })
+}
+
+export function updateSuspect(data) {
+    return request({
+        url: '/v1/cp/evidence_suspect_person/' + data.id + '/',
+        method: 'post',
+        data
+    })
+}
+
+export function delSuspect(data) {
+    return request({
+        url: '/v1/cp/evidence_suspect_person/',
         method: 'post',
         data
     })
