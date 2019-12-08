@@ -132,7 +132,7 @@
     import { fetchAdminMemberList} from '@/api/permissions'
 
     export default {
-        name: 'deleteList',
+        name: 'delList',
         directives: {waves},
         data() {
             return {

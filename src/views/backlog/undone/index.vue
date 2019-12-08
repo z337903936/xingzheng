@@ -255,16 +255,22 @@
 
             <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <el-button type="primary" size="small" @click="handleAcceptTask(row)" v-if="row.status===1 && row.stepName !== '痕检现勘'">
+                    <el-button type="primary" size="small" @click="handleAction(row,true)" v-if="row.status===1 && row.stepName === '物证入库'">
                         同意
                     </el-button>
-                    <el-button type="primary" size="small" @click="handleAcceptTaskSeach(row)" v-if="row.status===1 && row.stepName === '痕检现勘'">
-                        同意
+                    <el-button type="primary" size="small" @click="handleAction(row,false)" v-if="row.status===1 && row.stepName === '物证入库'">
+                        拒绝
                     </el-button>
-                    <el-button type="primary" size="small" @click="handleWriteResult(row)" v-if="row.status===2 && row.stepName !== '痕检现勘'">
+                    <el-button type="primary" size="small" @click="handleAcceptTask(row)" v-if="row.status===1 && row.stepName !== '痕检现勘' && row.stepName !== '物证入库'">
+                        接收任务
+                    </el-button>
+                    <el-button type="primary" size="small" @click="handleAcceptTaskSeach(row)" v-if="row.status===1 && row.stepName === '痕检现勘' && row.stepName !== '物证入库'">
+                        接收任务
+                    </el-button>
+                    <el-button type="primary" size="small" @click="handleWriteResult(row)" v-if="row.status===2 && row.stepName !== '痕检现勘' && row.stepName !== '物证入库'">
                         填写结果
                     </el-button>
-                    <router-link :to="'/search/update-search/'+row.evidenceId" v-if="row.status===2 && row.stepName==='痕检现勘'">
+                    <router-link :to="'/search/update-search/'+row.evidenceId" v-if="row.status===2 && row.stepName==='痕检现勘' && row.stepName !== '物证入库'">
                         <el-button type="primary" size="small" >编辑现勘</el-button>
                     </router-link>
                 </template>
@@ -512,6 +518,32 @@
             });
         },
         methods:{
+            handleAction(val,type){
+                const sendData = {
+                    stepId:val.id,
+                    agree:type,
+                };
+                accetpTask(sendData).then(response=>{
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.getList();
+
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                })
+
+            },
             countDict(val){
                 val = val.slice(-1)[0]
                 const send={
