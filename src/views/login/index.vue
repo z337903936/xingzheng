@@ -89,7 +89,7 @@ export default {
   components: { },
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (value.length < 6) {
+      if (value.length < 3) {
         callback(new Error('Please enter the correct user name'))
       } else {
         callback()
@@ -160,7 +160,7 @@ export default {
       var requestData = { phoneNumber: this.loginForm.username, captcha: this.loginForm.captcha }
       requestSMS(requestData).then(data => {
         this.loading = false
-        if (data.code == 200) {
+        if (data.code === 200) {
           this.$message({
             message: '短信已发送，请注意查收',
             type: 'success',

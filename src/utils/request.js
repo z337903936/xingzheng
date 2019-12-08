@@ -47,11 +47,10 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
+    console.log(res)
     if (res.code !== 200) {
       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
       if (res.code === 403) {
-        // 请自行在引入 MessageBox
-        // import { Message, MessageBox } from 'element-ui'
         MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
           confirmButtonText: '重新登录',
           cancelButtonText: '取消',
@@ -63,12 +62,12 @@ service.interceptors.response.use(
         })
       } else {
         Message({
-          message: res.message,
+          message: res.reason,
           type: 'error',
           duration: 5 * 1000
         })
       }
-      return Promise.reject('error')
+      // return Promise.reject(res)
     } else {
       return response.data
     }
@@ -76,7 +75,7 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error) // for debug
     Message({
-      message: error.message,
+      message: error.reason,
       type: 'error',
       duration: 5 * 1000
     })
