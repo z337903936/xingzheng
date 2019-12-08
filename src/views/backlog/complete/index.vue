@@ -63,15 +63,15 @@
             </el-table-column>
         </el-table>
 
-        <!--<el-pagination-->
-                <!--background-->
-                <!--layout="prev, pager, next"-->
-                <!--:page-count="pages"-->
-                <!--:current-page.sync="listQuery.page"-->
-                <!--@current-change="getList"-->
-                <!--@size-change="getList"-->
-        <!--&gt;-->
-        <!--</el-pagination>-->
+        <el-pagination
+                background
+                layout="prev, pager, next"
+                :page-count="pages"
+                :current-page.sync="listQuery.page"
+                @current-change="getList"
+                @size-change="getList"
+        >
+        </el-pagination>
     </div>
 </template>
 
@@ -97,7 +97,12 @@
             return{
                 list:[],
                 tableKey:0,
+                pages:1,
                 listLoading:false,
+                listQuery:{
+                    page:1,
+                    status:2,
+                }
             }
         },
         created() {
@@ -106,10 +111,7 @@
         methods:{
             getList() {
                 this.listLoading = true;
-                const data={
-                    status:2
-                }
-                taskList(data).then(response => {
+                taskList(this.listQuery).then(response => {
 
                     this.list = response.list
                     // this.pages = response.pages

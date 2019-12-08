@@ -256,10 +256,10 @@
             <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <el-button type="primary" size="small" @click="handleAcceptTask(row)" v-if="row.status===1 && row.stepName !== '痕检现勘'">
-                        接受任务
+                        同意
                     </el-button>
                     <el-button type="primary" size="small" @click="handleAcceptTaskSeach(row)" v-if="row.status===1 && row.stepName === '痕检现勘'">
-                        接受任务
+                        同意
                     </el-button>
                     <el-button type="primary" size="small" @click="handleWriteResult(row)" v-if="row.status===2 && row.stepName !== '痕检现勘'">
                         填写结果

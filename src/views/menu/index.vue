@@ -14,7 +14,6 @@
       :data="list"
       :expand-on-click-node="false"
       node-key="id"
-      default-expand-all
       style="width: 30%"
 
     >

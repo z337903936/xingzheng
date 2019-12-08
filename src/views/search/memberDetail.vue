@@ -719,8 +719,8 @@
         :rules="lostDetailListFormRules"
         :model="lostDetailListForm"
         label-position="left"
-        label-width="100px"
-        style="width: 400px; margin-left:50px;">
+        label-width="70px"
+        style="width: 70%; margin-left:50px;">
 
         <el-form-item label="名字" prop="name">
           <el-input v-model="lostDetailListForm.name"/>
@@ -757,8 +757,8 @@
               :rules="suspectPersonListFormRules"
               :model="suspectPersonListForm"
               label-position="left"
-              label-width="100px"
-              style="width: 400px; margin-left:50px;">
+              label-width="70px"
+              style="width: 70%; margin-left:50px;">
 
         <el-form-item label="名字" prop="name">
           <el-input v-model="suspectPersonListForm.name"/>
@@ -803,8 +803,8 @@
         :rules="concernedPersonListFormRules"
         :model="concernedPersonListForm"
         label-position="left"
-        label-width="100px"
-        style="width: 400px; margin-left:50px;">
+        label-width="70px"
+        style="width: 70%; margin-left:50px;">
 
         <el-form-item label="名字" prop="name">
           <el-input v-model="concernedPersonListForm.name"/>
@@ -865,14 +865,15 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="dialogMaterialListForm" :close-on-click-modal="false" title="物证" width="50%">
+    <el-dialog :visible.sync="dialogMaterialListForm" :close-on-click-modal="false" title="物证" width="50%"  :before-close="handleClose">
       <el-form
         ref="materialListForm"
         :rules="materialListFormRules"
         :model="materialListForm"
         label-position="left"
-        label-width="100px"
-        :before-close="handleClose"
+        label-width="70px"
+        style="width: 70%; margin-left:50px;"
+
       >
         <el-row :gutter="20">
           <el-col :span="8">
@@ -1048,7 +1049,7 @@
 
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogMaterialListForm = false">
+        <el-button @click="handleCloseButton">
           关闭
         </el-button>
       </div>
@@ -1601,6 +1602,7 @@ export default {
     materialChange(val){
       this.isFingerprint = false
       this.isDna = false
+      this.materialListForm.materialCategoryShow= val;
       var data = this.searchMaterial(this.materialCategoryList,val);
       if (data === '手印物证' ) {
         this.isInput = false
@@ -1642,10 +1644,17 @@ export default {
       });
       return result;
     },
-    handleClose(){
+    handleClose(done){
       if (this.isEdit)
-        this.submitForm()
+        this.submitForm();
       this.fetchData(this.list.id);
+      done();
+    },
+    handleCloseButton(){
+      if (this.isEdit)
+        this.submitForm();
+      this.fetchData(this.list.id);
+      this.dialogMaterialListForm = false
     },
     handleCurrentChange(row){
       if (row.status){
@@ -1653,7 +1662,7 @@ export default {
       }else{
         this.dialogMaterialListFormMethod = 'add';
       }
-      console.log(this.dialogMaterialListFormMethod);
+
       this.materialListForm = row;
 
     },

@@ -1,15 +1,6 @@
 <template>
     <div class="app-container">
-        <el-tabs v-model="activeName">
-            <el-tab-pane label="物证室首页" name="first">
-                <materialHome></materialHome>
-
-            </el-tab-pane>
-            <el-tab-pane label="物证管理" name="second">
-                <materialManger></materialManger>
-
-            </el-tab-pane>
-        </el-tabs>
+        <materialManger></materialManger>
 
     </div>
 </template>
