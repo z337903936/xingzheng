@@ -70,6 +70,7 @@
                 :current-page.sync="listQuery.page"
                 @current-change="getList"
                 @size-change="getList"
+                style="float: right;margin-top: 15px"
         >
         </el-pagination>
     </div>

@@ -71,7 +71,7 @@
                     v-model="caseCategoryPopover">
               常用字典
               <ul>
-                <li v-for="item in caseTypeUserList"><el-link @click="list.caseCategory=item.dictName" >{{ item.dictName }}</el-link></li>
+                <li v-for="item in caseTypeUserList"><el-link @click="list.caseCategory=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
               </ul>
             <el-cascader
               :options="caseTypeList"
@@ -81,9 +81,9 @@
               @change="countDict($event,'案件类别')"
               @visible-change="caseCategoryPopover = !caseCategoryPopover"
               slot="reference"
+              :props="emitProps"
               filterable
               style="width: 100%"
-              :props="emitProps"
               />
             </el-popover>
           </el-form-item>
@@ -112,7 +112,7 @@
                     v-model="caseHappenRegionPopover">
               常用字典
               <ul>
-                <li v-for="item in caseHappenRegionUserList"><el-link @click="list.caseHappenRegion=item.dictName" >{{ item.dictName }}</el-link></li>
+                <li v-for="item in caseHappenRegionUserList"><el-link @click="list.caseHappenRegion=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
               </ul>
             <el-cascader
               :options="caseHappenRegionList"
@@ -255,7 +255,7 @@
               常用字典
               <ul>
                 <li v-for="item in sceneTypeUserList">
-                  <el-link @click="list.sceneType = item.dictName" >{{ item.dictName }}</el-link>
+                  <el-link @click="list.sceneType = item.dictName.trim()" >{{ item.dictName }}</el-link>
                 </li>
               </ul>
             <el-cascader
@@ -281,7 +281,7 @@
                     v-model="crimeTimePopover">
               常用字典
               <ul>
-                <li v-for="item in crimeTimeUserList"><el-link @click="list.crimeTime=item.dictName" >{{ item.dictName }}</el-link></li>
+                <li v-for="item in crimeTimeUserList"><el-link @click="list.crimeTime=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
               </ul>
             <el-cascader
               :options="crimeTimeList"
@@ -309,7 +309,7 @@
                     v-model="invadeTypePopover">
               常用字典
               <ul>
-                <li v-for="item in invadeTypeUserList"><el-link @click="list.invadeType=item.dictName" >{{ item.dictName }}</el-link></li>
+                <li v-for="item in invadeTypeUserList"><el-link @click="list.invadeType=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
               </ul>
             <el-cascader
               :options="invadeTypeList"
@@ -334,7 +334,7 @@
                     v-model="escapeTypePopover">
               常用字典
               <ul>
-                <li v-for="item in escapeTypeUserList"><el-link @click="list.escapeType=item.dictName" >{{ item.dictName }}</el-link></li>
+                <li v-for="item in escapeTypeUserList"><el-link @click="list.escapeType=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
               </ul>
             <el-cascader
               :options="escapeTypeList"
@@ -483,9 +483,7 @@
         <el-button type="primary" size="mini" @click="dialogSuspectPersonListForm=true">添加嫌疑人</el-button>
         <el-table
                 :data="list.suspectPersonList"
-
                 border
-                max-height="150"
                 style="width: 100%">
           <el-table-column
                   prop="name"
@@ -605,7 +603,6 @@
         <el-table
           :data="list.materialList"
           border
-
           row-key="id"
           @selection-change="selectTask"
         >
@@ -769,7 +766,6 @@
         <el-form-item label="侦破方式" prop="solveMethod">
           <el-select v-model="suspectPersonListForm.solveMethod"
                      filterable
-                     @change="countDictSelect"
                      default-first-option
                      placeholder="请选择"
                       style="width: 100%">
@@ -890,7 +886,7 @@
                       v-model="materialCategoryPopover">
                 常用字典
                 <ul>
-                  <li v-for="item in materialCategoryUserList"><el-link @click="materialChange(item.dictName);materialListForm.materialCategory=item.dictName" >{{ item.dictName }}</el-link></li>
+                  <li v-for="item in materialCategoryUserList"><el-link @click="materialChange(item.dictName.trim());materialListForm.materialCategory=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
                 </ul>
                 <el-cascader
                         ref="materialCategoryList"
@@ -1007,6 +1003,11 @@
               type="primary" style="float: right"
               @click="dialogMaterialListFormMethod === 'add'?addMaterialListForm():updateMaterialListForm()">
         保存
+      </el-button>
+      <el-button
+              type="primary" style="float: right;margin-right: 10px"
+              @click="addMultipleMaterialListForm()">
+        批量保存
       </el-button>
       <el-table
               ref="materialPhotoList"
@@ -1467,7 +1468,8 @@ export default {
     },
     'list.caseCategory': {
       handler(newData, oldData) {
-        if (newData.indexOf("十类案件") > -1) {
+        var data = this.searchMaterial(this.caseTypeList,newData)
+        if (data === "十类案件") {
           this.list.isTenCase = true
         }else{
           this.list.isTenCase = false
@@ -1475,7 +1477,6 @@ export default {
 
       },
       deep: true,
-      immediate: true
     },
     'list.supporterUidArray': {
       handler(newData, oldData) {
@@ -1636,7 +1637,13 @@ export default {
               data.children.map(data2=>{
                 if (change === data2.label)
                   result = item.label;
+                if (data2.children){
+                  data2.children.map(data3=>{
+                    if (change === data3.label)
+                      result = item.label;
 
+                  })
+                }
               })
             }
           })
@@ -1647,7 +1654,6 @@ export default {
     handleClose(done){
       if (this.isEdit)
         this.submitForm();
-      this.fetchData(this.list.id);
       done();
     },
     handleCloseButton(){
@@ -1681,7 +1687,7 @@ export default {
         materialType: '',
         extractTime: (new Date()).valueOf(),
         extractMethod: '',
-        extractUid: '',
+        extractUid: this.list.mainChargerUid,
         extractName: '',
         imgUrl: val.imgUrl,
         stayPart: val.originalFileName,
@@ -1723,7 +1729,7 @@ export default {
       }
     },
 
-    countDictMaterial(val,type){
+    countDictArray(val,type){
       val = val.slice(-1)[0];
       const send={
         name:val,
@@ -1752,104 +1758,103 @@ export default {
       })
     },
     submitTask() {
-      const data = {
-        list: this.taskId
-      }
-      submitMaterial(data).then(response => {
-        if (response.code === 200) {
-          this.$message({
-            message: '操作成功',
-            type: 'success',
-            showClose: true,
-            duration: 2000
-          })
-        } else {
-          this.$message({
-            message: response.reason,
-            type: 'success',
-            showClose: true,
-            duration: 2000
-          })
+      if (this.taskId.length===0){
+        this.$confirm('请选择提交物证!')
+                .then(_ => {
+
+                })
+                .catch(_ => {});
+      } else{
+        const data = {
+          list: this.taskId
         }
-      })
+        submitMaterial(data).then(response => {
+          if (response.code === 200) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              showClose: true,
+              duration: 2000
+            })
+          } else {
+            this.$message({
+              message: response.reason,
+              type: 'success',
+              showClose: true,
+              duration: 2000
+            })
+          }
+        })
+      }
+
     },
     submitMaterialOutStock() {
-      const data = {
-        list: this.taskId
-      }
-      submitMaterialOutStock(data).then(response => {
-        if (response.code === 200) {
-          this.$message({
-            message: '操作成功',
-            type: 'success',
-            showClose: true,
-            duration: 2000
-          })
-        } else {
-          this.$message({
-            message: response.reason,
-            type: 'success',
-            showClose: true,
-            duration: 2000
-          })
+      if (this.taskId.length===0){
+        this.$confirm('请选择提交物证!')
+                .then(_ => {
+
+                })
+                .catch(_ => {});
+      } else{
+        const data = {
+          list: this.taskId
         }
-      })
+        submitMaterialOutStock(data).then(response => {
+          if (response.code === 200) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              showClose: true,
+              duration: 2000
+            })
+          } else {
+            this.$message({
+              message: response.reason,
+              type: 'success',
+              showClose: true,
+              duration: 2000
+            })
+          }
+        })
+      }
+
     },
     submitMaterialinStock() {
-      const data = {
-        list: this.taskId
-      }
-      submitMaterialinStock(data).then(response => {
-        if (response.code === 200) {
-          this.$message({
-            message: '操作成功',
-            type: 'success',
-            showClose: true,
-            duration: 2000
-          })
-        } else {
-          this.$message({
-            message: response.reason,
-            type: 'success',
-            showClose: true,
-            duration: 2000
-          })
+      if (this.taskId.length===0){
+        this.$confirm('请选择提交物证!')
+                .then(_ => {
+
+                })
+                .catch(_ => {});
+      } else{
+        const data = {
+          list: this.taskId
         }
-      })
+        submitMaterialinStock(data).then(response => {
+          if (response.code === 200) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              showClose: true,
+              duration: 2000
+            })
+          } else {
+            this.$message({
+              message: response.reason,
+              type: 'success',
+              showClose: true,
+              duration: 2000
+            })
+          }
+        })
+      }
+
     },
 
     fetchData(id) {
       fetchSearch(id).then(data => {
         this.list = data
-        this.list = this.changeTime(this.list, false)
-
-        if (this.list.supporterUid){
-          this.list.supporterUidArray = this.list.supporterUid.split(',').map(data => {
-            return parseInt(data)
-          })
-        }
-
-        if (this.list.sceneProtect === 0)
-          this.list.sceneProtect = '';
-        if (this.list.photographUid === 0)
-          this.list.photographUid = '';
-        if (this.list.medicalUid === 0)
-          this.list.medicalUid = '';
-        if (this.list.cameraUid === 0)
-          this.list.cameraUid = '';
-
-        if (this.list.crimeTime){
-          this.list.crimeTimeArray = JSON.parse(this.list.crimeTime)
-        }
-        if (this.list.sceneType){
-          this.list.sceneType = JSON.parse(this.list.sceneType)
-        }
-        if (this.list.invadeType){
-          this.list.invadeType = JSON.parse(this.list.invadeType)
-        }
-        if (this.list.escapeType){
-          this.list.escapeType = JSON.parse(this.list.escapeType)
-        }
+        this.proResponse()
 
       }).catch(err => {
         console.log(err)
@@ -1944,7 +1949,7 @@ export default {
               this.submitForm()
             this.dialogLostDetailListForm = false
             this.resetLostDetailListForm()
-            this.fetchData(this.list.id)
+
           } else {
             this.$message({
               message: response.reason,
@@ -1978,7 +1983,7 @@ export default {
             })
             if (this.isEdit)
               this.submitForm()
-            this.fetchData(this.list.id)
+
             this.dialogLostDetailListForm = false
             this.resetLostDetailListForm()
           } else {
@@ -2055,7 +2060,6 @@ export default {
               this.submitForm()
             this.dialogSuspectPersonListForm = false
             this.resetSuspectPersonListForm()
-            this.fetchData(this.list.id)
           } else {
             this.$message({
               message: response.reason,
@@ -2089,7 +2093,7 @@ export default {
             })
             if (this.isEdit)
               this.submitForm()
-            this.fetchData(this.list.id)
+
             this.dialogSuspectPersonListForm = false
             this.resetSuspectPersonListForm()
           } else {
@@ -2124,7 +2128,7 @@ export default {
             })
             if (this.isEdit)
               this.submitForm()
-            this.fetchData(this.list.id)
+
           } else {
             this.$message({
               message: response.reason,
@@ -2168,7 +2172,6 @@ export default {
             })
             if (this.isEdit)
               this.submitForm()
-            this.fetchData(this.list.id)
             this.dialogConcernedPersonListForm = false
             this.resetConcernedPersonListForm()
           } else {
@@ -2213,7 +2216,6 @@ export default {
             })
             if (this.isEdit)
               this.submitForm()
-            this.fetchData(this.list.id)
             this.dialogConcernedPersonListForm = false
             this.resetConcernedPersonListForm()
           } else {
@@ -2298,8 +2300,6 @@ export default {
       } else {
         this.dialogMaterialListForm = true
       }
-
-
     },
     toAddMaterial() {
       if (this.list.id == null) {
@@ -2325,11 +2325,6 @@ export default {
           this.materialListForm.materialNo = response.materialNo;
           this.materialListForm.status = 1;
           this.$set(this.materialPhotoList,this.materialListForm.index,this.materialListForm);
-          // if (thi
-          // s.isEdit)
-          //   this.submitForm()
-          // this.fetchData(this.list.id)
-          // this.dialogMaterialListForm = false
           this.resetMaterialListForm()
         } else {
           this.$message({
@@ -2340,22 +2335,61 @@ export default {
           })
         }
       })
+    },
+    addMultipleMaterialListForm(){
+      this.materialPhotoList.map(data=>{
 
-      // }else{
-      //     this.materialType.map(data=>{
-      //         if (data.id == this.materialListForm.materialType){
-      //             this.materialListForm.materialTypeShow = data.title
-      //         }
-      //     })
-      //     this.userList.map(data=>{
-      //         if (data.id == this.materialListForm.extractUid){
-      //             this.materialListForm.extractUidShow = data.title
-      //         }
-      //     })
-      //     this.list.materialList.push(this.materialListForm);
-      //     this.dialogMaterialListForm = false;
-      //     this.resetMaterialListForm();
-      // }
+        if (data.materialCategory.constructor === Array) {
+          data.materialCategory = data.materialCategoryShow
+        }
+        if (data.extractTime.toString().length > 10) { data.extractTime = parseInt(data.extractTime / 1000) }
+        if (data.status === 1){
+          updateMaterial(data).then(response => {
+            if (response.code === 200) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                showClose: true,
+                duration: 2000
+              })
+
+            } else {
+              this.$message({
+                message: response.reason,
+                type: 'success',
+                showClose: true,
+                duration: 2000
+              })
+            }
+          })
+        } else{
+          createMaterial(data).then(response => {
+            if (response.code === 200) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                showClose: true,
+                duration: 2000
+              });
+              data.materialNo = response.materialNo;
+              data.status = 1;
+              data.id = response.id;
+              this.$set(this.materialPhotoList,data.index,data);
+            } else {
+              this.$message({
+                message: response.reason,
+                type: 'success',
+                showClose: true,
+                duration: 2000
+              })
+            }
+          })
+        }
+
+      })
+
+
+
     },
     handleEditMaterialListForm(row) {
       row.extractTime = row.extractTime * 1000
@@ -2381,10 +2415,7 @@ export default {
             showClose: true,
             duration: 2000
           })
-          // this.dialogMaterialListForm = false
-          // if (this.isEdit)
-          //   this.submitForm()
-          // this.fetchData(this.list.id)
+
           this.resetMaterialListForm()
         } else {
           this.$message({
@@ -2395,21 +2426,7 @@ export default {
           })
         }
       })
-      // }else{
-      //     this.materialType.map(data=>{
-      //         if (data.id == this.materialListForm.materialType){
-      //             this.materialListForm.materialTypeShow = data.title
-      //         }
-      //     })
-      //     this.userList.map(data=>{
-      //         if (data.id == this.materialListForm.extractUid){
-      //             this.materialListForm.extractUidShow = data.title
-      //         }
-      //     })
-      //     var temp = Object.assign({}, this.materialListForm)// copy obj
-      //     this.dialogMaterialListForm = false;
-      //     this.resetMaterialListForm();
-      // }
+
     },
     handleDeleteMaterialListForm(row) {
       // if (this.isEdit) {
@@ -2457,6 +2474,38 @@ export default {
         if (data.caseHappenTime.toString().length === 10) { data.caseHappenTime = parseInt(data.caseHappenTime * 1000) }
       }
       return data
+    },
+    proResponse(){
+      this.list = this.changeTime(this.list, false)
+
+      if (this.list.supporterUid){
+        this.list.supporterUidArray = this.list.supporterUid.split(',').map(data => {
+          return parseInt(data)
+        })
+      }
+
+      if (this.list.sceneProtect === 0)
+        this.list.sceneProtect = '';
+      if (this.list.photographUid === 0)
+        this.list.photographUid = '';
+      if (this.list.medicalUid === 0)
+        this.list.medicalUid = '';
+      if (this.list.cameraUid === 0)
+        this.list.cameraUid = '';
+
+      if (this.list.crimeTime){
+        this.list.crimeTimeArray = JSON.parse(this.list.crimeTime)
+      }
+      if (this.list.sceneType){
+        this.list.sceneType = JSON.parse(this.list.sceneType)
+      }
+      if (this.list.invadeType){
+        this.list.invadeType = JSON.parse(this.list.invadeType)
+      }
+      if (this.list.escapeType){
+        this.list.escapeType = JSON.parse(this.list.escapeType)
+      }
+
     },
     submitForm(toAddMaterial = false) {
       this.$refs.listForm.validate(valid => {
@@ -2528,6 +2577,10 @@ export default {
                   showClose: true,
                   duration: 2000
                 })
+                this.fetchData(this.list.id)
+                // this.list = response;
+                // this.list.suspectPersonList = response.suspectPersonList;
+                // this.proResponse()
               } else {
                 this.$message({
                   message: response.reason,

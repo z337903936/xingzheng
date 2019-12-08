@@ -8,125 +8,109 @@
 
                 <div class="postInfo-container">
                     <el-row :gutter="20">
-                        <el-col :span="12">
-                            <el-form-item label="报告人" prop="reporter">
-                                <el-input v-model="postForm.reporter"/>
+                        <el-col :span="8">
+                            <el-form-item label="物证编号" prop="thirdMaterialNo">
+                                <el-input v-model="materialListForm.thirdMaterialNo" :disabled="true" placeholder="系统自动生成" />
                             </el-form-item>
                         </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="报告单位" prop="reportOrg">
+                        <el-col :span="8">
+                            <el-form-item label="物证类别" prop="materialCategory">
                                 <el-popover
                                         placement="left"
                                         width="200"
                                         trigger="manual"
-                                        v-model="reportOrgPopover">
+                                        v-model="materialCategoryPopover">
                                     常用字典
                                     <ul>
-                                        <li v-for="item in reportOrgUserList"><el-link @click="postForm.reportOrg=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
-                                    </ul>
-                                <el-cascader
-                                        :options="reportOrgList"
-                                        filterable
-                                        slot="reference"
-                                        :props="emitProps"
-                                        v-model="postForm.reportOrg"
-                                        :filter-method="remoteSearch"
-                                        @change="countDict($event,'报告单位')"
-                                        @visible-change="reportOrgPopover = !reportOrgPopover"
-                                        :show-all-levels="false"
-                                        style="width: 100%">
-                                </el-cascader>
-                                </el-popover>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                        <el-col :span="12">
-                            <el-form-item label="接警时间" prop="receiptTimeShow">
-                                <el-date-picker
-                                        v-model="postForm.receiptTimeShow"
-                                        type="datetime"
-                                        value-format="yyyy-MM-dd HH:mm:ss"
-                                        placeholder="选择时间"
-                                        style="width: 100%"/>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="联系电话" prop="contactPhoneNumber">
-                                <el-input v-model="postForm.contactPhoneNumber"/>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                        <el-col :span="12">
-                            <el-form-item label="案件类别" prop="caseCategory" >
-
-                                <el-popover
-                                        placement="left"
-                                        width="200"
-                                        trigger="manual"
-                                        v-model="caseCategoryPopover">
-                                    常用字典
-                                    <ul>
-                                        <li v-for="item in caseCategoryUserList">
-                                            <el-link @click="postForm.caseCategory=item.dictName.trim()" >
-                                                {{ item.dictName }}
-                                            </el-link>
-                                        </li>
+                                        <li v-for="item in materialCategoryUserList"><el-link @click="materialChange(item.dictName);materialListForm.materialCategory=item.dictName" >{{ item.dictName }}</el-link></li>
                                     </ul>
                                     <el-cascader
-                                            :options="caseCategoryList"
-                                            filterable
-                                            :props="emitProps"
-                                            @change="countDict($event,'案件类别')"
-                                            @visible-change="caseCategoryPopover = !caseCategoryPopover"
-                                            v-model="postForm.caseCategory"
-                                            :filter-method="remoteSearch"
+                                            ref="materialCategoryList"
+                                            :options="materialCategoryList"
+                                            v-model="materialListForm.materialCategory"
+                                            :filter-method="filterSearch"
                                             :show-all-levels="false"
+                                            @change="countDictMaterial($event,'物证类型')"
+                                            @visible-change="materialCategoryPopover = !materialCategoryPopover"
                                             slot="reference"
-                                            style="width: 100%">
-                                    </el-cascader>
+                                            filterable
+                                            style="width: 100%"/>
                                 </el-popover>
-
-
-
-
                             </el-form-item>
                         </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="案发时间" prop="caseTime">
+                        <el-col :span="8">
+                            <el-form-item label="可靠程度" prop="reliabilityLevel">
+                                <el-select v-model="materialListForm.reliabilityLevel" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in reliabilityLevel"
+                                            :key="item.title"
+                                            :label="item.title"
+                                            :value="item.title"/>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20">
+                        <el-col :span="8">
+                            <el-form-item label="遗留部位" prop="stayPart">
+                                <el-input v-model="materialListForm.stayPart"/>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="提取方法" prop="extractMethod">
+                                <el-input v-if="isInput" v-model="materialListForm.extractMethod"/>
+                                <el-select v-model="materialListForm.extractMethod"
+                                           filterable
+                                           @change="countDictSelect"
+                                           default-first-option
+                                           v-if="!isInput"
+                                           placeholder="请选择"
+                                           style="width: 100%">
+                                    <el-option
+                                            v-for="item in extractMethodList"
+                                            :key="item.value"
+                                            :label="item.value"
+                                            :value="item.value"/>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="利用情况" prop="usedType">
+                                <el-select v-model="materialListForm.usedType" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in usedType"
+                                            :key="item.title"
+                                            :label="item.title"
+                                            :value="item.title"/>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20">
+                        <el-col :span="8">
+                            <el-form-item label="提取日期" prop="extractTime">
+
                                 <el-date-picker
-                                        v-model="postForm.caseTime"
-                                        type="datetime"
+                                        v-model="materialListForm.extractTime"
+                                        type="date"
                                         value-format="timestamp"
                                         placeholder="选择时间"
                                         style="width: 100%"
                                 />
                             </el-form-item>
                         </el-col>
-                    </el-row>
-                    <el-form-item label="警情号" prop="instanceNo">
-                        <el-input v-model="postForm.instanceNo"/>
-                    </el-form-item>
-                    <el-form-item label="案发地点" prop="caseAddress">
-                        <el-input v-model="postForm.caseAddress"/>
-                    </el-form-item>
-                    <el-form-item label="案发摘要" prop="caseDigest">
-                        <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="postForm.caseDigest" placeholder="作案手法、侵入方式等"/>
-                    </el-form-item>
-                    <el-form-item label="损失情况" prop="lostDetail">
-                        <el-input v-model="postForm.lostDetail"/>
-                    </el-form-item>
-                    <el-row :gutter="20">
-                        <el-col :span="12">
-                            <el-form-item label="技术值班队长" prop="monitorUid">
-                                <el-select v-model="postForm.monitorUid"
-                                           filterable
-                                           :filter-method="filterUserSearch"
-                                           @visible-change="restUserSearch"
-                                           class="filter-item"
-                                           value-key="id"
-                                           style="width: 100%">
+                        <el-col :span="8">
+                            <el-form-item label="提取人" prop="extractUid">
+                                <el-select
+                                        v-model="materialListForm.extractUid"
+                                        :filter-method="filterUserSearch"
+                                        filterable
+                                        placeholder="请选择"
+                                        center
+                                        style="width: 100%"
+                                        @visible-change="restUserSearch">
                                     <el-option
                                             v-for="item in userShowList"
                                             :key="item.id"
@@ -135,94 +119,16 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="值班技术员" prop="techUid">
+                        <el-col :span="8">
 
-                                <el-select v-model="postForm.techUidArray"
-                                           filterable
-                                           :filter-method="filterUserSearch"
-                                           @visible-change="restUserSearch"
-                                           class="filter-item" multiple
-                                           @change="selectUpdate"
-                                           value-key="id"
-                                           style="width: 100%">
-                                    <el-option
-                                            v-for="item in userShowList"
-                                            :key="item.id"
-                                            :label="item.title"
-                                            :value="item.id"/>
-                                </el-select>
+                            <el-form-item label="物证名称" prop="name">
+                                <el-input v-model="materialListForm.name"/>
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row :gutter="20">
-                        <el-col :span="12">
-                            <el-form-item label="大队值班领导" prop="leaderUid">
-
-                                <el-select v-model="postForm.leaderUid"
-                                           filterable
-                                           :filter-method="filterUserSearch"
-                                           @visible-change="restUserSearch"
-                                            class="filter-item"
-                                           value-key="id"
-                                           style="width: 100%">
-                                    <el-option
-                                            v-for="item in userShowList"
-                                            :key="item.id"
-                                            :label="item.title"
-                                            :value="item.id"/>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="接警人" prop="receiptUid">
-                                <el-select v-model="postForm.receiptUid"
-                                           class="filter-item"
-                                           allow-create
-                                           filterable
-                                           value-key="id"
-                                           default-first-option
-                                           style="width: 100%">
-                                    <el-option
-                                            v-for="item in userList"
-                                            :value-key="item.id"
-                                            :label="item.title"
-                                            :value="item.id"/>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                        <el-col :span="12">
-                            <el-form-item label="驾驶员" prop="driverName">
-                                <el-input v-model="postForm.driverName"/>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="短信通知" prop="smsReceiverArray">
-                                <el-select v-model="postForm.smsReceiverArray"
-                                           filterable
-                                           :filter-method="filterUserSearch"
-                                           @visible-change="restUserSearch"
-                                           class="filter-item" multiple
-                                           @change="selectUpdate"
-                                           value-key="id"
-                                           style="width: 100%">
-                                    <el-option
-                                            v-for="item in userShowList"
-                                            :key="item.id"
-                                            :label="item.title"
-                                            :value="item.id"/>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-
-                    <el-form-item label="短信内容" prop="smsContent">
-                        <el-input v-model="postForm.smsContent" type="textarea" :autosize="{ minRows: 2, maxRows: 4}"
-                                  :value="smsContentChange" />
+                    <el-form-item label="特征描述" prop="note">
+                        <el-input v-model="materialListForm.note" type="textarea"/>
                     </el-form-item>
-
 
                     <el-form-item style="margin-bottom: 40px;text-align: center;" label-width="100px">
                         <el-button v-loading="loading"  style="width: 200px" type="primary"
@@ -316,8 +222,11 @@
                         });
                     }
                     if (this.postForm.caseCategory != ''){
-                        category = this.postForm.caseCategory
-
+                        if (this.isEdit) {
+                            category = this.postForm.caseCategory
+                        }else{
+                            category = this.postForm.caseCategory.slice(-1)[0]
+                        }
                     }
                     if (this.postForm.lostDetail != ''){
                         lost ='损失情况：'+ this.postForm.lostDetail +','
@@ -327,7 +236,6 @@
                     }else{
                         date = this.formatDate(this.postForm.receiptTimeShow)
                     }
-
                     if (this.postForm.monitorUid){
                         if (this.postForm.smsReceiverArray.indexOf(this.postForm.monitorUid) === -1)
                             this.postForm.smsReceiverArray.push(this.postForm.monitorUid)
@@ -341,9 +249,9 @@
                     if (this.postForm.techUidArray.length >0){
                         this.postForm.techUidArray.map(data=>{
                             if (this.postForm.smsReceiverArray.indexOf(data) === -1)
-                                if (data)
-                                    this.postForm.smsReceiverArray.push(data)
+                                this.postForm.smsReceiverArray.push(data)
                         })
+
                     }
 
                     this.smsContentChange =  date + ' 接到' + this.postForm.reportOrg + ' ' + this.postForm.reporter + '(' + this.postForm.contactPhoneNumber + ")" +
@@ -356,7 +264,7 @@
 
         },
         created() {
-            this.getUserList();
+            this.getUserList()
 
             this.search('案件类别').then(response=>{
                 this.caseCategoryList = this.processData(response.list)
@@ -370,9 +278,8 @@
             this.getUserDict('报告单位').then(response=>{
                 this.reportOrgUserList = response.list;
             });
-
             if (this.isEdit) {
-                const id = this.$route.params && this.$route.params.id;
+                const id = this.$route.params && this.$route.params.id
                 this.postForm.id = id;
                 this.fetchData(id)
             }else{
@@ -525,24 +432,17 @@
                     if (this.postForm.techUid === ''){
                         this.postForm.techUidArray = [];
                     }else{
-                        var item = [];
-                         this.postForm.techUid.split(",").map(data => {
-                            if (data && data!==undefined){
-                                item.push(parseInt(data))
-                            }
+                        this.postForm.techUidArray = this.postForm.techUid.split(",").map(data => {
+                            return parseInt(data);
                         });
-                        this.postForm.techUidArray = item;
                     }
+
                     if (this.postForm.smsReceiver  === ''){
                         this.postForm.smsReceiverArray = [];
                     }else{
-                        var item2 = [];
-                         this.postForm.smsReceiver.split(",").map(data => {
-                            if (data && data!==undefined){
-                                item2.push(parseInt(data))
-                            }
+                        this.postForm.smsReceiverArray = this.postForm.smsReceiver.split(",").map(data => {
+                            return parseInt(data);
                         });
-                        this.postForm.smsReceiverArray = item2
                     }
 
                     if (this.postForm.caseTime.toString().length===10)
@@ -586,8 +486,7 @@
                 }
                 if (data.instanceNo === this.$store.getters.instanceNo)
                     data.instanceNo=''
-                console.log(data);
-                return;
+
                 this.$refs.postForm.validate(valid => {
                     if (valid) {
                         this.loading = true

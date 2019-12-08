@@ -108,6 +108,7 @@
                 @current-change="getList"
                 @size-change="getList"
                 :hide-on-single-page="paginationShow"
+                style="float: right;margin-top: 15px"
         >
         </el-pagination>
 
@@ -140,6 +141,7 @@
                 listQuery: {
                     page: 1,
                     beginTime: undefined,
+                    evienceId: undefined,
                     endTime: undefined,
                     taskNo: undefined,
                     materialNo: undefined,
@@ -156,20 +158,21 @@
             }
         },
         created() {
+            const id = this.$route.params && this.$route.params.id;
+            this.listQuery.evienceId = id;
             this.getList()
             this.getUserList()
         },
         methods: {
-            getList() {
+            getList(id) {
                 this.listLoading = true;
                 transferList(this.listQuery).then(response => {
                     this.list = response.list;
                     this.pages = response.pages;
 
                     // Just to simulate the time of the request
-                    setTimeout(() => {
-                        this.listLoading = false
-                    },500)
+                    this.listLoading = false
+
                 })
             },
             getUserList() {

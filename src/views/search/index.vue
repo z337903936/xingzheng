@@ -98,15 +98,16 @@
                     <span>{{ row.caseCategory }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="发案地址" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.caseAddress }}</span>
-                </template>
-            </el-table-column>
+
 
             <el-table-column label="发案日期"  align="center" width="100">
                 <template slot-scope="{row}">
                     <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d}') }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="发案地址" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.caseAddress }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="发案区划" align="center">
@@ -138,17 +139,19 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="操作" align="center" fixed="right" width="200" class-name="small-padding fixed-width">
+            <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <router-link :to="'/search/update-search/'+row.id">
                         <el-button type="primary" size="mini" >编辑</el-button>
                     </router-link>
-                    <!--<el-button type="primary" size="mini" @click="handleUpdate(row)">-->
-                        <!--编辑-->
-                    <!--</el-button>-->
+
                     <router-link :to="'/search/show-search/'+row.id">
                         <el-button type="success" size="mini" >查看</el-button>
                     </router-link>
+                    <router-link :to="'/transferLog/index/'+row.id">
+                        <el-button type="success" size="mini" style="width: 80px">物证去向</el-button>
+                    </router-link>
+
                     <!--<el-button size="mini" type="success">-->
                         <!--查看-->
                     <!--</el-button>-->
@@ -163,6 +166,7 @@
                 @current-change="getList"
                 @size-change="getList"
                 :hide-on-single-page="paginationShow"
+                style="float: right;margin-top: 15px"
         >
         </el-pagination>
 

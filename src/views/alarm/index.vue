@@ -166,6 +166,7 @@
                 layout="prev, pager, next"
                 @current-change="getList"
                 @size-change="getList"
+                style="float: right;margin-top: 15px"
         />
 
         <el-dialog

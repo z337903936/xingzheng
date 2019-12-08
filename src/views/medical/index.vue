@@ -115,6 +115,7 @@
                 @current-change="getList"
                 @size-change="getList"
                 :hide-on-single-page="paginationShow"
+                style="float: right;margin-top: 15px"
         >
         </el-pagination>
 
