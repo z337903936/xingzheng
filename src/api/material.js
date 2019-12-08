@@ -18,7 +18,7 @@ export function fetchMaterial(id) {
 
 export function createMaterial(data) {
     return request({
-        url: '/v1/cp/materials/new/',
+        url: '/v1/cp/material/new/',
         method: 'post',
         data
     })
@@ -26,14 +26,32 @@ export function createMaterial(data) {
 
 export function updateMaterial(data) {
     return request({
-        url: '/v1/cp/materials/' + data.id + '/',
+        url: '/v1/cp/material/' + data.id + '/',
         method: 'post',
         data
     })
 }
-export function delMaterial(data) {
+
+export function applyDelMaterial(data) {
     return request({
-        url: '/v1/cp/materials/',
+        url: '/v1/cp/apply_destroy_material/',
+        method: 'post',
+        data
+    })
+}
+
+
+export function delMaterialList(data) {
+    return request({
+        url: '/v1/cp/apply_destroy_material_list/',
+        method: 'post',
+        data
+    })
+}
+
+export function delMaterialAction(data) {
+    return request({
+        url: '/v1/cp/handle_apply_destroy_material/',
         method: 'post',
         data
     })

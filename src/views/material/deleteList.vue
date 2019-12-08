@@ -12,12 +12,12 @@
                 />
                 <el-input v-model="listQuery.materialNo" placeholder="物证编号" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.evidenceNo" placeholder="勘查号" class="mb10" style="width: 200px;"
+                <el-input v-model="listQuery.applyName" placeholder="申请人" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.storagePlace" placeholder="物证库" class="mb10" style="width: 200px;"
+                <el-input v-model="listQuery.toName" placeholder="接收人" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
                 <div style="margin-top: 15px">
-                    <el-input v-model="listQuery.fromName" placeholder="移交人" class="mb10" style="width: 200px;"
+                    <el-input v-model="listQuery.name" placeholder="物证名字" class="mb10" style="width: 200px;"
                               @keyup.enter.native="handleFilter"/>
                     <el-input v-model="listQuery.filters" placeholder="关键字" class="mb10" style="width: 200px;"
                               @keyup.enter.native="handleFilter"/>
@@ -55,50 +55,49 @@
                     <span>{{ row.materialNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证库编号" align="center" width="200">
-                <template slot-scope="{row}">
-                    <span>{{ row.thirdMaterialNo }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="物证类别" width="150" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.materialCategory  }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="利用情况" width="120" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.usedType }}</span>
-                </template>
-            </el-table-column>
             <el-table-column label="物证名称" width="250" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.name }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="特征描述" width="300" align="center">
+            <el-table-column label="销毁理由" width="150" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.note }}</span>
+                    <span>{{ row.reason  }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证类型" width="170" align="center">
+            <el-table-column label="申请人" width="120" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.materialType }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="转移时间" width="210" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.transferTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                    <span>{{ row.applyName }}</span>
                 </template>
             </el-table-column>
 
+            <el-table-column label="申请时间" width="300" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.applyTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="审核人" width="170" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.approverName }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="审核时间" width="210" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.approveTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="状态" width="170" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.approveStatus ===1?'申请人':row.approveStatus ===2?'同意':'驳回'  }}</span>
+                </template>
+            </el-table-column>
             <el-table-column label="操作" align="center" width="230" fixed="right" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <router-link :to="'/material/edit/'+row.id">
-                        <el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>
-                    </router-link>
-
-                    <el-button v-waves type="primary" style="width: 70px"  size="mini" @click="handleDelete(row)" >
-                        销毁申请
+                    <el-button v-if="row.approveStatus ===1" v-waves type="primary" style="width: 70px"  size="mini" @click="handleDeleteAction(row,1)" >
+                        同意
+                    </el-button>
+                    <el-button v-if="row.approveStatus ===1" v-waves type="primary" style="width: 70px"  size="mini" @click="handleDeleteAction(row,2)" >
+                        驳回
                     </el-button>
                 </template>
             </el-table-column>
@@ -115,29 +114,7 @@
         >
         </el-pagination>
 
-        <el-dialog title="销毁申请" :close-on-click-modal="false" :visible.sync="dialogdeleteForm" width="40%">
-            <el-form
-                    ref="rules"
-                    :model="deleteForm"
-                    label-position="left"
-                    label-width="70px"
-                    style="width: 80%; margin-left:50px;">
-                <el-form-item label="理由" prop="reason">
-                    <el-input v-model="deleteForm.reason"/>
-                </el-form-item>
-
-            </el-form>
-
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogdeleteForm = false">
-                    取 消
-                </el-button>
-                <el-button type="primary" @click="pushDelete()">
-                    确 定
-                </el-button>
-            </div>
-        </el-dialog>
-
+        
 
     </div>
 </template>
@@ -149,14 +126,13 @@
 </style>
 
 <script>
-    import {fetchMaterialList,delMaterial,applyDelMaterial} from '@/api/material'
+    import {delMaterialList,delMaterialAction} from '@/api/material'
     import waves from '@/directive/waves' // waves directive
     import {parseTime} from '@/utils'
     import { fetchAdminMemberList} from '@/api/permissions'
 
-
     export default {
-        name: 'Material',
+        name: 'deleteList',
         directives: {waves},
         data() {
             return {
@@ -168,35 +144,30 @@
                 paginationShow: true,
                 searchTime: '',
                 limit: 20,
-                deleteForm: {
-                    id:undefined,
-                    reason:undefined
-                },
                 listQuery: {
                     page: 1,
                     beginTime: undefined,
                     endTime: undefined,
                     filters: undefined,
-                    fromName: undefined,
-                    storagePlace: undefined,
-                    evidenceNo: undefined,
+                    applyName: undefined,
+                    toName: undefined,
+                    name: undefined,
                     materialNo: undefined
                 },
                 rules:{},
                 downloadLoading: false,
-                dialogdeleteForm: false,
             }
         },
         created(){
             this.getList()
         },
         methods: {
-            handleDelete(val){
-                this.deleteForm.id = val.id;
-                this.dialogdeleteForm = true;
-            },
-            pushDelete(){
-                applyDelMaterial(this.deleteForm).then(response=>{
+            handleDeleteAction(val,type){
+                const sendData = {
+                    id:val.id,
+                    status:type,
+                };
+                delMaterialAction(sendData).then(response=>{
                     if (response.code === 200) {
                         this.$message({
                             message: '操作成功',
@@ -204,7 +175,7 @@
                             showClose: true,
                             duration: 2000
                         })
-                        this.dialogdeleteForm = false;
+                        this.getList()
                     } else {
                         this.$message({
                             message: response.reason,
@@ -217,13 +188,12 @@
             },
             getList(id) {
                 this.listLoading = true;
-                fetchMaterialList(this.listQuery).then(response => {
+                delMaterialList(this.listQuery).then(response => {
                     this.list = response.list;
                     this.pages = response.pages
-
                     // Just to simulate the time of the request
 
-                        this.listLoading = false
+                    this.listLoading = false
 
                 })
             },
@@ -233,9 +203,9 @@
                     beginTime: undefined,
                     endTime: undefined,
                     filters: undefined,
-                    fromName: undefined,
-                    storagePlace: undefined,
-                    evidenceNo: undefined,
+                    applyName: undefined,
+                    toName: undefined,
+                    name: undefined,
                     materialNo: undefined
                 };
                 this.searchTime = '';
@@ -248,31 +218,7 @@
                 this.listQuery.page = 1;
                 this.getList()
             },
-            //
-            // handleDownload() {
-            //     this.downloadLoading = true
-            //     import('@/vendor/Export2Excel').then(excel => {
-            //         const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-            //         const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-            //         const data = this.formatJson(filterVal, this.list)
-            //         excel.export_json_to_excel({
-            //             header: tHeader,
-            //             data,
-            //             filename: 'table-list'
-            //         })
-            //         this.downloadLoading = false
-            //     })
-            // },
-            // formatJson(filterVal, jsonData) {
-            //     return jsonData.map(v => filterVal.map(j => {
-            //         if (j === 'timestamp') {
-            //             return parseTime(v[j])
-            //         } else {
-            //             return v[j]
-            //         }
-            //     }))
-            // },
-            
+
         }
     }
 </script>
