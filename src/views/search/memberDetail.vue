@@ -894,7 +894,7 @@
                         v-model="materialListForm.materialCategory"
                         :filter-method="filterSearch"
                         :show-all-levels="false"
-                        @change="countDictMaterial($event,'物证类型')"
+                        @change="countDictArray($event,'物证类型')"
                         @visible-change="materialCategoryPopover = !materialCategoryPopover"
                         slot="reference"
                         filterable
@@ -1355,6 +1355,7 @@ export default {
       footprintMethodList: [],
       toolMethodList: [],
       bulletMethodList: [],
+      dnaMethodList: [],
       extractMethodList: [],
       idTypeUserList: [],
 
@@ -1368,9 +1369,11 @@ export default {
       footprintMethodUserList: [],
       toolMethodUserList: [],
       bulletMethodUserList: [],
+      dnaMethodUserList: [],
       extractMethodUserList: [],
       reportOrgUserList: [],
       materialCategoryUserList: [],
+
 
       solveMethodList:[],
 
@@ -1435,7 +1438,7 @@ export default {
               this.extractMethodList = this.bulletMethodList;
             }else if (newData.indexOf('生物物证') > -1){
               this.isInput = false
-              this.isDna = true
+              this.extractMethodList = this.dnaMethodList
             }else{
               this.isInput = true
 
@@ -1557,6 +1560,9 @@ export default {
    this.search('枪弹提取方法').then(data => {
       this.bulletMethodList = this.processData(data.list)
     })
+    this.search('生物检材提取方法').then(data => {
+      this.dnaMethodList = this.processData(data.list)
+    })
     this.search('侦破方式').then(data => {
       this.solveMethodList = this.processData(data.list)
     })
@@ -1596,6 +1602,9 @@ export default {
     })
    this.getUserDict('枪弹提取方法').then(data => {
       this.bulletMethodUserList = data.list
+    })
+    this.getUserDict('生物检材提取方法').then(data => {
+      this.dnaMethodUserList = data.list
     })
 
   },
