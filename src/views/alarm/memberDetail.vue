@@ -586,8 +586,7 @@
                 }
                 if (data.instanceNo === this.$store.getters.instanceNo)
                     data.instanceNo=''
-                console.log(data);
-                return;
+                
                 this.$refs.postForm.validate(valid => {
                     if (valid) {
                         this.loading = true
