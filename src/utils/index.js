@@ -3,10 +3,10 @@
  */
 
 export function parseTime(time, cFormat) {
-  if (time.length === 0) {
+  if (!time){
     return null
   }
-  if (!time){
+  if (time.length === 0) {
     return null
   }
   const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'

@@ -17,7 +17,9 @@
                             <el-col :span="15">
                                 <span v-if="list.placeTop===2"  class="badge badge-danger">置顶</span>
                                 <span v-if="list.recommend===2" class="badge badge-success">推荐</span>
-                                <el-link type="primary" style="font-size: 16px;"> {{ list.title }}</el-link>
+                                <router-link :to="'/forum/detail/'+list.id" class="link-type">
+                                    <el-link type="primary" style="font-size: 16px;"> {{ list.title }}</el-link>
+                                </router-link>
                                 <div class="digest">
                                     {{ list.digest }}
                                 </div>
@@ -56,8 +58,8 @@
 
 <script>
     import { fetchAllCateList } from '@/api/category'
-    import { fetchForumList } from '@/api/forum'
-    import {parseTime} from '@/utils'
+    import { fetchForumList,delForum } from '@/api/forum'
+    import { parseTime } from '@/utils'
     export default {
         name: "forum",
         data(){
@@ -97,6 +99,9 @@
                     this.listQuery.cateId = undefined;
                 }
                 this.getList();
+            },
+            delForum(){
+
             }
         }
     }

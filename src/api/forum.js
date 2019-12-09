@@ -40,3 +40,41 @@ export function delForum(data) {
         data
     })
 }
+
+export function favForum(data) {
+    return request({
+        url: '/v1/cp/n/article_fav/',
+        method: 'post',
+        data
+    })
+}
+
+
+export function fetchForumCommentsList(query) {
+    return request({
+        url: '/v1/cp/n/article_comments/',
+        method: 'get',
+        params: query
+    })
+}
+export function commentAction(data) {
+    return request({
+        url: '/v1/cp/n/article_comment/',
+        method: 'post',
+        data
+    })
+}
+export function commentLikeAction(data) {
+    return request({
+        url: '/v1/cp/n/comment_like/',
+        method: 'post',
+        data
+    })
+}
+export function commentReplyAction(data) {
+    return request({
+        url: '/v1/cp/n/comment_reply/',
+        method: 'post',
+        data
+    })
+}

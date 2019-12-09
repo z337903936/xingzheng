@@ -868,7 +868,7 @@
         :model="materialListForm"
         label-position="left"
         label-width="70px"
-        style="width: 70%; margin-left:50px;"
+        style="width: 90%; margin-left:50px;"
 
       >
         <el-row :gutter="20">
