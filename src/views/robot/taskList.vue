@@ -1,0 +1,181 @@
+<template>
+    <div class="app-container">
+
+        <el-table
+                v-loading="listLoading"
+                :key="tableKey"
+                :data="list"
+                border
+                fit
+                highlight-current-row
+                style="width: 100%;"
+        >
+            <el-table-column label="批次号"  align="center" >
+                <template slot-scope="{row}">
+                    <span>{{ row.batchNo }}</span>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="任务名称"  align="center" >
+                <template slot-scope="{row}">
+                    <span>{{ row.taskName }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="匹配数"   align="center" >
+                <template slot-scope="{row}">
+                    <span>{{ row.matchCount }}</span>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="案件分类" align="center" width="200">
+                <template slot-scope="{row}">
+                    <span>{{ row.caseCategory }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="处所" align="center" width="200">
+                <template slot-scope="{row}">
+                    <span>{{ row.sceneType }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="作案时机" align="center" width="200">
+                <template slot-scope="{row}">
+                    <span>{{ row.crimeTime }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="案件发生区域" align="center" width="200">
+                <template slot-scope="{row}">
+                    <span>{{ row.caseHappenRegion }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="侵入方式" align="center" width="200">
+                <template slot-scope="{row}">
+                    <span>{{ row.invadeType }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="作案出口" align="center" width="200">
+                <template slot-scope="{row}">
+                    <span>{{ row.escapeType }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="作案工具" align="center" width="200">
+                <template slot-scope="{row}">
+                    <span>{{ row.crimeTools }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="作案过程" align="center" width="200">
+                <template slot-scope="{row}">
+                    <span>{{ row.crimeDetail }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="作案人数 " align="center" width="200">
+                <template slot-scope="{row}">
+                    <span>{{ row.crimePeoples }}</span>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="勘查开始时间" width="250" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="勘查开始时间" width="250" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.examEndTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                </template>
+            </el-table-column>
+
+
+            <el-table-column label="勘查开始时间" width="250" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.beginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="勘查开始时间" width="250" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.endTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                </template>
+            </el-table-column>
+
+
+            <el-table-column label="任务状态" width="110" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.status===1?'未开始':row.status===2?'进行中':'已结束' }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center" width="280" class-name="small-padding fixed-width">
+                <template slot-scope="{row}">
+                    <router-link :to="'/search/taskResult/'+row.id">
+                        <el-button type="success" size="mini" >查看结果</el-button>
+                    </router-link>
+                </template>
+            </el-table-column>
+
+        </el-table>
+        <el-pagination
+                background
+                layout="prev, pager, next"
+                :page-count="pages"
+                :current-page.sync="listQuery.page"
+                @current-change="getList"
+                @size-change="getList"
+                :hide-on-single-page="paginationShow"
+                style="float: right;margin-top: 15px"
+        >
+        </el-pagination>
+
+    </div>
+</template>
+
+<style>
+    .mb10 {
+        margin-bottom: 10px;
+    }
+</style>
+
+<script>
+    import {robotBatch} from '@/api/robot'
+    import waves from '@/directive/waves' // waves directive
+    import { parseTime } from '@/utils'
+    import { fetchAdminMemberList } from '@/api/permissions'
+
+    export default {
+        name: 'robot',
+        directives: {waves},
+        data() {
+            return {
+                tableKey: 0,
+                list: null,
+                pages: 0,
+                listLoading: false,
+                paginationShow: true,
+                searchTime: '',
+                listQuery: {
+                    page: 1,
+                    id: undefined,
+                },
+                statusList:statusMap,
+
+            }
+        },
+        created() {
+            const id = this.$route.params && this.$route.params.id
+            this.getList(id)
+
+        },
+        methods: {
+            getList(id) {
+                this.listLoading = true;
+                this.listQuery.id = id
+                robotBatch(this.listQuery).then(response => {
+                    this.list = response.list;
+                    this.pages = response.pages
+
+                    // Just to simulate the time of the request
+                    this.listLoading = false
+
+                })
+            },
+
+        }
+    }
+</script>

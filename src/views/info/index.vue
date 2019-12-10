@@ -18,6 +18,7 @@
                     @change="countDict"
                     filterable
                     placeholder="处所"
+                    :props="{ checkStrictly: true,emitPath:false }"
                     style="width: 200px;"/>
             <el-cascader
                     :options="crimeTimeList"
@@ -27,6 +28,7 @@
                     @change="countDict"
                     filterable
                     placeholder="作案时机"
+                    :props="{ checkStrictly: true,emitPath:false }"
                     style="width: 200px"/>
             <el-cascader
                     :options="caseHappenRegionList"
@@ -36,6 +38,7 @@
                     @change="countDict"
                     filterable
                     placeholder="发案区划"
+                    :props="{ checkStrictly: true,emitPath:false }"
                     style="width: 200px"
             />
             <el-cascader
@@ -46,6 +49,7 @@
                     @change="countDict"
                     filterable
                     placeholder="侵入方式"
+                    :props="{ checkStrictly: true,emitPath:false }"
                     style="width: 200px"/>
             <div style="margin-top: 20px">
                 <el-cascader
@@ -56,6 +60,7 @@
                         @change="countDict"
                         placeholder="作案出口"
                         filterable
+                        :props="{ checkStrictly: true,emitPath:false }"
                         style="width: 200px"/>
                 <el-select v-model="listQuery.crimePeoples" placeholder="作案人数" center style="width: 200px">
                     <el-option
@@ -66,9 +71,15 @@
                 </el-select>
                 <el-input v-model="listQuery.crimeTools" placeholder="作案工具" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.crimeDetail" placeholder="关键字" class="mb10" style="width: 200px;"
+                <el-input v-model="listQuery.suspectName" placeholder="嫌疑人" class="mb10" style="width: 200px;"
+                          @keyup.enter.native="handleFilter"/>
+                <el-input v-model="listQuery.filters" placeholder="关键字" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
 
+                <el-button v-waves type="primary" icon="el-icon-search" @click="reset"
+                           style="float: right;margin-right: 20px">
+                    清空搜索条件
+                </el-button>
                 <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter" style="float: right;margin-right: 20px">
                     搜索
                 </el-button>
@@ -87,52 +98,52 @@
         >
             <el-table-column label="勘查号" prop="id" align="center" width="220">
                 <template slot-scope="{row}">
-                    <span>{{ row.id }}</span>
+                    <span>{{ row.selfEvidenceNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="案件性质" width="150" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.taskNo }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="发案日期" width="150" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.receiptTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="选择处所" width="150" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.reporter }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="作案区划" width="110" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.reportOrg }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="侵入方式" width="210" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.contactPhoneNumber }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="作案出口" width="110" align="center">
+            <el-table-column label="案件类别" width="150" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.caseCategory }}</span>
                 </template>
             </el-table-column>
+            <el-table-column label="发案日期" width="150" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.caseHappenTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="处所" width="150" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.sceneType }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="作案区划" width="110" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.caseAddress }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="侵入方式" width="210" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.invadeType }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="作案出口" width="110" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.escapeType }}</span>
+                </template>
+            </el-table-column>
             <el-table-column label="作案人数" width="110" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.techName }}</span>
+                    <span>{{ row.crimePeoples }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="作案工具" width="210" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.techName }}</span>
+                    <span>{{ row.crimeTools }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="主办" width="110" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.techName }}</span>
+                    <span>{{ row.mainChargerName }}</span>
                 </template>
             </el-table-column>
 
@@ -167,7 +178,7 @@
 </style>
 
 <script>
-    import {searchList} from '@/api/search'
+    import { filterEvidence } from '@/api/info'
     import { fetchAdminMemberList } from '@/api/permissions'
     import waves from '@/directive/waves' // waves directive
     import {fetchList} from '@/api/dictionary'
@@ -193,7 +204,8 @@
                     escapeType: undefined,
                     crimePeoples: undefined,
                     crimeTools: undefined,
-                    crimeDetail: undefined,
+                    suspectName: undefined,
+                    filters: undefined,
                     beginTime: undefined,
                     endTime: undefined,
                     status: 4,
@@ -242,6 +254,24 @@
             })
         },
         methods: {
+            reset() {
+                this.listQuery = {
+                    page: 1,
+                    sceneType: undefined,
+                    crimeTime: undefined,
+                    caseHappenRegion: undefined,
+                    invadeType: undefined,
+                    escapeType: undefined,
+                    crimePeoples: undefined,
+                    crimeTools: undefined,
+                    suspectName: undefined,
+                    filters: undefined,
+                    beginTime: undefined,
+                    endTime: undefined,
+                    status: 4,
+                };
+                this.searchTime = '';
+            },
             countDict(val){
                 if (val){
                     val = val.slice(-1)[0]
@@ -254,8 +284,31 @@
             },
             getList() {
                 this.listLoading = true;
-                searchList(this.listQuery).then(response => {
+                filterEvidence(this.listQuery).then(response => {
                     this.list = response.list;
+                    this.list.map(res=>{
+                        if (res.crimeTime){
+                            if (JSON.parse(res.crimeTime).constructor === Array){
+                                res.crimeTime = JSON.parse(res.crimeTime).join(' ')
+                            }
+                        }
+
+                        if (res.sceneType){
+                            if (JSON.parse(res.sceneType).constructor === Array){
+                                res.sceneType = JSON.parse(res.sceneType).join(' ')
+                            }
+                        }
+                        if (res.invadeType){
+                            if (JSON.parse(res.invadeType).constructor === Array){
+                                res.invadeType = JSON.parse(res.invadeType).join(' ')
+                            }
+                        }
+                        if (this.list.escapeType){
+                            if (JSON.parse(res.escapeType).constructor === Array){
+                                res.escapeType = JSON.parse(res.escapeType).join(' ')
+                            }
+                        }
+                    })
                     this.pages = response.pages
 
                     // Just to simulate the time of the request
@@ -264,10 +317,12 @@
                 })
             },
             handleFilter() {
-                if (this.searchTime[0].toString().length > 10)
-                    this.listQuery.beginTime = this.searchTime[0] / 1000;
-                if (this.searchTime[1].toString().length > 10)
-                    this.listQuery.endTime = this.searchTime[1] / 1000;
+                if (this.searchTime) {
+                    if (this.searchTime[0].toString().length > 10)
+                        this.listQuery.beginTime = this.searchTime[0] / 1000;
+                    if (this.searchTime[1].toString().length > 10)
+                        this.listQuery.endTime = this.searchTime[1] / 1000;
+                }
                 this.listQuery.page = 1;
                 this.getList()
             },
