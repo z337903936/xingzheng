@@ -38,134 +38,82 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="处所" prop="sceneType">
-                                <el-popover
-                                        placement="left"
-                                        width="200"
-                                        trigger="manual"
-                                        v-model="sceneTypePopover">
-                                    常用字典
-                                    <ul>
-                                        <li v-for="item in sceneTypeUserList">
-                                            <el-link @click="postForm.sceneType = item.dictName.trim()" >{{ item.dictName }}</el-link>
-                                        </li>
-                                    </ul>
+
                                     <el-cascader
                                             :options="sceneTypeList"
                                             v-model="postForm.sceneType"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-                                            @change="countDict($event,'作案选择处所')"
-                                            @visible-change="sceneTypePopover = !sceneTypePopover"
-                                            slot="reference"
                                             filterable
                                             :props="props"
                                             style="width: 100%"/>
-                                </el-popover>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="作案时机" prop="crimeTime">
-                                <el-popover
-                                        placement="left"
-                                        width="200"
-                                        trigger="manual"
-                                        v-model="crimeTimePopover">
-                                    常用字典
-                                    <ul>
-                                        <li v-for="item in crimeTimeUserList"><el-link @click="postForm.crimeTime=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
-                                    </ul>
+
                                     <el-cascader
                                             :options="crimeTimeList"
-                                            v-model="postForm.crimeTimeArray"
+                                            v-model="postForm.crimeTime"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-                                            @change="countDict($event,'作案时机')"
-                                            @visible-change="crimeTimePopover = !crimeTimePopover"
-                                            slot="reference"
+
                                             :props="props"
                                             filterable
                                             style="width: 100%"/>
-                                </el-popover>
+
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="案件发生区域" prop="caseHappenRegion">
-                                <el-popover
-                                        placement="left"
-                                        width="200"
-                                        trigger="manual"
-                                        v-model="caseHappenRegionPopover">
-                                    常用字典
-                                    <ul>
-                                        <li v-for="item in caseHappenRegionUserList"><el-link @click="postForm.caseHappenRegion=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
-                                    </ul>
+
                                     <el-cascader
                                             :options="caseHappenRegionList"
                                             v-model="postForm.caseHappenRegion"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-                                            @change="countDict($event,'行政区划')"
-                                            @visible-change="caseHappenRegionPopover = !caseHappenRegionPopover"
-                                            slot="reference"
+
+
                                             :props="emitProps"
                                             filterable
                                             style="width: 100%"
                                     />
-                                </el-popover>
+
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="侵入方式" prop="invadeType">
-                                <el-popover
-                                        placement="left"
-                                        width="200"
-                                        trigger="manual"
-                                        v-model="invadeTypePopover">
-                                    常用字典
-                                    <ul>
-                                        <li v-for="item in invadeTypeUserList"><el-link @click="postForm.invadeType=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
-                                    </ul>
+
                                     <el-cascader
                                             :options="invadeTypeList"
                                             v-model="postForm.invadeType"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-                                            @change="countDict($event,'侵入方式')"
-                                            @visible-change="invadeTypePopover = !invadeTypePopover"
-                                            slot="reference"
+
+
                                             filterable
                                             :props="props"
                                             style="width: 100%"/>
-                                </el-popover>
+
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="作案出口" prop="escapeType">
-                                <el-popover
-                                        placement="left"
-                                        width="200"
-                                        trigger="manual"
-                                        v-model="escapeTypePopover">
-                                    常用字典
-                                    <ul>
-                                        <li v-for="item in escapeTypeUserList"><el-link @click="postForm.escapeType=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
-                                    </ul>
+
                                     <el-cascader
                                             :options="escapeTypeList"
                                             v-model="postForm.escapeType"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-                                            @change="countDict($event,'作案出口')"
-                                            @visible-change="escapeTypePopover = !escapeTypePopover"
-                                            slot="reference"
+
                                             filterable
                                             :props="props"
                                             style="width: 100%"/>
-                                </el-popover>
+
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -177,28 +125,17 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="案件类别" prop="caseCategory">
-                                <el-popover
-                                        placement="left"
-                                        width="200"
-                                        trigger="manual"
-                                        v-model="caseCategoryPopover">
-                                    常用字典
-                                    <ul>
-                                        <li v-for="item in caseCategoryUserList"><el-link @click="postForm.caseCategory=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
-                                    </ul>
+
                                     <el-cascader
                                             :options="caseCategoryList"
                                             v-model="postForm.caseCategory"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-                                            @change="countDict($event,'案件类别')"
-                                            @visible-change="caseCategoryPopover = !caseCategoryPopover"
-                                            slot="reference"
                                             :props="emitProps"
                                             filterable
                                             style="width: 100%"
                                     />
-                                </el-popover>
+
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -223,7 +160,7 @@
 </template>
 
 <script>
-    import { createRobot, updateRobot } from '@/api/robot'
+    import { createRobot, updateRobot,robotDetail } from '@/api/robot'
     import {fetchList,userDictList} from '@/api/dictionary'
     import {fetchAdminMemberList} from '@/api/permissions'
 
@@ -239,11 +176,12 @@
         data() {
             return {
                 props: {
-                    multiple: true,
+                    checkStrictly: true,
                     emitPath:false
                 },
                 emitProps:{
-                    emitPath:false
+                    emitPath:false,
+                    checkStrictly: true
                 },
                 postForm: {
                     id: undefined,
@@ -264,7 +202,7 @@
                 userShowList: [],
                 rules: {},
                 loading: false,
-                smsContentChange: '',
+
 
                 caseCategoryList: [],
                 caseHappenRegionList: [],
@@ -272,20 +210,6 @@
                 crimeTimeList: [],
                 invadeTypeList: [],
                 escapeTypeList: [],
-
-                caseCategoryUserList: [],
-                caseHappenRegionUserList: [],
-                sceneTypeUserList: [],
-                crimeTimeUserList: [],
-                invadeTypeUserList: [],
-                escapeTypeUserList: [],
-
-                sceneTypePopover: false,
-                crimeTimePopover: false,
-                caseHappenRegionPopover: false,
-                invadeTypePopover: false,
-                escapeTypePopover: false,
-                caseCategoryPopover: false,
 
 
             }
@@ -323,25 +247,6 @@
             })
 
 
-            this.getUserDict('案件类别').then(data => {
-                this.caseTypeUserList = data.list
-            })
-            this.getUserDict('行政区划').then(data => {
-                this.caseHappenRegionUserList = data.list
-            })
-            this.getUserDict('作案选择处所').then(data => {
-                this.sceneTypeUserList = data.list
-            })
-            this.getUserDict('作案时机').then(data => {
-                this.crimeTimeUserList = data.list
-            })
-            this.getUserDict('侵入方式').then(data => {
-                this.invadeTypeUserList = data.list
-            })
-            this.getUserDict('作案出口').then(data => {
-                this.escapeTypeUserList = data.list
-            })
-
             if (this.isEdit) {
                 const id = this.$route.params && this.$route.params.id
                 this.postForm.id = id;
@@ -350,25 +255,6 @@
 
         },
         methods: {
-            countDict(val,type){
-                if (val) {
-                    if (val.constructor === Array){
-                        val.map(data=>{
-                            const send={
-                                name:data,
-                                cateName:type
-                            };
-                            this.$store.dispatch('PostUserUseDict', send)
-                        })
-                    }else{
-                        const send={
-                            name:val,
-                            cateName:type
-                        };
-                        this.$store.dispatch('PostUserUseDict', send)
-                    }
-                }
-            },
             getUserDict(parentName){
                 return new Promise((resolve, reject) => {
                     const data = {
@@ -462,7 +348,7 @@
             },
 
             fetchData(id) {
-                fetchDna(id).then(data => {
+                robotDetail(id).then(data => {
                     this.postForm = Object.assign({}, data);
                     if (this.postForm.examBeginTime.toString().length===10)
                         this.postForm.examBeginTime = data.examBeginTime*1000;
@@ -485,10 +371,10 @@
 
                 var data = Object.assign({},  this.postForm);
 
-                if (data.examBeginTime.toString().length>10)
+                if (data.examBeginTime &&data.examBeginTime.toString().length>10)
                     data.examBeginTime =  parseInt(data.examBeginTime/1000);
 
-                if (data.examEndTime.toString().length>10)
+                if (data.examEndTime && data.examEndTime.toString().length>10)
                     data.examEndTime =  parseInt(data.examEndTime/1000);
 
                 this.$refs.postForm.validate(valid => {
@@ -518,7 +404,7 @@
                                 this.loading = false
                             })
                         } else {
-                            console.log(data)
+                           
                             createRobot(data).then(data => {
                                 this.loading = false
                                 if (data.code === 200) {

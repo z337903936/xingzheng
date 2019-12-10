@@ -26,6 +26,28 @@
                     <span>{{ row.matchCount }}</span>
                 </template>
             </el-table-column>
+            <el-table-column label="勘查开始时间" width="250" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="勘查开始时间" width="250" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.examEndTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                </template>
+            </el-table-column>
+
+
+            <el-table-column label="任务开始时间" width="250" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.beginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="任务结束时间" width="250" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.endTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                </template>
+            </el-table-column>
 
             <el-table-column label="案件分类" align="center" width="200">
                 <template slot-scope="{row}">
@@ -73,36 +95,12 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="勘查开始时间" width="250" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="勘查开始时间" width="250" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.examEndTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-                </template>
-            </el-table-column>
-
-
-            <el-table-column label="勘查开始时间" width="250" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.beginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="勘查开始时间" width="250" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.endTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-                </template>
-            </el-table-column>
-
-
             <el-table-column label="任务状态" width="110" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.status===1?'未开始':row.status===2?'进行中':'已结束' }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" align="center" width="280" class-name="small-padding fixed-width">
+            <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <router-link :to="'/search/taskResult/'+row.id">
                         <el-button type="success" size="mini" >查看结果</el-button>
@@ -138,6 +136,22 @@
     import { parseTime } from '@/utils'
     import { fetchAdminMemberList } from '@/api/permissions'
 
+    const statusMap = [
+        {
+            id: 0,
+            title: '全部'
+        },
+        {
+            id: 1,
+            title: '未领取'
+        }, {
+            id: 2,
+            title: '进行中'
+        }, {
+            id: 3,
+            title: '已完成'
+        },
+    ];
     export default {
         name: 'robot',
         directives: {waves},
