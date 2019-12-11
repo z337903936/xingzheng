@@ -80,19 +80,18 @@
                     <span>{{ row.status===1?'未开始':row.status===2?'进行中':'已结束' }}</span>
                 </template>
             </el-table-column>
-
-            <el-table-column label="操作" align="center" width="280" class-name="small-padding fixed-width">
+            <el-table-column label="操作" align="center" fixed="right"  width="380" class-name="small-padding">
                 <template slot-scope="{row}">
                     <router-link :to="'/robot/edit/'+row.id">
                         <el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>
                     </router-link>
                     <router-link :to="'/robot/taskList/'+row.id">
-                        <el-button v-waves type="primary" size="mini" style="width: 90px" >任务批次</el-button>
+                        <el-button v-waves type="primary" icon="el-icon-tickets" size="mini" style="width: 100px" >任务批次</el-button>
                     </router-link>
-                    <el-button v-waves type="primary" size="mini" v-if="row.status === 1"  @click="handleTask(row,true)">
+                    <el-button v-waves type="success" icon="el-icon-video-play" size="mini" style="width: 100px"  @click="handleTask(row,true)">
                         开始任务
                     </el-button>
-                    <el-button v-waves type="primary" size="mini" v-if="row.status === 2"  @click="handleTask(row,false)">
+                    <el-button v-waves type="warning" icon="el-icon-video-pause" size="mini" style="width: 100px"  v-if="row.status ===2" @click="handleTask(row,false)">
                         结束任务
                     </el-button>
                 </template>
