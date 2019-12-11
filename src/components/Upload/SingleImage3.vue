@@ -62,7 +62,7 @@ export default {
       this.$emit('input', val)
     },
     handleImageSuccess(res) {
-      console.log(res);
+
       this.emitInput(res.imgUrl);
       this.$emit('tell',res)
 

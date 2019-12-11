@@ -1,5 +1,12 @@
 <template>
     <div class="forum">
+        <div style="margin-top: 20px;text-align: right">
+            <router-link :to="'/forum/create/'" >
+                <el-button type="success" size="small" style="padding: 10px 20px;width: 100px;font-size: 17px"><svg-icon icon-class="fatie" /> 发帖</el-button>
+            </router-link>
+        </div>
+
+
         <div class="forum-content">
 
             <el-tabs v-model="activeIndex" type="card" :before-leave="changeCategory">

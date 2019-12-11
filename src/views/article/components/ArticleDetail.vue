@@ -88,7 +88,7 @@ import { fetchAllCateList } from '@/api/category'
 const defaultForm = {
   title: '',
   author: '',
-  categoryId: '1',
+  categoryId: '',
   content: '',
   digest: '',
   placeTop: 'false',

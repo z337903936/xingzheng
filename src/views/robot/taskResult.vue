@@ -1,6 +1,13 @@
 <template>
     <div class="app-container">
+        <div class="filter-container">
 
+                <el-button v-waves type="primary"  @click="reset"
+                           style="float: right;margin-right: 20px">
+                    <svg-icon icon-class="jichuguanli" /> 申请串并
+                </el-button>
+
+        </div>
         <el-table
                 v-loading="listLoading"
                 :key="tableKey"
@@ -9,31 +16,41 @@
                 fit
                 highlight-current-row
                 style="width: 100%;"
+                @selection-change="selectTask"
         >
-            <el-table-column label="案件编号"  align="center" width="220px" >
+            <el-table-column
+                    v-model="taskId"
+                    type="selection"
+                    width="55"/>
+            <el-table-column label="勘查号"  align="center" width="220px" >
                 <template slot-scope="{row}">
-                    <span>{{ row.evidence.caseNo }}</span>
+                    <span>{{ row.evidence.selfEvidenceNo }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="接警记录编号"  align="center" width="320px">
+            <el-table-column label="发案日期"  align="center" width="320px">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidence.recordNo }}</span>
+                    <span>{{ row.evidence.caseHappenTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="警情号"   align="center" width="320px">
+            <el-table-column label="发案地址"   align="center" width="320px">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidence.instanceNo }}</span>
+                    <span>{{ row.evidence.caseAddress }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="案件分类" align="center" width="320px">
+            <el-table-column label="发案区划" align="center" width="320px">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidence.caseCategory }}</span>
+                    <span>{{ row.evidence.caseHappenRegion }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="勘查开始时间" align="center" width="220px">
+            <el-table-column label="案件性质" align="center" width="220px">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidence.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                    <span>{{ row.evidence.caseType  }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="主办" align="center" width="220px">
+                <template slot-scope="{row}">
+                    <span>{{ row.evidence.mainChargerName }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
@@ -86,7 +103,7 @@
                     page: 1,
                     id: undefined,
                 },
-
+                taskId: [],
 
             }
         },
@@ -95,6 +112,11 @@
             this.getList(id)
         },
         methods: {
+            selectTask(selection) {
+                this.taskId = selection.map(data => {
+                    return data.id
+                })
+            },
             getList(id) {
                 this.listQuery.id = id
                 this.listLoading = true;

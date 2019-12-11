@@ -682,6 +682,46 @@
           </el-table-column>
         </el-table>
       </el-form-item>
+      <el-divider>三录</el-divider>
+      <el-row :gutter="10">
+        <el-col :span="12">
+          <el-upload
+                  drag
+                  multiple
+                  :show-file-list="false"
+                  :on-success="handleFileSuccess"
+                  action="/v1/cp/upload/">
+            <i class="el-icon-upload"/>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          </el-upload>
+        </el-col>
+        <el-col :span="12">
+          <el-table
+                  :data="list.documentList"
+                  border
+                  row-key="id"
+                  @selection-change="selectFile"
+          >
+            <el-table-column
+                    v-model="fileId"
+                    type="selection"
+                    width="55"/>
+
+            <el-table-column
+                    prop="materialNo"
+                    label="文件名" align="center"
+            >
+              <template slot-scope="{row}">
+                <span>{{ row.name }}</span>
+              </template>
+            </el-table-column>
+
+          </el-table>
+        </el-col>
+
+      </el-row>
+
+
 
       <div style="margin: 40px 0;text-align: center;" >
         <el-button v-loading="loading" type="primary" style="width: 200px" @click="submitForm()">保存</el-button>
@@ -1094,6 +1134,7 @@ export default {
         emitPath:false
       },
       tableKey: 0,
+      imageUrl: '',
       dialogPoint: false,
       sceneProtectUidList: [
         {
@@ -1261,7 +1302,7 @@ export default {
         concernedPersonList: [],
         materialList: [],
         suspectPersonList: [],
-        documentList: []
+        documentList: [],
 
       },
       listRules: {},
@@ -1283,6 +1324,7 @@ export default {
 
       dialogSuspectPersonListFormIndex:'',
       taskId: [],
+      fileId: [],
       materialCategoryList: [],
       searchId: null,
 
@@ -1609,6 +1651,14 @@ export default {
 
   },
   methods: {
+    handleFileSuccess(res) {
+      var file = {
+        name:res.originalFileName,
+        fileUrl:res.imgUrl,
+      }
+      this.list.documentList.push(file)
+
+    },
     materialChange(val){
       this.isFingerprint = false
       this.isDna = false
@@ -1763,6 +1813,11 @@ export default {
 
     selectTask(selection) {
       this.taskId = selection.map(data => {
+        return data.id
+      })
+    },
+    selectFile(selection) {
+      this.fileId = selection.map(data => {
         return data.id
       })
     },

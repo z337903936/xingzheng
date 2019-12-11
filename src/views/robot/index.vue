@@ -46,19 +46,45 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="任务名称"   prop="id" align="center" >
+            <el-table-column label="任务名称"   prop="id" align="center" width="200">
                 <template slot-scope="{row}">
                     <span>{{ row.name }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="案件分类" align="center" width="200">
+            <el-table-column label="研判依据" align="center" width="450">
                 <template slot-scope="{row}">
-                    <span>{{ row.caseCategory }}</span>
+                    <span>
+                        <div v-if="row.sceneType ">
+                            处所：{{ row.sceneType  }}
+                        </div>
+                        <div v-if="row.crimeTime ">
+                            作案时机：{{ row.crimeTime  }}
+                        </div>
+                        <div v-if="row.caseHappenRegion ">
+                            案件发生区域：{{ row.caseHappenRegion  }}
+                        </div>
+                        <div v-if="row.invadeType ">
+                            侵入方式：{{ row.invadeType  }}
+                        </div>
+                        <div v-if="row.escapeType ">
+                            作案出口：{{ row.escapeType  }}
+                        </div>
+                        <div v-if="row.crimeTools ">
+                            作案工具：{{ row.crimeTools  }}
+                        </div>
+                        <div v-if="row.crimeDetail ">
+                            作案过程：{{ row.crimeDetail  }}
+                        </div>
+                        <div v-if="row.caseCategory ">
+                            案件分类：{{ row.caseCategory  }}
+                        </div>
+                    </span>
+
                 </template>
             </el-table-column>
 
-            <el-table-column label="勘查开始时间" width="250" align="center">
+            <el-table-column label="勘查开始时间" width="200" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
@@ -70,7 +96,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="创建日期"  width="250" align="center">
+            <el-table-column label="创建日期"  width="200" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
@@ -227,7 +253,25 @@
                 robotList(this.listQuery).then(response => {
                     this.list = response.list;
                     this.pages = response.pages
+                    this.list.map(data=>{
+                        // var content = ''
+                        // if (data.crimeTime){
+                        //     content += '案件类别:' +data.crimeTime
+                        // }
+                        // if (data.caseHappenRegion){
+                        //     content += '案件发生区域:' +data.crimeTime
+                        // }
+                        // if (data.crimeTime){
+                        //     content += '案件类别:' +data.crimeTime
+                        // }
+                        // if (data.crimeTime){
+                        //     content += '案件类别:' +data.crimeTime
+                        // }
+                        // if (data.crimeTime){
+                        //     content += '案件类别:' +data.crimeTime
+                        // }
 
+                    });
                     // Just to simulate the time of the request
                     this.listLoading = false
 
