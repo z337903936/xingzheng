@@ -160,7 +160,7 @@
         },
         created() {
             const id = this.$route.params && this.$route.params.id;
-            this.listQuery.evienceId = id;
+            this.listQuery.evidenceId = Number(id);
             this.getList()
             this.getUserList()
         },
