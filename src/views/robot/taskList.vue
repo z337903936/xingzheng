@@ -10,40 +10,40 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="批次号"  align="center" >
+            <el-table-column label="批次号"  align="center" width="180" >
                 <template slot-scope="{row}">
                     <span>{{ row.batchNo }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="任务名称"  align="center" >
+            <el-table-column label="任务名称"  align="center" width="90">
                 <template slot-scope="{row}">
                     <span>{{ row.taskName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="匹配数"   align="center" >
+            <el-table-column label="匹配数"   align="center" width="90">
                 <template slot-scope="{row}">
                     <span>{{ row.matchCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="勘查开始时间" width="250" align="center">
+            <el-table-column label="勘查开始时间" width="200" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="勘查开始时间" width="250" align="center">
+            <el-table-column label="勘查开始时间" width="200" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.examEndTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
 
 
-            <el-table-column label="任务开始时间" width="250" align="center">
+            <el-table-column label="任务开始时间" width="200" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.beginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="任务结束时间" width="250" align="center">
+            <el-table-column label="任务结束时间" width="200" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.endTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
@@ -89,9 +89,9 @@
                     <span>{{ row.crimeDetail }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="作案人数 " align="center" width="200">
+            <el-table-column label="作案人数 " align="center" width="90">
                 <template slot-scope="{row}">
-                    <span>{{ row.crimePeoples }}</span>
+                    <span>{{ row.crimePeoples===0?'不确定':row.status===1?'1人':row.status===2?'两个':'多人' }}</span>
                 </template>
             </el-table-column>
 
@@ -102,8 +102,8 @@
             </el-table-column>
             <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <router-link :to="'/search/taskResult/'+row.id">
-                        <el-button type="success" size="mini" >查看结果</el-button>
+                    <router-link :to="'/robot/taskResult/'+row.id">
+                        <el-button type="success" size="mini" icon=""  style="width: 100px">查看结果</el-button>
                     </router-link>
                 </template>
             </el-table-column>
@@ -168,6 +168,7 @@
                     id: undefined,
                 },
                 statusList:statusMap,
+
 
             }
         },

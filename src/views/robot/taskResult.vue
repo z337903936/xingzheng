@@ -10,35 +10,35 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="案件编号"  align="center" >
+            <el-table-column label="案件编号"  align="center" width="220px" >
                 <template slot-scope="{row}">
-                    <span>{{ row.caseNo }}</span>
+                    <span>{{ row.evidence.caseNo }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="接警记录编号"  align="center" >
+            <el-table-column label="接警记录编号"  align="center" width="320px">
                 <template slot-scope="{row}">
-                    <span>{{ row.recordNo }}</span>
+                    <span>{{ row.evidence.recordNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="警情号"   align="center" >
+            <el-table-column label="警情号"   align="center" width="320px">
                 <template slot-scope="{row}">
-                    <span>{{ row.instanceNo }}</span>
+                    <span>{{ row.evidence.instanceNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="案件分类" align="center" >
+            <el-table-column label="案件分类" align="center" width="320px">
                 <template slot-scope="{row}">
-                    <span>{{ row.caseCategory }}</span>
+                    <span>{{ row.evidence.caseCategory }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="勘查开始时间" align="center">
+            <el-table-column label="勘查开始时间" align="center" width="220px">
                 <template slot-scope="{row}">
-                    <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                    <span>{{ row.evidence.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" align="center" width="280" class-name="small-padding fixed-width">
+            <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <router-link :to="'/search/show-search/'+row.id">
+                    <router-link :to="'/search/show-search/'+row.evidenceId">
                         <el-button type="success" size="mini" >查看</el-button>
                     </router-link>
                 </template>
@@ -86,7 +86,7 @@
                     page: 1,
                     id: undefined,
                 },
-                statusList:statusMap,
+
 
             }
         },
