@@ -88,7 +88,7 @@
                     <router-link :to="'/robot/taskList/'+row.id">
                         <el-button v-waves type="primary" icon="el-icon-tickets" size="mini" style="width: 100px" >任务批次</el-button>
                     </router-link>
-                    <el-button v-waves type="success" icon="el-icon-video-play" size="mini" style="width: 100px"  @click="handleTask(row,true)">
+                    <el-button v-waves type="success" icon="el-icon-video-play" size="mini" style="width: 100px"  v-if="row.status !==2" @click="handleTask(row,true)">
                         开始任务
                     </el-button>
                     <el-button v-waves type="warning" icon="el-icon-video-pause" size="mini" style="width: 100px"  v-if="row.status ===2" @click="handleTask(row,false)">
@@ -190,7 +190,7 @@
                                 showClose: true,
                                 duration: 2000
                             })
-
+                            this.getList();
                         } else {
                             this.$message({
                                 message: response.reason,
@@ -209,6 +209,7 @@
                                 showClose: true,
                                 duration: 2000
                             })
+                            this.getList();
                         } else {
                             this.$message({
                                 message: response.reason,
