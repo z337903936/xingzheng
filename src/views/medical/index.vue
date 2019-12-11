@@ -1,13 +1,15 @@
 <template>
     <div class="app-container">
         <div class="filter-container">
-            <div><el-date-picker
+            <div>
+                <el-date-picker
                     v-model="searchTime"
                     type="datetimerange"
                     range-separator="至"
                     start-placeholder="开始时间"
                     end-placeholder="结束时间"
                     value-format="timestamp"
+                    style="width: 405px;"
             />
 
                 <el-input v-model="listQuery.taskNo" placeholder="任务号" class="mb10" style="width: 200px;"

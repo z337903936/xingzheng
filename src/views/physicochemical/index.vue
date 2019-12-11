@@ -8,6 +8,7 @@
                     start-placeholder="开始时间"
                     end-placeholder="结束时间"
                     value-format="timestamp"
+                    style="width: 405px;"
             />
                 <el-select v-model="listQuery.leaderName" placeholder="移交人" center>
                     <el-option
@@ -220,7 +221,7 @@
             //         }
             //     }))
             // },
-            
+
         }
     }
 </script>

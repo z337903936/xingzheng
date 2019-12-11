@@ -9,6 +9,7 @@
                         start-placeholder="移交开始时间"
                         end-placeholder="移交结束时间"
                         value-format="timestamp"
+                        style="width: 405px;"
                 />
                 <el-input v-model="listQuery.materialNo" placeholder="物证编号" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
@@ -272,7 +273,7 @@
             //         }
             //     }))
             // },
-            
+
         }
     }
 </script>

@@ -45,6 +45,7 @@
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
                                             filterable
+                                            clearable
                                             :props="props"
                                             style="width: 100%"/>
                             </el-form-item>
@@ -59,7 +60,7 @@
                                             v-model="postForm.crimeTime"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-
+                                            clearable
                                             :props="props"
                                             filterable
                                             style="width: 100%"/>
@@ -74,8 +75,7 @@
                                             v-model="postForm.caseHappenRegion"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-
-
+                                            clearable
                                             :props="emitProps"
                                             filterable
                                             style="width: 100%"
@@ -93,8 +93,7 @@
                                             v-model="postForm.invadeType"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-
-
+                                            clearable
                                             filterable
                                             :props="props"
                                             style="width: 100%"/>
@@ -109,7 +108,7 @@
                                             v-model="postForm.escapeType"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-
+                                            clearable
                                             filterable
                                             :props="props"
                                             style="width: 100%"/>
@@ -131,6 +130,7 @@
                                             v-model="postForm.caseCategory"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
+                                            clearable
                                             :props="emitProps"
                                             filterable
                                             style="width: 100%"
@@ -140,6 +140,9 @@
                         </el-col>
                     </el-row>
 
+                    <el-form-item label="关键字" prop="keyword">
+                        <el-input v-model="postForm.keyword" type="text"/>
+                    </el-form-item>
                     <el-form-item label="作案过程" prop="crimeDetail">
                         <el-input v-model="postForm.crimeDetail" type="textarea"/>
                     </el-form-item>
@@ -197,6 +200,7 @@
                     caseCategory: "",
                     examBeginTime: '',
                     examEndTime: '',
+                    keyword: '',
                 },
                 userList: [],
                 userShowList: [],
@@ -311,6 +315,7 @@
                     caseCategory: "",
                     examBeginTime: '',
                     examEndTime: '',
+                    keyword: '',
                 }
             },
             search(parentName, filter = null) {

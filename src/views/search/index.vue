@@ -7,6 +7,7 @@
                     range-separator="至"
                     start-placeholder="开始时间"
                     end-placeholder="结束时间"
+                    style="width: 405px;"
             />
 
                 <el-cascader
