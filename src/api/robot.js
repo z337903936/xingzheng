@@ -8,6 +8,15 @@ export function robotList(data) {
     })
 }
 
+
+export function robotDetail(id) {
+    return request({
+        url: '/v1/cp/tasks/' + id + '/',
+        method: 'get',
+        params: {}
+    })
+}
+
 export function createRobot(data) {
     return request({
         url: '/v1/cp/tasks/new/',

@@ -255,23 +255,23 @@
 
             <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <el-button type="primary" size="small" @click="handleAction(row,true)" v-if="row.status===1 && row.stepName === '物证入库'">
+                    <el-button type="primary" size="small" icon="el-icon-document-checked" @click="handleAction(row,true)" v-if="row.status===1 && row.stepName === '物证入库'">
                         同意入库
                     </el-button>
-                    <el-button type="primary" size="small" @click="handleAction(row,false)" v-if="row.status===1 && row.stepName === '物证入库'">
+                    <el-button type="warning" size="small" icon="el-icon-document-delete" @click="handleAction(row,false)" v-if="row.status===1 && row.stepName === '物证入库'">
                         拒绝入库
                     </el-button>
-                    <el-button type="primary" size="small" @click="handleAcceptTask(row)" v-if="row.status===1 && row.stepName !== '痕检现勘' && row.stepName !== '物证入库'">
+                    <el-button type="primary" size="small" icon="el-icon-document-checked" @click="handleAcceptTask(row)" v-if="row.status===1 && row.stepName !== '痕检现勘' && row.stepName !== '物证入库'">
                         接收任务
                     </el-button>
-                    <el-button type="primary" size="small" @click="handleAcceptTaskSeach(row)" v-if="row.status===1 && row.stepName === '痕检现勘' && row.stepName !== '物证入库'">
+                    <el-button type="primary" size="small" icon="el-icon-document-checked" @click="handleAcceptTaskSeach(row)" v-if="row.status===1 && row.stepName === '痕检现勘'">
                         接收任务
                     </el-button>
-                    <el-button type="primary" size="small" @click="handleWriteResult(row)" v-if="row.status===2 && row.stepName !== '痕检现勘' && row.stepName !== '物证入库'">
+                    <el-button type="success" size="small" icon="el-icon-tickets" @click="handleWriteResult(row)" v-if="row.status===2 && row.stepName !== '痕检现勘' && row.stepName !== '物证入库' && row.stepName !== '接警'">
                         填写结果
                     </el-button>
-                    <router-link :to="'/search/update-search/'+row.evidenceId" v-if="row.status===2 && row.stepName==='痕检现勘' && row.stepName !== '物证入库'">
-                        <el-button type="primary" size="small" >编辑现勘</el-button>
+                    <router-link :to="'/search/update-search/'+row.evidenceId" v-if="row.status===2 && row.stepName==='痕检现勘'">
+                        <el-button icon="el-icon-edit"  type="primary" size="small" >编辑现勘</el-button>
                     </router-link>
                 </template>
             </el-table-column>
@@ -293,7 +293,10 @@
                     label-position="left"
                     label-width="100px"
                     style="width: 400px; margin-left:50px;">
+                <div v-if="">
 
+                </div>
+                <el-divider></el-divider>
                 <el-form-item label="送检单位" prop="name">
                     <el-input v-model="acceptTaskFrom.requireOrg"/>
                 </el-form-item>
@@ -809,6 +812,9 @@
             handleAcceptTask(task){
                 this.dialogFormAccept =true;
                 this.acceptTaskFrom.stepId  = task.id
+                if (task) {
+
+                }
             },
             acceptTask(){
                 let  data = this.acceptTaskFrom;

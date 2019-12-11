@@ -40,7 +40,7 @@
                         placeholder="关键字"
                         style="width: 200px;"
                         @keyup.enter.native="handleFilter"/>
-                <el-button v-waves type="primary" icon="el-icon-search" @click="reset"
+                <el-button v-waves type="primary" icon="el-icon-refresh" @click="reset"
                            style="float: right;margin-right: 20px">
                     清空搜索条件
                 </el-button>
@@ -48,7 +48,7 @@
                            style="float: right;margin-right: 20px">
                     搜索
                 </el-button>
-                <router-link :to="'/alarm/create-alarm/'" style="float: right;margin-right: 10px">
+                <router-link :to="'/alarm/create-alarm/'" style="float: right;margin-right: 20px">
                     <el-button v-waves type="primary" icon="el-icon-edit">添加</el-button>
                 </router-link>
 
@@ -148,7 +148,7 @@
                     <router-link :to="'/alarm/edit-alarm/'+row.id">
                         <el-button v-waves type="primary" size="mini" icon="el-icon-edit">编辑</el-button>
                     </router-link>
-                    <el-button v-waves :disabled="judge(row)" type="primary" size="mini" icon="el-icon-delete"
+                    <el-button v-waves :disabled="judge(row)" type="danger" size="mini" icon="el-icon-delete"
                                @click="handleDelete(row)">删除
                     </el-button>
                     <el-button v-waves :disabled="judgeG(row)" type="primary" size="mini" style="width: 80px"

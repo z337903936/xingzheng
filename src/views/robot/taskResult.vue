@@ -72,7 +72,7 @@
     import { fetchAdminMemberList } from '@/api/permissions'
 
     export default {
-        name: 'robot',
+        name: 'robotTaskResult',
         directives: {waves},
         data() {
             return {

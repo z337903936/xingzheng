@@ -19,11 +19,15 @@
                         :label="item.title"
                         :value="item.id"/>
                 </el-select>
-                <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
+                <el-button v-waves type="primary" icon="el-icon-refresh" @click="reset"
+                           style="float: right;margin-right: 20px">
+                    清空搜索条件
+                </el-button>
+                <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter" style="float: right;margin-right: 20px">
                     搜索
                 </el-button>
                 <router-link :to="'/robot/create'">
-                    <el-button v-waves type="primary"  icon="el-icon-edit">创建任务</el-button>
+                    <el-button v-waves type="primary"  icon="el-icon-edit" style="float: right;margin-right: 20px">创建任务</el-button>
                 </router-link>
 
                 <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
@@ -83,7 +87,7 @@
                         <el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>
                     </router-link>
                     <router-link :to="'/robot/taskList/'+row.id">
-                        <el-button v-waves type="primary" size="mini" style="width: 90px" >运行列表</el-button>
+                        <el-button v-waves type="primary" size="mini" style="width: 90px" >任务批次</el-button>
                     </router-link>
                     <el-button v-waves type="primary" size="mini" v-if="row.status === 1"  @click="handleTask(row,true)">
                         开始任务
@@ -164,6 +168,16 @@
             this.getList()
         },
         methods: {
+            reset() {
+                this.listQuery = {
+                    page: 1,
+                    beginTime: undefined,
+                    endTime: undefined,
+                    name: undefined,
+                    status: 0,
+                };
+                this.searchTime = '';
+            },
             handleTask(data,type){
                 const sendData={
                     taskId:data.id

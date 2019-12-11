@@ -6,7 +6,7 @@
 import MemberDetail from './memberDetail'
 
 export default {
-  name: 'EditAlarm',
+  name: 'EditDna',
   components: { MemberDetail }
 }
 </script>

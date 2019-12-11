@@ -61,7 +61,7 @@
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="12">
-                            <el-form-item label="受理人" prop="handlerUid">
+                            <el-form-item label="提取人" prop="handlerUid">
                                 <el-select v-model="postForm.handlerUid"
                                            class="filter-item"
                                            allow-create

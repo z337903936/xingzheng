@@ -60,7 +60,7 @@
                     </el-select>
                     <el-input v-model="listQuery.filters" placeholder="关键字" style="width: 200px;"
                               @keyup.enter.native="handleFilter"/>
-                    <el-button v-waves type="primary" icon="el-icon-search" @click="reset"
+                    <el-button v-waves type="primary" icon="el-icon-refresh" @click="reset"
                                style="float: right;margin-right: 20px">
                         清空搜索条件
                     </el-button>
@@ -142,11 +142,11 @@
             <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <router-link :to="'/search/update-search/'+row.id">
-                        <el-button type="primary" size="mini" >编辑</el-button>
+                        <el-button type="primary" size="mini" icon="el-icon-edit" >编辑</el-button>
                     </router-link>
 
                     <router-link :to="'/search/show-search/'+row.id">
-                        <el-button type="success" size="mini" >查看</el-button>
+                        <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
                     </router-link>
                     <router-link :to="'/transferLog/index/'+row.id">
                         <el-button type="success" size="mini" style="width: 80px">物证去向</el-button>

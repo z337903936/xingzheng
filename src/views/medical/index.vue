@@ -33,11 +33,14 @@
                 <el-input v-model="listQuery.caseCategory" placeholder="案件类别" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
                 <el-checkbox v-model="listQuery.hasTransfered">是否移交</el-checkbox>
-
-                <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
+                <el-button v-waves type="primary" icon="el-icon-refresh" @click="reset"
+                           style="float: right;margin-right: 20px">
+                    清空搜索条件
+                </el-button>
+                <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter" style="float: right;margin-right: 20px">
                     搜索
                 </el-button>
-                <router-link :to="'/medical/create-medical'">
+                <router-link :to="'/medical/create-medical'" style="float: right;margin-right: 20px">
                     <el-button v-waves type="primary"  icon="el-icon-edit">添加</el-button>
                 </router-link>
 
@@ -171,6 +174,26 @@
             this.getList()
         },
         methods: {
+            reset() {
+                this.listQuery = {
+                    page: 1,
+                    beginTime: undefined,
+                    endTime: undefined,
+                    taskNo: undefined,
+                    delegateOrg: undefined,
+                    delegateName: undefined,
+                    digest: undefined,
+                    injure: undefined,
+                    delegateTarget: undefined,
+                    delegateResult: undefined,
+                    refereeName: undefined,
+                    documentNo: undefined,
+                    supportName: undefined,
+                    caseCategory: undefined,
+                    hasTransfered: undefined,
+                };
+                this.searchTime = '';
+            },
             getList() {
                 this.listLoading = true;
                 fetchMedicalList(this.listQuery).then(response => {
@@ -193,7 +216,7 @@
                 this.listQuery.page = 1;
                 this.getList()
             },
-            
+
         }
     }
 </script>

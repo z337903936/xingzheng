@@ -153,7 +153,7 @@
         },
     ];
     export default {
-        name: 'robot',
+        name: 'robotTaskList',
         directives: {waves},
         data() {
             return {

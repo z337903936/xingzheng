@@ -9,70 +9,114 @@
                 <div class="postInfo-container">
                     <el-row :gutter="20">
                         <el-col :span="12">
-                            <el-form-item label="送检号" prop="reporter">
-                                <el-input v-model="postForm.reporter"/>
+                            <el-form-item label="勘查号" prop="evidenceNo">
+                                <el-input v-model="postForm.evidenceNo"/>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="送检人" prop="reportOrg">
-                                <el-input v-model="postForm.reportOrg"/>
+                            <el-form-item label="任务号" prop="taskNo">
+                                <el-input v-model="postForm.taskNo"/>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="12">
-                            <el-form-item label="送检日期" prop="receiptTimeShow">
+                            <el-form-item label="DNA编号" prop="materialNo">
+                                <el-input v-model="postForm.materialNo"/>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="移交人" prop="requestUid">
+                                <el-select v-model="postForm.requestUid"
+                                           class="filter-item"
+                                           allow-create
+                                           filterable
+                                           default-first-option
+                                           style="width: 100%">
+                                    <el-option
+                                            v-for="item in userList"
+                                            :value-key="item.id"
+                                            :label="item.title"
+                                            :value="item.id"/>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="送检日期" prop="requestTime">
                                 <el-date-picker
-                                        v-model="postForm.receiptTimeShow"
+                                        v-model="postForm.requestTime"
                                         type="datetime"
-                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        value-format="timestamp"
                                         placeholder="选择时间"
                                         style="width: 100%"/>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="送检单位" prop="contactPhoneNumber">
-                                <el-input v-model="postForm.contactPhoneNumber"/>
+                            <el-form-item label="送检单位" prop="requestOrg">
+                                <el-input v-model="postForm.requestOrg"/>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="12">
-                            <el-form-item label="受理人" prop="monitorUid">
-                                <el-input v-model="postForm.reportOrg"/>
+                            <el-form-item label="提取人" prop="handlerUid">
+                                <el-select v-model="postForm.handlerUid"
+                                           class="filter-item"
+                                           allow-create
+                                           filterable
+                                           default-first-option
+                                           style="width: 100%">
+                                    <el-option
+                                            v-for="item in userList"
+                                            :value-key="item.id"
+                                            :label="item.title"
+                                            :value="item.id"/>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="文书号" prop="techUid">
-                                <el-input v-model="postForm.reportOrg"/>
+                            <el-form-item label="文书号" prop="documentNo">
+                                <el-input v-model="postForm.documentNo"/>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="12">
-                            <el-form-item label="勘查号" prop="leaderUid">
+                            <el-form-item label="案件类别" prop="caseCategory">
+                                <el-cascader
+                                        :options="caseCategoryList"
+                                        filterable
+                                        @change="countDict"
+                                        v-model="postForm.caseCategory"
+                                        :filter-method="remoteSearch"
+                                        :show-all-levels="false"
+                                        placeholder="案件类型"
+                                        class="mb10"
+                                        style="width: 100%">
+                                </el-cascader>
 
-                                <el-input v-model="postForm.reportOrg"/>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="文书去向" prop="receiptUid">
-                                <el-input v-model="postForm.reportOrg"/>
+                            <el-form-item label="文书去向" prop="documentRoute">
+                                <el-input v-model="postForm.documentRoute"/>
                             </el-form-item>
                         </el-col>
                     </el-row>
 
                     <el-form-item label="检验结果" prop="smsContent">
-                        <el-input v-model="postForm.smsContent" :autosize="{ minRows: 2, maxRows: 4}"
-                                  :value="smsContentChange" type="textarea"/>
+                        <el-input v-model="postForm.examResult" :autosize="{ minRows: 2, maxRows: 4}"
+                                   type="textarea"/>
                     </el-form-item>
                         <el-form-item label="简要案情" prop="smsContent">
-                        <el-input v-model="postForm.smsContent" :autosize="{ minRows: 2, maxRows: 4}"
-                                  :value="smsContentChange" type="textarea"/>
+                        <el-input v-model="postForm.caseDigest" :autosize="{ minRows: 2, maxRows: 4}"
+                                  type="textarea"/>
                     </el-form-item>
                         <el-form-item label="物证情况" prop="smsContent">
-                        <el-input v-model="postForm.smsContent" :autosize="{ minRows: 2, maxRows: 4}"
-                                  :value="smsContentChange" type="textarea"/>
+                        <el-input v-model="postForm.materialDetail" :autosize="{ minRows: 2, maxRows: 4}"
+                                   type="textarea"/>
                     </el-form-item>
 
                     <el-form-item style="margin-bottom: 40px;text-align: center;" label-width="100px">
@@ -91,7 +135,7 @@
 </template>
 
 <script>
-    import {fetchAlarm, createAlarm, updateAlarm} from '@/api/alarm'
+    import {dnaList, fetchDna, createDna, updateDna} from '@/api/dna'
     import {fetchList} from '@/api/dictionary'
     import {fetchAdminMemberList} from '@/api/permissions'
 
@@ -108,22 +152,21 @@
             return {
                 postForm: {
                     id: undefined,
-                    reporter: '',
-                    reportOrg: '',
-                    contactPhoneNumber: '',
-                    driverName: '',
-                    monitorUid: '',
-                    techUid: '',
-                    leaderUid: '',
-                    receiptTimeShow: '',
-                    receiptTime: '',
-                    smsContent: "",
-                    smsReceiverArray: '',
-                    smsReceiver: '',
-                    caseAddress: '',
-                    caseCategory: '',
+                    evidenceNo: '',
+                    taskNo: '',
+                    materialNo: '',
+                    requestUid: '',
+                    requestName: '',
+                    requestOrg: '',
+                    requestTime: '',
+                    handlerUid: '',
+                    handlerName: '',
+                    caseCategory: "",
+                    documentNo: '',
+                    documentRoute: '',
+                    examResult: '',
                     caseDigest: '',
-                    lostDetail: '',
+                    materialDetail: '',
                 },
                 userList: [],
                 userShowList: [],
@@ -137,22 +180,6 @@
 
         },
         watch: {
-            postForm: {
-                handler() {
-                    var tech = '';
-                    if (this.postForm.techUid != '') {
-                        this.userList.filter(data => {
-                            if (this.postForm.techUid === data.id)
-                                tech = data.title
-                        })
-                    }
-                    this.smsContentChange = this.postForm.receiptTimeShow + ' 接到' + this.postForm.reportOrg + ' ' + this.postForm.reporter + '(' + this.postForm.contactPhoneNumber + ")" +
-                        '报告在' + this.postForm.caseAddress + '发生一起' + this.postForm.caseCategory + ' 案件,损失情况：' + this.postForm.lostDetail + '。值班技术员：' + tech
-                },
-                deep: true,
-
-            },
-
         },
         created() {
             this.getUserList()
@@ -163,9 +190,19 @@
                 this.postForm.id = id;
                 this.fetchData(id)
             }
-            this.postForm.receiptUid = this.$store.getters.id;
+
         },
         methods: {
+            countDict(val){
+                if (val){
+                    val = val.slice(-1)[0]
+                    const send={
+                        name:val
+                    };
+                    this.$store.dispatch('PostUserUseDict', send)
+                }
+
+            },
             filterUserSearch(value){
                 if (value) {
                     this.userShowList = this.userList.filter(data=>{
@@ -186,7 +223,6 @@
                 if (!change) {
                     this.userShowList = this.userList;
                 }
-
             },
             remoteSearch(node,value){
                 var p =  /^[a-zA-Z]+$/;
@@ -201,22 +237,21 @@
             restForm() {
                 this.postForm = {
                     id: undefined,
-                    reporter: '',
-                    reportOrg: '',
-                    contactPhoneNumber: '',
-                    driverName: '',
-                    monitorUid: '',
-                    techUid: '',
-                    leaderUid: '',
-                    receiptTimeShow: '',
-                    receiptTime: '',
-                    smsContent: "",
-                    smsReceiverArray: '',
-                    smsReceiver: '',
-                    caseAddress: '',
-                    caseCategory: '',
+                    evidenceNo: '',
+                    taskNo: '',
+                    materialNo: '',
+                    requestUid: '',
+                    requestName: '',
+                    requestOrg: '',
+                    requestTime: '',
+                    handlerUid: '',
+                    handlerName: '',
+                    caseCategory: "",
+                    documentNo: '',
+                    documentRoute: '',
+                    examResult: '',
                     caseDigest: '',
-                    lostDetail: '',
+                    materialDetail: '',
                 }
             },
             search(parentName,filter=null){
@@ -254,44 +289,43 @@
                     this.userShowList = this.userList
                 })
             },
-            formatDate(now) {
-                var year = now.getFullYear();
-                var month = now.getMonth() + 1;
-                var date = now.getDate();
-                var hour = now.getHours();
-                var minute = now.getMinutes();
-                var second = now.getSeconds();
-                return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
-            },
+
             fetchData(id) {
-                fetchAlarm(id).then(data => {
+                fetchDna(id).then(data => {
                     this.postForm = Object.assign({}, data);
-                    this.postForm.smsReceiverArray = this.postForm.smsReceiver.split(",").map(data => {
-                        return parseInt(data);
-                    });
-                    var d = new Date(this.postForm.receiptTime * 1000);
-                    this.postForm.receiptTimeShow = this.formatDate(d)
+                    if (this.postForm.requestTime.toString().length===10)
+                        this.postForm.requestTime = data.requestTime*1000;
+
                 }).catch(err => {
                     console.log(err)
                 })
             },
             submitForm() {
-                console.log(this.postForm);
-                var data = this.postForm
-                data.smsContent = this.smsContentChange;
-                if (data.smsReceiverArray.length > 0) {
-                    data.smsReceiver = data.smsReceiverArray.join(',');
+
+                var data = Object.assign({},  this.postForm);
+
+                if (!/^[1-9]+[0-9]*]*$/.test(data.receiptUid)) {
+                    data.receiptName = data.receiptUid;
+                    data.receiptUid = 0;
                 }
-                data.receiptTime = Date.parse(data.receiptTimeShow) / 1000;
+
+                if (!/^[1-9]+[0-9]*]*$/.test(data.handlerUid)) {
+                    data.handlerName = data.handlerUid;
+                    data.handlerUid = 0;
+                }
+
                 if (data.caseCategory.constructor === Array) {
                     data.caseCategory = data.caseCategory.slice(-1)[0]
                 }
+
+                if (data.requestTime.toString().length>10)
+                    data.requestTime =  parseInt(data.requestTime/1000);
 
                 this.$refs.postForm.validate(valid => {
                     if (valid) {
                         this.loading = true
                         if (this.isEdit) {
-                            updateAlarm(data).then(data => {
+                            updateDna(data).then(data => {
                                 this.loading = false
                                 if (data.code === 200) {
                                     this.$message({
@@ -313,7 +347,7 @@
                                 this.loading = false
                             })
                         } else {
-                            createAlarm(data).then(data => {
+                            createDna(data).then(data => {
                                 this.loading = false
                                 if (data.code === 200) {
                                     this.$message({
@@ -322,6 +356,13 @@
                                         showClose: true,
                                         duration: 1000
                                     })
+                                    this.$router.push({
+                                        path: '/dna/index',
+                                        query: {
+                                            t: +new Date()
+                                        }
+                                    })
+                                    this.$store.dispatch('delView', this.$route)
                                 } else {
                                     this.$message({
                                         message: data.reason,

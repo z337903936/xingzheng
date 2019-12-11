@@ -16,19 +16,11 @@
                             :label="item.title"
                             :value="item.id"/>
                 </el-select>
-                <el-input v-model="listQuery.materialNo" placeholder="DNA编号" class="mb10" style="width: 200px;"
+                <el-input v-model="listQuery.dnaNo" placeholder="DNA编号" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
-                <el-cascader
-                        :options="caseCategoryList"
-                        filterable
-                        @change="countDict"
-                        v-model="listQuery.caseCategory"
-                        :filter-method="remoteSearch"
-                        :show-all-levels="false"
-                        placeholder="案件类型"
-                        class="mb10"
-                        style="width: 200px">
-                </el-cascader>
+                <el-input v-model="listQuery.materialNo" placeholder="物证编号" class="mb10" style="width: 200px;"
+                          @keyup.enter.native="handleFilter"/>
+
                 <el-input v-model="listQuery.evidenceNo" placeholder="勘查号" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
                 <div style="margin-top: 10px">
@@ -36,21 +28,22 @@
                               @keyup.enter.native="handleFilter"/>
                     <el-input v-model="listQuery.examResult" placeholder="检验结果" class="mb10" style="width: 200px;"
                               @keyup.enter.native="handleFilter"/>
-                    <el-input v-model="listQuery.caseDigest" placeholder="关键字" class="mb10" style="width: 200px;"
+                    <el-input v-model="listQuery.filters" placeholder="关键字" class="mb10" style="width: 200px;"
                               @keyup.enter.native="handleFilter"/>
                     <div style="float: right">
-                        <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter" style="margin-right: 10px">
+                        <el-button v-waves type="primary" icon="el-icon-refresh" @click="reset"
+                                   style="float: right;margin-right: 20px">
+                            清空搜索条件
+                        </el-button>
+                        <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter" style="float: right;margin-right: 20px">
                             搜索
                         </el-button>
-                        <router-link :to="'/dna/create-dna'">
-                            <el-button v-waves type="primary" style="margin-right: 10px"  icon="el-icon-edit">添加</el-button>
+                        <router-link :to="'/dna/create-dna'" style="float: right;margin-right: 20px">
+                            <el-button v-waves type="primary"  icon="el-icon-edit" >添加</el-button>
                         </router-link>
                     </div>
 
                 </div>
-
-
-
                 <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
                 <!--导出-->
                 <!--</el-button>-->
@@ -64,11 +57,12 @@
                 border
                 fit
                 highlight-current-row
+                @cell-dblclick="celldblclick"
                 style="width: 100%;"
         >
             <el-table-column label="DNA编号" prop="id" align="center" width="180">
                 <template slot-scope="{row}">
-                    <span>{{ row.materialNo }}</span>
+                    <span>{{ row.dnaNo }}</span>
                 </template>
             </el-table-column>
 
@@ -129,12 +123,88 @@
         >
         </el-pagination>
 
+
+        <el-dialog
+                title="详情"
+                :visible.sync="dialogDetail"
+                width="50%"
+                >
+            <el-divider content-position="left">比中单位</el-divider>
+            <el-row :gutter="20">
+                <el-col :span="12">检验人: </el-col>
+                <el-col :span="12">比中单位: </el-col>
+            </el-row>
+            <el-row :gutter="20" class="detail">
+                <el-col :span="12">检索方式: </el-col>
+                <el-col :span="12">比中时间: </el-col>
+            </el-row>
+            <el-row :gutter="20" class="detail">
+                <el-col :span="12">姓名: </el-col>
+                <el-col :span="12">性别: </el-col>
+            </el-row>
+            <el-row :gutter="20" class="detail">
+                <el-col :span="12">身份证号: </el-col>
+                <el-col :span="12">是否排除: </el-col>
+            </el-row>
+            <el-row :gutter="20" class="detail">
+                <el-col :span="12">DNA编号: </el-col>
+                <el-col :span="12">DNA: </el-col>
+            </el-row>
+            <el-row :gutter="20" class="detail">
+                <el-col :span="12">户籍地址: </el-col>
+                <el-col :span="12">上报时间: </el-col>
+            </el-row>
+            <el-divider content-position="left">物证信息</el-divider>
+            <el-row :gutter="20" class="detail">
+                <el-col :span="12">物证编号: </el-col>
+                <el-col :span="12">物证类型: </el-col>
+            </el-row>
+            <el-row :gutter="20" class="detail">
+                <el-col :span="12">遗留部位: </el-col>
+                <el-col :span="12">提取方法: </el-col>
+            </el-row>
+
+            <el-row :gutter="20" class="detail">
+                <el-col :span="12">提取日期: </el-col>
+                <el-col :span="12">提取人: </el-col>
+            </el-row>
+
+            <el-row :gutter="20" class="detail">
+                <el-col :span="12">可靠程度: </el-col>
+                <el-col :span="12">利用情况: </el-col>
+            </el-row>
+            <el-divider content-position="left">案件信息</el-divider>
+            <el-row :gutter="20" class="detail">
+                <el-col :span="12">勘查号: </el-col>
+                <el-col :span="12">现勘号: </el-col>
+            </el-row>
+
+  <el-row :gutter="20" class="detail">
+                <el-col :span="12">案件编号: </el-col>
+                <el-col :span="12">案发时间: </el-col>
+            </el-row>
+
+  <el-row :gutter="20" class="detail">
+                <el-col :span="12">案发地点: </el-col>
+                <el-col :span="12">案件类别: </el-col>
+            </el-row>
+
+
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogDetail = false">关 闭</el-button>
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 
 <style>
     .mb10 {
         margin-bottom: 10px;
+    }
+    .detail{
+        margin-left: 20px;
+        margin-top: 15px;
     }
 </style>
 
@@ -144,9 +214,6 @@
     import {parseTime} from '@/utils'
     import { fetchAdminMemberList} from '@/api/permissions'
     import {fetchList} from '@/api/dictionary'
-
-
-
 
     export default {
         name: 'Dna',
@@ -158,6 +225,8 @@
                 pages: 0,
                 listLoading: false,
                 paginationShow: true,
+                dialogDetail: false,
+                detail: {},
                 searchTime: [],
                 limit: 20,
                 listQuery: {
@@ -170,7 +239,7 @@
                     taskNo: undefined,
                     examResult: undefined,
                     requestName: undefined,
-                    caseDigest: undefined,
+                    dnaNo: undefined,
                 },
                 rules:{},
                 downloadLoading: false,
@@ -186,6 +255,25 @@
             });
         },
         methods: {
+            reset() {
+                this.listQuery = {
+                    page: 1,
+                    beginTime: undefined,
+                    endTime: undefined,
+                    materialNo: undefined,
+                    caseCategory: undefined,
+                    evidenceNo: undefined,
+                    taskNo: undefined,
+                    examResult: undefined,
+                    requestName: undefined,
+                    dnaNo: undefined,
+                };
+                this.searchTime = '';
+            },
+            celldblclick(val){
+                this.detail = val;
+                this.dialogDetail = true;
+            },
             countDict(val){
                 if (val){
                     val = val.slice(-1)[0]
@@ -263,7 +351,7 @@
                     return sendData
                 })
             },
-            
+
         }
     }
 </script>

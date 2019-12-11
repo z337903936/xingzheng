@@ -251,6 +251,8 @@
                 const id = this.$route.params && this.$route.params.id
                 this.postForm.id = id;
                 this.fetchData(id)
+            }else{
+                this.restForm()
             }
 
         },
@@ -404,7 +406,7 @@
                                 this.loading = false
                             })
                         } else {
-                           
+
                             createRobot(data).then(data => {
                                 this.loading = false
                                 if (data.code === 200) {
