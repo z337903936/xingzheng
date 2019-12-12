@@ -264,7 +264,6 @@
                 if (this.taskId.length===0){
                     this.$confirm('请选择串并数据!')
                         .then(_ => {
-
                         })
                         .catch(_ => {});
                 } else{
@@ -278,7 +277,7 @@
             },
             applyCompose(){
                 if (this.isEdit) {
-                    
+
                 }else{
                     this.applyData.list =  this.taskId
                     applyCompose(this.applyData).then(response=>{

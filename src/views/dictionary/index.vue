@@ -170,9 +170,7 @@ export default {
   },
   methods: {
     handleDrop(draggingNode, dropNode, dropType, ev) {
-      console.log(draggingNode)
-      console.log(dropNode)
-      console.log(dropType)
+
       var parentId;
       if (dropType==='inner'){
         parentId = dropNode.data.id
