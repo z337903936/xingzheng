@@ -1,18 +1,9 @@
 <template>
     <div class="app-container">
+
         <div class="filter-container">
             <div>
-                <el-date-picker
-                        v-model="searchTime"
-                        type="datetimerange"
-                        range-separator="至"
-                        start-placeholder="开始时间"
-                        end-placeholder="结束时间"
-                        value-format="timestamp"
-                        style="width: 405px;"
-                />
-                <el-input v-model="listQuery.name" placeholder="任务名" class="mb10" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
+
                 <el-select v-model="listQuery.status" placeholder="任务状态" class="mb10" style="width: 200px;">
                 <el-option
                         v-for="item in statusList"
@@ -27,8 +18,8 @@
                 <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter" style="float: right;margin-right: 20px">
                     搜索
                 </el-button>
-                <router-link :to="'/robot/create'">
-                    <el-button v-waves type="primary"  icon="el-icon-edit" style="float: right;margin-right: 20px">创建任务</el-button>
+                <router-link :to="'/compose/create'">
+                    <el-button v-waves type="primary"  icon="el-icon-edit" style="float: right;margin-right: 20px">创建串并</el-button>
                 </router-link>
 
                 <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
@@ -46,81 +37,34 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="任务名称"   prop="id" align="center" width="200">
+            <el-table-column label="串并编号"   prop="id" align="center" width="250">
                 <template slot-scope="{row}">
-                    <span>{{ row.name }}</span>
+                    <span>{{ row.composeNo }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="研判依据" align="center" width="450">
+            <el-table-column label="串并依据" align="center" >
                 <template slot-scope="{row}">
-                    <span>
-                        <div v-if="row.sceneType ">
-                            处所：{{ row.sceneType  }}
-                        </div>
-                        <div v-if="row.crimeTime ">
-                            作案时机：{{ row.crimeTime  }}
-                        </div>
-                        <div v-if="row.caseHappenRegion ">
-                            案件发生区域：{{ row.caseHappenRegion  }}
-                        </div>
-                        <div v-if="row.invadeType ">
-                            侵入方式：{{ row.invadeType  }}
-                        </div>
-                        <div v-if="row.escapeType ">
-                            作案出口：{{ row.escapeType  }}
-                        </div>
-                        <div v-if="row.crimeTools ">
-                            作案工具：{{ row.crimeTools  }}
-                        </div>
-                        <div v-if="row.crimeDetail ">
-                            作案过程：{{ row.crimeDetail  }}
-                        </div>
-                        <div v-if="row.caseCategory ">
-                            案件分类：{{ row.caseCategory  }}
-                        </div>
-                    </span>
-
+                    <span>{{ row.preConditions }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="勘查开始时间" width="200" align="center">
+            <el-table-column label="申请人"  width="200" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-                </template>
-            </el-table-column>
-
-            <el-table-column label="创建人" align="center" width="150">
-                <template slot-scope="{row}">
-                    <span>{{ row.createName }}</span>
-                </template>
-            </el-table-column>
-
-            <el-table-column label="创建日期"  width="200" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                    <span>{{ row.createName  }}</span>
                 </template>
             </el-table-column>
 
             <el-table-column label="任务状态" width="110" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.status===1?'未开始':row.status===2?'进行中':'已结束' }}</span>
+                    <span>{{ row.status===1?'申请中 ':row.status===2?'已同意':'已拒绝' }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="操作" align="center" fixed="right"  width="380" class-name="small-padding">
                 <template slot-scope="{row}">
-                    <router-link :to="'/robot/edit/'+row.id">
+                    <router-link :to="'/compose/edit/'+row.id">
                         <el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>
                     </router-link>
-                    <router-link :to="'/robot/taskList/'+row.id">
-                        <el-button v-waves type="primary" icon="el-icon-tickets" size="mini" style="width: 100px" >任务批次</el-button>
-                    </router-link>
-                    <el-button v-waves type="success" icon="el-icon-video-play" size="mini" style="width: 100px"  v-if="row.status !==2" @click="handleTask(row,true)">
-                        开始任务
-                    </el-button>
-                    <el-button v-waves type="warning" icon="el-icon-video-pause" size="mini" style="width: 100px"  v-if="row.status ===2" @click="handleTask(row,false)">
-                        结束任务
-                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -148,30 +92,24 @@
 </style>
 
 <script>
-    import {robotList, createRobot, updateRobot,startRobot,endRobot} from '@/api/robot'
+    import {composeList} from '@/api/compose'
     import waves from '@/directive/waves' // waves directive
     import { parseTime } from '@/utils'
     import { fetchAdminMemberList } from '@/api/permissions'
 
     const statusMap = [
-        {
-            id: 0,
-            title: '全部'
-        },
+
         {
             id: 1,
-            title: '未领取'
-        }, {
-            id: 2,
             title: '进行中'
         }, {
-            id: 3,
-            title: '已完成'
-        },
+            id: 2,
+            title: '已通过'
+        }
     ];
 
     export default {
-        name: 'robot',
+        name: 'compose',
         directives: {waves},
         data() {
             return {
@@ -180,13 +118,11 @@
                 pages: 0,
                 listLoading: false,
                 paginationShow: true,
+
                 searchTime: '',
                 listQuery: {
                     page: 1,
-                    beginTime: undefined,
-                    endTime: undefined,
-                    name: undefined,
-                    status: 0,
+                    status: 1,
                 },
                 statusList:statusMap,
 
@@ -199,10 +135,7 @@
             reset() {
                 this.listQuery = {
                     page: 1,
-                    beginTime: undefined,
-                    endTime: undefined,
-                    name: undefined,
-                    status: 0,
+                    status: 1,
                 };
                 this.searchTime = '';
             },
@@ -252,28 +185,9 @@
             },
             getList() {
                 this.listLoading = true;
-                robotList(this.listQuery).then(response => {
+                composeList(this.listQuery).then(response => {
                     this.list = response.list;
                     this.pages = response.pages
-                    this.list.map(data=>{
-                        // var content = ''
-                        // if (data.crimeTime){
-                        //     content += '案件类别:' +data.crimeTime
-                        // }
-                        // if (data.caseHappenRegion){
-                        //     content += '案件发生区域:' +data.crimeTime
-                        // }
-                        // if (data.crimeTime){
-                        //     content += '案件类别:' +data.crimeTime
-                        // }
-                        // if (data.crimeTime){
-                        //     content += '案件类别:' +data.crimeTime
-                        // }
-                        // if (data.crimeTime){
-                        //     content += '案件类别:' +data.crimeTime
-                        // }
-
-                    });
                     // Just to simulate the time of the request
                     this.listLoading = false
 

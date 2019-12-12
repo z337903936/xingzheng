@@ -2,8 +2,8 @@
     <div class="app-container">
         <div class="filter-container">
 
-                <el-button v-waves type="primary"  @click="reset"
-                           style="float: right;margin-right: 20px">
+                <el-button v-waves type="primary"  @click="handleApply"
+                           style="float: right;margin-right: 20px;margin-bottom: 10px">
                     <svg-icon icon-class="jichuguanli" /> 申请串并
                 </el-button>
 
@@ -55,9 +55,9 @@
             </el-table-column>
             <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <router-link :to="'/search/show-search/'+row.evidenceId">
-                        <el-button type="success" size="mini" >查看</el-button>
-                    </router-link>
+                    <!--<router-link :to="'/search/show-search/'+row.evidenceId">-->
+                        <!--<el-button type="success" size="mini" >查看</el-button>-->
+                    <!--</router-link>-->
                 </template>
             </el-table-column>
         </el-table>
@@ -72,6 +72,28 @@
                 style="float: right;margin-top: 15px"
         >
         </el-pagination>
+        <el-dialog title="串并申请" :close-on-click-modal="false" :visible.sync="dialogFormVisible" width="30%">
+            <el-form
+                    ref="dataForm"
+                    :rules="rules"
+                    :model="applyData"
+                    label-position="left"
+                    label-width="70px"
+                    style="width: 70%; margin-left:50px;">
+
+                <el-form-item label="串并依据" prop="path">
+                    <el-input v-model="applyData.preConditions"/>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">
+                    取 消
+                </el-button>
+                <el-button type="primary" @click="applyCompose()">
+                    确 定
+                </el-button>
+            </div>
+        </el-dialog>
 
     </div>
 </template>
@@ -84,6 +106,7 @@
 
 <script>
     import {robotResult} from '@/api/robot'
+    import {applyCompose} from '@/api/compose'
     import waves from '@/directive/waves' // waves directive
     import { parseTime } from '@/utils'
     import { fetchAdminMemberList } from '@/api/permissions'
@@ -98,23 +121,64 @@
                 pages: 0,
                 listLoading: false,
                 paginationShow: true,
+                dialogFormVisible: false,
                 searchTime: '',
                 listQuery: {
                     page: 1,
                     id: undefined,
                 },
                 taskId: [],
+                applyData:{
+                    preConditions:'',
+                    list:[],
+                },
+                rules:{},
+                curId:''
 
             }
         },
         created() {
             const id = this.$route.params && this.$route.params.id
+            this.curId = id;
             this.getList(id)
         },
         methods: {
+            handleApply(){
+                if (this.taskId.length===0){
+                    this.$confirm('请选择串并数据!')
+                        .then(_ => {
+
+                        })
+                        .catch(_ => {});
+                } else{
+                    this.dialogFormVisible = true;
+                }
+            },
             selectTask(selection) {
                 this.taskId = selection.map(data => {
                     return data.id
+                })
+            },
+            applyCompose(){
+                this.applyData.list =  this.taskId
+                applyCompose(this.applyData).then(response=>{
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.dialogFormVisible = false;
+                        this.getList(this.curId)
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
                 })
             },
             getList(id) {

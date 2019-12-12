@@ -139,7 +139,18 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="鞋印" prop="name">
+                                <el-input v-model="postForm.name"/>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="嫌疑人" prop="keyword">
+                                <el-input v-model="postForm.keyword" type="text"/>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                     <el-form-item label="关键字" prop="keyword">
                         <el-input v-model="postForm.keyword" type="text"/>
                     </el-form-item>

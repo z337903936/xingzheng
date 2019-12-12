@@ -68,9 +68,10 @@
                     <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter"  style="float: right;margin-right: 20px">
                         搜索
                     </el-button>
-                    <router-link :to="'/search/create-search/'" style="float: right;margin-right: 10px">
-                        <el-button type="primary" icon="el-icon-edit">添加</el-button>
-                    </router-link>
+                    <el-button v-waves type="primary"  @click="handleApply"
+                               style="float: right;margin-right: 20px;">
+                        <svg-icon icon-class="jichuguanli" /> 保存
+                    </el-button>
                 </div>
 
                 <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
@@ -87,8 +88,13 @@
                 border
                 fit
                 highlight-current-row
+                @selection-change="selectTask"
                 style="width: 100%;"
         >
+            <el-table-column
+                    v-model="taskId"
+                    type="selection"
+                    width="55"/>
             <el-table-column label="勘查号"  align="center" width="120">
                 <template slot-scope="{row}">
                     <span>{{ row.selfEvidenceNo }}</span>
@@ -137,20 +143,9 @@
 
             <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <router-link :to="'/search/update-search/'+row.id">
-                        <el-button type="primary" size="mini" icon="el-icon-edit" >编辑</el-button>
-                    </router-link>
-
                     <router-link :to="'/search/show-search/'+row.id">
                         <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
                     </router-link>
-                    <router-link :to="'/transferLog/index/'+row.id">
-                        <el-button type="success" size="mini" style="width: 80px">物证去向</el-button>
-                    </router-link>
-
-                    <!--<el-button size="mini" type="success">-->
-                        <!--查看-->
-                    <!--</el-button>-->
                 </template>
             </el-table-column>
         </el-table>
@@ -165,7 +160,28 @@
                 style="float: right;margin-top: 15px"
         >
         </el-pagination>
+        <el-dialog title="串并申请" :close-on-click-modal="false" :visible.sync="dialogFormVisible" width="30%">
+            <el-form
+                    ref="dataForm"
+                    :rules="rules"
+                    :model="applyData"
+                    label-position="left"
+                    label-width="70px"
+                    style="width: 70%; margin-left:50px;">
 
+                <el-form-item label="串并依据" prop="path">
+                    <el-input v-model="applyData.preConditions"/>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">
+                    取 消
+                </el-button>
+                <el-button type="primary" @click="applyCompose()">
+                    确 定
+                </el-button>
+            </div>
+        </el-dialog>
 
 
     </div>
@@ -180,8 +196,13 @@
 
 
     export default {
-        name: "Search",
-
+        name: "composeForm",
+        props: {
+            isEdit: {
+                type: Boolean,
+                default: false
+            }
+        },
         directives: {waves},
         filters: {
             // statusFilter(status) {
@@ -219,9 +240,13 @@
                 caseTypeList:[],
                 userShowList: [],
                 caseHappenRegionList:[],
-
                 calendarTypeOptions:{},
-
+                taskId: [],
+                dialogFormVisible: false,
+                applyData:{
+                    preConditions:'',
+                    list:[],
+                },
             }
         },
         created() {
@@ -235,6 +260,54 @@
             })
         },
         methods: {
+            handleApply(){
+                if (this.taskId.length===0){
+                    this.$confirm('请选择串并数据!')
+                        .then(_ => {
+
+                        })
+                        .catch(_ => {});
+                } else{
+                    if (this.isEdit) {
+
+                    }else{
+                        this.dialogFormVisible = true;
+                    }
+
+                }
+            },
+            applyCompose(){
+                if (this.isEdit) {
+                    
+                }else{
+                    this.applyData.list =  this.taskId
+                    applyCompose(this.applyData).then(response=>{
+                        if (response.code === 200) {
+                            this.$message({
+                                message: '操作成功',
+                                type: 'success',
+                                showClose: true,
+                                duration: 2000
+                            })
+                            this.dialogFormVisible = false;
+                            this.getList(this.curId)
+                        } else {
+                            this.$message({
+                                message: response.reason,
+                                type: 'success',
+                                showClose: true,
+                                duration: 2000
+                            })
+                        }
+                    })
+                }
+
+            },
+            selectTask(selection) {
+                this.taskId = selection.map(data => {
+                    return data.id
+                })
+            },
             reset() {
                 this.listQuery = {
                     page: 1,

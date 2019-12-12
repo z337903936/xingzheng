@@ -210,6 +210,46 @@
             </el-table-column>
 
         </el-table>
+        <el-table
+                :data="list.suspectPersonList"
+                height="200"
+                border
+                max-height="200"
+                style="width: 100%"
+                class="mb10">
+            <el-table-column
+                    prop="materialNo"
+                    label="名字"
+            >
+                <template slot-scope="{row}">
+                    <span>{{ row.name }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="thirdMaterialNo"
+                    label="证件号"
+            >
+                <template slot-scope="{row}">
+                    <span>{{ row.idNo }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="materialCategory"
+                    label="侦破方式">
+                <template slot-scope="{row}">
+                    <span>{{ row.solveMethod }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="materialType"
+                    label="作案特点">
+                <template slot-scope="{row}">
+                    <span>{{ row.crimeDetail }}</span>
+                </template>
+            </el-table-column>
+
+
+        </el-table>
 
         <el-table
                 :data="list.materialList"
@@ -271,6 +311,7 @@
             </el-table-column>
 
         </el-table>
+
     </div>
 </template>
 

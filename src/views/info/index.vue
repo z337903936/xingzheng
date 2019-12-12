@@ -74,6 +74,8 @@
                           @keyup.enter.native="handleFilter"/>
                 <el-input v-model="listQuery.suspectName" placeholder="嫌疑人" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
+                <el-input v-model="listQuery.suspectName" placeholder="鞋印" class="mb10" style="width: 200px;"
+                          @keyup.enter.native="handleFilter"/>
                 <el-input v-model="listQuery.filters" placeholder="关键字" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
 
