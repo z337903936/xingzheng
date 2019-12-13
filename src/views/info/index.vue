@@ -238,7 +238,7 @@
     import waves from '@/directive/waves' // waves directive
     import {fetchList} from '@/api/dictionary'
     import {applyCompose} from '@/api/compose'
-    
+
     export default {
         name: 'Dna',
         directives: {waves},

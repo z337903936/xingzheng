@@ -26,9 +26,11 @@
                     <span>{{ row.matchCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="勘查开始时间" width="200" align="center">
+            <el-table-column label="勘查时间" width="300" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                    <span> - </span>
+                    <span>{{ row.examEndTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
             <!--<el-table-column label="勘查开始时间" width="200" align="center">-->

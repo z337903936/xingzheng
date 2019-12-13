@@ -387,9 +387,13 @@
                     this.postForm = Object.assign({}, data);
                     if (this.postForm.examBeginTime.toString().length===10)
                         this.postForm.examBeginTime = data.examBeginTime*1000;
+                    else if (this.postForm.examBeginTime === 0)
+                        this.postForm.examBeginTime =''
+
                     if (this.postForm.examEndTime.toString().length===10)
                         this.postForm.examEndTime = data.examEndTime*1000;
-
+                    else if (this.postForm.examEndTime === 0)
+                        this.postForm.examEndTime =''
 
                     if (this.postForm.crimeTime){
                         this.postForm.crimeTime = JSON.parse(this.postForm.crimeTime)

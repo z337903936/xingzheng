@@ -55,9 +55,9 @@
             </el-table-column>
             <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <!--<router-link :to="'/search/show-search/'+row.evidenceId">-->
-                        <!--<el-button type="success" size="mini" >查看</el-button>-->
-                    <!--</router-link>-->
+                    <router-link :to="'/search/show-search/'+row.evidenceId">
+                        <el-button type="success" size="mini" >查看</el-button>
+                    </router-link>
                 </template>
             </el-table-column>
         </el-table>
