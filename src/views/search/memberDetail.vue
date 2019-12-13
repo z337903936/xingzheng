@@ -698,7 +698,7 @@
         <el-col :span="12">
           <el-button type="primary" size="mini" @click="submitSanlu">批量提交</el-button>
           <el-table
-                  :data="list.documentList"
+                  :data="list.sanLuList"
                   border
                   row-key="id"
                   @selection-change="selectFile"
@@ -1314,7 +1314,7 @@ export default {
         concernedPersonList: [],
         materialList: [],
         suspectPersonList: [],
-        documentList: [],
+        sanLuList: [],
 
       },
       listRules: {},
@@ -1726,7 +1726,7 @@ export default {
           }
         })
       }else{
-        this.list.documentList.push(file)
+        this.list.sanLuList.push(file)
       }
     },
     handleDeleteSanlu(row){
