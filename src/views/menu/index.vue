@@ -286,6 +286,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
+
           updateMenu(tempData).then((ref) => {
             this.getList()
             this.dialogFormVisible = false

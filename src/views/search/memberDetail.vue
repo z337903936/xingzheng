@@ -696,11 +696,14 @@
           </el-upload>
         </el-col>
         <el-col :span="12">
+          <el-button type="primary" size="mini" @click="submitSanlu">批量提交</el-button>
           <el-table
                   :data="list.documentList"
                   border
                   row-key="id"
                   @selection-change="selectFile"
+                  max-height="150"
+
           >
             <el-table-column
                     v-model="fileId"
@@ -712,10 +715,18 @@
                     label="文件名" align="center"
             >
               <template slot-scope="{row}">
-                <span>{{ row.name }}</span>
+                <span>{{ row.fileName }}</span>
               </template>
             </el-table-column>
-
+            <el-table-column label="操作" fixed="right" width="150" align="center">
+              <template slot-scope="scope">
+                <el-button
+                        size="mini"
+                        type="danger"
+                        @click="handleDeleteSanlu( scope.row)">删除
+                </el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </el-col>
 
@@ -734,7 +745,7 @@
       title="提示"
       width="30%"
     >
-      <span>添加物证必须先保存现勘记录，是否保存现勘记录</span>
+      <span>{{ dialogPointContent }}必须先保存现勘记录，是否保存现勘记录</span>
       <span slot="footer" class="dialog-footer">
 
         <div slot="footer" class="dialog-footer">
@@ -1102,7 +1113,7 @@
 <script>
 import { createSearch, fetchSearch, updateSearch, createPerson, updatePerson, delPerson, createLost, updateLost, delLost,
   createMaterial, updateMaterial, delMaterial, submitMaterial,submitMaterialinStock,submitMaterialOutStock, createDocument,
-  updateDocument, delDocument,createSuspect, updateSuspect, delSuspect } from '@/api/search'
+  updateDocument, delDocument,createSuspect, updateSuspect, delSuspect ,createSanlu, delSanlu, submitSanlu } from '@/api/search'
 import {fetchList,userDictList} from '@/api/dictionary'
 import { fetchAdminMemberList } from '@/api/permissions'
 import Upload from '@/components/Upload/SingleImage3'
@@ -1136,6 +1147,7 @@ export default {
       tableKey: 0,
       imageUrl: '',
       dialogPoint: false,
+      dialogPointContent: '添加物证',
       sceneProtectUidList: [
         {
           id: 0,
@@ -1651,13 +1663,96 @@ export default {
 
   },
   methods: {
+    submitSanlu() {
+      if (this.list.id == null) {
+        this.dialogPointContent = '提交三录'
+        this.dialogPoint = true
+      } else {
+        if (this.fileId.length===0){
+          this.$confirm('请选择三录数据!')
+                  .then(_ => {
+                  })
+                  .catch(_ => {});
+        } else{
+          const data = {
+            list: this.fileId
+          }
+          submitSanlu(data).then(response => {
+            if (response.code === 200) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                showClose: true,
+                duration: 2000
+              })
+            } else {
+              this.$message({
+                message: response.reason,
+                type: 'success',
+                showClose: true,
+                duration: 2000
+              })
+            }
+          })
+        }
+      }
+
+
+    },
     handleFileSuccess(res) {
       var file = {
-        name:res.originalFileName,
-        fileUrl:res.imgUrl,
+        fileName:res.originalFileName,
+        url:res.imgUrl,
       }
-      this.list.documentList.push(file)
-
+      if (this.isEdit){
+        file.id = this.list.id
+        createSanlu(file).then(response=>{
+          if (response.code === 200) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              showClose: true,
+              duration: 2000
+            })
+            if (this.isEdit)
+              this.submitForm()
+          } else {
+            this.$message({
+              message: response.reason,
+              type: 'success',
+              showClose: true,
+              duration: 2000
+            })
+          }
+        })
+      }else{
+        this.list.documentList.push(file)
+      }
+    },
+    handleDeleteSanlu(row){
+      var data={
+        id:row.id,
+        operation:'del',
+      }
+      delSanlu(data).then(response=>{
+        if (response.code === 200) {
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            showClose: true,
+            duration: 2000
+          })
+          if (this.isEdit)
+            this.submitForm()
+        } else {
+          this.$message({
+            message: response.reason,
+            type: 'success',
+            showClose: true,
+            duration: 2000
+          })
+        }
+      })
     },
     materialChange(val){
       this.isFingerprint = false
@@ -2360,6 +2455,7 @@ export default {
     handleClickToAddMaterial() {
       this.resetMaterialListForm()
       if (this.list.id == null) {
+        this.dialogPointContent = '添加物证'
         this.dialogPoint = true
       } else {
         this.dialogMaterialListForm = true

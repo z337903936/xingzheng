@@ -182,3 +182,28 @@ export function delSuspect(data) {
         data
     })
 }
+//三录
+
+export function createSanlu(data) {
+    return request({
+        url: '/v1/cp/evidence_sanlu/new/',
+        method: 'post',
+        data
+    })
+}
+
+
+export function delSanlu(data) {
+    return request({
+        url: '/v1/cp/evidence_sanlu/',
+        method: 'post',
+        data
+    })
+}
+export function submitSanlu(data) {
+    return request({
+        url: '/v1/cp/batch_submit_sanlu/',
+        method: 'post',
+        data
+    })
+}

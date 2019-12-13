@@ -1,5 +1,102 @@
 <template>
     <div  class="app-container">
+        <div v-if="isEdit">
+            <el-divider>已有串并</el-divider>
+            <div class="filter-container">
+                <div>
+                        <el-button v-waves type="danger"  @click="handleDelete"
+                                   style="float: right;margin-right: 20px;" icon="el-icon-delete">
+                           删除所选
+                        </el-button>
+
+                    <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
+                    <!--导出-->
+                    <!--</el-button>-->
+                </div>
+            </div>
+
+            <el-table
+                    v-loading="listLoadingUse"
+                    :data="listUse"
+                    border
+                    fit
+                    highlight-current-row
+                    @selection-change="selectUseTask"
+                    max-height="500"
+                    style="width: 100%;"
+            >
+                <el-table-column
+                        v-model="taskUseId"
+                        type="selection"
+                        width="55"/>
+                <el-table-column label="勘查号"  align="center" width="120">
+                    <template slot-scope="{row}">
+                        <span>{{ row.selfEvidenceNo }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="发案日期"  align="center" width="100">
+                    <template slot-scope="{row}">
+                        <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d}') }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="发案地址" align="center">
+                    <template slot-scope="{row}">
+                        <span>{{ row.caseAddress }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="发案区划" align="center">
+                    <template slot-scope="{row}">
+                        <span>{{ row.caseHappenRegion }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="主办" align="center" width="100">
+                    <template slot-scope="{row}">
+                        <span>{{ row.mainChargerName }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="协办" align="center" width="150">
+                    <template slot-scope="{row}">
+                        <span>{{ row.supporterName }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="法医" align="center" width="100">
+                    <template slot-scope="{row}">
+                        <span>{{ row.medicalName }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="案件性质" align="center">
+                    <template slot-scope="{row}">
+                        <span>{{ row.caseCategory }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="是否死亡" align="center" width="80">
+                    <template slot-scope="{row}">
+                        <span>{{ row.isDeathCase?'是':'否' }}</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
+                    <template slot-scope="{row}">
+                        <router-link :to="'/search/show-search/'+row.id">
+                            <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
+                        </router-link>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-pagination
+                    background
+                    layout="prev, pager, next"
+                    :page-count="pagesUse"
+                    :current-page.sync="pageUse"
+                    @current-change="getComposeList"
+                    @size-change="getComposeList"
+                    :hide-on-single-page="paginationShow"
+                    style="float: right;margin-top: 15px"
+            >
+            </el-pagination>
+            <el-divider></el-divider>
+        </div>
+
         <div class="filter-container">
             <div><el-date-picker
                     v-model="searchTime"
@@ -70,8 +167,11 @@
                     </el-button>
                     <el-button v-waves type="primary"  @click="handleApply"
                                style="float: right;margin-right: 20px;">
-                        <svg-icon icon-class="jichuguanli" /> 保存
+                        <svg-icon icon-class="jichuguanli" />
+                        <span v-if="!isEdit">保存</span>
+                        <span v-if="isEdit">添加到已有串并</span>
                     </el-button>
+
                 </div>
 
                 <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
@@ -89,6 +189,7 @@
                 fit
                 highlight-current-row
                 @selection-change="selectTask"
+                max-height="500"
                 style="width: 100%;"
         >
             <el-table-column
@@ -189,6 +290,7 @@
 
 <script>
     import {searchList} from '@/api/search'
+    import {composeDetail,updateCompose,delCompose} from '@/api/compose'
     import waves from '@/directive/waves' // waves directive
     import {fetchList} from '@/api/dictionary'
     import {parseTime} from '@/utils'
@@ -221,8 +323,12 @@
                 },
                 tableKey: 0,
                 list: null,
+                listUse: null,
                 pages: 0,
+                pagesUse: 0,
+                pageUse: 0,
                 listLoading: true,
+                listLoadingUse: true,
                 paginationShow: true,
                 searchTime: '',
                 limit: 20,
@@ -242,15 +348,29 @@
                 caseHappenRegionList:[],
                 calendarTypeOptions:{},
                 taskId: [],
+                taskUseId: [],
                 dialogFormVisible: false,
                 applyData:{
                     preConditions:'',
                     list:[],
                 },
+                sendData:{
+                    taskId:undefined,
+                    list:[],
+                },
+                rules:{},
+                curId:undefined,
             }
         },
         created() {
+            if (this.isEdit) {
+                const id = this.$route.params && this.$route.params.id;
+                this.curId = id;
+                this.sendData.taskId = id;
+                this.getComposeList(id)
+            }
             this.getList()
+
             this.getUserList()
             this.search('案件类别').then(response=>{
                 this.caseTypeList = this.processData(response.list)
@@ -260,27 +380,15 @@
             })
         },
         methods: {
-            handleApply(){
-                if (this.taskId.length===0){
+            handleDelete(){
+                if (this.taskUseId.length===0){
                     this.$confirm('请选择串并数据!')
                         .then(_ => {
                         })
                         .catch(_ => {});
                 } else{
-                    if (this.isEdit) {
-
-                    }else{
-                        this.dialogFormVisible = true;
-                    }
-
-                }
-            },
-            applyCompose(){
-                if (this.isEdit) {
-
-                }else{
-                    this.applyData.list =  this.taskId
-                    applyCompose(this.applyData).then(response=>{
+                    this.sendData.list = this.taskUseId;
+                    delCompose(this.sendData).then(response=>{
                         if (response.code === 200) {
                             this.$message({
                                 message: '操作成功',
@@ -300,10 +408,70 @@
                         }
                     })
                 }
+            },
+            handleApply(){
+                if (this.taskId.length===0){
+                    this.$confirm('请选择串并数据!')
+                        .then(_ => {
+                        })
+                        .catch(_ => {});
+                } else{
+                    if (this.isEdit) {
+                        this.sendData.list = this.taskId;
+                        updateCompose(this.sendData).then(response=>{
+                            if (response.code === 200) {
+                                this.$message({
+                                    message: '操作成功',
+                                    type: 'success',
+                                    showClose: true,
+                                    duration: 2000
+                                })
+                                this.dialogFormVisible = false;
+                                this.getList(this.curId)
+                            } else {
+                                this.$message({
+                                    message: response.reason,
+                                    type: 'success',
+                                    showClose: true,
+                                    duration: 2000
+                                })
+                            }
+                        })
+                    }else{
+                        this.dialogFormVisible = true;
+                    }
 
+                }
+            },
+            applyCompose(){
+                this.applyData.list =  this.taskId
+                applyCompose(this.applyData).then(response=>{
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.dialogFormVisible = false;
+                        this.getList(this.curId)
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                })
             },
             selectTask(selection) {
                 this.taskId = selection.map(data => {
+                    return data.id
+                })
+            },
+            selectUseTask(selection) {
+                this.taskUseId = selection.map(data => {
                     return data.id
                 })
             },
@@ -349,6 +517,18 @@
                     // Just to simulate the time of the request
 
                     this.listLoading = false
+
+                })
+            },
+            getComposeList(id) {
+                this.listLoading = true;
+                composeDetail(id).then(response => {
+                    this.listUse = response.list;
+                    this.pagesUse = response.pages;
+
+                    // Just to simulate the time of the request
+
+                    this.listLoadingUse = false
 
                 })
             },

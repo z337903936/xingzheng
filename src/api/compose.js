@@ -7,6 +7,29 @@ export function composeList(data) {
         params: data
     })
 }
+export function composeDetail(id) {
+    return request({
+        url: '/v1/cp/compose_task_detail_list/' + id + '/',
+        method: 'get',
+        params: {}
+    })
+}
+
+export function updateCompose(data) {
+    return request({
+        url: '/v1/cp/add_task_detail_to_list/',
+        method: 'post',
+        data
+    })
+}
+
+export function delCompose(data) {
+    return request({
+        url: '/v1/cp/remove_task_detail_from_list/',
+        method: 'post',
+        data
+    })
+}
 
 export function auditComposeList() {
     return request({
