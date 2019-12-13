@@ -141,8 +141,8 @@
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="12">
-                            <el-form-item label="鞋印" prop="name">
-                                <el-input v-model="postForm.name"/>
+                            <el-form-item label="鞋印" prop="footprint">
+                                <el-input v-model="postForm.footprint"/>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -190,12 +190,12 @@
         data() {
             return {
                 props: {
-                    checkStrictly: true,
+                    multiple: true,
                     emitPath:false
                 },
                 emitProps:{
                     emitPath:false,
-                    checkStrictly: true
+                    multiple: true
                 },
                 postForm: {
                     id: undefined,
@@ -212,6 +212,7 @@
                     examBeginTime: '',
                     examEndTime: '',
                     keyword: '',
+                    footprint: '',
                 },
                 userList: [],
                 userShowList: [],
@@ -327,6 +328,7 @@
                     examBeginTime: '',
                     examEndTime: '',
                     keyword: '',
+                    footprint: '',
                 }
             },
             search(parentName, filter = null) {
@@ -373,6 +375,30 @@
                     if (this.postForm.examEndTime.toString().length===10)
                         this.postForm.examEndTime = data.examEndTime*1000;
 
+
+                    if (this.postForm.crimeTime){
+                        this.postForm.crimeTime = JSON.parse(this.postForm.crimeTime)
+                    }
+                    if (this.postForm.sceneType){
+                        this.postForm.sceneType = JSON.parse(this.postForm.sceneType)
+                    }
+                    if (this.postForm.invadeType){
+                        this.postForm.invadeType = JSON.parse(this.postForm.invadeType)
+                    }
+                    if (this.postForm.escapeType){
+                        this.postForm.escapeType = JSON.parse(this.postForm.escapeType)
+                    }
+
+
+                    if (this.postForm.caseHappenRegion){
+                        this.postForm.caseHappenRegion = JSON.parse(this.postForm.caseHappenRegion)
+                    }
+
+                    if (this.postForm.caseCategory){
+                        this.postForm.caseCategory = JSON.parse(this.postForm.caseCategory)
+                    }
+
+
                 }).catch(err => {
                     console.log(err)
                 })
@@ -388,6 +414,43 @@
             submitForm() {
 
                 var data = Object.assign({},  this.postForm);
+
+                if (data.crimeTime) {
+                    if (data.crimeTime.length > 0) {
+                        data.crimeTime = JSON.stringify(data.crimeTime)
+                    }
+                }
+
+                 if (data.caseHappenRegion) {
+                    if (data.caseHappenRegion.length > 0) {
+                        data.caseHappenRegion = JSON.stringify(data.caseHappenRegion)
+                    }
+                }
+
+                if (data.sceneType) {
+                    if (data.sceneType.length > 0) {
+                        data.sceneType = JSON.stringify(data.sceneType)
+                    }
+                }
+
+                if (data.invadeType) {
+                    if (data.invadeType.length > 0) {
+                        data.invadeType = JSON.stringify(data.invadeType)
+                    }
+                }
+
+                if (data.escapeType) {
+                    if (data.escapeType.length > 0) {
+                        data.escapeType = JSON.stringify(data.escapeType)
+                    }
+                }
+
+                if (data.caseCategory) {
+                    if (data.caseCategory.length > 0) {
+                        data.caseCategory = JSON.stringify(data.caseCategory)
+                    }
+                }
+
 
                 if (data.examBeginTime &&data.examBeginTime.toString().length>10)
                     data.examBeginTime =  parseInt(data.examBeginTime/1000);
