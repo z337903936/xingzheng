@@ -1450,7 +1450,7 @@ export default {
     }
   },
   watch: {
-    'list.concernedPersonList': {
+   /* 'list.concernedPersonList': {
       handler(newData, oldData) {
         if (newData.length > 0) {
          var count = 0;
@@ -1468,8 +1468,8 @@ export default {
         }
       },
       deep: true,
-      immediate: true
-    },
+
+    },*/
     'materialListForm.materialCategory': {
       handler(newData, oldData) {
 
@@ -2302,6 +2302,23 @@ export default {
       }
     },
 
+    judgeCP(newData){
+      if (newData.length > 0) {
+        var count = 0;
+        newData.map(item=>{
+          if (item.idType === '死者'){
+            count++
+          }
+        })
+
+        if (count)
+          this.list.isDeathCase = true;
+        else
+          this.list.isDeathCase = false
+      } else {
+        this.list.isDeathCase = false
+      }
+    },
     resetConcernedPersonListForm() {
       this.concernedPersonListForm = {
         name: '',
@@ -2314,6 +2331,8 @@ export default {
       }
       this.dialogConcernedPersonListFormMethod = 'add'
       this.dialogConcernedPersonListFormIndex = ''
+      this.judgeCP(this.list.concernedPersonList);
+
     },
     addConcernedPersonListForm() {
       if (this.concernedPersonListForm.idType.constructor === Array) {
@@ -2329,10 +2348,12 @@ export default {
               showClose: true,
               duration: 2000
             })
-            if (this.isEdit)
-              this.submitForm()
             this.dialogConcernedPersonListForm = false
             this.resetConcernedPersonListForm()
+            if (this.isEdit)
+              this.submitForm()
+
+
           } else {
             this.$message({
               message: response.reason,
@@ -2353,6 +2374,7 @@ export default {
         this.dialogConcernedPersonListForm = false
         this.resetConcernedPersonListForm()
       }
+
     },
     handleEditConcernedPersonListForm(index, row) {
       this.concernedPersonListForm = Object.assign({}, row) // copy obj
@@ -2373,10 +2395,11 @@ export default {
               showClose: true,
               duration: 2000
             })
-            if (this.isEdit)
-              this.submitForm()
             this.dialogConcernedPersonListForm = false
             this.resetConcernedPersonListForm()
+            if (this.isEdit)
+              this.submitForm()
+
           } else {
             this.$message({
               message: response.reason,
@@ -2398,6 +2421,7 @@ export default {
         this.dialogConcernedPersonListForm = false
         this.resetConcernedPersonListForm()
       }
+
     },
     handleDeleteConcernedPersonListForm(index, row) {
       if (this.isEdit) {
@@ -2413,9 +2437,10 @@ export default {
               showClose: true,
               duration: 2000
             })
+
             if (this.isEdit)
               this.submitForm()
-            this.fetchData(this.list.id)
+
           } else {
             this.$message({
               message: response.reason,
@@ -2427,7 +2452,9 @@ export default {
         })
       } else {
         this.list.concernedPersonList.splice(index, 1)
+        this.judgeCP(this.list.concernedPersonList);
       }
+
     },
     resetMaterialListForm() {
       const change = {
@@ -2728,7 +2755,9 @@ export default {
             data.escapeType = data.escapeType.slice(-1)[0]
           }
           this.loading = true
+
           if (this.isEdit) {
+
             updateSearch(data).then(response => {
               if (response.code === 200) {
                 this.$message({
