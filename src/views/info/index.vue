@@ -70,15 +70,28 @@
                             :label="item.title"
                             :value="item.id"/>
                 </el-select>
+                <el-cascader
+                        :options="footprintList"
+                        v-model="listQuery.footprint"
+                        :filter-method="filterSearch"
+                        :show-all-levels="false"
+                        @change="countDict"
+                        placeholder="足迹"
+                        filterable
+                        :props="{ checkStrictly: true,emitPath:false }"
+                        style="width: 200px"/>
                 <el-input v-model="listQuery.crimeTools" placeholder="作案工具" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
                 <el-input v-model="listQuery.suspectName" placeholder="嫌疑人" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.suspectName" placeholder="鞋印" class="mb10" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
+
                 <el-input v-model="listQuery.filters" placeholder="关键字" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
 
+                <el-button v-waves type="primary"  @click="handleApply"
+                           style="float: right;margin-right: 20px;margin-bottom: 10px">
+                    <svg-icon icon-class="jichuguanli" /> 申请串并
+                </el-button>
                 <el-button v-waves type="primary" icon="el-icon-search" @click="reset"
                            style="float: right;margin-right: 20px">
                     清空搜索条件
@@ -97,16 +110,16 @@
                 border
                 fit
                 highlight-current-row
+                @selection-change="selectTask"
                 style="width: 100%;"
         >
+            <el-table-column
+                    v-model="taskId"
+                    type="selection"
+                    width="55"/>
             <el-table-column label="勘查号" prop="id" align="center" width="220">
                 <template slot-scope="{row}">
                     <span>{{ row.selfEvidenceNo }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="案件类别" width="150" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.caseCategory }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="发案日期" width="150" align="center">
@@ -124,9 +137,30 @@
                     <span>{{ row.caseAddress }}</span>
                 </template>
             </el-table-column>
+            <el-table-column label="案件类别" width="150" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.caseCategory }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="案件时机" width="150" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.crimeTime }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="足迹" width="150" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.footprint }}</span>
+                </template>
+            </el-table-column>
+
             <el-table-column label="侵入方式" width="210" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.invadeType }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="嫌疑人" width="210" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.suspectName }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="作案出口" width="110" align="center">
@@ -144,18 +178,13 @@
                     <span>{{ row.crimeTools }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="主办" width="110" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.mainChargerName }}</span>
-                </template>
-            </el-table-column>
+
 
             <el-table-column label="操作" fixed="right" align="center" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <!--<router-link :to="'/alarm/edit-alarm/'+row.id">-->
-                        <!--<el-button v-waves type="primary" size="mini" icon="el-icon-edit">编辑</el-button>-->
-                    <!--</router-link>-->
-
+                    <router-link :to="'/search/show-search/'+row.id">
+                        <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
+                    </router-link>
                 </template>
             </el-table-column>
         </el-table>
@@ -171,6 +200,29 @@
         >
         </el-pagination>
 
+        <el-dialog title="串并申请" :close-on-click-modal="false" :visible.sync="dialogFormVisible" width="30%">
+            <el-form
+                    ref="dataForm"
+                    :rules="rules"
+                    :model="applyData"
+                    label-position="left"
+                    label-width="70px"
+                    style="width: 70%; margin-left:50px;">
+
+                <el-form-item label="串并依据" prop="path">
+                    <el-input v-model="applyData.preConditions"/>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">
+                    取 消
+                </el-button>
+                <el-button type="primary" @click="applyCompose()">
+                    确 定
+                </el-button>
+            </div>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -185,7 +237,8 @@
     import { fetchAdminMemberList } from '@/api/permissions'
     import waves from '@/directive/waves' // waves directive
     import {fetchList} from '@/api/dictionary'
-
+    import {applyCompose} from '@/api/compose'
+    
     export default {
         name: 'Dna',
         directives: {waves},
@@ -220,6 +273,13 @@
                 crimeTimeList: [],
                 invadeTypeList: [],
                 escapeTypeList: [],
+                footprintList: [],
+                taskId: [],
+                applyData:{
+                    preConditions:'',
+                    list:[],
+                },
+                dialogFormVisible: false,
                 crimePeoplesType: [
                     {
                         id: 0,
@@ -255,8 +315,50 @@
             this.search('作案出口').then(data => {
                 this.escapeTypeList = this.processData(data.list)
             })
+            this.search('足迹物证').then(data => {
+                this.footprintList = this.processData(data.list)
+            })
+
         },
         methods: {
+            handleApply(){
+                if (this.taskId.length===0){
+                    this.$confirm('请选择串并数据!')
+                        .then(_ => {
+
+                        })
+                        .catch(_ => {});
+                } else{
+                    this.dialogFormVisible = true;
+                }
+            },
+            selectTask(selection) {
+                this.taskId = selection.map(data => {
+                    return data.id
+                })
+            },
+            applyCompose(){
+                this.applyData.list =  this.taskId
+                applyCompose(this.applyData).then(response=>{
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.dialogFormVisible = false;
+                        this.getList(this.curId)
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                })
+            },
             reset() {
                 this.listQuery = {
                     page: 1,
@@ -291,11 +393,13 @@
                     this.list = response.list;
                     this.list.map(res=>{
                         if (res.crimeTime){
-                            if (JSON.parse(res.crimeTime).constructor === Array){
-                                res.crimeTime = JSON.parse(res.crimeTime).join(' ')
+                            if (res.crimeTime.startsWith('[',0)){
+                                if (JSON.parse(res.crimeTime).constructor === Array){
+                                    res.crimeTime = JSON.parse(res.crimeTime).join(' ')
+                                }
                             }
-                        }
 
+                        }
                         if (res.sceneType){
                             if (JSON.parse(res.sceneType).constructor === Array){
                                 res.sceneType = JSON.parse(res.sceneType).join(' ')
@@ -306,11 +410,12 @@
                                 res.invadeType = JSON.parse(res.invadeType).join(' ')
                             }
                         }
-                        if (this.list.escapeType){
+                        if (res.escapeType){
                             if (JSON.parse(res.escapeType).constructor === Array){
                                 res.escapeType = JSON.parse(res.escapeType).join(' ')
                             }
                         }
+                        return res;
                     })
                     this.pages = response.pages
 

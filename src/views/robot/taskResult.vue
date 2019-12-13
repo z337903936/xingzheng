@@ -121,7 +121,7 @@
                 pages: 0,
                 listLoading: false,
                 paginationShow: true,
-                dialogFormVisible: false,
+
                 searchTime: '',
                 listQuery: {
                     page: 1,
@@ -132,6 +132,7 @@
                     preConditions:'',
                     list:[],
                 },
+                dialogFormVisible: false,
                 rules:{},
                 curId:''
 

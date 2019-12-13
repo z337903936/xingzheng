@@ -141,8 +141,18 @@
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="12">
-                            <el-form-item label="鞋印" prop="footprint">
-                                <el-input v-model="postForm.footprint"/>
+                            <el-form-item label="足迹" prop="footprint">
+                                <el-cascader
+                                        :options="footprintList"
+                                        v-model="postForm.footprint"
+                                        :filter-method="filterSearch"
+                                        :show-all-levels="false"
+                                        clearable
+                                        :props="emitProps"
+                                        filterable
+                                        style="width: 100%"
+                                />
+
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -226,6 +236,7 @@
                 crimeTimeList: [],
                 invadeTypeList: [],
                 escapeTypeList: [],
+                footprintList: [],
 
 
             }
@@ -260,6 +271,10 @@
 
             this.search('作案出口').then(data => {
                 this.escapeTypeList = this.processData(data.list)
+            })
+
+            this.search('足迹物证').then(data => {
+                this.footprintList = this.processData(data.list)
             })
 
 
