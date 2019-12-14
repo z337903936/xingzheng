@@ -156,7 +156,7 @@
                     filters: undefined,
                     fromName: undefined,
                     evidenceNo: undefined,
-                    bizName: '申请物证入库',
+                    bizName: 'MATERIAL_STOCK',
                 },
                 rules:{},
                 downloadLoading: false,

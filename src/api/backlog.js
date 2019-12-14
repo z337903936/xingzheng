@@ -18,10 +18,18 @@ export function accetpTask(data) {
     })
 }
 
+export function medicalDetail(data) {
+    return request({
+        url: '/v1/cp/case_details/',
+        method: 'get',
+        params:data
+    })
+}
+
 
 export function writeResult(data) {
     return request({
-        url: '/v1/cp/exam_task_result/' + data.id + '/',
+        url: '/v1/cp/exam_task_result/?materialId=' + data.id ,
         method: 'post',
         data
     })

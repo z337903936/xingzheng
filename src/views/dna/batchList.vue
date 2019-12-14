@@ -50,11 +50,8 @@
                     <span>{{ row.evidenceMaterial.thirdMaterialNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
+            <el-table-column label="操作" align="center" fixed="right" width="280" class="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <router-link :to="'/dna/edit-dna/'+row.evidenceMaterial.id">
-                        <el-button type="primary" size="mini"  icon="el-icon-edit" >编辑</el-button>
-                    </router-link>
                     <el-button type="success" size="mini" style="width: 90px" icon="el-icon-tickets" @click="handleWriteResult(row)">
                         填写结果
                     </el-button>
@@ -104,97 +101,124 @@
                             <el-input v-model="resultFrom.examOrg"/>
                         </el-form-item>
                     </el-col>
+                    <div v-if="resultDetail.stepName === 'DNA检测'">
+                        <el-col :span="12">
 
-                    <el-col :span="12">
+                            <el-form-item label="检材类型" prop="materialType">
+                                <el-input v-model="resultFrom.materialType"/>
+                                <el-cascader
+                                        :options="materialTypeList"
+                                        filterable
+                                        slot="reference"
+                                        :props="emitProps"
+                                        v-model="resultFrom.materialType"
+                                        :filter-method="remoteSearch"
+                                        @change="countDict($event,'检材类型')"
+                                        :show-all-levels="false"
+                                        style="width: 100%">
+                                </el-cascader>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="检验结果" prop="examResult">
+                                <el-select v-model="resultFrom.examResult" placeholder="请选择" style="width: 100%">
+                                    <el-option
+                                            v-for="item in examResult"
+                                            :key="item.title"
+                                            :label="item.title"
+                                            :value="item.title"/>
+                                </el-select>
+                                <el-input v-model="resultFrom.examResult"/>
 
-                        <el-form-item label="检材类型" prop="materialType">
-                            <el-input v-model="resultFrom.materialType"/>
-                            <el-cascader
-                                    :options="materialTypeList"
-                                    filterable
-                                    slot="reference"
-                                    :props="emitProps"
-                                    v-model="resultFrom.materialType"
-                                    :filter-method="remoteSearch"
-                                    @change="countDict($event,'检材类型')"
-                                    :show-all-levels="false"
-                                    style="width: 100%">
-                            </el-cascader>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="检验结果" prop="examResult">
-                            <el-select v-model="resultFrom.examResult" placeholder="请选择" style="width: 100%">
-                                <el-option
-                                        v-for="item in examResult"
-                                        :key="item.title"
-                                        :label="item.title"
-                                        :value="item.title"/>
-                            </el-select>
-                            <el-input v-model="resultFrom.examResult"/>
+                            </el-form-item>
 
-                        </el-form-item>
+                        </el-col>
+                    </div>
+                    <div v-else-if="resultDetail.stepName === '指纹检测'">
+                        <el-col :span="24">
+                            <el-form-item label="检验结果" prop="idNo">
+                                <el-select v-model="resultFrom.examResult" placeholder="请选择" style="width: 100%">
+                                    <el-option
+                                            v-for="item in examResultF"
+                                            :key="item.title"
+                                            :label="item.title"
+                                            :value="item.title"/>
+                                </el-select>
+                            </el-form-item>
 
-                    </el-col>
+                        </el-col>
+                    </div>
 
-                    <el-col :span="12">
-                        <el-form-item label="比中人员" prop="checkPeople">
-                            <el-select v-model="resultFrom.checkPeople"
-                                       filterable
-                                       :filter-method="filterUserSearch"
-                                       @visible-change="restUserSearch"
-                                       class="filter-item"
-                                       @change="selectUpdate"
-                                       value-key="id"
-                                       style="width: 100%">
-                                <el-option
-                                        v-for="item in userShowList"
-                                        :key="item.id"
-                                        :label="item.title"
-                                        :value="item.id"/>
-                            </el-select>
-                        </el-form-item>
+                    <div v-else>
+                        <el-col :span="24">
+                            <el-form-item label="检验结果" prop="idNo">
+                                <el-input v-model="resultFrom.examResult"/>
+                            </el-form-item>
 
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="性别" prop="sex">
-                            <el-select v-model="resultFrom.sex" placeholder="请选择"  style="width: 100%">
-                                <el-option
-                                        v-for="item in sex"
-                                        :key="item.title"
-                                        :label="item.title"
-                                        :value="item.title"/>
-                            </el-select>
-                        </el-form-item>
+                        </el-col>
+                    </div>
 
-                    </el-col>
+                    <div v-if="resultDetail.stepName === 'DNA检测' || resultDetail.stepName === '指纹检测'">
 
-                    <el-col :span="12">
-                        <el-form-item label="身份证号" prop="idNo">
-                            <el-input v-model="resultFrom.idNo"/>
+                        <el-col :span="12">
+                            <el-form-item label="比中人员" prop="checkPeople">
+                                <el-select v-model="resultFrom.checkPeople"
+                                           filterable
+                                           :filter-method="filterUserSearch"
+                                           @visible-change="restUserSearch"
+                                           class="filter-item"
+                                           @change="selectUpdate"
+                                           value-key="id"
+                                           style="width: 100%">
+                                    <el-option
+                                            v-for="item in userShowList"
+                                            :key="item.id"
+                                            :label="item.title"
+                                            :value="item.id"/>
+                                </el-select>
+                            </el-form-item>
 
-                        </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="性别" prop="sex">
+                                <el-select v-model="resultFrom.sex" placeholder="请选择"  style="width: 100%">
+                                    <el-option
+                                            v-for="item in sex"
+                                            :key="item.title"
+                                            :label="item.title"
+                                            :value="item.title"/>
+                                </el-select>
+                            </el-form-item>
 
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="比中时间" prop="checkOutTime">
-                            <el-date-picker
-                                    v-model="resultFrom.checkOutTime"
-                                    type="date"
-                                    value-format="timestamp"
-                                    placeholder="选择日期"
-                                    style="width: 100%">
-                            </el-date-picker>
-                        </el-form-item>
+                        </el-col>
 
-                    </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="身份证号" prop="idNo">
+                                <el-input v-model="resultFrom.idNo"/>
 
-                    <el-col :span="24">
-                        <el-form-item label="户籍地" prop="huji">
-                            <el-input v-model="resultFrom.huji"/>
-                        </el-form-item>
+                            </el-form-item>
 
-                    </el-col>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="比中时间" prop="checkOutTime">
+                                <el-date-picker
+                                        v-model="resultFrom.checkOutTime"
+                                        type="date"
+                                        value-format="timestamp"
+                                        placeholder="选择日期"
+                                        style="width: 100%">
+                                </el-date-picker>
+                            </el-form-item>
+
+                        </el-col>
+
+                        <el-col :span="24">
+                            <el-form-item label="户籍地" prop="huji">
+                                <el-input v-model="resultFrom.huji"/>
+                            </el-form-item>
+
+                        </el-col>
+                    </div>
                     <el-col :span="12">
                         <el-form-item label="利用情况" prop="useType">
                             <el-select v-model="resultFrom.usedType" placeholder="请选择"  style="width: 100%">
@@ -233,38 +257,38 @@
             <el-divider content-position="left">物证信息</el-divider>
             <el-row :gutter="20">
                 <el-col :span="12">
-                    <el-form-item label="物证名称" prop="name">
-                        {{ resultDetail.name }}
+                    <el-form-item label="物证名称" >
+                        {{ resultDetail.evidenceMaterial.name }}
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="提取位置" prop="name">
-                        {{ resultDetail.name }}
+                    <el-form-item label="提取位置" >
+                        {{ resultDetail.evidenceMaterial.name }}
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
 
-                    <el-form-item label="提取方法" prop="name">
-                        {{ resultDetail.extractMethod }}
+                    <el-form-item label="提取方法" >
+                        {{ resultDetail.evidenceMaterial.extractMethod }}
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="可靠程度" prop="name">
-                        {{ resultDetail.reliabilityLevel }}
+                    <el-form-item label="可靠程度" >
+                        {{ resultDetail.evidenceMaterial.reliabilityLevel }}
                     </el-form-item>
 
                 </el-col>
 
                 <el-col :span="12">
-                    <el-form-item label="提取人" prop="name">
-                        {{ resultDetail.extractName }}
+                    <el-form-item label="提取人" >
+                        {{ resultDetail.evidenceMaterial.extractName }}
                     </el-form-item>
 
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="提取时间" prop="name">
-                        {{ resultDetail.extractTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')  }}
+                    <el-form-item label="提取时间" >
+                        {{ resultDetail.evidenceMaterial.extractTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')  }}
                     </el-form-item>
 
                 </el-col>
@@ -273,30 +297,30 @@
             <el-divider content-position="left">案件信息</el-divider>
             <el-row :gutter="20">
                 <el-col :span="12">
-                    <el-form-item label="勘查号" prop="name">
-                        {{ resultDetail.evidenceNo }}
+                    <el-form-item label="勘查号" >
+                        {{ resultDetail.evidence.evidenceNo }}
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="案件编号" prop="name">
-                        {{ resultDetail.caseNo }}
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12">
-                    <el-form-item label="发案时间 " prop="name">
-                        {{ resultDetail.caseHappenTime }}
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="案件类别" prop="name">
-                        {{ resultDetail.caseCategory }}
+                    <el-form-item label="案件编号">
+                        {{ resultDetail.evidence.caseNo }}
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
-                    <el-form-item label="发案地点" prop="name">
-                        {{ resultDetail.caseAddress }}
+                    <el-form-item label="发案时间 ">
+                        {{ resultDetail.evidence.caseHappenTime }}
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="案件类别" >
+                        {{ resultDetail.evidence.caseCategory }}
+                    </el-form-item>
+                </el-col>
+
+                <el-col :span="12">
+                    <el-form-item label="发案地点" >
+                        {{ resultDetail.evidence.caseAddress }}
                     </el-form-item>
                 </el-col>
 
@@ -324,6 +348,7 @@
 </style>
 
 <script>
+    import {  medicalDetail } from '@/api/backlog'
     import {  batchMaterialList } from '@/api/common'
     import waves from '@/directive/waves' // waves directive
     import { parseTime } from '@/utils'
@@ -374,6 +399,13 @@
                         title: '混合不可拆分'
                     },
                 ],
+                examResultF: [
+                    {
+                        title: '比中'
+                    }, {
+                        title: '未比中'
+                    },
+                ],
                 emitProps:{
                     emitPath:false
                 },
@@ -397,7 +429,7 @@
                     checkPeople: '',
                     sex: '',
                     idNo: '',
-                    checkOutTime: '',
+                    checkOutTime: undefined,
                     huji: '',
                     useType: '',
                     documentNo: '',
@@ -409,6 +441,7 @@
                 userList: [],
                 userShowList: [],
                 materialTypeList: [],
+                curName:'',
 
             }
         },
@@ -427,7 +460,7 @@
             handleWriteResult(task) {
                 this.dialogResultFrom = true;
                 this.resultFrom.id = task.id
-                this.resultDetail = task.evidenceMaterial
+                this.resultDetail = task
             },
             writeResult() {
                 let data = Object.assign({}, this.resultFrom)
@@ -464,6 +497,10 @@
                     this.listLoading = false
 
                 })
+                const send ={
+                    caseId:id
+                }
+
             },
             getUserList() {
                 fetchAdminMemberList({}).then(response => {

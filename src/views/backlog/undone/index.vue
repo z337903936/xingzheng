@@ -261,19 +261,29 @@
                     </el-button>
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
                                @click="handleAcceptTask(row)"
-                               v-if="row.status===1 && row.stepName !== '痕检现勘' && row.stepName !== '物证入库'">
+                               v-if="row.status===1 && (row.stepName === '法医现勘' ||  row.stepName === '接警') ">
                         接收任务
+                    </el-button>
+                    <el-button type="primary" size="small" icon="el-icon-document-checked"
+                               @click="handleTaskAction(row)"
+                               v-if="row.status===1 && row.stepName !== '痕检现勘' && row.stepName !== '物证入库' && row.stepName !== '法医现勘' && row.stepName !== '接警' ">
+                        任务操作
                     </el-button>
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
                                @click="handleAcceptTaskSeach(row)" v-if="row.status===1 && row.stepName === '痕检现勘'">
                         接收任务
                     </el-button>
                     <el-button type="success" size="small" icon="el-icon-tickets" @click="handleWriteResult(row)"
-                               v-if="row.status===2 && row.stepName !== '痕检现勘' && row.stepName !== '物证入库' && row.stepName !== '接警'">
+                               v-if="row.status===2 && row.stepName === '法医现勘' ">
                         填写结果
                     </el-button>
+                    <router-link :to="'/material/batch/'+row.examBatch.id"
+                                 v-if="row.status===2 && row.stepName !== '痕检现勘' && row.stepName !== '物证入库' && row.stepName !== '接警'"
+                    >
+                        <el-button v-waves type="success" size="mini" icon="el-icon-tickets" style="width: 100px">物证详情</el-button>
+                    </router-link>
                     <router-link :to="'/search/update-search/'+row.evidenceId"
-                                 v-if="row.status===2 && row.stepName==='痕检现勘'">
+                                 v-if="row.status===2 && (row.stepName==='痕检现勘' ||  row.stepName === '接警') ">
                         <el-button icon="el-icon-edit" type="primary" size="small">编辑现勘</el-button>
                     </router-link>
                 </template>
@@ -289,13 +299,13 @@
         <!--@size-change="getList"-->
         <!--&gt;-->
         <!--</el-pagination>-->
-        <el-dialog title="接受任务" :close-on-click-modal="false" :visible.sync="dialogFormAccept" width="50%">
+        <el-dialog title="任务" :close-on-click-modal="false" :visible.sync="dialogFormAction" width="50%">
             <el-form
                     ref="acceptTaskFrom"
                     :model="acceptTaskFrom"
                     label-position="left"
-                    label-width="100px"
-                    style="width: 400px; margin-left:50px;">
+                    label-width="120px"
+                    style="width: 80%; margin-left:50px;">
 
                 <el-form-item label="送检单位" prop="name">
                     <el-input v-model="acceptTaskFrom.requireOrg"/>
@@ -312,267 +322,82 @@
                     >
                     </el-date-picker>
                 </el-form-item>
+                <el-form-item label="理由" prop="reason">
+                    <el-input v-model="acceptTaskFrom.reason"/>
+                </el-form-item>
             </el-form>
 
+
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormAccept = false">
-                    取 消
+                <el-button type="danger" @click="actionTask(false)">
+                    拒绝
                 </el-button>
-                <el-button type="primary" @click="acceptTask()">
-                    确 定
+                <el-button type="primary" @click="actionTask(true)">
+                    同意
                 </el-button>
             </div>
         </el-dialog>
+        <el-dialog title="接受任务" :close-on-click-modal="false" :visible.sync="dialogFormAccept" width="50%">
+        <el-form
+                ref="acceptTaskFrom"
+                :model="acceptTaskFrom"
+                label-position="left"
+                label-width="120px"
+                style="width: 80%; margin-left:50px;">
 
-        <el-dialog title="填写结果" :close-on-click-modal="false" :visible.sync="dialogResultFrom" width="50%">
+            <el-form-item label="送检单位" prop="name">
+                <el-input v-model="acceptTaskFrom.requireOrg"/>
+            </el-form-item>
+
+
+
+
+            <el-form-item label="送检时间" prop="sort">
+                <el-date-picker
+                        v-model="acceptTaskFrom.requireTime"
+                        type="date"
+                        value-format="timestamp"
+                        placeholder="选择日期"
+                        style="width: 100%"
+                >
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item label="理由" prop="name">
+                <el-input v-model="acceptTaskFrom.reason"/>
+            </el-form-item>
+
+        </el-form>
+
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormAccept = false">
+                取 消
+            </el-button>
+            <el-button type="primary" @click="acceptTask()">
+                确 定
+            </el-button>
+        </div>
+    </el-dialog>
+
+        <el-dialog title="填写结果" :close-on-click-modal="false" :visible.sync="dialogresultFrom" width="50%">
             <el-form
-                    ref="ResultFrom"
-                    :model="ResultFrom"
+                    ref="resultFrom"
+                    :model="resultFrom"
                     label-position="left"
-                    label-width="100px"
-                    style="width: 400px; margin-left:50px;">
-                <div v-if="isDNA">
-                    <el-row :gutter="20">
-                        <el-col :span="12">
-                            <el-form-item label="移交人" prop="name">
+                    label-width="120px"
+                    style="width: 80%; margin-left:50px;">
 
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="移交日期" prop="name">
-
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="简要案情" prop="name">
-
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="鉴定文书号" prop="name">
-
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-
-                </div>
-                <div v-if="isForensic">
-                    <el-row :gutter="20">
-                        <el-col :span="12">
-                            <el-form-item label="移交人" prop="name">
-
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="死者名字" prop="name">
-
-                            </el-form-item>
-                        </el-col>
-
-                    <el-col :span="12">
-                        <el-form-item label="简要案情" prop="name">
-
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="尸检号" prop="name">
-
-                        </el-form-item>
-                    </el-col>
-                    </el-row>
-                </div>
-                <div v-if="isFinger">
-                    <el-row :gutter="20">
-                        <el-col :span="12">
-                            <el-form-item label="移交人" prop="name">
-
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="移交日期" prop="name">
-
-                            </el-form-item>
-                        </el-col>
-
-                        <el-col :span="12">
-                            <el-form-item label="鉴定文书号" prop="name">
-
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="比中嫌疑人" prop="name">
-
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-form-item label="简要案情" prop="name">
-
-                    </el-form-item>
-                </div>
-                <div v-if="isElectron">
-                    <el-row :gutter="20">
-                        <el-col :span="12">
-                            <el-form-item label="移交人" prop="name">
-
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="移交日期" prop="name">
-
-                            </el-form-item>
-                        </el-col>
-
-                        <el-col :span="12">
-                            <el-form-item label="鉴定文书号" prop="name">
-
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="简要案情" prop="name">
-
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-
-                </div>
-                <el-divider></el-divider>
-               <!-- <el-divider content-position="left">检验信息</el-divider>
-                <el-row :gutter="20">
-                <el-col :span="12">
-                <el-form-item label="检验人" prop="name">
-                <el-input v-model="ResultFrom.result"/>
+                <el-form-item label="检测结果" prop="result">
+                    <el-input v-model="resultFrom.result"/>
                 </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                <el-form-item label="检验单位" prop="name">
-                <el-input v-model="ResultFrom.result"/>
+                <el-form-item label="勘查号" prop="evidenceNo">
+                    <el-input v-model="resultFrom.evidenceNo"/>
                 </el-form-item>
-                </el-col>
-
-                <el-col :span="12">
-                <el-form-item label="检验结果" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                <el-form-item label="比中时间" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-
-                <el-col :span="12">
-                <el-form-item label="姓名" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                <el-form-item label="性别" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-
-                <el-col :span="12">
-                <el-form-item label="身份证号" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                <el-form-item label="户籍地址" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-
-                </el-row>
-                <el-divider content-position="left">物证信息</el-divider>
-                <el-row :gutter="20">
-                <el-col :span="12">
-                <el-form-item label="物证名称" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                <el-form-item label="提取方法" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-
-                <el-col :span="12">
-                <el-form-item label="提取人" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                <el-form-item label="提取时间" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-
-                <el-col :span="12">
-                <el-form-item label="可靠程度" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                <el-form-item label="利用情况" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-
-                </el-row>
-                <el-divider content-position="left">案件信息</el-divider>
-                <el-row :gutter="20">
-                <el-col :span="12">
-                <el-form-item label="物证名称" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                <el-form-item label="提取方法" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-
-                <el-col :span="12">
-                <el-form-item label="提取人" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                <el-form-item label="提取时间" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-
-                <el-col :span="12">
-                <el-form-item label="可靠程度" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                <el-form-item label="利用情况" prop="name">
-                <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                </el-col>
-
-                </el-row>-->
-                <el-form-item label="检测结果" prop="name">
-                    <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                <el-form-item label="文书号" prop="name">
-                    <el-input v-model="ResultFrom.documentNo"/>
-                </el-form-item>
-                <el-form-item label="利用情况" prop="usedType">
-                    <el-select v-model="ResultFrom.usedType" placeholder="请选择">
-                        <el-option
-                                v-for="item in usedType"
-                                :key="item.title"
-                                :label="item.title"
-                                :value="item.title"/>
-                    </el-select>
+                <el-form-item label="文书号" prop="documentNo">
+                    <el-input v-model="resultFrom.documentNo"/>
                 </el-form-item>
                 <el-form-item label="文书日期" prop="sort">
                     <el-date-picker
-                            v-model="ResultFrom.documentDate"
+                            v-model="resultFrom.documentDate"
                             type="date"
                             value-format="timestamp"
                             placeholder="选择日期"
@@ -580,61 +405,93 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="是否推送给主办痕检" prop="needToPushToCharger">
-                    <el-checkbox v-model="ResultFrom.needToPushToCharger"></el-checkbox>
+                    <el-checkbox v-model="resultFrom.needToPushToCharger"></el-checkbox>
                 </el-form-item>
-                <div v-if="isForensic">
-                    <el-form-item label="委托单位" prop="delegateOrg">
-                        <el-input v-model="ResultFrom.delegateOrg"/>
-                    </el-form-item>
-                    <el-form-item label="委托人" prop="delegateName">
-                        <el-input v-model="ResultFrom.delegateName"/>
-                    </el-form-item>
-                    <el-form-item label="简要案情" prop="digest">
-                        <el-input v-model="ResultFrom.digest"/>
-                    </el-form-item>
-                    <el-form-item label="死者情况" prop="deathDetail">
-                        <el-input v-model="ResultFrom.deathDetail"/>
-                    </el-form-item>
-                    <el-form-item label="委托目的" prop="delegateReason">
-                        <el-input v-model="ResultFrom.delegateReason"/>
-                    </el-form-item>
-                    <el-form-item label="鉴定结论" prop="conclusion">
-                        <el-input v-model="ResultFrom.conclusion"/>
-                    </el-form-item>
-                    <el-form-item label="鉴定人" prop="examName">
-                        <el-input v-model="ResultFrom.examName"/>
-                    </el-form-item>
-                    <el-form-item label="协办" prop="supportName">
-                        <el-input v-model="ResultFrom.supportName"/>
-                    </el-form-item>
-                    <el-form-item label="案件类别" prop="caseCategory">
-                        <el-cascader
-                                :options="caseCategoryList"
-                                filterable
-                                @change="countDict"
-                                v-model="ResultFrom.caseCategory"
-                                :filter-method="remoteSearch"
-                                :show-all-levels="false"
-                                placeholder="案件类别"
-                                style="width: 100%;">
-                        </el-cascader>
+                <el-form-item label="任务编号" prop="taskNo">
+                    <el-input v-model="resultFrom.taskNo"/>
+                </el-form-item>
+                <el-form-item label="案件类别" prop="caseCategory">
+                    <el-cascader
+                            :options="caseCategoryList"
+                            filterable
+                            @change="countDict"
+                            v-model="resultFrom.caseCategory"
+                            :filter-method="remoteSearch"
+                            :show-all-levels="false"
+                            placeholder="案件类别"
+                            style="width: 100%;">
+                    </el-cascader>
 
-                    </el-form-item>
-                    <el-form-item label="是否移交" prop="hasTransfered">
-                        <el-checkbox v-model="ResultFrom.hasTransfered"></el-checkbox>
-                    </el-form-item>
-                    <el-form-item label="文书发放" prop="hasTransfered">
-                        <el-checkbox v-model="ResultFrom.hasTransfered"></el-checkbox>
-                    </el-form-item>
-                    <el-form-item label="备注栏" prop="deathDetail">
-                        <el-input v-model="ResultFrom.deathDetail" type="textarea"
-                                  :autosize="{ minRows: 2, maxRows: 4}"/>
-                    </el-form-item>
-                </div>
+                </el-form-item>
+                <el-form-item label="委托日期" prop="delegateTime">
+                    <el-date-picker
+                            v-model="resultFrom.delegateTime"
+                            type="date"
+                            value-format="timestamp"
+                            placeholder="选择日期"
+                            style="width: 100%">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="委托单位" prop="delegateOrg">
+                    <el-input v-model="resultFrom.delegateOrg"/>
+                </el-form-item>
+
+                <el-form-item label="委托人" prop="delegateName">
+                    <el-select v-model="resultFrom.delegateUid"
+                               filterable
+                               :filter-method="filterUserSearch"
+                               @visible-change="restUserSearch"
+                               class="filter-item"
+                               @change="selectUpdate"
+                               value-key="id"
+                               style="width: 100%">
+                        <el-option
+                                v-for="item in userShowList"
+                                :key="item.id"
+                                :label="item.title"
+                                :value="item.id"/>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="简要案情" prop="digest">
+                    <el-input v-model="resultFrom.digest"/>
+                </el-form-item>
+                <el-form-item label="死者情况" prop="deathDetail">
+                    <el-input v-model="resultFrom.deathDetail"/>
+                </el-form-item>
+                <el-form-item label="提取检材" prop="extractMaterial">
+                    <el-input v-model="resultFrom.extractMaterial"/>
+                </el-form-item>
+                <el-form-item label="检材去向" prop="materialTo">
+                    <el-input v-model="resultFrom.materialTo"/>
+                </el-form-item>
+
+                <el-form-item label="鉴定结论" prop="conclusion">
+                    <el-input v-model="resultFrom.conclusion"/>
+                </el-form-item>
+                <el-form-item label="检验人" prop="examName">
+                    <el-select v-model="resultFrom.examUid"
+                               filterable
+                               :filter-method="filterUserSearch"
+                               @visible-change="restUserSearch"
+                               class="filter-item"
+                               @change="selectUpdate"
+                               value-key="id"
+                               style="width: 100%">
+                        <el-option
+                                v-for="item in userShowList"
+                                :key="item.id"
+                                :label="item.title"
+                                :value="item.id"/>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="备注栏" prop="note">
+                    <el-input v-model="resultFrom.note" type="textarea"
+                              :autosize="{ minRows: 2, maxRows: 4}"/>
+                </el-form-item>
 
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogResultFrom = false">
+                <el-button @click="dialogresultFrom = false">
                     取 消
                 </el-button>
                 <el-button type="primary" @click="writeResult()">
@@ -673,7 +530,7 @@
 
 
 <script>
-    import {accetpTask, taskList, writeResult} from '@/api/backlog'
+    import {accetpTask, taskList, writeResult,medicalWriteResult} from '@/api/backlog'
     import {parseTime} from '@/utils'
     import {fetchAdminMemberList} from '@/api/permissions'
     import {fetchList} from '@/api/dictionary'
@@ -714,34 +571,38 @@
                 dialogFormAccept: false,
                 acceptTaskFrom: {
                     stepId: '',
+                    recordNo: undefined,
                     requireOrg: '',
                     requireTime: '',
+                    reason: '',
+                    agree: undefined,
                 },
-                dialogResultFrom: false,
+                dialogresultFrom: false,
                 isForensic: false,
                 isDNA: false,
                 isFinger: false,
                 isElectron: false,
-                ResultFrom: {
+                resultFrom: {
                     id: '',
-                    stepId: '',
                     result: '',
                     documentNo: '',
                     documentDate: '',
+                    taskNo: '',
                     delegateOrg: '',
-                    delegateName: '',
+                    delegateUid: '',
                     digest: '',
                     deathDetail: '',
-                    delegateReason: '',
+                    extractMaterial: '',
                     conclusion: '',
-                    examName: '',
-                    supportName: '',
+                    examUid: '',
+                    materialTo: '',
                     caseCategory: '',
-                    hasTransfered: '',
+                    note: '',
                     needToPushToCharger: '',
                     usedType: '',
                 },
                 caseCategoryList: [],
+                dialogFormAction: false,
 
 
             }
@@ -867,24 +728,24 @@
                 }
             },
             handleWriteResult(task) {
-                this.dialogResultFrom = true;
+                this.dialogresultFrom = true;
                 if (task.stepName === '法医现勘') {
                     this.isForensic = true
-                    this.ResultFrom.caseCategory = task.evidence.caseCategory
-                    this.ResultFrom.selfEvidenceNo = task.evidence.selfEvidenceNo
-                    this.ResultFrom.caseCategory = task.evidence.caseCategory
-                    this.ResultFrom.caseCategory = task.evidence.caseCategory
+                    this.resultFrom.caseCategory = task.evidence.caseCategory
+                    this.resultFrom.selfEvidenceNo = task.evidence.selfEvidenceNo
+                    this.resultFrom.caseCategory = task.evidence.caseCategory
+                    this.resultFrom.caseCategory = task.evidence.caseCategory
                 } else {
                     this.isForensic = false
                 }
-                this.ResultFrom.stepId = task.id
-                this.ResultFrom.id = task.id
+                this.resultFrom.stepId = task.id
+                this.resultFrom.id = task.id
             },
             writeResult() {
-                let data = Object.assign({}, this.ResultFrom)
+                let data = Object.assign({}, this.resultFrom)
                 if (data.documentDate.toString().length > 10)
                     data.documentDate = parseInt(data.documentDate / 1000);
-                writeResult(data).then(response => {
+                medicalWriteResult(data).then(response => {
                     if (response.code === 200) {
                         this.$message({
                             message: '操作成功',
@@ -892,7 +753,7 @@
                             showClose: true,
                             duration: 2000
                         });
-                        this.dialogResultFrom = false;
+                        this.dialogresultFrom = false;
                         this.getList();
                     } else {
                         this.$message({
@@ -929,10 +790,42 @@
             },
             handleAcceptTask(task) {
                 this.dialogFormAccept = true;
-                this.acceptTaskFrom.stepId = task.id
-                if (task) {
-
+                if ( task=== '接警') {
+                    this.acceptTaskFrom.recordNo = task.id
+                }else{
+                    this.acceptTaskFrom.stepId = task.id
                 }
+            },
+            handleTaskAction(task) {
+                this.dialogFormAction = true;
+                this.acceptTaskFrom.stepId = task.id
+
+            },
+            actionTask(type) {
+                let data = this.acceptTaskFrom;
+                data.agree = type;
+                if (data.requireTime.toString().length > 10)
+                    data.requireTime = parseInt(data.requireTime / 1000);
+                accetpTask(data).then(response => {
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.dialogFormAccept = false;
+                        this.getList();
+
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                })
             },
             acceptTask() {
                 let data = this.acceptTaskFrom;

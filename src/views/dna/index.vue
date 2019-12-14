@@ -39,9 +39,9 @@
                         <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter" style="float: right;margin-right: 20px">
                             搜索
                         </el-button>
-                        <router-link :to="'/dna/create-dna'" style="float: right;margin-right: 20px">
-                            <el-button v-waves type="primary"  icon="el-icon-edit" >添加</el-button>
-                        </router-link>
+                        <!--<router-link :to="'/dna/create-dna'" style="float: right;margin-right: 20px">-->
+                            <!--<el-button v-waves type="primary"  icon="el-icon-edit" >添加</el-button>-->
+                        <!--</router-link>-->
                     </div>
 
                 <!--</div>-->

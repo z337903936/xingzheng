@@ -497,7 +497,6 @@
                     this.resultFrom.caseCategory = task.evidence.caseCategory
                     this.resultFrom.selfEvidenceNo = task.evidence.selfEvidenceNo
                     this.resultFrom.caseCategory = task.evidence.caseCategory
-                    this.resultFrom.caseCategory = task.evidence.caseCategory
                 } else {
                     this.isForensic = false
                 }
