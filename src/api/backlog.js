@@ -21,7 +21,7 @@ export function accetpTask(data) {
 
 export function writeResult(data) {
     return request({
-        url: '/v1/cp/task_result/' + data.id + '/',
+        url: '/v1/cp/exam_task_result/' + data.id + '/',
         method: 'post',
         data
     })
