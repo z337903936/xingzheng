@@ -16,3 +16,13 @@ export function batchMaterialList(data){
         params: data
     })
 }
+
+
+export function homePageState(data){
+    return request({
+        url: '/v1/cp/home_page_stat/',
+        method: 'get',
+        params: data
+    })
+}
+

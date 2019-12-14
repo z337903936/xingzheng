@@ -1,8 +1,8 @@
 <template>
   <div class="dashboard-editor-container">
-    <panel-group @handleSetLineChartData="handleSetLineChartData"/>
+    <panel-group :state="state" @handleSetLineChartData="handleSetLineChartData"/>
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <bar-chart/>
+      <bar-chart :state="state" />
     </el-row>
 
     <div  @click="gotoUndone">
@@ -63,6 +63,7 @@ import TransactionTable from './components/TransactionTable'
 import TodoList from './components/TodoList'
 import BoxCard from './components/BoxCard'
 import { taskList} from '@/api/backlog'
+import { homePageState} from '@/api/common'
 
 export default {
   name: 'DashboardAdmin',
@@ -90,6 +91,9 @@ export default {
   data() {
     return {
       listLoading:false,
+      state:{
+
+      }
     }
   },
   created() {
@@ -119,6 +123,11 @@ export default {
         this.listLoading = false
 
       })
+
+      homePageState().then(res=>{
+        this.state = res;
+      })
+
     },
   }
 }

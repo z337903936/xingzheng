@@ -254,41 +254,43 @@
 
                     </el-col>
                 </el-row>
+
             <el-divider content-position="left">物证信息</el-divider>
+
             <el-row :gutter="20">
                 <el-col :span="12">
                     <el-form-item label="物证名称" >
-                        {{ resultDetail.evidenceMaterial.name }}
+                        {{ resultDetail.evidenceMaterial ? resultDetail.evidenceMaterial.name:'' }}
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="提取位置" >
-                        {{ resultDetail.evidenceMaterial.name }}
+                        {{ resultDetail.evidenceMaterial ? resultDetail.evidenceMaterial.name:'' }}
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
 
                     <el-form-item label="提取方法" >
-                        {{ resultDetail.evidenceMaterial.extractMethod }}
+                        {{  resultDetail.evidenceMaterial ?resultDetail.evidenceMaterial.extractMethod:'' }}
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="可靠程度" >
-                        {{ resultDetail.evidenceMaterial.reliabilityLevel }}
+                        {{ resultDetail.evidenceMaterial ?resultDetail.evidenceMaterial.reliabilityLevel:'' }}
                     </el-form-item>
 
                 </el-col>
 
                 <el-col :span="12">
                     <el-form-item label="提取人" >
-                        {{ resultDetail.evidenceMaterial.extractName }}
+                        {{ resultDetail.evidenceMaterial ?resultDetail.evidenceMaterial.extractName:'' }}
                     </el-form-item>
 
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="提取时间" >
-                        {{ resultDetail.evidenceMaterial.extractTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')  }}
+                        {{ resultDetail.evidenceMaterial ?(resultDetail.evidenceMaterial.extractTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')): '' }}
                     </el-form-item>
 
                 </el-col>
@@ -298,29 +300,29 @@
             <el-row :gutter="20">
                 <el-col :span="12">
                     <el-form-item label="勘查号" >
-                        {{ resultDetail.evidence.evidenceNo }}
+                        {{ resultDetail.evidence ?resultDetail.evidence.evidenceNo: '' }}
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="案件编号">
-                        {{ resultDetail.evidence.caseNo }}
+                        {{ resultDetail.evidence ?resultDetail.evidence.caseNo: '' }}
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                     <el-form-item label="发案时间 ">
-                        {{ resultDetail.evidence.caseHappenTime }}
+                        {{ resultDetail.evidence ?resultDetail.evidence.caseHappenTime: '' }}
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="案件类别" >
-                        {{ resultDetail.evidence.caseCategory }}
+                        {{ resultDetail.evidence ?resultDetail.evidence.caseCategory : ''}}
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                     <el-form-item label="发案地点" >
-                        {{ resultDetail.evidence.caseAddress }}
+                        {{ resultDetail.evidence ?resultDetail.evidence.caseAddress : ''}}
                     </el-form-item>
                 </el-col>
 

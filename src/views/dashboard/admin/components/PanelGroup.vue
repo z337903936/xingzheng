@@ -7,7 +7,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">个人勘查数</div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num"/>
+          <count-to :start-val="0" :end-val="state.dayEvidences" :duration="3000" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
@@ -18,7 +18,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">当月勘查数</div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num"/>
+          <count-to :start-val="0" :end-val="state.monthEvidences" :duration="3000" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
@@ -29,7 +29,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">提取数</div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num"/>
+          <count-to :start-val="0" :end-val="9280" :duration="3000" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
@@ -40,7 +40,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">破案数</div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num"/>
+          <count-to :start-val="0" :end-val="13600" :duration="3000" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
@@ -53,6 +53,20 @@ import CountTo from 'vue-count-to'
 export default {
   components: {
     CountTo
+  },
+  props: {
+    state: {
+      type: Object,
+      default: false
+    }
+  },
+  data(){
+    return{
+      list:{}
+    }
+  },
+  created(){
+
   },
   methods: {
     handleSetLineChartData(type) {

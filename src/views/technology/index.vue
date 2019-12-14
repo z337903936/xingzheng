@@ -51,12 +51,12 @@
         >
             <el-table-column label="文书号" prop="id" align="center" width="180">
                 <template slot-scope="{row}">
-                    <span>{{ row.stepName }}</span>
+                    <span>{{ row.documentNo }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="尸检号" prop="id" align="center" width="180">
                 <template slot-scope="{row}">
-                    <span>{{ row.taskNo }}</span>
+                    <span>{{ row.autopsyNo }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="物证数量" align="center" min-width="100">
@@ -152,7 +152,7 @@
                     filters: undefined,
                     fromName: undefined,
                     evidenceNo: undefined,
-                    bizName: 'MATERIAL_STOCK',
+                    bizName: '三录',
                 },
                 rules:{},
                 downloadLoading: false,
