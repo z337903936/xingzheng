@@ -68,6 +68,9 @@
                     <router-link :to="'/compose/detail/'+row.id">
                         <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
                     </router-link>
+                    <el-button v-waves  type="danger" size="mini" icon="el-icon-delete" style="margin-left: 0"
+                               @click="handleDelete(row)">删除
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -95,7 +98,7 @@
 </style>
 
 <script>
-    import {composeList} from '@/api/compose'
+    import {composeList,delCompose} from '@/api/compose'
     import waves from '@/directive/waves' // waves directive
     import { parseTime } from '@/utils'
     import { fetchAdminMemberList } from '@/api/permissions'
@@ -135,6 +138,39 @@
             this.getList()
         },
         methods: {
+            handleDelete(data) {
+                this.$confirm('确认删除？')
+                    .then(_ => {
+                        this.delete(data)
+
+                    })
+                    .catch(_ => {});
+
+            },
+            delete(data){
+                const sendData = {
+                    taskId: data.id,
+                    operation: 'del'
+                }
+                delCompose(sendData).then(response => {
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.getList()
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                })
+            },
             reset() {
                 this.listQuery = {
                     page: 1,

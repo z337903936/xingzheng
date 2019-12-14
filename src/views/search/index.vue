@@ -99,24 +99,29 @@
                     <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="发案地址" align="center">
+            <el-table-column label="发案地址" width="350"  align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.caseAddress }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="发案区划" align="center">
+            <el-table-column label="发案区划" width="150" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.caseHappenRegion }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="主办" align="center" width="100">
+            <el-table-column label="案件类别" width="200" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.mainChargerName }}</span>
+                    <span>{{ row.caseCategory }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="主办" align="center" width="150">
+                <template slot-scope="{row}">
+                    <span>{{ row.mainChargerName.replace(/,/g," ") }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="协办" align="center" width="150">
                 <template slot-scope="{row}">
-                    <span>{{ row.supporterName }}</span>
+                    <span>{{ row.supporterName.replace(/,/g," ") }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="法医" align="center" width="100">
@@ -125,7 +130,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="是否死亡" align="center" width="80">
+            <el-table-column label="是否死亡" align="center" width="90">
                 <template slot-scope="{row}">
                     <span>{{ row.isDeathCase?'是':'否' }}</span>
                 </template>

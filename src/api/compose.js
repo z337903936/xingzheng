@@ -25,7 +25,7 @@ export function updateCompose(data) {
 
 export function delCompose(data) {
     return request({
-        url: '/v1/cp/remove_task_detail_from_list/',
+        url: '/v1/cp/compose_task/',
         method: 'post',
         data
     })

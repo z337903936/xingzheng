@@ -17,6 +17,15 @@ export function robotDetail(id) {
     })
 }
 
+export function deleteRobot(data) {
+    return request({
+        url: '/v1/cp/robot_task/',
+        method: 'post',
+        data
+    })
+}
+
+
 export function createRobot(data) {
     return request({
         url: '/v1/cp/tasks/new/',

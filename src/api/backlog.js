@@ -10,6 +10,7 @@ export function taskList(query) {
 
 
 
+
 export function accetpTask(data) {
     return request({
         url: '/v1/cp/task/',
@@ -37,6 +38,13 @@ export function writeResult(data) {
 export function medicalWriteResult(data) {
     return request({
         url: '/v1/cp/evidence_medical_record_list/',
+        method: 'post',
+        data
+    })
+}
+export function cancelEvidence(data) {
+    return request({
+        url: '/v1/cp/cancel_evidence/',
         method: 'post',
         data
     })

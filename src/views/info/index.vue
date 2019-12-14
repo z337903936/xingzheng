@@ -19,7 +19,7 @@
                     @change="countDict"
                     filterable
                     placeholder="处所"
-                    :props="{ checkStrictly: true,emitPath:false }"
+                    :props="{  multiple: true,emitPath:false }"
                     style="width: 200px;"/>
             <el-cascader
                     :options="crimeTimeList"
@@ -29,7 +29,7 @@
                     @change="countDict"
                     filterable
                     placeholder="作案时机"
-                    :props="{ checkStrictly: true,emitPath:false }"
+                    :props="{  multiple: true,emitPath:false }"
                     style="width: 200px"/>
             <el-cascader
                     :options="caseHappenRegionList"
@@ -39,7 +39,7 @@
                     @change="countDict"
                     filterable
                     placeholder="发案区划"
-                    :props="{ checkStrictly: true,emitPath:false }"
+                    :props="{ multiple: true,emitPath:false }"
                     style="width: 200px"
             />
             <el-cascader
@@ -50,7 +50,7 @@
                     @change="countDict"
                     filterable
                     placeholder="侵入方式"
-                    :props="{ checkStrictly: true,emitPath:false }"
+                    :props="{ multiple: true,emitPath:false }"
                     style="width: 200px"/>
             <div style="margin-top: 20px">
                 <el-cascader
@@ -61,7 +61,7 @@
                         @change="countDict"
                         placeholder="作案出口"
                         filterable
-                        :props="{ checkStrictly: true,emitPath:false }"
+                        :props="{ multiple: true,emitPath:false }"
                         style="width: 200px"/>
                 <el-select v-model="listQuery.crimePeoples" placeholder="作案人数" center style="width: 200px">
                     <el-option

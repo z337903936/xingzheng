@@ -96,9 +96,9 @@
             <el-select v-model="list.sceneProtect" placeholder="请选择" center style="width: 100%">
               <el-option
                 v-for="item in sceneProtectType"
-                :key="item.id"
+                :key="item.title"
                 :label="item.title"
-                :value="item.id"
+                :value="item.title"
               />
             </el-select>
           </el-form-item>
@@ -236,9 +236,9 @@
               @visible-change="restUserSearch">
               <el-option
                 v-for="item in sceneProtectUidList"
-                :key="item.id"
+                :key="item.title"
                 :label="item.title"
-                :value="item.id"/>
+                :value="item.title"/>
             </el-select>
           </el-form-item>
         </el-col>
@@ -285,7 +285,7 @@
               </ul>
             <el-cascader
               :options="crimeTimeList"
-              v-model="list.crimeTimeArray"
+              v-model="list.crimeTime"
               :filter-method="filterSearch"
               :show-all-levels="false"
               @change="countDict($event,'作案时机')"
@@ -886,9 +886,9 @@
           <el-select v-model="concernedPersonListForm.sex" placeholder="请选择" center style="width: 100%">
             <el-option
               v-for="item in sex"
-              :key="item.id"
+              :key="item.title"
               :label="item.title"
-              :value="item.id"
+              :value="item.title"
               />
           </el-select>
         </el-form-item>
@@ -1150,106 +1150,104 @@ export default {
       dialogPointContent: '添加物证',
       sceneProtectUidList: [
         {
-          id: 0,
           title: '无'
         }, {
-          id: 1,
           title: '有'
         }
       ],
       sceneProtectType: [
         {
-          id: 1,
+
           title: '未移动'
         }, {
-          id: 2,
+
           title: '已复原'
         }, {
-          id: 3,
+
           title: '不明显'
         }, {
-          id: 4,
+
           title: '一般'
         }, {
-          id: 5,
+
           title: '混乱'
         }, {
-          id: 6,
+
           title: '其他'
         }
       ],
       crimePeoplesType: [
         {
-          id: 0,
+          id:0,
           title: '不确定'
         }, {
-          id: 1,
+          id:1,
           title: '1人'
         }, {
-          id: 2,
+          id:2,
           title: '两个'
         }, {
-          id: 3,
+          id:3,
           title: '多人'
         }
       ],
       idType: [
         {
-          id: 1,
+
           title: '身份证'
         }, {
-          id: 2,
+
           title: '护照'
         }, {
-          id: 3,
+
           title: '军人证'
         }, {
-          id: 4,
+
           title: '学生证'
         }
       ],
       sex: [
         {
-          id: 0,
+
           title: '未知'
         }, {
-          id: 1,
+
           title: '男'
         }, {
-          id: 2,
+
           title: '女'
         }
       ],
       documentType: [
         {
-          id: 1,
+
           title: 'DNA鉴定书'
         }, {
-          id: 2,
+
           title: '指纹鉴定书'
         }, {
-          id: 3,
+
           title: '理化鉴定书'
         }, {
-          id: 4,
+
           title: '其他鉴定书'
         }
       ],
       materialType: [
         {
-          id: 1,
+
           title: '指纹印'
         }, {
-          id: 2,
+
           title: 'DNA'
         }, {
-          id: 3,
+
           title: '鞋印'
         }, {
-          id: 4,
+
           title: '工痕'
         }, {
-          id: 5,
+
           title: '微量物证'
         }
       ],
@@ -1492,6 +1490,7 @@ export default {
               this.extractMethodList = this.bulletMethodList;
             }else if (newData.indexOf('生物物证') > -1){
               this.isInput = false
+
               this.extractMethodList = this.dnaMethodList
             }else{
               this.isInput = true
@@ -1759,6 +1758,7 @@ export default {
       this.isDna = false
       this.materialListForm.materialCategoryShow= val;
       var data = this.searchMaterial(this.materialCategoryList,val);
+      console.log(data);
       if (data === '手印物证' ) {
         this.isInput = false
         this.isFingerprint = true
@@ -1774,7 +1774,7 @@ export default {
         this.extractMethodList = this.bulletMethodList;
       }else if (data === '生物物证'){
         this.isInput = false
-        this.isDna = true
+        this.extractMethodList = this.dnaMethodList
       }else{
         this.isInput = true
 
@@ -2681,7 +2681,7 @@ export default {
         this.list.cameraUid = '';
 
       if (this.list.crimeTime){
-        this.list.crimeTimeArray = JSON.parse(this.list.crimeTime)
+        this.list.crimeTime = JSON.parse(this.list.crimeTime)
       }
       if (this.list.sceneType){
         this.list.sceneType = JSON.parse(this.list.sceneType)
@@ -2713,9 +2713,9 @@ export default {
               data.supporterUid = data.supporterUidArray.join(',')
             }
           }
-          if (data.crimeTimeArray) {
-            if (data.crimeTimeArray.length > 0) {
-              data.crimeTime = JSON.stringify(data.crimeTimeArray)
+          if (data.crimeTime) {
+            if (data.crimeTime.length > 0) {
+              data.crimeTime = JSON.stringify(data.crimeTime)
             }
           }
 

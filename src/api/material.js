@@ -56,3 +56,28 @@ export function delMaterialAction(data) {
         data
     })
 }
+
+export function sanluList(data,id) {
+    return request({
+        url: '/v1/cp/list_sanlu_by_batch_id/'+id+'/',
+        method: 'get',
+        params: data
+    })
+}
+
+
+export function agreeMaterialIn(data) {
+    return request({
+        url: '/v1/cp/agree_in_out_stock/',
+        method: 'post',
+        data
+    })
+}
+
+export function dnyMaterialIn(data) {
+    return request({
+        url: '/v1/cp/deny_in_out_stock/',
+        method: 'post',
+        data
+    })
+}

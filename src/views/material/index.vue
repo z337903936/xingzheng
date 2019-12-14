@@ -49,6 +49,11 @@
                 highlight-current-row
                 style="width: 100%;"
         >
+            <el-table-column label="任务名" prop="id" align="center" width="180">
+                <template slot-scope="{row}">
+                    <span>{{ row.stepName }}</span>
+                </template>
+            </el-table-column>
             <el-table-column label="任务编号" prop="id" align="center" width="180">
                 <template slot-scope="{row}">
                     <span>{{ row.taskNo }}</span>
@@ -86,18 +91,17 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="操作" align="center" width="230" fixed="right" class-name="small-padding fixed-width">
+            <el-table-column label="操作" align="center" width="330" fixed="right" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <router-link :to="'/material/detail/'+row.id">
                         <el-button v-waves type="primary" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>
                     </router-link>
-                    <!--<router-link :to="'/material/edit/'+row.id">-->
-                        <!--<el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>-->
-                    <!--</router-link>-->
-
-                    <!--<el-button v-waves type="primary" style="width: 70px"  size="mini" @click="handleDelete(row)" >-->
-                        <!--销毁申请-->
-                    <!--</el-button>-->
+                    <el-button v-waves type="success" style="width: 70px"  size="mini" @click="agreeIn(row)" v-if="row.status === 1" >
+                        同意
+                    </el-button>
+                    <el-button v-waves type="warning" style="width: 70px;margin-left: 0"  size="mini" @click="denyIn(row)" v-if="row.status === 1">
+                        拒绝
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -125,7 +129,7 @@
 </style>
 
 <script>
-    import {fetchMaterialList,delMaterial,applyDelMaterial} from '@/api/material'
+    import {fetchMaterialList,delMaterial,applyDelMaterial,agreeMaterialIn,dnyMaterialIn} from '@/api/material'
     import { batchList, batchMaterialList } from '@/api/common'
     import waves from '@/directive/waves' // waves directive
     import {parseTime} from '@/utils'
@@ -167,7 +171,7 @@
             this.getList()
         },
         methods: {
-            getList(id) {
+            getList() {
                 this.listLoading = true;
                 batchList(this.listQuery).then(response => {
                     this.list = response.list;
@@ -200,30 +204,54 @@
                 this.listQuery.page = 1;
                 this.getList()
             },
-            //
-            // handleDownload() {
-            //     this.downloadLoading = true
-            //     import('@/vendor/Export2Excel').then(excel => {
-            //         const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-            //         const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-            //         const data = this.formatJson(filterVal, this.list)
-            //         excel.export_json_to_excel({
-            //             header: tHeader,
-            //             data,
-            //             filename: 'table-list'
-            //         })
-            //         this.downloadLoading = false
-            //     })
-            // },
-            // formatJson(filterVal, jsonData) {
-            //     return jsonData.map(v => filterVal.map(j => {
-            //         if (j === 'timestamp') {
-            //             return parseTime(v[j])
-            //         } else {
-            //             return v[j]
-            //         }
-            //     }))
-            // },
+            agreeIn(data){
+                const sendData={
+                    batchId:data.id
+                }
+                agreeMaterialIn(sendData).then(response=>{
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.getList()
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                })
+
+            },
+            denyIn(data){
+                const sendData={
+                    batchId:data.id
+                }
+                dnyMaterialIn(sendData).then(response=>{
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.getList()
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                })
+            }
+
 
         }
     }

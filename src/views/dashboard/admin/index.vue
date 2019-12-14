@@ -1,40 +1,54 @@
 <template>
   <div class="dashboard-editor-container">
     <panel-group @handleSetLineChartData="handleSetLineChartData"/>
-
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData"/>
+      <bar-chart/>
     </el-row>
 
-    <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <raddar-chart/>
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <pie-chart/>
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <bar-chart/>
-        </div>
-      </el-col>
-    </el-row>
+    <div  @click="gotoUndone">
+      <el-table
+              v-loading="listLoading"
+              :data="list"
+              border
+              fit
+              highlight-current-row
+              style="width: 100%;"
 
-    <el-row :gutter="8">
-      <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="padding-right:8px;margin-bottom:30px;">
-        <transaction-table/>
-      </el-col>
-      <!--<el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">-->
-        <!--<todo-list/>-->
-      <!--</el-col>-->
-      <!--<el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">-->
-        <!--<box-card/>-->
-      <!--</el-col>-->
-    </el-row>
+
+      >
+        <el-table-column label="任务单号" align="center">
+          <template slot-scope="{row}">
+            <span>{{ row.taskNo }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="任务类型" align="center">
+          <template slot-scope="{row}">
+            <span>{{ row.stepName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="发送人" align="center">
+          <template slot-scope="{row}">
+            <span>{{ row.stepHandler }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="发送时间" align="center">
+          <template slot-scope="{row}">
+            <span>{{ row.taskArriveTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')  }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="任务数" align="center">
+          <template slot-scope="{row}">
+            <span>{{ row.examNumber }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" align="center">
+          <template slot-scope="{row}">
+            <span>{{ row.status | statusFilter }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
   </div>
 </template>
@@ -48,25 +62,7 @@ import BarChart from './components/BarChart'
 import TransactionTable from './components/TransactionTable'
 import TodoList from './components/TodoList'
 import BoxCard from './components/BoxCard'
-
-const lineChartData = {
-  newVisitis: {
-    expectedData: [100, 120, 161, 134, 105, 160, 165],
-    actualData: [120, 82, 91, 154, 162, 140, 145]
-  },
-  messages: {
-    expectedData: [200, 192, 120, 144, 160, 130, 140],
-    actualData: [180, 160, 151, 106, 145, 150, 130]
-  },
-  purchases: {
-    expectedData: [80, 100, 121, 104, 105, 90, 100],
-    actualData: [120, 90, 100, 138, 142, 130, 130]
-  },
-  shoppings: {
-    expectedData: [130, 140, 141, 142, 145, 150, 160],
-    actualData: [120, 82, 91, 154, 162, 140, 130]
-  }
-}
+import { taskList} from '@/api/backlog'
 
 export default {
   name: 'DashboardAdmin',
@@ -80,15 +76,50 @@ export default {
     TodoList,
     BoxCard
   },
-  data() {
-    return {
-      lineChartData: lineChartData.newVisitis
+  filters: {
+
+    statusFilter(status) {
+      const statusMap = {
+        1: '未领取',
+        2: '进行中',
+        3: '已完成'
+      }
+      return statusMap[status]
     }
   },
-  methods: {
-    handleSetLineChartData(type) {
-      this.lineChartData = lineChartData[type]
+  data() {
+    return {
+      listLoading:false,
     }
+  },
+  created() {
+    this.getList();
+  },
+  methods: {
+    gotoUndone(){
+      this.$router.push({
+        path: '/backlog/undone/',
+        query: {
+          t: +new Date()
+        }
+      })
+    },
+    getList() {
+      this.listLoading = true;
+      const data = {
+        status: 1
+      }
+      taskList(data).then(response => {
+
+        this.list = response.list.slice(0,10)
+        // this.pages = response.pages
+
+        // Just to simulate the time of the request
+
+        this.listLoading = false
+
+      })
+    },
   }
 }
 </script>

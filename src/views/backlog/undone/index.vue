@@ -226,20 +226,15 @@
                     <span>{{ row.stepName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="发送人" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.stepHandler }}</span>
-                </template>
-            </el-table-column>
             <el-table-column label="发送时间" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.taskArriveTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')  }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="任务详情" align="center">
+            <el-table-column label="任务数" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.stepHandler }}</span>
+                    <span>{{ row.examNumber }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="状态" align="center">
@@ -286,6 +281,10 @@
                                  v-if="row.status===2 && (row.stepName==='痕检现勘' ||  row.stepName === '接警') ">
                         <el-button icon="el-icon-edit" type="primary" size="small">编辑现勘</el-button>
                     </router-link>
+                    <el-button type="warning" size="small" icon="el-icon-tickets" @click="handleCancelEvidence(row.record.id)"
+                               v-if="row.status===2 && (row.stepName==='痕检现勘' ||  row.stepName === '接警') ">
+                        取消勘查
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -530,7 +529,7 @@
 
 
 <script>
-    import {accetpTask, taskList, writeResult,medicalWriteResult} from '@/api/backlog'
+    import {accetpTask, taskList, writeResult,medicalWriteResult,cancelEvidence} from '@/api/backlog'
     import {parseTime} from '@/utils'
     import {fetchAdminMemberList} from '@/api/permissions'
     import {fetchList} from '@/api/dictionary'
@@ -616,6 +615,30 @@
             });
         },
         methods: {
+            handleCancelEvidence(id){
+                const sendData={
+                    recordId:id
+                }
+                cancelEvidence(sendData).then(response=>{
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.getList();
+
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                })
+            },
             selectUpdate(val) {
                 this.$forceUpdate()
             },
