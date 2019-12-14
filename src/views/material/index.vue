@@ -88,9 +88,9 @@
 
             <el-table-column label="操作" align="center" width="230" fixed="right" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <!--<router-link :to="'/material/batch/'+row.id">-->
-                        <!--<el-button v-waves type="primary" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>-->
-                    <!--</router-link>-->
+                    <router-link :to="'/material/detail/'+row.id">
+                        <el-button v-waves type="primary" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>
+                    </router-link>
                     <!--<router-link :to="'/material/edit/'+row.id">-->
                         <!--<el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>-->
                     <!--</router-link>-->

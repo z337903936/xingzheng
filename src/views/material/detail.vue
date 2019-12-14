@@ -1,46 +1,46 @@
 <template>
     <div class="app-container">
-        <div class="filter-container">
-            <div>
-                <el-date-picker
-                        v-model="searchTime"
-                        type="datetimerange"
-                        range-separator="至"
-                        start-placeholder="移交开始时间"
-                        end-placeholder="移交结束时间"
-                        value-format="timestamp"
-                        style="width: 405px;"
-                />
-                <el-input v-model="listQuery.materialNo" placeholder="物证编号" class="mb10" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.evidenceNo" placeholder="勘查号" class="mb10" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
-                <el-input v-model="listQuery.storagePlace" placeholder="物证库" class="mb10" style="width: 200px;"
-                          @keyup.enter.native="handleFilter"/>
-                <div style="margin-top: 15px">
-                    <el-input v-model="listQuery.fromName" placeholder="移交人" class="mb10" style="width: 200px;"
-                              @keyup.enter.native="handleFilter"/>
-                    <el-input v-model="listQuery.filters" placeholder="关键字" class="mb10" style="width: 200px;"
-                              @keyup.enter.native="handleFilter"/>
-                    <el-button v-waves type="primary" icon="el-icon-search" @click="reset"
-                               style="float: right;margin-right: 20px">
-                        清空搜索条件
-                    </el-button>
-                    <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter" style="float: right;margin-right: 20px">
-                        搜索
-                    </el-button>
-                    <router-link :to="'/material/create'" style="float: right;margin-right: 20px">
-                        <el-button v-waves type="primary"  icon="el-icon-edit">添加</el-button>
-                    </router-link>
-                </div>
+        <!--<div class="filter-container">-->
+            <!--<div>-->
+                <!--<el-date-picker-->
+                        <!--v-model="searchTime"-->
+                        <!--type="datetimerange"-->
+                        <!--range-separator="至"-->
+                        <!--start-placeholder="移交开始时间"-->
+                        <!--end-placeholder="移交结束时间"-->
+                        <!--value-format="timestamp"-->
+                        <!--style="width: 405px;"-->
+                <!--/>-->
+                <!--<el-input v-model="listQuery.materialNo" placeholder="物证编号" class="mb10" style="width: 200px;"-->
+                          <!--@keyup.enter.native="handleFilter"/>-->
+                <!--<el-input v-model="listQuery.evidenceNo" placeholder="勘查号" class="mb10" style="width: 200px;"-->
+                          <!--@keyup.enter.native="handleFilter"/>-->
+                <!--<el-input v-model="listQuery.storagePlace" placeholder="物证库" class="mb10" style="width: 200px;"-->
+                          <!--@keyup.enter.native="handleFilter"/>-->
+                <!--<div style="margin-top: 15px">-->
+                    <!--<el-input v-model="listQuery.fromName" placeholder="移交人" class="mb10" style="width: 200px;"-->
+                              <!--@keyup.enter.native="handleFilter"/>-->
+                    <!--<el-input v-model="listQuery.filters" placeholder="关键字" class="mb10" style="width: 200px;"-->
+                              <!--@keyup.enter.native="handleFilter"/>-->
+                    <!--<el-button v-waves type="primary" icon="el-icon-search" @click="reset"-->
+                               <!--style="float: right;margin-right: 20px">-->
+                        <!--清空搜索条件-->
+                    <!--</el-button>-->
+                    <!--<el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter" style="float: right;margin-right: 20px">-->
+                        <!--搜索-->
+                    <!--</el-button>-->
+                    <!--<router-link :to="'/material/create'" style="float: right;margin-right: 20px">-->
+                        <!--<el-button v-waves type="primary"  icon="el-icon-edit">添加</el-button>-->
+                    <!--</router-link>-->
+                <!--</div>-->
 
 
 
                 <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
                 <!--导出-->
                 <!--</el-button>-->
-            </div>
-        </div>
+            <!--</div>-->
+        <!--</div>-->
 
         <el-table
                 v-loading="listLoading"
@@ -53,56 +53,56 @@
         >
             <el-table-column label="物证编码" prop="id" align="center" width="180">
                 <template slot-scope="{row}">
-                    <span>{{ row.materialNo }}</span>
+                    <span>{{ row.evidenceMaterial.materialNo }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="物证库编号" align="center" width="200">
                 <template slot-scope="{row}">
-                    <span>{{ row.thirdMaterialNo }}</span>
+                    <span>{{ row.evidenceMaterial.thirdMaterialNo }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="物证类别" width="150" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.materialCategory  }}</span>
+                    <span>{{ row.evidenceMaterial.materialCategory  }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="利用情况" width="120" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.usedType }}</span>
+                    <span>{{ row.evidenceMaterial.usedType }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="物证名称" width="250" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.name }}</span>
+                    <span>{{ row.evidenceMaterial.name }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="特征描述" width="300" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.note }}</span>
+                    <span>{{ row.evidenceMaterial.note }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="物证类型" width="170" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.materialType }}</span>
+                    <span>{{ row.evidenceMaterial.materialType }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="转移时间" width="210" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.transferTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                    <span>{{ row.evidenceMaterial.transferTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="操作" align="center" width="230" fixed="right" class-name="small-padding fixed-width">
-                <template slot-scope="{row}">
-                    <router-link :to="'/material/edit/'+row.id">
-                        <el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>
-                    </router-link>
+            <!--<el-table-column label="操作" align="center" width="230" fixed="right" class-name="small-padding fixed-width">-->
+                <!--<template slot-scope="{row}">-->
+                    <!--<router-link :to="'/material/edit/'+row.evidenceMaterial.id">-->
+                        <!--<el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>-->
+                    <!--</router-link>-->
 
-                    <el-button v-waves type="primary" style="width: 70px"  size="mini" @click="handleDelete(row)" >
-                        销毁申请
-                    </el-button>
-                </template>
-            </el-table-column>
+                    <!--<el-button v-waves type="primary" style="width: 70px"  size="mini" @click="handleDelete(row)" >-->
+                        <!--销毁申请-->
+                    <!--</el-button>-->
+                <!--</template>-->
+            <!--</el-table-column>-->
         </el-table>
         <el-pagination
                 background
@@ -154,7 +154,7 @@
     import waves from '@/directive/waves' // waves directive
     import {parseTime} from '@/utils'
     import { fetchAdminMemberList} from '@/api/permissions'
-
+    import {  batchMaterialList } from '@/api/common'
 
     export default {
         name: 'Material',
@@ -173,15 +173,19 @@
                     id:undefined,
                     reason:undefined
                 },
+                // listQuery: {
+                //     page: 1,
+                //     beginTime: undefined,
+                //     endTime: undefined,
+                //     filters: undefined,
+                //     fromName: undefined,
+                //     storagePlace: undefined,
+                //     evidenceNo: undefined,
+                //     materialNo: undefined
+                // },
                 listQuery: {
                     page: 1,
-                    beginTime: undefined,
-                    endTime: undefined,
-                    filters: undefined,
-                    fromName: undefined,
-                    storagePlace: undefined,
-                    evidenceNo: undefined,
-                    materialNo: undefined
+                    batchId: undefined,
                 },
                 rules:{},
                 downloadLoading: false,
@@ -189,7 +193,8 @@
             }
         },
         created(){
-            this.getList()
+            const id = this.$route.params && this.$route.params.id
+            this.getList(id)
         },
         methods: {
             handleDelete(val){
@@ -217,8 +222,9 @@
                 })
             },
             getList(id) {
+                this.listQuery.batchId = id
                 this.listLoading = true;
-                fetchMaterialList(this.listQuery).then(response => {
+                batchMaterialList(this.listQuery).then(response => {
                     this.list = response.list;
                     this.pages = response.pages
 

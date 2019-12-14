@@ -603,6 +603,8 @@
                 },
                 caseCategoryList: [],
                 dialogFormAction: false,
+                userList: [],
+                userShowList: [],
 
 
             }
@@ -614,6 +616,43 @@
             });
         },
         methods: {
+            selectUpdate(val) {
+                this.$forceUpdate()
+            },
+            filterUserSearch(value){
+                if (value) {
+                    this.userShowList = this.userList.filter(data=>{
+                        var p =  /^[a-zA-Z]+$/;
+                        if (p.test(value)) {
+                            if (data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                                return data
+                        }else{
+                            if (data.title.indexOf(value)>-1)
+                                return data
+                        }
+                    })
+                }else{
+                    this.userShowList = this.userList;
+                }
+            },
+            restUserSearch(change){
+                if (!change) {
+                    this.userShowList = this.userList;
+                }
+
+            },
+            getUserList() {
+                fetchAdminMemberList({}).then(response => {
+                    this.userList = response.list.map(data => {
+                        return {
+                            id: data.id,
+                            title: data.realName,
+                            py:data.pinyinAbbr,
+                        }
+                    })
+                    this.userShowList = this.userList
+                })
+            },
             handleAction(val, type) {
                 const sendData = {
                     stepId: val.id,
