@@ -141,7 +141,7 @@
             <el-table-column label="操作" align="center" fixed="right" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <router-link :to="'/material/batch/'+row.id">
-                        <el-button v-waves type="primary" size="mini" style="width: 100px"  icon="el-icon-tickets">任务批次</el-button>
+                        <el-button v-waves type="primary" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>
                     </router-link>
                 </template>
             </el-table-column>

@@ -18,9 +18,9 @@
                 <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter" style="float: right;margin-right: 20px">
                     搜索
                 </el-button>
-                <router-link :to="'/compose/create'">
-                    <el-button v-waves type="primary"  icon="el-icon-edit" style="float: right;margin-right: 20px">创建串并</el-button>
-                </router-link>
+                <!--<router-link :to="'/compose/create'">-->
+                <!--<el-button v-waves type="primary"  icon="el-icon-edit" style="float: right;margin-right: 20px">创建串并</el-button>-->
+            <!--</router-link>-->
 
                 <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
                 <!--导出-->
@@ -64,6 +64,9 @@
                 <template slot-scope="{row}">
                     <router-link :to="'/compose/edit/'+row.id">
                         <el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>
+                    </router-link>
+                    <router-link :to="'/compose/detail/'+row.id">
+                        <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
                     </router-link>
                 </template>
             </el-table-column>

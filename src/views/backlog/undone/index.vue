@@ -247,11 +247,7 @@
                     <span>{{ row.status | statusFilter }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="待检测个数" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.examBatch.examNumber }}</span>
-                </template>
-            </el-table-column>
+
 
             <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">

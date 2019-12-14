@@ -26,3 +26,10 @@ export function writeResult(data) {
         data
     })
 }
+export function medicalWriteResult(data) {
+    return request({
+        url: '/v1/cp/evidence_medical_record_list/',
+        method: 'post',
+        data
+    })
+}

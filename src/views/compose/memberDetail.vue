@@ -44,34 +44,29 @@
                         <span>{{ row.caseAddress }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="发案区划" align="center">
-                    <template slot-scope="{row}">
-                        <span>{{ row.caseHappenRegion }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="主办" align="center" width="100">
-                    <template slot-scope="{row}">
-                        <span>{{ row.mainChargerName }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="协办" align="center" width="150">
-                    <template slot-scope="{row}">
-                        <span>{{ row.supporterName }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="法医" align="center" width="100">
-                    <template slot-scope="{row}">
-                        <span>{{ row.medicalName }}</span>
-                    </template>
-                </el-table-column>
                 <el-table-column label="案件性质" align="center">
                     <template slot-scope="{row}">
                         <span>{{ row.caseCategory }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="是否死亡" align="center" width="80">
+                <el-table-column label="发案区划" align="center">
                     <template slot-scope="{row}">
-                        <span>{{ row.isDeathCase?'是':'否' }}</span>
+                        <span>{{ row.caseHappenRegion }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="侵入方式" align="center">
+                    <template slot-scope="{row}">
+                        <span>{{ row.invadeType }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="作案工具" align="center">
+                    <template slot-scope="{row}">
+                        <span>{{ row.crimeTools }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="足迹" align="center">
+                    <template slot-scope="{row}">
+                        <span>{{ row.footprint }}</span>
                     </template>
                 </el-table-column>
 
@@ -211,37 +206,31 @@
                     <span>{{ row.caseAddress }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="发案区划" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.caseHappenRegion }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="主办" align="center" width="100">
-                <template slot-scope="{row}">
-                    <span>{{ row.mainChargerName }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="协办" align="center" width="150">
-                <template slot-scope="{row}">
-                    <span>{{ row.supporterName }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="法医" align="center" width="100">
-                <template slot-scope="{row}">
-                    <span>{{ row.medicalName }}</span>
-                </template>
-            </el-table-column>
             <el-table-column label="案件性质" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.caseCategory }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="是否死亡" align="center" width="80">
+            <el-table-column label="发案区划" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.isDeathCase?'是':'否' }}</span>
+                    <span>{{ row.caseHappenRegion }}</span>
                 </template>
             </el-table-column>
-
+            <el-table-column label="侵入方式" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.invadeType }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="作案工具" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.crimeTools }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="足迹" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.footprint }}</span>
+                </template>
+            </el-table-column>
             <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <router-link :to="'/search/show-search/'+row.id">

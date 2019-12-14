@@ -124,11 +124,7 @@
                     <span>{{ row.medicalName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="案件性质" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.caseCategory }}</span>
-                </template>
-            </el-table-column>
+
             <el-table-column label="是否死亡" align="center" width="80">
                 <template slot-scope="{row}">
                     <span>{{ row.isDeathCase?'是':'否' }}</span>

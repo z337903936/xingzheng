@@ -25,17 +25,6 @@
                     <span>{{ row.evidenceMaterial.materialCategory }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证编码"  align="center" width="220px" >
-                <template slot-scope="{row}">
-                    <span>{{ row.evidenceMaterial.materialNo }}</span>
-                </template>
-            </el-table-column>
-
-            <el-table-column label="物证库编号"  align="center" width="320px">
-                <template slot-scope="{row}">
-                    <span>{{ row.evidenceMaterial.thirdMaterialNo }}</span>
-                </template>
-            </el-table-column>
             <el-table-column label="物证类别"   align="center" width="320px">
                 <template slot-scope="{row}">
                     <span>{{ row.evidenceMaterial.materialCategory }}</span>
@@ -54,6 +43,11 @@
             <el-table-column label="利用情况" align="center" width="320px">
                 <template slot-scope="{row}">
                     <span>{{ row.evidenceMaterial.usedType }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="物证库编号"  align="center" width="320px">
+                <template slot-scope="{row}">
+                    <span>{{ row.evidenceMaterial.thirdMaterialNo }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
@@ -86,34 +80,97 @@
                     label-position="left"
                     label-width="100px"
                     style="width: 400px; margin-left:50px;">
-                <!--<div>-->
-                    <!--<el-row :gutter="20">-->
-                        <!--<el-col :span="12">-->
-                            <!--<el-form-item label="移交人" prop="name">-->
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-form-item label="检验人" prop="name">
+                            <el-input v-model="ResultFrom.result"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="检验单位" prop="name">
+                            <el-input v-model="ResultFrom.result"/>
+                        </el-form-item>
+                    </el-col>
 
-                            <!--</el-form-item>-->
-                        <!--</el-col>-->
-                        <!--<el-col :span="12">-->
-                            <!--<el-form-item label="移交日期" prop="name">-->
+                    <el-col :span="12">
 
-                            <!--</el-form-item>-->
-                        <!--</el-col>-->
-                        <!--<el-col :span="12">-->
-                            <!--<el-form-item label="简要案情" prop="name">-->
+                        <el-form-item label="检材类型" prop="name">
+                            <el-input v-model="ResultFrom.result"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="检验结果" prop="name">
+                            <el-input v-model="ResultFrom.result"/>
+                        </el-form-item>
 
-                            <!--</el-form-item>-->
-                        <!--</el-col>-->
-                        <!--<el-col :span="12">-->
-                            <!--<el-form-item label="鉴定文书号" prop="name">-->
+                    </el-col>
 
-                            <!--</el-form-item>-->
-                        <!--</el-col>-->
-                    <!--</el-row>-->
+                    <el-col :span="12">
+                        <el-form-item label="比中人员" prop="name">
+                            <el-input v-model="ResultFrom.result"/>
+                        </el-form-item>
 
-                <!--</div>-->
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="性别" prop="name">
+                            <el-input v-model="ResultFrom.result"/>
+                        </el-form-item>
 
-                <!--<el-divider></el-divider>-->
-                <el-form-item label="检测结果" prop="name">
+                    </el-col>
+
+                    <el-col :span="12">
+                        <el-form-item label="身份证号" prop="name">
+                            <el-input v-model="ResultFrom.result"/>
+                        </el-form-item>
+
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="比中时间" prop="name">
+                            <el-date-picker
+                                    v-model="ResultFrom.documentDate"
+                                    type="date"
+                                    value-format="timestamp"
+                                    placeholder="选择日期"
+                                    style="width: 100%">
+                            </el-date-picker>
+                        </el-form-item>
+
+                    </el-col>
+
+                    <el-col :span="24">
+                        <el-form-item label="户籍地" prop="name">
+                            <el-input v-model="ResultFrom.result"/>
+                        </el-form-item>
+
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="利用情况" prop="name">
+                            <el-input v-model="ResultFrom.result"/>
+                        </el-form-item>
+
+                    </el-col>
+
+                    <el-col :span="12">
+                        <el-form-item label="是否推送痕检" prop="name">
+                            <el-input v-model="ResultFrom.needToPushToCharger"/>
+                        </el-form-item>
+
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="鉴定文书号" prop="name">
+                            <el-input v-model="ResultFrom.result"/>
+                        </el-form-item>
+
+                    </el-col>
+
+                    <el-col :span="12">
+                        <el-form-item label="是否移交鉴定文书" prop="name">
+                            <el-input v-model="ResultFrom.result"/>
+                        </el-form-item>
+
+                    </el-col>
+                </el-row>
+              <!--  <el-form-item label="检测结果" prop="name">
                     <el-input v-model="ResultFrom.result"/>
                 </el-form-item>
                 <el-form-item label="文书号" prop="name">
@@ -139,6 +196,81 @@
                 </el-form-item>
                 <el-form-item label="是否推送给主办痕检" prop="needToPushToCharger">
                     <el-checkbox v-model="ResultFrom.needToPushToCharger"></el-checkbox>
+                </el-form-item>-->
+
+            <el-divider content-position="left">物证信息</el-divider>
+            <el-row :gutter="20">
+                <el-col :span="12">
+                    <el-form-item label="物证名称" prop="name">
+                        <el-input v-model="ResultFrom.result"/>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="提取位置" prop="name">
+                        <el-input v-model="ResultFrom.result"/>
+                    </el-form-item>
+                </el-col>
+
+                <el-col :span="12">
+
+                    <el-form-item label="提取方法" prop="name">
+                        <el-input v-model="ResultFrom.result"/>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="可靠程度" prop="name">
+                        <el-input v-model="ResultFrom.result"/>
+                    </el-form-item>
+
+                </el-col>
+
+                <el-col :span="12">
+                    <el-form-item label="提取人" prop="name">
+                        <el-input v-model="ResultFrom.result"/>
+                    </el-form-item>
+
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="提取时间" prop="name">
+                        <el-input v-model="ResultFrom.result"/>
+                    </el-form-item>
+
+                </el-col>
+
+            </el-row>
+            <el-divider content-position="left">案件信息</el-divider>
+            <el-row :gutter="20">
+                <el-col :span="12">
+                    <el-form-item label="勘查号" prop="name">
+                        <el-input v-model="ResultFrom.result"/>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="案件编号" prop="name">
+                        <el-input v-model="ResultFrom.result"/>
+                    </el-form-item>
+                </el-col>
+
+                <el-col :span="12">
+                    <el-form-item label="发案时间 " prop="name">
+                        <el-input v-model="ResultFrom.result"/>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="案件类别" prop="name">
+                        <el-input v-model="ResultFrom.result"/>
+                    </el-form-item>
+                </el-col>
+
+                <el-col :span="12">
+                    <el-form-item label="发案地点" prop="name">
+                        <el-input v-model="ResultFrom.result"/>
+                    </el-form-item>
+                </el-col>
+
+            </el-row>
+                <el-form-item label="物证是否入库" prop="name">
+                    <el-input v-model="ResultFrom.result"/>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
