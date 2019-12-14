@@ -75,59 +75,111 @@
 
         <el-dialog title="填写结果" :close-on-click-modal="false" :visible.sync="dialogResultFrom" width="50%">
             <el-form
-                    ref="ResultFrom"
-                    :model="ResultFrom"
+                    ref="resultFrom"
+                    :model="resultFrom"
                     label-position="left"
                     label-width="100px"
-                    style="width: 400px; margin-left:50px;">
+                    style="width:80%; margin-left:50px;">
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <el-form-item label="检验人" prop="name">
-                            <el-input v-model="ResultFrom.result"/>
+                        <el-form-item label="检验人" prop="examUid">
+                            <el-select v-model="resultFrom.examUid"
+                                       filterable
+                                       :filter-method="filterUserSearch"
+                                       @visible-change="restUserSearch"
+                                       class="filter-item"
+                                       @change="selectUpdate"
+                                       value-key="id"
+                                       style="width: 100%">
+                                <el-option
+                                        v-for="item in userShowList"
+                                        :key="item.id"
+                                        :label="item.title"
+                                        :value="item.id"/>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="检验单位" prop="name">
-                            <el-input v-model="ResultFrom.result"/>
+                        <el-form-item label="检验单位" prop="examOrg">
+                            <el-input v-model="resultFrom.examOrg"/>
                         </el-form-item>
                     </el-col>
 
                     <el-col :span="12">
 
-                        <el-form-item label="检材类型" prop="name">
-                            <el-input v-model="ResultFrom.result"/>
+                        <el-form-item label="检材类型" prop="materialType">
+                            <el-input v-model="resultFrom.materialType"/>
+                            <el-cascader
+                                    :options="materialTypeList"
+                                    filterable
+                                    slot="reference"
+                                    :props="emitProps"
+                                    v-model="resultFrom.materialType"
+                                    :filter-method="remoteSearch"
+                                    @change="countDict($event,'检材类型')"
+                                    :show-all-levels="false"
+                                    style="width: 100%">
+                            </el-cascader>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="检验结果" prop="name">
-                            <el-input v-model="ResultFrom.result"/>
+                        <el-form-item label="检验结果" prop="examResult">
+                            <el-select v-model="resultFrom.examResult" placeholder="请选择" style="width: 100%">
+                                <el-option
+                                        v-for="item in examResult"
+                                        :key="item.title"
+                                        :label="item.title"
+                                        :value="item.title"/>
+                            </el-select>
+                            <el-input v-model="resultFrom.examResult"/>
+
                         </el-form-item>
 
                     </el-col>
 
                     <el-col :span="12">
-                        <el-form-item label="比中人员" prop="name">
-                            <el-input v-model="ResultFrom.result"/>
+                        <el-form-item label="比中人员" prop="checkPeople">
+                            <el-select v-model="resultFrom.checkPeople"
+                                       filterable
+                                       :filter-method="filterUserSearch"
+                                       @visible-change="restUserSearch"
+                                       class="filter-item"
+                                       @change="selectUpdate"
+                                       value-key="id"
+                                       style="width: 100%">
+                                <el-option
+                                        v-for="item in userShowList"
+                                        :key="item.id"
+                                        :label="item.title"
+                                        :value="item.id"/>
+                            </el-select>
                         </el-form-item>
 
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="性别" prop="name">
-                            <el-input v-model="ResultFrom.result"/>
+                        <el-form-item label="性别" prop="sex">
+                            <el-select v-model="resultFrom.sex" placeholder="请选择"  style="width: 100%">
+                                <el-option
+                                        v-for="item in sex"
+                                        :key="item.title"
+                                        :label="item.title"
+                                        :value="item.title"/>
+                            </el-select>
                         </el-form-item>
 
                     </el-col>
 
                     <el-col :span="12">
-                        <el-form-item label="身份证号" prop="name">
-                            <el-input v-model="ResultFrom.result"/>
+                        <el-form-item label="身份证号" prop="idNo">
+                            <el-input v-model="resultFrom.idNo"/>
+
                         </el-form-item>
 
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="比中时间" prop="name">
+                        <el-form-item label="比中时间" prop="checkOutTime">
                             <el-date-picker
-                                    v-model="ResultFrom.documentDate"
+                                    v-model="resultFrom.checkOutTime"
                                     type="date"
                                     value-format="timestamp"
                                     placeholder="选择日期"
@@ -138,101 +190,81 @@
                     </el-col>
 
                     <el-col :span="24">
-                        <el-form-item label="户籍地" prop="name">
-                            <el-input v-model="ResultFrom.result"/>
+                        <el-form-item label="户籍地" prop="huji">
+                            <el-input v-model="resultFrom.huji"/>
                         </el-form-item>
 
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="利用情况" prop="name">
-                            <el-input v-model="ResultFrom.result"/>
-                        </el-form-item>
-
-                    </el-col>
-
-                    <el-col :span="12">
-                        <el-form-item label="是否推送痕检" prop="name">
-                            <el-input v-model="ResultFrom.needToPushToCharger"/>
-                        </el-form-item>
-
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="鉴定文书号" prop="name">
-                            <el-input v-model="ResultFrom.result"/>
+                        <el-form-item label="利用情况" prop="useType">
+                            <el-select v-model="resultFrom.usedType" placeholder="请选择"  style="width: 100%">
+                                <el-option
+                                        v-for="item in usedType"
+                                        :key="item.title"
+                                        :label="item.title"
+                                        :value="item.title"/>
+                            </el-select>
                         </el-form-item>
 
                     </el-col>
 
                     <el-col :span="12">
-                        <el-form-item label="是否移交鉴定文书" prop="name">
-                            <el-input v-model="ResultFrom.result"/>
+                        <el-form-item label="是否推送痕检" prop="needToPushToCharger">
+
+                            <el-checkbox v-model="resultFrom.needToPushToCharger"></el-checkbox>
+                        </el-form-item>
+
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="鉴定文书号" prop="documentNo">
+                            <el-input v-model="resultFrom.documentNo"/>
+                        </el-form-item>
+
+                    </el-col>
+
+                    <el-col :span="12">
+                        <el-form-item label="移交鉴定文书" prop="needTransferDocument">
+
+                            <el-checkbox v-model="resultFrom.needTransferDocument"></el-checkbox>
                         </el-form-item>
 
                     </el-col>
                 </el-row>
-              <!--  <el-form-item label="检测结果" prop="name">
-                    <el-input v-model="ResultFrom.result"/>
-                </el-form-item>
-                <el-form-item label="文书号" prop="name">
-                    <el-input v-model="ResultFrom.documentNo"/>
-                </el-form-item>
-                <el-form-item label="利用情况" prop="usedType">
-                    <el-select v-model="ResultFrom.usedType" placeholder="请选择" style="width: 100%;">
-                        <el-option
-                                v-for="item in usedType"
-                                :key="item.title"
-                                :label="item.title"
-                                :value="item.title"/>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="文书日期" prop="sort">
-                    <el-date-picker
-                            v-model="ResultFrom.documentDate"
-                            type="date"
-                            value-format="timestamp"
-                            placeholder="选择日期"
-                            style="width: 100%">
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item label="是否推送给主办痕检" prop="needToPushToCharger">
-                    <el-checkbox v-model="ResultFrom.needToPushToCharger"></el-checkbox>
-                </el-form-item>-->
-
             <el-divider content-position="left">物证信息</el-divider>
             <el-row :gutter="20">
                 <el-col :span="12">
                     <el-form-item label="物证名称" prop="name">
-                        <el-input v-model="ResultFrom.result"/>
+                        {{ resultDetail.name }}
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="提取位置" prop="name">
-                        <el-input v-model="ResultFrom.result"/>
+                        {{ resultDetail.name }}
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
 
                     <el-form-item label="提取方法" prop="name">
-                        <el-input v-model="ResultFrom.result"/>
+                        {{ resultDetail.extractMethod }}
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="可靠程度" prop="name">
-                        <el-input v-model="ResultFrom.result"/>
+                        {{ resultDetail.reliabilityLevel }}
                     </el-form-item>
 
                 </el-col>
 
                 <el-col :span="12">
                     <el-form-item label="提取人" prop="name">
-                        <el-input v-model="ResultFrom.result"/>
+                        {{ resultDetail.extractName }}
                     </el-form-item>
 
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="提取时间" prop="name">
-                        <el-input v-model="ResultFrom.result"/>
+                        {{ resultDetail.extractTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')  }}
                     </el-form-item>
 
                 </el-col>
@@ -242,35 +274,35 @@
             <el-row :gutter="20">
                 <el-col :span="12">
                     <el-form-item label="勘查号" prop="name">
-                        <el-input v-model="ResultFrom.result"/>
+                        {{ resultDetail.evidenceNo }}
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="案件编号" prop="name">
-                        <el-input v-model="ResultFrom.result"/>
+                        {{ resultDetail.caseNo }}
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                     <el-form-item label="发案时间 " prop="name">
-                        <el-input v-model="ResultFrom.result"/>
+                        {{ resultDetail.caseHappenTime }}
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="案件类别" prop="name">
-                        <el-input v-model="ResultFrom.result"/>
+                        {{ resultDetail.caseCategory }}
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12">
                     <el-form-item label="发案地点" prop="name">
-                        <el-input v-model="ResultFrom.result"/>
+                        {{ resultDetail.caseAddress }}
                     </el-form-item>
                 </el-col>
 
             </el-row>
-                <el-form-item label="物证是否入库" prop="name">
-                    <el-input v-model="ResultFrom.result"/>
+                <el-form-item label="物证是否入库" prop="needPutInStock">
+                    <el-checkbox v-model="resultFrom.needPutInStock"></el-checkbox>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -297,12 +329,25 @@
     import { parseTime } from '@/utils'
     import { fetchAdminMemberList } from '@/api/permissions'
     import {writeResult} from '@/api/backlog'
+    import {fetchList,userDictList} from '@/api/dictionary'
 
     export default {
         name: 'materialBatch',
         directives: {waves},
         data() {
             return {
+                sex: [
+                    {
+
+                        title: '未知'
+                    }, {
+
+                        title: '男'
+                    }, {
+
+                        title: '女'
+                    }
+                ],
                 usedType: [
                     {
                         title: '查档认定'
@@ -318,6 +363,20 @@
                         title: '尚未利用'
                     }
                 ],
+                examResult: [
+                    {
+                        title: '未检出'
+                    }, {
+                        title: '单一分型 '
+                    }, {
+                        title: '混合可拆分'
+                    }, {
+                        title: '混合不可拆分'
+                    },
+                ],
+                emitProps:{
+                    emitPath:false
+                },
                 tableKey: 0,
                 list: null,
                 pages: 0,
@@ -329,33 +388,51 @@
                     batchId: undefined,
                 },
                 dialogResultFrom: false,
-                ResultFrom: {
+                resultFrom: {
                     id: '',
-
-                    result: '',
+                    examUid: '',
+                    examOrg: '',
+                    materialType: '',
+                    examResult: '',
+                    checkPeople: '',
+                    sex: '',
+                    idNo: '',
+                    checkOutTime: '',
+                    huji: '',
+                    useType: '',
                     documentNo: '',
-                    documentDate: '',
-                    hasTransfered: '',
                     needToPushToCharger: '',
-                    usedType: '',
+                    needTransferDocument: '',
+                    needPutInStock: '',
                 },
+                resultDetail:{},
+                userList: [],
+                userShowList: [],
+                materialTypeList: [],
 
             }
         },
         created() {
             const id = this.$route.params && this.$route.params.id
             this.getList(id)
+            this.getUserList()
+            this.search('检材类型').then(response=>{
+                this.materialTypeList = this.processData(response.list)
+            });
         },
         methods: {
+            selectUpdate(val) {
+                this.$forceUpdate()
+            },
             handleWriteResult(task) {
                 this.dialogResultFrom = true;
-
-                this.ResultFrom.id = task.id
+                this.resultFrom.id = task.id
+                this.resultDetail = task.evidenceMaterial
             },
             writeResult() {
-                let data = Object.assign({}, this.ResultFrom)
-                if (data.documentDate.toString().length > 10)
-                    data.documentDate = parseInt(data.documentDate / 1000);
+                let data = Object.assign({}, this.resultFrom)
+                if (data.checkOutTime.toString().length > 10)
+                    data.checkOutTime = parseInt(data.checkOutTime / 1000);
                 writeResult(data).then(response => {
                     if (response.code === 200) {
                         this.$message({
@@ -387,6 +464,73 @@
                     this.listLoading = false
 
                 })
+            },
+            getUserList() {
+                fetchAdminMemberList({}).then(response => {
+                    this.userList = response.list.map(data => {
+                        return {
+                            id: data.id,
+                            title: data.realName,
+                            py: data.pinyinAbbr
+                        }
+                    })
+                    this.userShowList = this.userList
+                })
+            },
+            search(parentName, filter = null) {
+                return new Promise((resolve, reject) => {
+                    const data = {
+                        filter: filter,
+                        parentName: parentName
+                    }
+                    resolve(fetchList(data))
+                })
+            },
+            remoteSearch(node,value){
+                var p =  /^[a-zA-Z]+$/;
+                if (p.test(value)){
+                    if (node.data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                        return true
+                }else{
+                    if (node.data.label.indexOf(value)>-1)
+                        return true
+                }
+            },
+            processData(data) {
+                return data.map(item => {
+                    var sendData = {
+                        value: item.name,
+                        label: item.name,
+                        py: item.pinyinAbbr
+                    }
+                    if (item.children.length > 0) {
+                        sendData.children = this.processData(item.children)
+                    }
+
+                    return sendData
+                })
+            },
+            filterUserSearch(value){
+                if (value) {
+                    this.userShowList = this.userList.filter(data=>{
+                        var p =  /^[a-zA-Z]+$/;
+                        if (p.test(value)) {
+                            if (data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                                return data
+                        }else{
+                            if (data.title.indexOf(value)>-1)
+                                return data
+                        }
+                    })
+                }else{
+                    this.userShowList = this.userList;
+                }
+            },
+            restUserSearch(change){
+                if (!change) {
+                    this.userShowList = this.userList;
+                }
+
             },
 
         }

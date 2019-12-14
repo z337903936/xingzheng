@@ -11,6 +11,8 @@
                         value-format="timestamp"
                         style="width: 405px;"
                 />
+                <el-input v-model="listQuery.materialNo" placeholder="物证编号" class="mb10" style="width: 200px;"
+                          @keyup.enter.native="handleFilter"/>
                 <el-input v-model="listQuery.evidenceNo" placeholder="勘查号" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
                 <el-input v-model="listQuery.storagePlace" placeholder="物证库" class="mb10" style="width: 200px;"
@@ -27,9 +29,9 @@
                     <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter" style="float: right;margin-right: 20px">
                         搜索
                     </el-button>
-                    <!--<router-link :to="'/material/create'" style="float: right;margin-right: 20px">-->
-                        <!--<el-button v-waves type="primary"  icon="el-icon-edit">添加</el-button>-->
-                    <!--</router-link>-->
+                    <router-link :to="'/material/create'" style="float: right;margin-right: 20px">
+                        <el-button v-waves type="primary"  icon="el-icon-edit">添加</el-button>
+                    </router-link>
                 </div>
 
 
@@ -49,55 +51,56 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="任务编号" prop="id" align="center" width="180">
+            <el-table-column label="物证编码" prop="id" align="center" width="180">
                 <template slot-scope="{row}">
-                    <span>{{ row.taskNo }}</span>
+                    <span>{{ row.materialNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="现勘号" prop="id" align="center" width="180">
+            <el-table-column label="物证库编号" align="center" width="200">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidenceNo }}</span>
+                    <span>{{ row.thirdMaterialNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证数量" align="center" min-width="100">
+            <el-table-column label="物证类别" width="150" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.examNumber }}</span>
+                    <span>{{ row.materialCategory  }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="来源" width="210" align="center">
+            <el-table-column label="利用情况" width="120" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.fromStep }}</span>
+                    <span>{{ row.usedType }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="转移人" width="100" align="center">
+            <el-table-column label="物证名称" width="250" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.fromName }}</span>
+                    <span>{{ row.name }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="接收人" width="210" align="center">
+            <el-table-column label="特征描述" width="300" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.createName }}</span>
+                    <span>{{ row.note }}</span>
                 </template>
             </el-table-column>
-
-            <el-table-column label="转移时间" width="170" align="center">
+            <el-table-column label="物证类型" width="170" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                    <span>{{ row.materialType }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="转移时间" width="210" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.transferTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
 
             <el-table-column label="操作" align="center" width="230" fixed="right" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <!--<router-link :to="'/material/batch/'+row.id">-->
-                        <!--<el-button v-waves type="primary" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>-->
-                    <!--</router-link>-->
-                    <!--<router-link :to="'/material/edit/'+row.id">-->
-                        <!--<el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>-->
-                    <!--</router-link>-->
+                    <router-link :to="'/material/edit/'+row.id">
+                        <el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>
+                    </router-link>
 
-                    <!--<el-button v-waves type="primary" style="width: 70px"  size="mini" @click="handleDelete(row)" >-->
-                        <!--销毁申请-->
-                    <!--</el-button>-->
+                    <el-button v-waves type="primary" style="width: 70px"  size="mini" @click="handleDelete(row)" >
+                        销毁申请
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -113,6 +116,28 @@
         >
         </el-pagination>
 
+        <el-dialog title="销毁申请" :close-on-click-modal="false" :visible.sync="dialogdeleteForm" width="40%">
+            <el-form
+                    ref="rules"
+                    :model="deleteForm"
+                    label-position="left"
+                    label-width="70px"
+                    style="width: 80%; margin-left:50px;">
+                <el-form-item label="理由" prop="reason">
+                    <el-input v-model="deleteForm.reason"/>
+                </el-form-item>
+
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogdeleteForm = false">
+                    取 消
+                </el-button>
+                <el-button type="primary" @click="pushDelete()">
+                    确 定
+                </el-button>
+            </div>
+        </el-dialog>
 
 
     </div>
@@ -126,7 +151,6 @@
 
 <script>
     import {fetchMaterialList,delMaterial,applyDelMaterial} from '@/api/material'
-    import { batchList, batchMaterialList } from '@/api/common'
     import waves from '@/directive/waves' // waves directive
     import {parseTime} from '@/utils'
     import { fetchAdminMemberList} from '@/api/permissions'
@@ -155,8 +179,9 @@
                     endTime: undefined,
                     filters: undefined,
                     fromName: undefined,
+                    storagePlace: undefined,
                     evidenceNo: undefined,
-                    bizName: '申请物证入库',
+                    materialNo: undefined
                 },
                 rules:{},
                 downloadLoading: false,
@@ -167,9 +192,33 @@
             this.getList()
         },
         methods: {
+            handleDelete(val){
+                this.deleteForm.id = val.id;
+                this.dialogdeleteForm = true;
+            },
+            pushDelete(){
+                applyDelMaterial(this.deleteForm).then(response=>{
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.dialogdeleteForm = false;
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                })
+            },
             getList(id) {
                 this.listLoading = true;
-                batchList(this.listQuery).then(response => {
+                fetchMaterialList(this.listQuery).then(response => {
                     this.list = response.list;
                     this.pages = response.pages
 

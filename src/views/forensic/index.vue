@@ -107,24 +107,24 @@
 
         <el-dialog title="填写结果" :close-on-click-modal="false" :visible.sync="dialogResultFrom" width="30%">
             <el-form
-                    ref="ResultFrom"
-                    :model="ResultFrom"
+                    ref="resultFrom"
+                    :model="resultFrom"
                     label-position="left"
                     label-width="120px"
                     style="width: 80%; margin-left:50px;">
 
                 <el-form-item label="检测结果" prop="result">
-                    <el-input v-model="ResultFrom.result"/>
+                    <el-input v-model="resultFrom.result"/>
                 </el-form-item>
                 <el-form-item label="勘查号" prop="evidenceNo">
-                    <el-input v-model="ResultFrom.evidenceNo"/>
+                    <el-input v-model="resultFrom.evidenceNo"/>
                 </el-form-item>
                 <el-form-item label="文书号" prop="documentNo">
-                    <el-input v-model="ResultFrom.documentNo"/>
+                    <el-input v-model="resultFrom.documentNo"/>
                 </el-form-item>
                 <el-form-item label="文书日期" prop="sort">
                     <el-date-picker
-                            v-model="ResultFrom.documentDate"
+                            v-model="resultFrom.documentDate"
                             type="date"
                             value-format="timestamp"
                             placeholder="选择日期"
@@ -132,17 +132,17 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="是否推送给主办痕检" prop="needToPushToCharger">
-                    <el-checkbox v-model="ResultFrom.needToPushToCharger"></el-checkbox>
+                    <el-checkbox v-model="resultFrom.needToPushToCharger"></el-checkbox>
                 </el-form-item>
                 <el-form-item label="任务编号" prop="taskNo">
-                    <el-input v-model="ResultFrom.taskNo"/>
+                    <el-input v-model="resultFrom.taskNo"/>
                 </el-form-item>
                 <el-form-item label="案件类别" prop="caseCategory">
                     <el-cascader
                             :options="caseCategoryList"
                             filterable
                             @change="countDict"
-                            v-model="ResultFrom.caseCategory"
+                            v-model="resultFrom.caseCategory"
                             :filter-method="remoteSearch"
                             :show-all-levels="false"
                             placeholder="案件类别"
@@ -152,7 +152,7 @@
                 </el-form-item>
                 <el-form-item label="委托日期" prop="delegateTime">
                     <el-date-picker
-                            v-model="ResultFrom.delegateTime"
+                            v-model="resultFrom.delegateTime"
                             type="date"
                             value-format="timestamp"
                             placeholder="选择日期"
@@ -160,11 +160,11 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="委托单位" prop="delegateOrg">
-                    <el-input v-model="ResultFrom.delegateOrg"/>
+                    <el-input v-model="resultFrom.delegateOrg"/>
                 </el-form-item>
 
                 <el-form-item label="委托人" prop="delegateName">
-                    <el-select v-model="ResultFrom.delegateUid"
+                    <el-select v-model="resultFrom.delegateUid"
                                filterable
                                :filter-method="filterUserSearch"
                                @visible-change="restUserSearch"
@@ -180,23 +180,23 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="简要案情" prop="digest">
-                    <el-input v-model="ResultFrom.digest"/>
+                    <el-input v-model="resultFrom.digest"/>
                 </el-form-item>
                 <el-form-item label="死者情况" prop="deathDetail">
-                    <el-input v-model="ResultFrom.deathDetail"/>
+                    <el-input v-model="resultFrom.deathDetail"/>
                 </el-form-item>
                 <el-form-item label="提取检材" prop="extractMaterial">
-                    <el-input v-model="ResultFrom.extractMaterial"/>
+                    <el-input v-model="resultFrom.extractMaterial"/>
                 </el-form-item>
                 <el-form-item label="检材去向" prop="materialTo">
-                    <el-input v-model="ResultFrom.materialTo"/>
+                    <el-input v-model="resultFrom.materialTo"/>
                 </el-form-item>
 
                 <el-form-item label="鉴定结论" prop="conclusion">
-                    <el-input v-model="ResultFrom.conclusion"/>
+                    <el-input v-model="resultFrom.conclusion"/>
                 </el-form-item>
                 <el-form-item label="检验人" prop="examName">
-                    <el-select v-model="ResultFrom.examUid"
+                    <el-select v-model="resultFrom.examUid"
                                filterable
                                :filter-method="filterUserSearch"
                                @visible-change="restUserSearch"
@@ -212,7 +212,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="备注栏" prop="note">
-                    <el-input v-model="ResultFrom.note" type="textarea"
+                    <el-input v-model="resultFrom.note" type="textarea"
                               :autosize="{ minRows: 2, maxRows: 4}"/>
                 </el-form-item>
 
@@ -260,7 +260,7 @@
     import {accetpTask, taskList,medicalWriteResult} from '@/api/backlog'
     import {parseTime} from '@/utils'
     import {fetchAdminMemberList} from '@/api/permissions'
-    import {fetchList} from '@/api/dictionary'
+    import {fetchList,userDictList} from '@/api/dictionary'
 
     export default {
         name: "Backlog",
@@ -307,7 +307,7 @@
                 isDNA: false,
                 isFinger: false,
                 isElectron: false,
-                ResultFrom: {
+                resultFrom: {
                     id: '',
                     result: '',
                     documentNo: '',
@@ -340,6 +340,9 @@
             });
         },
         methods: {
+            selectUpdate(val) {
+                this.$forceUpdate()
+            },
             filterUserSearch(value){
                 if (value) {
                     this.userShowList = this.userList.filter(data=>{
@@ -491,18 +494,18 @@
                 this.dialogResultFrom = true;
                 if (task.stepName === '法医现勘') {
                     this.isForensic = true
-                    this.ResultFrom.caseCategory = task.evidence.caseCategory
-                    this.ResultFrom.selfEvidenceNo = task.evidence.selfEvidenceNo
-                    this.ResultFrom.caseCategory = task.evidence.caseCategory
-                    this.ResultFrom.caseCategory = task.evidence.caseCategory
+                    this.resultFrom.caseCategory = task.evidence.caseCategory
+                    this.resultFrom.selfEvidenceNo = task.evidence.selfEvidenceNo
+                    this.resultFrom.caseCategory = task.evidence.caseCategory
+                    this.resultFrom.caseCategory = task.evidence.caseCategory
                 } else {
                     this.isForensic = false
                 }
-                this.ResultFrom.stepId = task.id
-                this.ResultFrom.id = task.id
+                this.resultFrom.stepId = task.id
+                this.resultFrom.id = task.id
             },
             writeResult() {
-                let data = Object.assign({}, this.ResultFrom)
+                let data = Object.assign({}, this.resultFrom)
                 if (data.documentDate.toString().length > 10)
                     data.documentDate = parseInt(data.documentDate / 1000);
                 medicalWriteResult(data).then(response => {
