@@ -290,7 +290,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="提取时间" >
-                        {{ resultDetail.evidenceMaterial ?(resultDetail.evidenceMaterial.extractTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')): '' }}
+                        {{ resultDetail.evidenceMaterial ?resultDetail.evidenceMaterial.extractTime: '' }}
                     </el-form-item>
 
                 </el-col>
@@ -463,6 +463,12 @@
                 this.dialogResultFrom = true;
                 this.resultFrom.id = task.id
                 this.resultDetail = task
+                if (this.resultDetail.evidenceMaterial){
+                    this.resultDetail.evidenceMaterial.extractTime = parseTime(this.resultDetail.evidenceMaterial.extractTime,'{y}-{m}-{d} {h}:{i}:{s}')
+                } if (this.resultDetail.evidence){
+                    this.resultDetail.evidence.caseHappenTime = parseTime(this.resultDetail.evidence.extractTime,'{y}-{m}-{d} {h}:{i}:{s}')
+                }
+                
             },
             writeResult() {
                 let data = Object.assign({}, this.resultFrom)

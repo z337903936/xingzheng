@@ -78,7 +78,7 @@
                         @change="countDict"
                         placeholder="足迹"
                         filterable
-                        :props="{ checkStrictly: true,emitPath:false }"
+                        :props="{ multiple: true,emitPath:false }"
                         style="width: 200px"/>
                 <el-input v-model="listQuery.crimeTools" placeholder="作案工具" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
