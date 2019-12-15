@@ -31,9 +31,11 @@
 
 
         <el-divider content-position="left">批次物证列表</el-divider>
-        <el-button type="primary" size="mini" @click="submitMaterialinStock">批量存入物证库</el-button>
-        <el-button type="primary" size="mini" @click="submitMaterialinStock">推送痕检</el-button>
-        <el-button type="primary" size="mini" @click="submitMaterialinStock">移交鉴定文书</el-button>
+        <div style="float: right;margin-bottom: 10px">
+            <el-button type="primary" size="mini" @click="submitMaterialinStock">批量存入物证库</el-button>
+            <el-button type="primary" size="mini" @click="submitMaterialinStock">推送痕检</el-button>
+            <el-button type="primary" size="mini" @click="submitMaterialinStock">移交鉴定文书</el-button>
+        </div>
         <el-table
                 v-loading="listLoading"
                 :key="tableKey"
