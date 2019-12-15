@@ -2,8 +2,7 @@
   <div class="dashboard-editor-container">
     <panel-group :state="state" />
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <bar-chart :state="state" v-if="state.month.length>0" />
-      <div v-else>暂无数据</div>
+      <bar-chart :state="state" />
     </el-row>
     <div class="tip"><p>待办任务</p></div>
     <div  @click="gotoUndone">
@@ -95,8 +94,8 @@ export default {
       state:{
         dayEvidences:0,
         monthEvidences:0,
-        month:[],
-        showMonth:[],
+        dayData:[],
+        eviData:[],
       },
       list:''
     }
@@ -139,11 +138,11 @@ export default {
           month.push(data.day);
           showMonth.push(data.evidences)
         });
-        this.state.month = month;
-        this.state.showMonth = showMonth;
+        this.state.dayData = month;
+        this.state.eviData = showMonth;
+        console.log(this.state);
 
       })
-
 
     },
   }
