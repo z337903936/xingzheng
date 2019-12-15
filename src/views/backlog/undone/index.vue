@@ -534,8 +534,10 @@
     import {fetchAdminMemberList} from '@/api/permissions'
     import {fetchList} from '@/api/dictionary'
     import waves from '@/directive/waves' // waves directive
+
     export default {
         name: "Backlog",
+        directives: {waves},
         filters: {
 
             statusFilter(status) {
