@@ -181,7 +181,7 @@
     import {fetchList} from '@/api/dictionary'
 
     export default {
-        name: 'Dna',
+        name: 'electronic',
         directives: {waves},
         data() {
             return {
@@ -198,7 +198,7 @@
                     page: 1,
                     beginTime: undefined,
                     endTime: undefined,
-                    bizName: '理化检测',
+                    bizName: '电子物证检测',
                     evidenceNo: undefined,
                     fromName: undefined,
                     filters: undefined,
@@ -228,7 +228,6 @@
                     taskNo: undefined,
                     examResult: undefined,
                     requestName: undefined,
-                    dnaNo: undefined,
                 };
                 this.searchTime = '';
             },
