@@ -468,12 +468,14 @@
                 } if (this.resultDetail.evidence){
                     this.resultDetail.evidence.caseHappenTime = parseTime(this.resultDetail.evidence.extractTime,'{y}-{m}-{d} {h}:{i}:{s}')
                 }
-                
             },
             writeResult() {
                 let data = Object.assign({}, this.resultFrom)
-                if (data.checkOutTime.toString().length > 10)
+
+                if (data.checkOutTime && data.checkOutTime.toString().length > 10)
                     data.checkOutTime = parseInt(data.checkOutTime / 1000);
+
+
                 writeResult(data).then(response => {
                     if (response.code === 200) {
                         this.$message({
