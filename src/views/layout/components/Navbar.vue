@@ -2,25 +2,25 @@
   <div class="navbar">
     <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
 
-    <breadcrumb class="breadcrumb-container"/>
+    <!--<breadcrumb class="breadcrumb-container"/>-->
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <error-log class="errLog-container right-menu-item"/>
 
-        <el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom">
-          <screenfull class="screenfull right-menu-item"/>
-        </el-tooltip>
+        <!--<el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom">-->
+          <!--<screenfull class="screenfull right-menu-item"/>-->
+        <!--</el-tooltip>-->
 
-        <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
-          <size-select class="international right-menu-item"/>
-        </el-tooltip>
+        <!--<el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">-->
+          <!--<size-select class="international right-menu-item"/>-->
+        <!--</el-tooltip>-->
 
-        <lang-select class="international right-menu-item"/>
+        <!--<lang-select class="international right-menu-item"/>-->
 
-        <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom">
-          <theme-picker class="theme-switch right-menu-item"/>
-        </el-tooltip>
+        <!--<el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom">-->
+          <!--<theme-picker class="theme-switch right-menu-item"/>-->
+        <!--</el-tooltip>-->
       </template>
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
@@ -94,7 +94,10 @@
     height: 50px;
     line-height: 50px;
     border-radius: 0px !important;
-
+    background-image: url("../../../../static/img/banner.png");
+    background-repeat:no-repeat;
+    background-size:100% 100%;
+    -moz-background-size:100% 100%;
     .hamburger-container {
       line-height: 58px;
       height: 50px;

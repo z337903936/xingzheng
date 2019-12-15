@@ -259,6 +259,10 @@ export default {
 
   /* reset element-ui css */
   .login-container {
+    background-image: url("../../../static/img/login.png");
+    background-repeat:no-repeat;
+    background-size:100% 100%;
+    -moz-background-size:100% 100%;
     .el-input {
       display: inline-block;
       height: 47px;
@@ -303,12 +307,11 @@ export default {
 
     .login-form {
       position: absolute;
-      left: 0;
-      right: 0;
+      right: 15%;
       width: 520px;
       max-width: 100%;
       padding: 35px 35px 15px 35px;
-      margin: 120px auto;
+      margin: 220px 0 120px 0;
     }
 
     .tips {

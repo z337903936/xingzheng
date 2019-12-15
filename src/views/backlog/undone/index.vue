@@ -876,7 +876,7 @@
                             showClose: true,
                             duration: 2000
                         })
-                        this.dialogFormAccept = false;
+                        this.dialogFormAction = false;
                         this.getList();
 
                     } else {
@@ -901,7 +901,7 @@
                             showClose: true,
                             duration: 2000
                         })
-                        this.dialogFormAccept = false;
+                        this.dialogFormAction = false;
                         this.getList();
 
                     } else {
