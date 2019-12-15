@@ -1,5 +1,13 @@
 <template>
   <div class="navbar">
+
+    <div class="webName">
+      <el-image
+              style="width: 50px; height: 50px;top: 15px;"
+              src="../../../../static/img/bannerb.png"
+              fit="fill"></el-image>
+      {{ this.$store.getters.webName }}
+    </div>
     <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
 
     <!--<breadcrumb class="breadcrumb-container"/>-->
@@ -90,13 +98,22 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  .webName{
+    position: fixed;
+    color: white;
+    letter-spacing: 11px;
+    font-size: 30px;
+    width: 100%;
+    text-align: center;
+  }
+
   .navbar {
     position: fixed;
     height: 80px;
     line-height: 80px;
     border-radius: 0px !important;
-    background-image: url("../../../../static/img/banner.png");
-    /*background-repeat:no-repeat;*/
+    background-image: url("../../../../static/img/bannera.png");
+    background-repeat:no-repeat;
     background-size: 100% 80px;
     -moz-background-size: 100% 100%;
     left: 0;
@@ -109,6 +126,7 @@
       float: left;
       padding: 0 10px;
       margin-top: 17px;
+      color: white;
     }
 
     .breadcrumb-container {

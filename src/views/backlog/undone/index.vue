@@ -2,7 +2,6 @@
     <div class="app-container">
         <el-table
                 v-loading="listLoading"
-
                 :data="list"
                 border
                 fit
@@ -10,9 +9,9 @@
                 style="width: 100%;"
 
         >
-            <el-table-column type="expand" ref="expand">
+            <el-table-column  type="expand" ref="expand">
                 <template slot-scope="{row}">
-                    <el-form label-position="left" inline class="table-expand" v-if="row.fromStep === '接警'">
+                    <el-form label-position="left" inline class="table-expand" v-if="row.fromStep === '警情扭转'">
                         <el-form-item label="报告人">
                             <span>{{ row.record.reporter }}</span>
                         </el-form-item>
@@ -110,7 +109,7 @@
 
                     <!--</el-form>-->
 
-                    <el-form label-position="left" inline class="table-expand" v-else-if="row.fromStep === '痕检'">
+                    <el-form label-position="left" inline class="table-expand" v-else-if="row.fromStep === '痕检现勘'">
                         <el-form-item label="任务号">
                             <span>{{ row.evidence.thirdEvidenceNo }}</span>
                         </el-form-item>
@@ -215,74 +214,89 @@
                     </el-form>
                 </template>
 
-            </el-table-column>
-            <el-table-column label="任务单号" align="center">
+            </el-table-column >
+            <el-table-column label="任务单号" align="center" width="120">
                 <template slot-scope="{row}">
                     <span>{{ row.taskNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="任务类型" align="center">
+            <el-table-column label="任务类型" align="center" width="120">
                 <template slot-scope="{row}">
                     <span>{{ row.stepName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="发送时间" align="center">
+            <el-table-column label="发送人" align="center" width="100">
+                <template slot-scope="{row}">
+                    <span>{{ row.fromUser }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="发送时间" align="center" width="170">
                 <template slot-scope="{row}">
                     <span>{{ row.taskArriveTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')  }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="任务数" align="center">
+            <el-table-column label="简要案情" align="center" style="min-width: 600px">
                 <template slot-scope="{row}">
-                    <span>{{ row.examNumber }}</span>
+                    <span>{{ row.evidence.caseHappenTime +'在'+ row.evidence.caseAddress + row.evidence.caseCategory +'案' }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="状态" align="center">
+            <el-table-column label="案件类别" align="center" width="150">
+                <template slot-scope="{row}">
+                    <span>{{ row.evidence.caseCategory }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="状态" align="center" width="100">
                 <template slot-scope="{row}">
                     <span>{{ row.status | statusFilter }}</span>
                 </template>
             </el-table-column>
 
 
-            <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+            <el-table-column label="操作" align="center" width="230" fixed="right" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
-                               @click="handleAction(row,true)" v-if="row.status===1 && row.stepName === '物证入库'">
+                               @click="handleAction(row,true)" v-if="row.status===1 && (row.stepName === '申请物证入库' || row.stepName === '申请物证出库')">
                         同意入库
                     </el-button>
                     <el-button type="warning" size="small" icon="el-icon-document-delete"
-                               @click="handleAction(row,false)" v-if="row.status===1 && row.stepName === '物证入库'">
+                               @click="handleAction(row,false)" v-if="row.status===1 && (row.stepName === '申请物证入库' || row.stepName === '申请物证出库')">
                         拒绝入库
                     </el-button>
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
                                @click="handleAcceptTask(row)"
-                               v-if="row.status===1 && (row.stepName === '法医现勘' ||  row.stepName === '接警') ">
+                               v-if="row.status===1 && (row.stepName === '法医现勘' ||  row.stepName === '警情扭转') ">
                         接收任务
                     </el-button>
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
                                @click="handleTaskAction(row)"
-                               v-if="row.status===1 && row.stepName !== '痕检现勘' && row.stepName !== '物证入库' && row.stepName !== '法医现勘' && row.stepName !== '接警' ">
+                               v-if="row.status===1 && row.stepName !== '痕检现勘' && (row.stepName !== '申请物证入库' || row.stepName !== '申请物证出库') && row.stepName !== '法医现勘' && row.stepName !== '警情扭转' ">
                         任务操作
                     </el-button>
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
-                               @click="handleAcceptTaskSeach(row)" v-if="row.status===1 && row.stepName === '痕检现勘'">
+                               @click="handleAcceptTaskSeach(row)"
+                               v-if="row.status===1 && row.stepName === '痕检现勘'">
                         接收任务
                     </el-button>
-                    <el-button type="success" size="small" icon="el-icon-tickets" @click="handleWriteResult(row)"
-                               v-if="row.status===2 && row.stepName === '法医现勘' ">
-                        填写结果
-                    </el-button>
-                    <router-link :to="'/material/batch/'+row.examBatch.id"
-                                 v-if="row.status===2 && row.stepName !== '痕检现勘' && row.stepName !== '物证入库' && row.stepName !== '接警'"
+                    <!--<el-button type="success" size="small" icon="el-icon-tickets" @click="handleWriteResult(row)"-->
+                               <!--v-if="row.status===2 && row.stepName === '法医现勘' ">-->
+                        <!--填写结果-->
+                    <!--</el-button>-->
+                    <router-link :to="'/medical/result/'+row.id"
+                                 v-if="row.status===2 && row.stepName === '法医现勘' ">
+                        <el-button icon="el-icon-edit" type="primary" size="small">填写结果</el-button>
+                    </router-link>
+                    <router-link :to="'/material/batch/'+row.examBatchId"
+                                 v-if="row.stepName !== '痕检现勘' && (row.stepName !== '申请物证入库' || row.stepName !== '申请物证出库') && row.stepName !== '警情扭转'"
                     >
                         <el-button v-waves type="success" size="mini" icon="el-icon-tickets" style="width: 100px">物证详情</el-button>
                     </router-link>
                     <router-link :to="'/search/update-search/'+row.evidenceId"
-                                 v-if="row.status===2 && (row.stepName==='痕检现勘' ||  row.stepName === '接警') ">
+                                 v-if="row.status===2 && (row.stepName==='痕检现勘' ||  row.stepName === '警情扭转') ">
                         <el-button icon="el-icon-edit" type="primary" size="small">编辑现勘</el-button>
                     </router-link>
-                    <el-button type="warning" size="small" icon="el-icon-tickets" @click="handleCancelEvidence(row.record.id)"
-                               v-if="row.status===2 && (row.stepName==='痕检现勘' ||  row.stepName === '接警') ">
+                    <el-button type="warning" size="small" icon="el-icon-tickets" @click="handleCancelEvidence(row.record)"
+                               v-if="row.status===2 && (row.stepName==='痕检现勘' ||  row.stepName === '警情扭转') ">
                         取消勘查
                     </el-button>
                 </template>
@@ -617,9 +631,9 @@
             });
         },
         methods: {
-            handleCancelEvidence(id){
+            handleCancelEvidence(data){
                 const sendData={
-                    recordId:id
+                    recordId:data.id
                 }
                 cancelEvidence(sendData).then(response=>{
                     if (response.code === 200) {
@@ -735,9 +749,17 @@
                 }
                 taskList(data).then(response => {
                     this.list = response.list
-                    // this.pages = response.pages
-
-                    // Just to simulate the time of the request
+                    this.list.map(data=>{
+                        if (data.examBatch){
+                            data.examBatchId = data.examBatch.id;
+                        }
+                        if (data.evidence.caseHappenTime) {
+                            data.evidence.caseHappenTime = parseTime(data.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}')
+                        }else{
+                            data.evidence.caseHappenTime = ''
+                        }
+                        return data;
+                    })
 
                     this.listLoading = false
 
@@ -854,7 +876,7 @@
             },
             handleAcceptTask(task) {
                 this.dialogFormAccept = true;
-                if ( task=== '接警') {
+                if ( task=== '警情扭转') {
                     this.acceptTaskFrom.recordNo = task.id
                 }else{
                     this.acceptTaskFrom.stepId = task.id

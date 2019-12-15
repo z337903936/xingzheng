@@ -360,7 +360,7 @@
                 }
             },
             judgeG(data) {
-                if (this.$store.getters.groupName.indexOf('痕检') > -1) {
+                if (this.$store.getters.groupName.indexOf('痕检现勘') > -1) {
                     return false
                 } else {
                     return true

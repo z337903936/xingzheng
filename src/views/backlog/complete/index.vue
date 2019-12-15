@@ -9,47 +9,43 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="任务单号" align="center" >
+            <el-table-column label="任务单号" align="center" width="120">
                 <template slot-scope="{row}">
-
                     <span>{{ row.taskNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="任务类型" align="center">
+            <el-table-column label="任务类型" align="center" width="120">
                 <template slot-scope="{row}">
                     <span>{{ row.stepName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="发送人" align="center">
+            <el-table-column label="发送人" align="center" width="100">
                 <template slot-scope="{row}">
-                    <span>{{ row.stepHandler }}</span>
+                    <span>{{ row.fromUser }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="发送时间"  align="center">
+            <el-table-column label="发送时间" align="center" width="170">
                 <template slot-scope="{row}">
-                    <span>{{row.taskArriveTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+                    <span>{{ row.taskArriveTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')  }}</span>
                 </template>
             </el-table-column>
-            <!--<el-table-column label="任务结束时间"  align="center">-->
-            <!--<template slot-scope="{row}">-->
-            <!--<span>{{row.taskEndTime!==''?(row.taskEndTime*1000 | parseTime('{y}-{m}-{d} {h}:{i}')):''}}</span>-->
-            <!--</template>-->
-            <!--</el-table-column>-->
-            <el-table-column label="任务详情" align="center">
+
+            <el-table-column label="简要案情" align="center" style="min-width: 600px">
                 <template slot-scope="{row}">
-                    <span>{{ row.stepHandler }}</span>
+                    <span>{{ row.evidence.caseHappenTime + row.evidence.caseAddress + row.evidence.caseCategory }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="状态"  align="center">
+            <el-table-column label="案件类别" align="center" width="150">
+                <template slot-scope="{row}">
+                    <span>{{ row.evidence.caseCategory }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="状态" align="center" width="100">
                 <template slot-scope="{row}">
                     <span>{{ row.status | statusFilter }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="关联编号" >
-                <template slot-scope="{row}">
-                    <span>{{ row.stepHandler }}</span>
-                </template>
-            </el-table-column>
+
 
             <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
@@ -118,6 +114,17 @@
 
                     this.list = response.list
                     // this.pages = response.pages
+                    this.list.map(data=>{
+                        if (data.examBatch){
+                            data.examBatchId = data.examBatch.id;
+                        }
+                        if (data.evidence.caseHappenTime) {
+                            data.evidence.caseHappenTime = parseTime(data.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}')
+                        }else{
+                            data.evidence.caseHappenTime = ''
+                        }
+                        return data;
+                    })
 
                     // Just to simulate the time of the request
 

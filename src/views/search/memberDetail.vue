@@ -598,8 +598,8 @@
       <el-form-item label-width="auto">
         <el-button type="primary" size="mini" @click="handleClickToAddMaterial">添加物证</el-button>
         <el-button type="primary" size="mini" @click="submitTask">批量提交物证</el-button>
-        <el-button type="primary" size="mini" @click="submitMaterialOutStock">批量借出物证</el-button>
-        <el-button type="primary" size="mini" @click="submitMaterialinStock">批量存入物证库</el-button>
+        <el-button type="primary" size="mini" @click="">批量借出物证</el-button>
+        <el-button type="primary" size="mini" @click="">批量存入物证库</el-button>
         <el-table
           :data="list.materialList"
           border
@@ -735,7 +735,7 @@
 
 
       <div style="margin: 40px 0;text-align: center;" >
-        <el-button v-loading="loading" type="primary" style="width: 200px" @click="submitForm()">保存</el-button>
+        <el-button v-loading="loading" type="primary" style="width: 200px" @click="submitForm(false,true)">保存</el-button>
       </div>
 
     </el-form>
@@ -2695,7 +2695,7 @@ export default {
       }
 
     },
-    submitForm(toAddMaterial = false) {
+    submitForm(toAddMaterial = false,out=false) {
       this.$refs.listForm.validate(valid => {
         if (valid) {
           var data = Object.assign({}, this.list)
@@ -2768,6 +2768,16 @@ export default {
                   duration: 2000
                 })
                 this.fetchData(this.list.id)
+
+                if (out) {
+                  this.$router.push({
+                    path: '/search/index',
+                    query: {
+                      t: +new Date()
+                    }
+                  })
+                  this.$store.dispatch('delView', this.$route)
+                }
                 // this.list = response;
                 // this.list.suspectPersonList = response.suspectPersonList;
                 // this.proResponse()

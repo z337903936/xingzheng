@@ -9,6 +9,22 @@ export function taskList(query) {
 }
 
 
+export function taskDetails(id) {
+    return request({
+        url: '/v1/cp/task_result_detail/'+id+'/',
+        method: 'get',
+        params: {}
+    })
+}
+
+export function medicalDetails(id) {
+    return request({
+        url: '/v1/cp/medical_task_result_detail/'+id+'/',
+        method: 'get',
+        params: {}
+    })
+}
+
 
 
 export function accetpTask(data) {

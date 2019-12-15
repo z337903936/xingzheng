@@ -9,6 +9,7 @@ const getters = {
   uid: state => state.user.uid,
   id: state => state.user.id,
   caseNo: state => state.user.caseNo,
+  webName: state => state.user.webName,
   instanceNo: state => state.user.instanceNo,
   evidenceNo: state => state.user.evidenceNo,
   groupName: state => state.user.groupName,

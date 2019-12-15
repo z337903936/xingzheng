@@ -198,7 +198,7 @@
                     page: 1,
                     beginTime: undefined,
                     endTime: undefined,
-                    bizName: '电子物证检测',
+                    bizName: '电子物证送检',
                     evidenceNo: undefined,
                     fromName: undefined,
                     filters: undefined,

@@ -18,6 +18,7 @@ const user = {
     instanceNo: '',
     evidenceNo: '',
     roles: [],
+    webName:'',
     setting: {
       articlePlatform: []
     }
@@ -26,6 +27,9 @@ const user = {
   mutations: {
     SET_CODE: (state, code) => {
       state.code = code
+    },
+    SET_WEBNAME: (state, webName) => {
+      state.webName = webName
     },
     SET_CASE: (state, caseNo) => {
       state.caseNo = caseNo
@@ -124,6 +128,8 @@ const user = {
 
            if (data.key ==='EVIDENCE_NO_PREFIX')
              commit('SET_EVIDENCE', data.value)
+           if (data.key ==='PARAM_KEY_TITLE')
+             commit('SET_WEBNAME', data.value)
          })
        })
       })

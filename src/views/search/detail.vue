@@ -209,19 +209,19 @@
 
                     if (response.stepList.length>0) {
                         response.stepList.map(item=>{
-                            if (item.stepName === 'DNA检测') {
+                            if (item.stepName === 'DNA送检') {
                                 this.dnaList.push(item)
                             }
-                            if (item.stepName === '指纹检测') {
+                            if (item.stepName === '指纹送检') {
                                 this.fingerprintist.push(item)
                             }
                             if (item.stepName === '法医现勘') {
                                 this.forensicList = response.concernedPersonList
                             }
-                            if (item.stepName === '理化检测') {
+                            if (item.stepName === '理化送检') {
                                 this.physicocheList.push(item)
                             }
-                            if (item.stepName === '电子物证检测') {
+                            if (item.stepName === '电子物证送检') {
                                 this.electronicList.push(item)
                             }
                         })

@@ -198,7 +198,7 @@
                     page: 1,
                     beginTime: undefined,
                     endTime: undefined,
-                    bizName: '理化检测',
+                    bizName: '理化送检',
                     evidenceNo: undefined,
                     fromName: undefined,
                     filters: undefined,

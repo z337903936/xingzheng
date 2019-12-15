@@ -11,17 +11,6 @@
             />
 
                 <el-cascader
-                        :options="caseTypeList"
-                        v-model="listQuery.caseCategory"
-                        :filter-method="filterSearch"
-                        :show-all-levels="false"
-                        placeholder="案件类别"
-                        @change="countDict($event,'案件类别')"
-                        filterable
-                        style="width: 200px"
-                        :props="emitProps"
-                />
-                <el-cascader
                         :options="caseHappenRegionList"
                         v-model="listQuery.caseHappenRegion"
                         :filter-method="filterSearch"
@@ -31,6 +20,18 @@
                         :props="emitProps"
                         filterable
                         style="width: 200px"
+                />
+
+                <el-cascader
+                        :options="caseTypeList"
+                        v-model="listQuery.caseCategory"
+                        :filter-method="filterSearch"
+                        :show-all-levels="false"
+                        placeholder="案件类别"
+                        @change="countDict($event,'案件类别')"
+                        filterable
+                        style="width: 200px"
+                        :props="emitProps"
                 />
                 <div style="margin-top: 15px">
                     <el-select

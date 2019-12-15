@@ -198,7 +198,7 @@
                     page: 1,
                     beginTime: undefined,
                     endTime: undefined,
-                    bizName: '指纹检测',
+                    bizName: '指纹送检',
                     evidenceNo: undefined,
                     fromName: undefined,
                     filters: undefined,

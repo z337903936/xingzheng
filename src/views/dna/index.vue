@@ -101,7 +101,7 @@
                     <!--<span>{{ row.documentRoute }}</span>-->
                 <!--</template>-->
             <!--</el-table-column>-->
-            <el-table-column label="任务编号" prop="id" align="center" width="180">
+            <el-table-column label="任务序号" prop="id" align="center" width="180">
                 <template slot-scope="{row}">
                     <span>{{ row.taskNo }}</span>
                 </template>
@@ -116,23 +116,23 @@
                     <span>{{ row.examNumber }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="来源" width="210" align="center">
+            <el-table-column label="简要案情" align="center" min-width="100">
                 <template slot-scope="{row}">
-                    <span>{{ row.fromStep }}</span>
+                    <span>{{ row.evidence.caseHappenTime +'在'+ row.evidence.caseAddress + row.evidence.caseCategory +'案' }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="转移人" width="100" align="center">
+            <el-table-column label="移交人" width="100" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.fromName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="接受人" width="210" align="center">
+            <el-table-column label="检验人" width="210" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.createName }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="转移时间" width="170" align="center">
+            <el-table-column label="移交时间" width="170" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
@@ -198,7 +198,7 @@
                     page: 1,
                     beginTime: undefined,
                     endTime: undefined,
-                    bizName: 'DNA检测',
+                    bizName: 'DNA送检',
                     evidenceNo: undefined,
                     fromName: undefined,
                     filters: undefined,
@@ -263,6 +263,15 @@
                 batchList(this.listQuery).then(response => {
                     this.list = response.list;
                     this.pages = response.pages
+
+                    this.list.map(data=>{
+                        if (data.evidence.caseHappenTime) {
+                            data.evidence.caseHappenTime = parseTime(data.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}')
+                        }else{
+                            data.evidence.caseHappenTime = ''
+                        }
+                        return data;
+                    })
 
                     // Just to simulate the time of the request
 
