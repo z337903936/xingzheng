@@ -1,10 +1,11 @@
 <template>
   <div class="dashboard-editor-container">
-    <panel-group :state="state" @handleSetLineChartData="handleSetLineChartData"/>
+    <panel-group :state="state" />
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <bar-chart :state="state" />
+      <bar-chart :state="state" v-if="state.month.length>0" />
+      <div v-else>暂无数据</div>
     </el-row>
-
+    <div class="tip"><p>待办任务</p></div>
     <div  @click="gotoUndone">
       <el-table
               v-loading="listLoading"
@@ -92,12 +93,19 @@ export default {
     return {
       listLoading:false,
       state:{
-
-      }
+        dayEvidences:0,
+        monthEvidences:0,
+        month:[],
+        showMonth:[],
+      },
+      list:''
     }
   },
   created() {
+
+
     this.getList();
+
   },
   methods: {
     gotoUndone(){
@@ -123,10 +131,19 @@ export default {
         this.listLoading = false
 
       })
-
       homePageState().then(res=>{
+        var month = [];
+        var showMonth = [];
         this.state = res;
+        this.state.dayStatList.map(data=>{
+          month.push(data.day);
+          showMonth.push(data.evidences)
+        });
+        this.state.month = month;
+        this.state.showMonth = showMonth;
+
       })
+
 
     },
   }
@@ -137,10 +154,18 @@ export default {
 .dashboard-editor-container {
   padding: 32px;
   background-color: rgb(240, 242, 245);
+  min-height: calc( 100vh - 114px );
   .chart-wrapper {
     background: #fff;
     padding: 16px 16px 0;
     margin-bottom: 32px;
   }
+}
+ .tip {
+  padding: 8px 16px;
+  background-color: #ecf8ff;
+  border-radius: 4px;
+  border-left: 5px solid #50bfff;
+  margin: 20px 0;
 }
 </style>

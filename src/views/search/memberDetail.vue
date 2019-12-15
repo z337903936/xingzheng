@@ -227,7 +227,7 @@
         <el-col :span="12">
           <el-form-item label="现场保护民警 " prop="sceneProtectUid">
             <el-select
-              v-model="list.sceneProtectUid"
+              v-model="list.sceneProtectName"
               :filter-method="filterUserSearch"
               filterable
               placeholder="请选择"
@@ -1284,6 +1284,7 @@ export default {
         caseHappenTime: '',
         caseHappenRegion: '',
         sceneProtect: '',
+        sceneProtectName: '',
         caseCategory: '',
         mainChargerUid: '',
         supporterUid: '',

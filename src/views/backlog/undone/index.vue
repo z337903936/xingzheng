@@ -533,7 +533,7 @@
     import {parseTime} from '@/utils'
     import {fetchAdminMemberList} from '@/api/permissions'
     import {fetchList} from '@/api/dictionary'
-
+    import waves from '@/directive/waves' // waves directive
     export default {
         name: "Backlog",
         filters: {

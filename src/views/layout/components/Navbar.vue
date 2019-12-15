@@ -91,18 +91,24 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   .navbar {
-    height: 50px;
-    line-height: 50px;
+    position: fixed;
+    height: 80px;
+    line-height: 80px;
     border-radius: 0px !important;
     background-image: url("../../../../static/img/banner.png");
-    background-repeat:no-repeat;
-    background-size:100% 100%;
-    -moz-background-size:100% 100%;
+    /*background-repeat:no-repeat;*/
+    background-size: 100% 80px;
+    -moz-background-size: 100% 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 2;
     .hamburger-container {
       line-height: 58px;
       height: 50px;
       float: left;
       padding: 0 10px;
+      margin-top: 17px;
     }
 
     .breadcrumb-container {
@@ -142,7 +148,7 @@
       .avatar-container {
         height: 50px;
         margin-right: 30px;
-
+        margin-top: 11px;
         .avatar-wrapper {
           margin-top: 5px;
           position: relative;
