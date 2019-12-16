@@ -207,3 +207,10 @@ export function submitSanlu(data) {
         data
     })
 }
+export function submitTaskNo(data) {
+    return request({
+        url: '/v1/cp/evidence_exam_task_no/',
+        method: 'post',
+        data
+    })
+}

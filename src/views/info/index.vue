@@ -66,7 +66,7 @@
                     @change="countDict($event,'案件类别')"
                     filterable
                     style="width: 200px"
-                    :props="emitProps"
+                    :props="{  multiple: true,emitPath:false }"
             />
             <div style="margin-top: 20px">
                 <el-cascader
@@ -135,12 +135,12 @@
                     v-model="taskId"
                     type="selection"
                     width="55"/>
-            <el-table-column label="勘查号" prop="id" align="center" width="220">
+            <el-table-column label="勘查号" prop="id" align="center" width="120">
                 <template slot-scope="{row}">
                     <span>{{ row.selfEvidenceNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="发案日期" width="150" align="center">
+            <el-table-column label="发案日期" width="170" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.caseHappenTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
@@ -160,23 +160,23 @@
                     <span>{{ row.caseCategory }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="案件时机" width="150" align="center">
+            <el-table-column label="案件时机" width="120" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.crimeTime }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="足迹" width="150" align="center">
+            <el-table-column label="足迹" width="110" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.footprint }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="侵入方式" width="210" align="center">
+            <el-table-column label="侵入方式" width="150" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.invadeType }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="嫌疑人" width="210" align="center">
+            <el-table-column label="嫌疑人" width="110" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.suspectName }}</span>
                 </template>
@@ -191,7 +191,7 @@
                     <span>{{ row.crimePeoples }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="作案工具" width="210" align="center">
+            <el-table-column label="作案工具" width="110" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.crimeTools }}</span>
                 </template>

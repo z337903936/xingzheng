@@ -108,6 +108,8 @@ export default {
         monthEvidences:0,
         dayData:[],
         eviData:[],
+
+        stealData:[],
       },
       list:''
     }
@@ -146,13 +148,20 @@ export default {
         var month = [];
         var showMonth = [];
         this.state = res;
+        var dayData = []
+        var eviData = []
+        var stealData = []
         this.state.dayStatList.map(data=>{
-          month.push(data.day);
-          showMonth.push(data.evidences)
+          dayData.push(data.day);
+          eviData.push(data.evidences)
         });
-        this.state.dayData = month;
-        this.state.eviData = showMonth;
-        console.log(this.state);
+        this.state.dayData = dayData
+        this.state.eviData = eviData
+        this.state.dayStealStatList.map(data=>{
+          stealData.push(data.evidences)
+        });
+        this.state.stealData = stealData
+
 
       })
 

@@ -33,9 +33,10 @@
 
         <el-divider content-position="left">批次物证列表</el-divider>
         <div style="float: right;margin-bottom: 10px">
+            <el-button type="primary" size="mini" @click="dialogTaskFrom = true">填写任务号</el-button>
             <el-button type="primary" size="mini" @click="submitMaterialinStock">批量存入物证库</el-button>
             <el-button type="primary" size="mini" @click="submitPush">推送痕检</el-button>
-            <el-button type="primary" size="mini" @click="dialogtransFrom = true">移交鉴定文书</el-button>
+            <el-button type="primary" size="mini" @click="dialogTransFrom = true">移交鉴定文书</el-button>
         </div>
         <el-table
                 v-loading="listLoading"
@@ -358,7 +359,7 @@
 
 
 
-        <el-dialog title="移交鉴定文书" :close-on-click-modal="false" :visible.sync="dialogtransFrom" width="50%">
+        <el-dialog title="移交鉴定文书" :close-on-click-modal="false" :visible.sync="dialogTransFrom" width="50%">
             <el-form
                     ref="trans"
                     :model="transFrom"
@@ -374,10 +375,42 @@
             </el-form>
 
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogtransFrom = false">
+                <el-button @click="dialogTransFrom = false">
                     取 消
                 </el-button>
                 <el-button type="primary" @click="submitTrans()">
+                    确 定
+                </el-button>
+            </div>
+        </el-dialog>
+
+        <el-dialog title="填写任务号" :close-on-click-modal="false" :visible.sync="dialogTaskFrom" width="50%">
+            <el-form
+                    ref="trans"
+                    :model="taskFrom"
+                    label-position="left"
+                    label-width="80px"
+                    style="width: 80%; margin-left:50px;">
+                <el-form-item label="任务号" prop="dnaTaskNo" v-if="batch.stepName === 'DNA送检'">
+                    <el-input v-model="taskFrom.dnaTaskNo"/>
+                </el-form-item>
+                <el-form-item label="任务号" prop="fpTaskNo" v-if="batch.stepName === '指纹送检'">
+                    <el-input v-model="taskFrom.fpTaskNo"/>
+                </el-form-item>
+                <el-form-item label="任务号" prop="digiTaskNo" v-if="batch.stepName === '电子物证送检'">
+                    <el-input v-model="taskFrom.digiTaskNo"/>
+                </el-form-item>
+                <el-form-item label="任务号" prop="cheTaskNo" v-if="batch.stepName === '理化送检'">
+                    <el-input v-model="taskFrom.cheTaskNo"/>
+                </el-form-item>
+
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogTaskFrom = false">
+                    取 消
+                </el-button>
+                <el-button type="primary" @click="submitTaskNo()">
                     确 定
                 </el-button>
             </div>
@@ -400,7 +433,7 @@
 
 <script>
     import {  medicalDetail } from '@/api/backlog'
-    import {  submitSanlu } from '@/api/search'
+    import {  submitSanlu ,submitTaskNo} from '@/api/search'
     import {  batchMaterialList,batchPush } from '@/api/common'
     import waves from '@/directive/waves' // waves directive
     import { parseTime } from '@/utils'
@@ -413,7 +446,8 @@
         directives: {waves},
         data() {
             return {
-                dialogtransFrom:false,
+                dialogTransFrom:false,
+                dialogTaskFrom:false,
                 transFrom:{
                     documentNo:''
                 },
@@ -502,12 +536,18 @@
                 materialTypeList: [],
                 curId:'',
                 heardDetail:{},
-                batch:{}
+                batch:{},
+                taskFrom:{
+                    evidenceId:undefined,
+                    dnaTaskNo:undefined,
+                    fpTaskNo:undefined,
+                    digiTaskNo:undefined,
+                    cheTaskNo:undefined,
+                }
             }
         },
         created() {
             this.batch =  JSON.parse(this.$route.query.batch);
-            console.log(this.batch);
             const id = this.$route.params && this.$route.params.id
             this.curId = id;
             this.getList(id)
@@ -515,12 +555,33 @@
 
             this.heardDetail = this.batch;
             this.heardDetail.evidence.caseHappenTime = parseTime(this.heardDetail.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}');
+            this.taskFrom.evidenceId = this.heardDetail.evidence.id;
 
             this.search('检材类型').then(response=>{
                 this.materialTypeList = this.processData(response.list)
             });
         },
         methods: {
+            submitTaskNo(){
+                submitTaskNo(this.taskFrom).then(response => {
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.dialogTaskFrom = false
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                })
+            },
             resultDisable(){
                 return this.batch.status === 1;
             },
@@ -593,7 +654,7 @@
                             showClose: true,
                             duration: 2000
                         })
-                        this.dialogtransFrom = false
+                        this.dialogTransFrom = false
                     } else {
                         this.$message({
                             message: response.reason,

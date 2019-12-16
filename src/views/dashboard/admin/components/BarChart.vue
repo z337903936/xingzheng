@@ -62,7 +62,7 @@ export default {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
     },
-    setOptions({ dayData,eviData } = {}) {
+    setOptions({ dayData,eviData,stealData } = {}) {
       this.chart.setOption({
         tooltip: {
           trigger: 'axis',
@@ -96,6 +96,13 @@ export default {
           stack: 'vistors',
           barWidth: '60%',
           data: eviData,
+          animationDuration
+        },{
+          name: '盗窃案',
+          type: 'bar',
+          stack: 'vistors',
+          barWidth: '60%',
+          data: stealData,
           animationDuration
         }]
       })
