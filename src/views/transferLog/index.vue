@@ -8,7 +8,7 @@
                     start-placeholder="开始时间"
                     end-placeholder="结束时间"
                     value-format="timestamp"
-                    style="width: 405px;"
+                    style="width: 405px;" clearable
             />
                 <el-input v-model="listQuery.taskNo" placeholder="任务编号" class="mb10" style="width: 200px;"/>
                 <el-input v-model="listQuery.materialNo" placeholder="物证编号" class="mb10" style="width: 200px;"/>

@@ -12,7 +12,7 @@
             </el-col>
             <el-col :span="6">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="文章分类:" prop="categoryId" required>
-                <el-select v-model="postForm.categoryId" placeholder="请选择">
+                <el-select v-model="postForm.categoryId" placeholder="请选择" >
                   <el-option
                     v-for="item in categories"
                     :key="item.id"

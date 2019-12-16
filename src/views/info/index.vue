@@ -8,6 +8,7 @@
                     start-placeholder="开始时间"
                     end-placeholder="结束时间"
                     value-format="timestamp"
+                    clearable
                     style="width: 405px;"
             />
 
@@ -18,6 +19,7 @@
                     :show-all-levels="false"
                     @change="countDict"
                     filterable
+                    clearable
                     placeholder="处所"
                     :props="{  multiple: true,emitPath:false }"
                     style="width: 200px;"/>
@@ -28,6 +30,7 @@
                     :show-all-levels="false"
                     @change="countDict"
                     filterable
+                    clearable
                     placeholder="作案时机"
                     :props="{  multiple: true,emitPath:false }"
                     style="width: 200px"/>
@@ -38,6 +41,7 @@
                     :show-all-levels="false"
                     @change="countDict"
                     filterable
+                    clearable
                     placeholder="发案区划"
                     :props="{ multiple: true,emitPath:false }"
                     style="width: 200px"
@@ -49,6 +53,7 @@
                     :show-all-levels="false"
                     @change="countDict"
                     filterable
+                    clearable
                     placeholder="侵入方式"
                     :props="{ multiple: true,emitPath:false }"
                     style="width: 200px"/>
@@ -61,9 +66,10 @@
                         @change="countDict"
                         placeholder="作案出口"
                         filterable
+                        clearable
                         :props="{ multiple: true,emitPath:false }"
                         style="width: 200px"/>
-                <el-select v-model="listQuery.crimePeoples" placeholder="作案人数" center style="width: 200px">
+                <el-select v-model="listQuery.crimePeoples" placeholder="作案人数" clearable center style="width: 200px">
                     <el-option
                             v-for="item in crimePeoplesType"
                             :key="item.id"
@@ -78,6 +84,7 @@
                         @change="countDict"
                         placeholder="足迹"
                         filterable
+                        clearable
                         :props="{ multiple: true,emitPath:false }"
                         style="width: 200px"/>
                 <el-input v-model="listQuery.crimeTools" placeholder="作案工具" class="mb10" style="width: 200px;"

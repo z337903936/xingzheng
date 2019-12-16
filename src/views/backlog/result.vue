@@ -16,6 +16,7 @@
                                        @visible-change="restUserSearch"
                                        class="filter-item"
                                        @change="selectUpdate"
+                                       clearable
                                        value-key="id"
                                        style="width: 100%">
                                 <el-option
@@ -38,6 +39,7 @@
                                 <!--<el-input v-model="resultFrom.materialType"/>-->
                                 <el-cascader
                                         :options="materialTypeList"
+                                        clearable
                                         filterable
                                         :props="emitProps"
                                         v-model="resultFrom.materialType"
@@ -50,7 +52,7 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="检验结果" prop="examResult">
-                                <el-select v-model="resultFrom.examResult" placeholder="请选择" style="width: 100%">
+                                <el-select v-model="resultFrom.examResult" placeholder="请选择" style="width: 100%" clearable>
                                     <el-option
                                             v-for="item in examResult"
                                             :key="item.title"
@@ -66,7 +68,7 @@
                     <div v-else-if="stepName === '指纹送检'">
                         <el-col :span="24">
                             <el-form-item label="检验结果" prop="idNo">
-                                <el-select v-model="resultFrom.examResult" placeholder="请选择" style="width: 100%">
+                                <el-select v-model="resultFrom.examResult" placeholder="请选择" style="width: 100%" clearable>
                                     <el-option
                                             v-for="item in examResultF"
                                             :key="item.title"
@@ -111,7 +113,7 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="性别" prop="sex">
-                                <el-select v-model="resultFrom.sex" placeholder="请选择"  style="width: 100%">
+                                <el-select v-model="resultFrom.sex" placeholder="请选择"  style="width: 100%" clearable>
                                     <el-option
                                             v-for="item in sex"
                                             :key="item.title"
@@ -134,6 +136,7 @@
                                 <el-date-picker
                                         v-model="resultFrom.checkOutTime"
                                         type="date"
+                                        clearable
                                         value-format="timestamp"
                                         placeholder="选择日期"
                                         style="width: 100%">
@@ -151,7 +154,7 @@
                     </div>
                     <el-col :span="12">
                         <el-form-item label="利用情况" prop="useType">
-                            <el-select v-model="resultFrom.usedType" placeholder="请选择"  style="width: 100%">
+                            <el-select v-model="resultFrom.usedType" clearable placeholder="请选择"  style="width: 100%">
                                 <el-option
                                         v-for="item in usedType"
                                         :key="item.title"

@@ -8,6 +8,7 @@
                     start-placeholder="移交开始时间"
                     end-placeholder="移交结束时间"
                     value-format="timestamp"
+                    clearable
                     style="width: 405px;"
             />
                 <el-select v-model="listQuery.requestName" placeholder="移交人" center>

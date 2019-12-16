@@ -9,11 +9,11 @@
                         start-placeholder="开始时间"
                         end-placeholder="结束时间"
                         value-format="timestamp"
-                        style="width: 405px;"
+                        style="width: 405px;" clearable
                 />
                 <el-input v-model="listQuery.name" placeholder="任务名" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
-                <el-select v-model="listQuery.status" placeholder="任务状态" class="mb10" style="width: 200px;">
+                <el-select v-model="listQuery.status" placeholder="任务状态" class="mb10" style="width: 200px;" clearable>
                 <el-option
                         v-for="item in statusList"
                         :key="item.id"

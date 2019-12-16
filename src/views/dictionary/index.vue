@@ -81,7 +81,7 @@
           <el-input v-model="temp.name"/>
         </el-form-item>
         <el-form-item label="上级字典" prop="parentId">
-          <el-select v-model="temp.parentId" placeholder="请选择" filterable >
+          <el-select v-model="temp.parentId" placeholder="请选择" filterable clearable>
             <el-option
               v-for="item in parentId"
               :key="item.id"

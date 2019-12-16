@@ -14,7 +14,7 @@
           <el-form-item label="勘查开始" prop="examBeginTime">
             <el-date-picker
               v-model="list.examBeginTime"
-              type="datetime"
+              type="datetime" clearable
               value-format="timestamp"
               placeholder="选择时间"
               style="width: 100%"
@@ -25,7 +25,7 @@
           <el-form-item label="勘查结束" prop="examEndTime">
             <el-date-picker
               v-model="list.examEndTime"
-              type="datetime"
+              type="datetime" clearable
               value-format="timestamp"
               placeholder="选择时间"
               style="width: 100%"/>
@@ -37,7 +37,7 @@
           <el-form-item label="发案开始" prop="caseBeginTime">
             <el-date-picker
               v-model="list.caseBeginTime"
-              type="datetime"
+              type="datetime" clearable
               value-format="timestamp"
               placeholder="选择时间"
               style="width: 100%"/>
@@ -47,7 +47,7 @@
           <el-form-item label="发案结束" prop="caseEndTime">
             <el-date-picker
               v-model="list.caseEndTime"
-              type="datetime"
+              type="datetime" clearable
               value-format="timestamp"
               placeholder="选择时间"
               style="width: 100%"/>
@@ -77,7 +77,7 @@
               :options="caseTypeList"
               v-model="list.caseCategory"
               :filter-method="filterSearch"
-              :show-all-levels="false"
+              :show-all-levels="false" clearable
               @change="countDict($event,'案件类别')"
               @visible-change="caseCategoryPopover = !caseCategoryPopover"
               slot="reference"
@@ -93,7 +93,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="现场保护情况" prop="sceneProtect">
-            <el-select v-model="list.sceneProtect" placeholder="请选择" center style="width: 100%">
+            <el-select v-model="list.sceneProtect" placeholder="请选择" clearable center style="width: 100%">
               <el-option
                 v-for="item in sceneProtectType"
                 :key="item.title"
@@ -121,7 +121,7 @@
               :show-all-levels="false"
               @change="countDict($event,'行政区划')"
               @visible-change="caseHappenRegionPopover = !caseHappenRegionPopover"
-              slot="reference"
+              slot="reference" clearable
               :props="emitProps"
               filterable
               style="width: 100%"
@@ -138,7 +138,7 @@
               v-model="list.mainChargerUid"
               :filter-method="filterUserSearch"
               filterable
-              disabled
+              disabled clearable
               placeholder="请选择"
               center
               style="width: 100%"
@@ -159,7 +159,7 @@
               :filter-method="filterUserSearch"
               filterable
               placeholder="请选择"
-              center
+              center clearable
               multiple
               style="width: 100%"
               @visible-change="restUserSearch"
@@ -182,7 +182,7 @@
               :filter-method="filterUserSearch"
               filterable
               placeholder="请选择"
-              center
+              center clearable
               style="width: 100%"
               @visible-change="restUserSearch">
               <el-option
@@ -200,7 +200,7 @@
               :filter-method="filterUserSearch"
               filterable
               placeholder="请选择"
-              center
+              center clearable
               style="width: 100%"
               @visible-change="restUserSearch">
               <el-option
@@ -229,7 +229,7 @@
             <el-select
               v-model="list.sceneProtectName"
               :filter-method="filterUserSearch"
-              filterable
+              filterable clearable
               placeholder="请选择"
               center
               style="width: 100%"
@@ -262,7 +262,7 @@
               :options="sceneTypeList"
               v-model="list.sceneType"
               :filter-method="filterSearch"
-              :show-all-levels="false"
+              :show-all-levels="false" clearable
               @change="countDict($event,'作案选择处所')"
               @visible-change="sceneTypePopover = !sceneTypePopover"
               slot="reference"
@@ -287,7 +287,7 @@
               :options="crimeTimeList"
               v-model="list.crimeTime"
               :filter-method="filterSearch"
-              :show-all-levels="false"
+              :show-all-levels="false" clearable
               @change="countDict($event,'作案时机')"
               @visible-change="crimeTimePopover = !crimeTimePopover"
               slot="reference"
@@ -315,7 +315,7 @@
               :options="invadeTypeList"
               v-model="list.invadeType"
               :filter-method="filterSearch"
-              :show-all-levels="false"
+              :show-all-levels="false" clearable
               @change="countDict($event,'侵入方式')"
               @visible-change="invadeTypePopover = !invadeTypePopover"
               slot="reference"
@@ -340,7 +340,7 @@
               :options="escapeTypeList"
               v-model="list.escapeType"
               :filter-method="filterSearch"
-              :show-all-levels="false"
+              :show-all-levels="false" clearable
               @change="countDict($event,'作案出口')"
               @visible-change="escapeTypePopover = !escapeTypePopover"
               slot="reference"
@@ -355,7 +355,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="作案人数" prop="crimePeoples">
-            <el-select v-model="list.crimePeoples" placeholder="请选择" center style="width: 100%">
+            <el-select v-model="list.crimePeoples" placeholder="请选择" clearable center style="width: 100%">
               <el-option
                 v-for="item in crimePeoplesType"
                 :key="item.id"
@@ -832,7 +832,7 @@
         </el-form-item>
         <el-form-item label="侦破方式" prop="solveMethod">
           <el-select v-model="suspectPersonListForm.solveMethod"
-                     filterable
+                     filterable clearable
                      default-first-option
                      placeholder="请选择"
                       style="width: 100%">
@@ -844,7 +844,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="性别" prop="sex">
-          <el-select v-model="suspectPersonListForm.sex" placeholder="请选择" center style="width: 100%">
+          <el-select v-model="suspectPersonListForm.sex" placeholder="请选择" clearable center style="width: 100%">
             <el-option
                     v-for="item in sex"
                     :key="item.title"
@@ -901,7 +901,7 @@
             :filter-method="filterSearch"
             @change="countDict($event,'身份类型')"
             @visible-change="reportOrgPopover = !reportOrgPopover"
-            slot="reference"
+            slot="reference" clearable
             :props="emitProps"
             :show-all-levels="false"
             filterable
@@ -912,7 +912,7 @@
           <el-input v-model="concernedPersonListForm.idNo"/>
         </el-form-item>
         <el-form-item label="性别" prop="sex">
-          <el-select v-model="concernedPersonListForm.sex" placeholder="请选择" center style="width: 100%">
+          <el-select v-model="concernedPersonListForm.sex" clearable placeholder="请选择" center style="width: 100%">
             <el-option
               v-for="item in sex"
               :key="item.title"
@@ -984,7 +984,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="可靠程度" prop="reliabilityLevel">
-              <el-select v-model="materialListForm.reliabilityLevel" placeholder="请选择">
+              <el-select v-model="materialListForm.reliabilityLevel" clearable placeholder="请选择">
                 <el-option
                         v-for="item in reliabilityLevel"
                         :key="item.title"
@@ -1005,7 +1005,7 @@
             <el-form-item label="提取方法" prop="extractMethod">
               <el-input v-if="isInput" v-model="materialListForm.extractMethod"/>
               <el-select v-model="materialListForm.extractMethod"
-                         filterable
+                         filterable clearable
                          @change="countDictSelect"
                          default-first-option
                          v-if="!isInput"
@@ -1021,7 +1021,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="利用情况" prop="usedType">
-              <el-select v-model="materialListForm.usedType" placeholder="请选择">
+              <el-select v-model="materialListForm.usedType" clearable placeholder="请选择">
                 <el-option
                   v-for="item in usedType"
                   :key="item.title"
@@ -1038,7 +1038,7 @@
 
               <el-date-picker
                 v-model="materialListForm.extractTime"
-                type="date"
+                type="date" clearable
                 value-format="timestamp"
                 placeholder="选择时间"
                 style="width: 100%"
@@ -1050,7 +1050,7 @@
               <el-select
                 v-model="materialListForm.extractUid"
                 :filter-method="filterUserSearch"
-                filterable
+                filterable clearable
                 placeholder="请选择"
                 center
                 style="width: 100%"

@@ -31,6 +31,7 @@
                                            class="filter-item"
                                            allow-create
                                            filterable
+                                           clearable
                                            default-first-option
                                            style="width: 100%">
                                     <el-option
@@ -46,6 +47,7 @@
                         <el-col :span="12">
                             <el-form-item label="送检日期" prop="requestTime">
                                 <el-date-picker
+                                        clearable
                                         v-model="postForm.requestTime"
                                         type="datetime"
                                         value-format="timestamp"
@@ -65,6 +67,7 @@
                                 <el-select v-model="postForm.handlerUid"
                                            class="filter-item"
                                            allow-create
+                                           clearable
                                            filterable
                                            default-first-option
                                            style="width: 100%">
@@ -88,6 +91,7 @@
                                 <el-cascader
                                         :options="caseCategoryList"
                                         filterable
+                                        clearable
                                         @change="countDict"
                                         v-model="postForm.caseCategory"
                                         :filter-method="remoteSearch"

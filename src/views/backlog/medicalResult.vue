@@ -20,6 +20,7 @@
                 <el-date-picker
                         v-model="resultFrom.documentDate"
                         type="date"
+                        clearable
                         value-format="timestamp"
                         placeholder="选择日期"
                         style="width: 100%">
@@ -35,6 +36,7 @@
                 <el-cascader
                         :options="caseCategoryList"
                         filterable
+                        clearable
                         @change="countDict"
                         v-model="resultFrom.caseCategory"
                         :filter-method="remoteSearch"
@@ -47,6 +49,7 @@
                 <el-date-picker
                         v-model="resultFrom.delegateTime"
                         type="date"
+                        clearable
                         value-format="timestamp"
                         placeholder="选择日期"
                         style="width: 100%">
@@ -59,6 +62,7 @@
             <el-form-item label="委托人" prop="delegateName">
                 <el-select v-model="resultFrom.delegateUid"
                            filterable
+                           clearable
                            :filter-method="filterUserSearch"
                            @visible-change="restUserSearch"
                            class="filter-item"
@@ -91,6 +95,7 @@
             <el-form-item label="检验人" prop="examName">
                 <el-select v-model="resultFrom.examUid"
                            filterable
+                           clearable
                            :filter-method="filterUserSearch"
                            @visible-change="restUserSearch"
                            class="filter-item"

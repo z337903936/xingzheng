@@ -13,7 +13,7 @@
             </el-col>
             <el-col :span="9">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="是否显示:">
-                <el-select :rows="1" v-model="postForm.status">
+                <el-select :rows="1" v-model="postForm.status" clearable>
                   <el-option key="1" label="显示" value="1"/>
                   <el-option key="2" label="隐藏" value="2"/>
                 </el-select>

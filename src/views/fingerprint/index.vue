@@ -4,13 +4,14 @@
             <div><el-date-picker
                     v-model="searchTime"
                     type="datetimerange"
+                    clearable
                     range-separator="至"
                     start-placeholder="移交开始时间"
                     end-placeholder="移交结束时间"
                     value-format="timestamp"
                     style="width: 405px;"
             />
-                <el-select v-model="listQuery.requestName" placeholder="移交人" center>
+                <el-select v-model="listQuery.requestName" placeholder="移交人" center clearable>
                     <el-option
                             v-for="item in userList"
                             :key="item.id"

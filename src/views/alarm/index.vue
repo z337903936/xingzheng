@@ -10,6 +10,7 @@
                         end-placeholder="结束时间"
                         value-format="timestamp"
                         style="width: 405px;"
+                        clearable
                 />
 
                 <el-cascader
@@ -20,8 +21,10 @@
                         v-model="listQuery.reporterOrg"
                         :filter-method="remoteSearch"
                         @change="countDict($event,'报告单位')"
+                        clearable
                         :show-all-levels="false"
                         style="width: 200px;">
+
                 </el-cascader>
                 <el-select
                         v-model="listQuery.techName"
@@ -29,6 +32,7 @@
                         filterable
                         placeholder="值班技术员"
                         center
+                        clearable
                         @visible-change="restUserSearch">
                     <el-option
                             v-for="item in userShowList"

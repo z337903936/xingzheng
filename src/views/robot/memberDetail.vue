@@ -12,7 +12,7 @@
                             <el-form-item label="勘查开始时间" prop="examBeginTime">
                                 <el-date-picker
                                         v-model="postForm.examBeginTime"
-                                        type="datetime"
+                                        type="datetime" clearable
                                         value-format="timestamp"
                                         placeholder="选择时间"
                                         style="width: 100%"
@@ -23,7 +23,7 @@
                             <el-form-item label="勘查结束时间" prop="examEndTime">
                                 <el-date-picker
                                         v-model="postForm.examEndTime"
-                                        type="datetime"
+                                        type="datetime" clearable
                                         value-format="timestamp"
                                         placeholder="选择时间"
                                         style="width: 100%"/>
@@ -44,7 +44,7 @@
                                             v-model="postForm.sceneType"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-                                            filterable
+                                            filterable clearable
                                             clearable
                                             :props="props"
                                             style="width: 100%"/>
@@ -60,7 +60,7 @@
                                             v-model="postForm.crimeTime"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-                                            clearable
+                                            clearable clearable
                                             :props="props"
                                             filterable
                                             style="width: 100%"/>
@@ -75,7 +75,7 @@
                                             v-model="postForm.caseHappenRegion"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-                                            clearable
+                                            clearable clearable
                                             :props="emitProps"
                                             filterable
                                             style="width: 100%"
@@ -93,7 +93,7 @@
                                             v-model="postForm.invadeType"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-                                            clearable
+                                            clearable clearable
                                             filterable
                                             :props="props"
                                             style="width: 100%"/>
@@ -108,7 +108,7 @@
                                             v-model="postForm.escapeType"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-                                            clearable
+                                            clearable clearable
                                             filterable
                                             :props="props"
                                             style="width: 100%"/>
@@ -130,7 +130,7 @@
                                             v-model="postForm.caseCategory"
                                             :filter-method="filterSearch"
                                             :show-all-levels="false"
-                                            clearable
+                                            clearable clearable
                                             :props="emitProps"
                                             filterable
                                             style="width: 100%"
@@ -147,7 +147,7 @@
                                         v-model="postForm.footprint"
                                         :filter-method="filterSearch"
                                         :show-all-levels="false"
-                                        clearable
+                                        clearable clearable
                                         :props="emitProps"
                                         filterable
                                         style="width: 100%"

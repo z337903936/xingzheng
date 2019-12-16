@@ -28,6 +28,7 @@
                                         :options="reportOrgList"
                                         filterable
                                         slot="reference"
+                                        clearable
                                         :props="emitProps"
                                         v-model="postForm.reportOrg"
                                         :filter-method="remoteSearch"
@@ -46,6 +47,7 @@
                                 <el-date-picker
                                         v-model="postForm.receiptTimeShow"
                                         type="datetime"
+                                        clearable
                                         value-format="yyyy-MM-dd HH:mm:ss"
                                         placeholder="选择时间"
                                         style="width: 100%"/>
@@ -77,6 +79,7 @@
                                     <el-cascader
                                             :options="caseCategoryList"
                                             filterable
+                                            clearable
                                             :props="emitProps"
                                             @change="countDict($event,'案件类别')"
                                             @visible-change="caseCategoryPopover = !caseCategoryPopover"
@@ -101,6 +104,7 @@
                                         value-format="timestamp"
                                         placeholder="选择时间"
                                         style="width: 100%"
+                                        clearable
                                 />
                             </el-form-item>
                         </el-col>
@@ -126,6 +130,7 @@
                                            @visible-change="restUserSearch"
                                            class="filter-item"
                                            value-key="id"
+                                           clearable
                                            style="width: 100%">
                                     <el-option
                                             v-for="item in userShowList"
@@ -144,6 +149,7 @@
                                            @visible-change="restUserSearch"
                                            class="filter-item" multiple
                                            @change="selectUpdate"
+                                           clearable
                                            value-key="id"
                                            style="width: 100%">
                                     <el-option
@@ -164,6 +170,7 @@
                                            :filter-method="filterUserSearch"
                                            @visible-change="restUserSearch"
                                             class="filter-item"
+                                           clearable
                                            value-key="id"
                                            style="width: 100%">
                                     <el-option
@@ -180,6 +187,7 @@
                                            class="filter-item"
                                            allow-create
                                            filterable
+                                           clearable
                                            value-key="id"
                                            default-first-option
                                            style="width: 100%">
@@ -204,6 +212,7 @@
                                            filterable
                                            :filter-method="filterUserSearch"
                                            @visible-change="restUserSearch"
+                                           clearable
                                            class="filter-item" multiple
                                            @change="selectUpdate"
                                            value-key="id"

@@ -8,7 +8,7 @@
                         range-separator="至"
                         start-placeholder="移交开始时间"
                         end-placeholder="移交结束时间"
-                        value-format="timestamp"
+                        value-format="timestamp" clearable
                         style="width: 405px;"
                 />
                 <el-input v-model="listQuery.evidenceNo" placeholder="勘查号" class="mb10" style="width: 200px;"

@@ -10,7 +10,7 @@
                     value-format="timestamp"
                     style="width: 405px;"
             />
-                <el-select v-model="listQuery.requestName" placeholder="移交人" center>
+                <el-select v-model="listQuery.requestName" placeholder="移交人" center clearable>
                     <el-option
                             v-for="item in userList"
                             :key="item.id"
