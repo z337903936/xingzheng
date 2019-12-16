@@ -22,11 +22,9 @@
 
             </el-row>
             <el-row :gutter="20" class="mb10">
-
                 <el-col :span="12">
                     发案地点:{{ heardDetail.evidence ?heardDetail.evidence.caseAddress : ''}}
                 </el-col>
-
 
             </el-row>
 
@@ -36,8 +34,8 @@
         <el-divider content-position="left">批次物证列表</el-divider>
         <div style="float: right;margin-bottom: 10px">
             <el-button type="primary" size="mini" @click="submitMaterialinStock">批量存入物证库</el-button>
-            <el-button type="primary" size="mini" @click="submitMaterialinStock">推送痕检</el-button>
-            <el-button type="primary" size="mini" @click="submitMaterialinStock">移交鉴定文书</el-button>
+            <el-button type="primary" size="mini" @click="submitPush">推送痕检</el-button>
+            <el-button type="primary" size="mini" @click="dialogtransFrom = true">移交鉴定文书</el-button>
         </div>
         <el-table
                 v-loading="listLoading"
@@ -95,9 +93,10 @@
             </el-table-column>
             <el-table-column label="操作" align="center" fixed="right" width="280" class="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <router-link :to="'/material/result/'+row.materialId+'/'+row.stepName">
-                        <el-button v-waves type="success" size="mini" style="width: 90px" icon="el-icon-tickets">填写结果</el-button>
-                    </router-link>
+                    <!--<router-link :to="{name:'materialResult',params:row}" >-->
+                        <!--<el-button v-waves type="success" size="mini" style="width: 90px" icon="el-icon-tickets" :disabled="resultDisable()">填写结果</el-button>-->
+                    <!--</router-link>-->
+                    <el-button v-waves type="success" size="mini" style="width: 90px" icon="el-icon-tickets" :disabled="resultDisable()" @click="gotoMaterialResult(row)">填写结果</el-button>
                     <!--<el-button type="success" size="mini" style="width: 90px" icon="el-icon-tickets" @click="handleWriteResult(row)">-->
                         <!--填写结果-->
                     <!--</el-button>-->
@@ -356,6 +355,33 @@
                 </el-button>
             </div>
         </el-dialog>
+
+
+
+        <el-dialog title="移交鉴定文书" :close-on-click-modal="false" :visible.sync="dialogtransFrom" width="50%">
+            <el-form
+                    ref="trans"
+                    :model="transFrom"
+                    label-position="left"
+                    label-width="120px"
+                    style="width: 80%; margin-left:50px;">
+
+                <el-form-item label="文书号" prop="documentNo">
+                    <el-input v-model="transFrom.documentNo"/>
+                </el-form-item>
+
+
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogtransFrom = false">
+                    取 消
+                </el-button>
+                <el-button type="primary" @click="submitTrans()">
+                    确 定
+                </el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -374,7 +400,8 @@
 
 <script>
     import {  medicalDetail } from '@/api/backlog'
-    import {  batchMaterialList } from '@/api/common'
+    import {  submitSanlu } from '@/api/search'
+    import {  batchMaterialList,batchPush } from '@/api/common'
     import waves from '@/directive/waves' // waves directive
     import { parseTime } from '@/utils'
     import { fetchAdminMemberList } from '@/api/permissions'
@@ -386,6 +413,10 @@
         directives: {waves},
         data() {
             return {
+                dialogtransFrom:false,
+                transFrom:{
+                    documentNo:''
+                },
                 sex: [
                     {
 
@@ -447,7 +478,8 @@
                 },
                 dialogResultFrom: false,
                 resultFrom: {
-                    id: '',
+                    materialId: '',
+                    batchId: '',
                     examUid: '',
                     examOrg: '',
                     materialType: '',
@@ -468,20 +500,55 @@
                 userList: [],
                 userShowList: [],
                 materialTypeList: [],
-                curName:'',
+                curId:'',
                 heardDetail:{},
-
+                batch:{}
             }
         },
         created() {
+            this.batch =  JSON.parse(this.$route.query.batch);
+            console.log(this.batch);
             const id = this.$route.params && this.$route.params.id
+            this.curId = id;
             this.getList(id)
             this.getUserList()
+
+            this.heardDetail = this.batch;
+            this.heardDetail.evidence.caseHappenTime = parseTime(this.heardDetail.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}');
+
             this.search('检材类型').then(response=>{
                 this.materialTypeList = this.processData(response.list)
             });
         },
         methods: {
+            resultDisable(){
+                return this.batch.status === 1;
+            },
+            gotoMaterialResult(row){
+                this.$router.push({ name:'materialResult',params:{id:row.id},query: { material:JSON.stringify(row)}})
+            },
+            submitPush(){
+                batchPush({
+                    batchId:this.curId
+                }).then(response => {
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                })
+            },
             submitMaterialinStock() {
                 if (this.taskId.length===0){
                     this.$confirm('请选择提交物证!')
@@ -501,6 +568,7 @@
                                 showClose: true,
                                 duration: 2000
                             })
+
                         } else {
                             this.$message({
                                 message: response.reason,
@@ -511,7 +579,30 @@
                         }
                     })
                 }
-
+            },
+            submitTrans(){
+                const sendData={
+                    evidenceId:this.heardDetail.evidence.id,
+                    documentNo:this.transFrom.documentNo,
+                }
+                submitSanlu(sendData).then(response=>{
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.dialogtransFrom = false
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                })
             },
             selectTask(selection) {
                 this.taskId = selection.map(data => {
@@ -524,7 +615,8 @@
             },
             handleWriteResult(task) {
                 this.dialogResultFrom = true;
-                this.resultFrom.id = task.id
+                this.resultFrom.materialId = task.evidenceMaterial.id
+                this.resultFrom.batchId = task.batchId
                 this.resultDetail = task
                 if (this.resultDetail.evidenceMaterial){
                     this.resultDetail.evidenceMaterial.extractTime = parseTime(this.resultDetail.evidenceMaterial.extractTime,'{y}-{m}-{d} {h}:{i}:{s}')
@@ -568,8 +660,8 @@
                 batchMaterialList(this.listQuery).then(response => {
                     this.list = response.list;
                     this.pages = response.pages
-                    this.heardDetail = this.list[0];
-                    this.heardDetail.evidence.caseHappenTime = parseTime(this.heardDetail.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}');
+                    // this.heardDetail = this.list[0];
+                    // this.heardDetail.evidence.caseHappenTime = parseTime(this.heardDetail.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}');
                     // Just to simulate the time of the request
                     this.listLoading = false
 

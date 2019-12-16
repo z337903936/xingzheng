@@ -54,7 +54,7 @@
                     <span>{{ row.stepName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="任务编号" prop="id" align="center" width="180">
+            <el-table-column label="任务序号" prop="id" align="center" width="180">
                 <template slot-scope="{row}">
                     <span>{{ row.taskNo }}</span>
                 </template>
@@ -69,9 +69,18 @@
                     <span>{{ row.examNumber }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="来源" width="210" align="center">
+            <el-table-column label="简要案情" align="center" min-width="200">
                 <template slot-scope="{row}">
-                    <span>{{ row.fromStep }}</span>
+                    <span>{{ row.evidence.caseHappenTime }}</span>
+                    <span v-if="row.evidence.caseHappenTime && row.evidence.caseAddress">
+                        在
+                    </span>
+                    <span>
+                        {{ row.evidence.caseAddress + row.evidence.caseCategory  }}
+                    </span>
+                    <span v-if=" row.evidence.caseCategory">
+                        案
+                    </span>
                 </template>
             </el-table-column>
             <el-table-column label="转移人" width="100" align="center">
@@ -176,7 +185,14 @@
                 batchList(this.listQuery).then(response => {
                     this.list = response.list;
                     this.pages = response.pages
-
+                    this.list.map(data=>{
+                        if (data.evidence.caseHappenTime) {
+                            data.evidence.caseHappenTime = parseTime(data.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}')
+                        }else{
+                            data.evidence.caseHappenTime = ''
+                        }
+                        return data;
+                    })
                     // Just to simulate the time of the request
 
                         this.listLoading = false

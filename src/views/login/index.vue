@@ -259,7 +259,7 @@ export default {
 
   /* reset element-ui css */
   .login-container {
-    background-image: url("../../../static/img/login.png");
+    background-image: url("../../../static/img/login2.png");
     background-repeat:no-repeat;
     background-size:100% 100%;
     -moz-background-size:100% 100%;
@@ -307,11 +307,12 @@ export default {
 
     .login-form {
       position: absolute;
-      right: 15%;
+      right: 7%;
       width: 520px;
       max-width: 100%;
       padding: 35px 35px 15px 35px;
-      margin: 220px 0 120px 0;
+      margin: 181px 0 120px 0;
+
     }
 
     .tips {

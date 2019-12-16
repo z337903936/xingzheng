@@ -26,3 +26,10 @@ export function homePageState(data){
     })
 }
 
+export function batchPush(data) {
+    return request({
+        url: '/v1/cp/push_exam_result_to_evidence/',
+        method: 'post',
+        data
+    })
+}

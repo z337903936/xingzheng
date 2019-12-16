@@ -98,28 +98,30 @@
             </el-table-column>
             <el-table-column label="保存时限"  align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidenceMaterial.usedType }}</span>
+                    <span>{{ row.evidenceMaterial.storageDuration }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="物证库存放位置"  align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidenceMaterial.name }}</span>
+                    <span>{{ row.evidenceMaterial.storagePlace }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="物证编号" width="300" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidenceMaterial.note }}</span>
+                    <span>{{ row.evidenceMaterial.materialNo }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="出库用途"  align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidenceMaterial.materialType }}</span>
+                    <span>{{ row.evidenceMaterial.borrowReason }}</span>
                 </template>
             </el-table-column>
 
             <el-table-column label="操作" align="center" width="230" fixed="right" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-
+                    <el-button v-waves type="primary" size="mini" icon="el-icon-edit"  style="width: 70px" @click="handleAction(row)" >
+                        编辑
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -158,6 +160,47 @@
             </div>
         </el-dialog>
 
+        <el-dialog title="操作" :close-on-click-modal="false" :visible.sync="dialogActionForm" width="40%">
+            <el-form
+                    ref="rules"
+                    :model="actionForm"
+                    label-position="left"
+                    label-width="140px"
+                    style="width: 80%; margin-left:50px;">
+               <div v-if="actionForm.stepName === '申请物证入库'">
+                   <el-form-item label="物证库存放位置" prop="reason">
+                       <el-input v-model="actionForm.storagePlace"/>
+                   </el-form-item>
+                   <el-form-item label="保存时限" prop="reason">
+                       <el-select v-model="actionForm.storageDuration" placeholder="请选择" clearable center style="width: 100%">
+                           <el-option
+                                   v-for="item in storageDuration"
+                                   :key="item.title"
+                                   :label="item.title"
+                                   :value="item.title"
+                           />
+                       </el-select>
+                   </el-form-item>
+               </div>
+
+                <div v-if="actionForm.stepName === '申请物证出库'">
+                    <el-form-item label="出库用途" prop="reason">
+                        <el-input v-model="actionForm.storagePlace"/>
+                    </el-form-item>
+                </div>
+
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogActionForm = false">
+                    取 消
+                </el-button>
+                <el-button type="primary" @click="editAction()">
+                    确 定
+                </el-button>
+            </div>
+        </el-dialog>
+
 
     </div>
 </template>
@@ -169,7 +212,7 @@
 </style>
 
 <script>
-    import {fetchMaterialList,delMaterial,applyDelMaterial} from '@/api/material'
+    import {fetchMaterialList,delMaterial,applyDelMaterial,updateMaterial} from '@/api/material'
     import waves from '@/directive/waves' // waves directive
     import {parseTime} from '@/utils'
     import { fetchAdminMemberList} from '@/api/permissions'
@@ -180,6 +223,13 @@
         directives: {waves},
         data() {
             return {
+                storageDuration: [
+                    {
+                        title: '临时保存'
+                    }, {
+                        title: '永久保存'
+                    }
+                ],
                 tableKey: 0,
                 list: null,
                 activeName: 'first',
@@ -192,16 +242,7 @@
                     id:undefined,
                     reason:undefined
                 },
-                // listQuery: {
-                //     page: 1,
-                //     beginTime: undefined,
-                //     endTime: undefined,
-                //     filters: undefined,
-                //     fromName: undefined,
-                //     storagePlace: undefined,
-                //     evidenceNo: undefined,
-                //     materialNo: undefined
-                // },
+
                 listQuery: {
                     page: 1,
                     batchId: undefined,
@@ -210,6 +251,13 @@
                 downloadLoading: false,
                 dialogdeleteForm: false,
                 heardDetail:{},
+                dialogActionForm:false,
+                actionForm:{
+                    id:undefined,
+                    storagePlace:undefined,
+                    storageDuration:undefined,
+                    borrowReason:undefined,
+                }
             }
         },
         created(){
@@ -217,6 +265,31 @@
             this.getList(id)
         },
         methods: {
+            handleAction(data){
+                this.actionForm = data.evidenceMaterial;
+                this.actionForm.stepName = data.stepName
+                this.dialogActionForm = true;
+            },
+            editAction(){
+                updateMaterial(this.actionForm).then(response=>{
+                    if (response.code === 200) {
+                        this.$message({
+                            message: '操作成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                        this.dialogActionForm = false;
+                    } else {
+                        this.$message({
+                            message: response.reason,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        })
+                    }
+                })
+            },
             handleDelete(val){
                 this.deleteForm.id = val.id;
                 this.dialogdeleteForm = true;

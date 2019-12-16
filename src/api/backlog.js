@@ -46,7 +46,7 @@ export function medicalDetail(data) {
 
 export function writeResult(data) {
     return request({
-        url: '/v1/cp/exam_task_result/?materialId=' + data.id ,
+        url: '/v1/cp/exam_task_result/'  ,
         method: 'post',
         data
     })

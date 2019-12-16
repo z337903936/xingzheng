@@ -4,7 +4,19 @@
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <bar-chart :state="state" />
     </el-row>
-    <div class="tip"><p>待办任务</p></div>
+    <div class="tip">
+     <div style="margin: 13px 0">
+       <el-row :gutter="20">
+         <el-col :span="21">
+           <div style=" margin-top: 10px;">待办任务</div>
+         </el-col>
+         <el-col :span="3">
+           <el-button type="success" @click="gotoUndone" plain>去完成任务</el-button>
+         </el-col>
+       </el-row>
+
+     </div>
+    </div>
     <div  @click="gotoUndone">
       <el-table
               v-loading="listLoading"

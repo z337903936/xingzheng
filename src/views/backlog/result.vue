@@ -89,7 +89,7 @@
                         </el-col>
                     </div>
 
-                    <div v-if="stepName === 'DNA送检' || resultDetail.stepName === '指纹送检'">
+                    <div v-if="stepName === 'DNA送检' || stepName === '指纹送检'">
 
                         <el-col :span="12">
                             <el-form-item label="比中人员" prop="checkPeople">
@@ -334,6 +334,7 @@
                 emitProps:{
                     emitPath:false
                 },
+                material:{}
             }
         },
         created() {
@@ -341,7 +342,10 @@
             this.search('检材类型').then(response=>{
                 this.materialTypeList = this.processData(response.list)
             });
-            this.stepName = this.$route.params && this.$route.params.type
+            this.material = JSON.parse(this.$route.query.material);
+            this.resultDetail = this.material;
+            this.stepName =  this.resultDetail.stepName
+            console.log(this.material)
             const id = this.$route.params && this.$route.params.id
             this.resultFrom.id = id;
             if (this.isEdit) {
@@ -355,7 +359,7 @@
             fetchData(id) {
                 taskDetails(id).then(data => {
                     this.resultFrom = Object.assign({}, data);
-                    this.resultDetail = Object.assign({}, data);
+                    // this.resultDetail = Object.assign({}, data);
 
                 }).catch(err => {
                     console.log(err)

@@ -71,14 +71,23 @@
                     <span>{{ row.evidenceNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证数量" align="center" min-width="100">
+            <el-table-column label="物证数量" align="center" width="100">
                 <template slot-scope="{row}">
                     <span>{{ row.examNumber }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="简要案情" align="center" min-width="100">
+            <el-table-column label="简要案情" align="center" min-width="200">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidence.caseHappenTime +'在'+ row.evidence.caseAddress + row.evidence.caseCategory +'案' }}</span>
+                    <span>{{ row.evidence.caseHappenTime }}</span>
+                    <span v-if="row.evidence.caseHappenTime && row.evidence.caseAddress">
+                        在
+                    </span>
+                    <span>
+                        {{ row.evidence.caseAddress + row.evidence.caseCategory  }}
+                    </span>
+                    <span v-if=" row.evidence.caseCategory">
+                        案
+                    </span>
                 </template>
             </el-table-column>
             <el-table-column label="移交人" width="100" align="center">
@@ -100,9 +109,11 @@
 
             <el-table-column label="操作" align="center" fixed="right" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <router-link :to="'/material/batch/'+row.id">
-                        <el-button v-waves type="primary" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>
-                    </router-link>
+                    <!--<router-link :to="{ name:'materialBatch',params:{id:row.id},query: { batch: JOSN.stringify(row)}}">-->
+                        <!--<el-button v-waves type="primary" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>-->
+                    <!--</router-link>-->
+                    <el-button v-waves type="primary" size="mini" style="width: 100px" @click="gotobatchList(row)"  icon="el-icon-tickets">物证详情</el-button>
+
                 </template>
             </el-table-column>
         </el-table>
@@ -170,6 +181,7 @@
             }
         },
         created() {
+
             this.getList()
             this.getUserList();
             this.search('案件类别').then(response=>{
@@ -177,6 +189,9 @@
             });
         },
         methods: {
+            gotobatchList(row){
+                this.$router.push({ name:'materialBatch',params:{id:row.id},query: { batch:JSON.stringify(row)}})
+            },
             reset() {
                 this.listQuery = {
                     page: 1,

@@ -1346,7 +1346,17 @@ export default {
 
       },
       listRules: {},
-      lostDetailListFormRules: {},
+      lostDetailListFormRules: {
+        name: [
+          { required: true, message: '请输入名称', trigger: 'change' }
+        ],
+        value: [
+          {type: 'number', required: true, message: '请输入价值', trigger: 'change' }
+        ],
+        amount: [
+          {type: 'number', required: true, message: '请输入数量', trigger: 'change' }
+        ],
+      },
       concernedPersonListFormRules: {},
       materialListFormRules: {},
       suspectPersonListFormRules: {},
@@ -2161,35 +2171,40 @@ export default {
       this.dialogLostDetailListFormIndex = ''
     },
     addLostDetailListForm() {
-      if (this.isEdit) {
-        this.lostDetailListForm.evidenceId = this.list.id
-        createLost(this.lostDetailListForm).then(response => {
-          if (response.code === 200) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              showClose: true,
-              duration: 2000
+      this.$refs.lostDetailListForm.validate(valid => {
+        if (valid){
+          if (this.isEdit) {
+            this.lostDetailListForm.evidenceId = this.list.id
+            createLost(this.lostDetailListForm).then(response => {
+              if (response.code === 200) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  showClose: true,
+                  duration: 2000
+                })
+                if (this.isEdit)
+                  this.submitForm()
+                this.dialogLostDetailListForm = false
+                this.resetLostDetailListForm()
+
+              } else {
+                this.$message({
+                  message: response.reason,
+                  type: 'success',
+                  showClose: true,
+                  duration: 2000
+                })
+              }
             })
-            if (this.isEdit)
-              this.submitForm()
+          } else {
+            this.list.lostDetailList.push(this.lostDetailListForm)
             this.dialogLostDetailListForm = false
             this.resetLostDetailListForm()
-
-          } else {
-            this.$message({
-              message: response.reason,
-              type: 'success',
-              showClose: true,
-              duration: 2000
-            })
           }
-        })
-      } else {
-        this.list.lostDetailList.push(this.lostDetailListForm)
-        this.dialogLostDetailListForm = false
-        this.resetLostDetailListForm()
-      }
+        }
+      })
+
     },
     handleEditLostDetailListForm(index, row) {
       this.lostDetailListForm = Object.assign({}, row) // copy obj
@@ -2198,35 +2213,40 @@ export default {
       this.dialogLostDetailListForm = true
     },
     updateLostDetailListForm() {
-      if (this.isEdit) {
-        updateLost(this.lostDetailListForm).then(response => {
-          if (response.code === 200) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              showClose: true,
-              duration: 2000
-            })
-            if (this.isEdit)
-              this.submitForm()
+      this.$refs.lostDetailListForm.validate(valid => {
+        if (valid){
+          if (this.isEdit) {
+            updateLost(this.lostDetailListForm).then(response => {
+              if (response.code === 200) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  showClose: true,
+                  duration: 2000
+                })
+                if (this.isEdit)
+                  this.submitForm()
 
+                this.dialogLostDetailListForm = false
+                this.resetLostDetailListForm()
+              } else {
+                this.$message({
+                  message: response.reason,
+                  type: 'success',
+                  showClose: true,
+                  duration: 2000
+                })
+              }
+            })
+          } else {
+            var temp = Object.assign({}, this.lostDetailListForm)// copy obj
+            this.list.lostDetailList.splice(this.dialogLostDetailListFormIndex, 1, temp)
             this.dialogLostDetailListForm = false
             this.resetLostDetailListForm()
-          } else {
-            this.$message({
-              message: response.reason,
-              type: 'success',
-              showClose: true,
-              duration: 2000
-            })
           }
-        })
-      } else {
-        var temp = Object.assign({}, this.lostDetailListForm)// copy obj
-        this.list.lostDetailList.splice(this.dialogLostDetailListFormIndex, 1, temp)
-        this.dialogLostDetailListForm = false
-        this.resetLostDetailListForm()
-      }
+        }
+      })
+
     },
     handleDeleteLostDetailListForm(index, row) {
       if (this.isEdit) {
@@ -2402,45 +2422,50 @@ export default {
 
     },
     addConcernedPersonListForm() {
-      if (this.concernedPersonListForm.idType.constructor === Array) {
-        this.concernedPersonListForm.idType = this.concernedPersonListForm.idType.slice(-1)[0]
-      }
-      if (this.isEdit) {
-        this.concernedPersonListForm.evidenceId = this.list.id
-        createPerson(this.concernedPersonListForm).then(response => {
-          if (response.code === 200) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              showClose: true,
-              duration: 2000
+
+        if (valid) {
+          if (this.concernedPersonListForm.idType.constructor === Array) {
+            this.concernedPersonListForm.idType = this.concernedPersonListForm.idType.slice(-1)[0]
+          }
+          if (this.isEdit) {
+            this.concernedPersonListForm.evidenceId = this.list.id
+            createPerson(this.concernedPersonListForm).then(response => {
+              if (response.code === 200) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  showClose: true,
+                  duration: 2000
+                })
+                this.dialogConcernedPersonListForm = false
+                this.resetConcernedPersonListForm()
+                if (this.isEdit)
+                  this.submitForm()
+
+
+              } else {
+                this.$message({
+                  message: response.reason,
+                  type: 'success',
+                  showClose: true,
+                  duration: 2000
+                })
+              }
             })
+          } else {
+            this.sex.map(data => {
+              if (data.id == this.concernedPersonListForm.sex) {
+                this.concernedPersonListForm.sexShow = data.title
+              }
+            })
+
+            this.list.concernedPersonList.push(this.concernedPersonListForm)
             this.dialogConcernedPersonListForm = false
             this.resetConcernedPersonListForm()
-            if (this.isEdit)
-              this.submitForm()
-
-
-          } else {
-            this.$message({
-              message: response.reason,
-              type: 'success',
-              showClose: true,
-              duration: 2000
-            })
           }
-        })
-      } else {
-        this.sex.map(data => {
-          if (data.id == this.concernedPersonListForm.sex) {
-            this.concernedPersonListForm.sexShow = data.title
-          }
-        })
+        }
 
-        this.list.concernedPersonList.push(this.concernedPersonListForm)
-        this.dialogConcernedPersonListForm = false
-        this.resetConcernedPersonListForm()
-      }
+
 
     },
     handleEditConcernedPersonListForm(index, row) {
@@ -2763,14 +2788,7 @@ export default {
 
     },
     submitForm(toAddMaterial = false,out=false) {
-      if (this.list.lostDetailList.length === 0){
-        this.$confirm('请输入损失情况!')
-                .then(_ => {
 
-                }).catch(_ => {
-
-                });
-      }else{
         this.$refs.listForm.validate(valid => {
           if (valid) {
             var data = Object.assign({}, this.list)
@@ -2917,7 +2935,7 @@ export default {
             return false
           }
         })
-      }
+
 
     }
 

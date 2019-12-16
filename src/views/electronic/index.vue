@@ -71,14 +71,23 @@
                     <span>{{ row.evidenceNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证数量" align="center" min-width="100">
+            <el-table-column label="物证数量" align="center" width="100">
                 <template slot-scope="{row}">
                     <span>{{ row.examNumber }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="简要案情" align="center" min-width="100">
+            <el-table-column label="简要案情" align="center" min-width="200">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidence.caseHappenTime +'在'+ row.evidence.caseAddress + row.evidence.caseCategory +'案' }}</span>
+                    <span>{{ row.evidence.caseHappenTime }}</span>
+                    <span v-if="row.evidence.caseHappenTime && row.evidence.caseAddress">
+                        在
+                    </span>
+                    <span>
+                        {{ row.evidence.caseAddress + row.evidence.caseCategory  }}
+                    </span>
+                    <span v-if=" row.evidence.caseCategory">
+                        案
+                    </span>
                 </template>
             </el-table-column>
             <el-table-column label="移交人" width="100" align="center">

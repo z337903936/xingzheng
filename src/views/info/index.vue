@@ -57,6 +57,17 @@
                     placeholder="侵入方式"
                     :props="{ multiple: true,emitPath:false }"
                     style="width: 200px"/>
+            <el-cascader
+                    :options="caseTypeList"
+                    v-model="listQuery.caseCategory"
+                    :filter-method="filterSearch"
+                    :show-all-levels="false"
+                    placeholder="案件类别"
+                    @change="countDict($event,'案件类别')"
+                    filterable
+                    style="width: 200px"
+                    :props="emitProps"
+            />
             <div style="margin-top: 20px">
                 <el-cascader
                         :options="escapeTypeList"
@@ -269,6 +280,7 @@
                     crimeTools: undefined,
                     suspectName: undefined,
                     filters: undefined,
+                    caseCategory: undefined,
                     beginTime: undefined,
                     endTime: undefined,
                     status: 4,
@@ -281,6 +293,7 @@
                 invadeTypeList: [],
                 escapeTypeList: [],
                 footprintList: [],
+                caseTypeList: [],
                 taskId: [],
                 applyData:{
                     preConditions:'',
@@ -325,7 +338,9 @@
             this.search('足迹物证').then(data => {
                 this.footprintList = this.processData(data.list)
             })
-
+            this.search('案件类别').then(response=>{
+                this.caseTypeList = this.processData(response.list)
+            });
         },
         methods: {
             handleApply(){
