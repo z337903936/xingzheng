@@ -50,8 +50,11 @@
             <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
 
                 <template slot-scope="{row}">
+                    <router-link :to="'/material/detail/'+row.examBatch.id" v-if=" row.stepName === '申请物证入库'  || row.stepName === '申请物证出库' ">
+                        <el-button v-waves type="primary" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>
+                    </router-link>
                     <router-link :to="'/medical/result/'+row.id"
-                                 v-if="row.status===2 && row.stepName === '法医现勘' ">
+                                 v-if=" row.stepName === '法医现勘' ">
                         <el-button icon="el-icon-edit" type="primary" size="small">填写结果</el-button>
                     </router-link>
                     <router-link :to="'/material/batch/'+row.examBatchId"
@@ -59,10 +62,10 @@
                     >
                         <el-button v-waves type="success" size="mini" icon="el-icon-tickets" style="width: 100px">物证详情</el-button>
                     </router-link>
-                    <router-link :to="'/search/update-search/'+row.id" v-if="row.stepName === '痕检现勘' || row.stepName === '警情扭转' ">
+                    <router-link :to="'/search/update-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘' || row.stepName === '警情扭转' ">
                         <el-button type="primary" size="mini" icon="el-icon-edit" >编辑</el-button>
                     </router-link>
-                    <router-link :to="'/search/show-search/'+row.id" v-if="row.stepName === '痕检现勘' || row.stepName === '警情扭转'">
+                    <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘' || row.stepName === '警情扭转'">
                         <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
                     </router-link>
                 </template>

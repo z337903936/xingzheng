@@ -263,6 +263,9 @@
                                @click="handleAction(row,false)" v-if="row.status===1 && (row.stepName === '申请物证入库' || row.stepName === '申请物证出库')">
                         拒绝入库
                     </el-button>
+                    <router-link :to="'/material/detail/'+row.examBatch.id" v-if="row.stepName === '申请物证入库' || row.stepName === '申请物证出库'">
+                        <el-button v-waves type="primary" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>
+                    </router-link>
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
                                @click="handleAcceptTask(row)"
                                v-if="row.status===1 && (row.stepName === '法医现勘' ||  row.stepName === '警情扭转') ">
