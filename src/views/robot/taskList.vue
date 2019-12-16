@@ -214,6 +214,40 @@
                 robotBatch(this.listQuery).then(response => {
                     this.list = response.list;
                     this.pages = response.pages
+                    this.list.map(res=>{
+                        if (res.crimeTime){
+                            if (JSON.parse(res.crimeTime).constructor === Array){
+                                res.crimeTime = JSON.parse(res.crimeTime).join(' ')
+                            }
+                        }
+                        if (res.sceneType){
+                            if (JSON.parse(res.sceneType).constructor === Array){
+                                res.sceneType = JSON.parse(res.sceneType).join(' ')
+                            }
+                        }
+                        if (res.invadeType){
+                            if (JSON.parse(res.invadeType).constructor === Array){
+                                res.invadeType = JSON.parse(res.invadeType).join(' ')
+                            }
+                        }
+                        if (res.escapeType){
+                            if (JSON.parse(res.escapeType).constructor === Array){
+                                res.escapeType = JSON.parse(res.escapeType).join(' ')
+                            }
+                        }
+                        if (res.caseHappenRegion){
+                            if (JSON.parse(res.caseHappenRegion).constructor === Array){
+                                res.caseHappenRegion = JSON.parse(res.caseHappenRegion).join(' ')
+                            }
+                        }
+                        if (res.caseCategory){
+                            if (JSON.parse(res.caseCategory).constructor === Array){
+                                res.caseCategory = JSON.parse(res.caseCategory).join(' ')
+                            }
+                        }
+                        return res;
+
+                    });
 
                     // Just to simulate the time of the request
                     this.listLoading = false

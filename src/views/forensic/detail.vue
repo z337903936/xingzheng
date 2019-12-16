@@ -82,9 +82,9 @@
                                style="float: right;margin-right: 20px">
                         搜索
                     </el-button>
-                    <router-link :to="'/alarm/create-alarm/'" style="float: right;margin-right: 20px">
-                        <el-button v-waves type="primary" icon="el-icon-edit">添加</el-button>
-                    </router-link>
+                    <!--<router-link :to="'/alarm/create-alarm/'" style="float: right;margin-right: 20px">-->
+                        <!--<el-button v-waves type="primary" icon="el-icon-edit">添加</el-button>-->
+                    <!--</router-link>-->
                 </div>
 
 
@@ -104,24 +104,9 @@
                 style="width: 100%;"
 
         >
-            <el-table-column label="文书号" align="center" width="130">
+            <el-table-column label="尸检号" align="center" width="130">
                 <template slot-scope="{row}">
-                    <span>{{ row.documentNo }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="现勘号" align="center" width="100">
-                <template slot-scope="{row}">
-                    <span>{{ row.evidenceNo }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="任务编号" align="center" width="100">
-                <template slot-scope="{row}">
-                    <span>{{ row.taskNo }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="文书日期" align="center" width="170">
-                <template slot-scope="{row}">
-                    <span>{{ row.documentDate | parseTime('{y}-{m}-{d} {h}:{i}:{s}')  }}</span>
+                    <span>{{ row.autopsyNo }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="案件类别" align="center" width="200">
@@ -134,17 +119,18 @@
                     <span>{{ row.delegateTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')  }}</span>
                 </template>
             </el-table-column>
-
             <el-table-column label="委托单位" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.delegateOrg }}</span>
                 </template>
             </el-table-column>
+
             <el-table-column label="委托人" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.delegateName  }}</span>
                 </template>
             </el-table-column>
+
             <el-table-column label="简要案情" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.digest }}</span>
@@ -161,13 +147,6 @@
                     <span>{{ row.extractMaterial }}</span>
                 </template>
             </el-table-column>
-
-            <el-table-column label="检材去向" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.materialTo }}</span>
-                </template>
-            </el-table-column>
-
             <el-table-column label="鉴定结论" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.conclusion }}</span>
@@ -179,6 +158,11 @@
                     <span>{{ row.examName }}</span>
                 </template>
             </el-table-column>
+            <el-table-column label="文书" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.documentNo }}</span>
+                </template>
+            </el-table-column>
 
             <el-table-column label="备注" align="center">
                 <template slot-scope="{row}">
@@ -186,9 +170,11 @@
                 </template>
             </el-table-column>
 
-            <!--<el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">-->
-                <!--<template slot-scope="{row}">-->
-
+            <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+                <template slot-scope="{row}">
+                    <router-link :to="'/medical/result/'+row.id">
+                        <el-button icon="el-icon-edit" type="primary" size="small">填写结果</el-button>
+                    </router-link>
                     <!--<el-button type="primary" size="small" icon="el-icon-document-checked"-->
                                <!--@click="handleAcceptTask(row)"-->
                                <!--v-if="row.status===1">-->
@@ -203,8 +189,8 @@
                                  <!--v-if="row.status===2 && row.stepName==='痕检现勘'">-->
                         <!--<el-button icon="el-icon-edit" type="primary" size="small">编辑现勘</el-button>-->
                     <!--</router-link>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
+                </template>
+            </el-table-column>
         </el-table>
         <el-pagination
                 :page-count="pages"
