@@ -60,48 +60,7 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <!--<el-table-column label="DNA编号" prop="id" align="center" width="180">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.dnaNo }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-
-            <!--<el-table-column label="送检时间" width="170" align="center">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.requestTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="提取人" align="center" min-width="100">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.handlerName }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="勘查号" width="210" align="center">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.evidenceNo }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="任务号" width="210px" align="center">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.taskNo }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="移交人" width="100" align="center">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.requestName }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="检验结果" width="210" align="center">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.examResult }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="文书去向" width="110" align="center">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.documentRoute }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <el-table-column label="任务编号" prop="id" align="center" width="180">
+            <el-table-column label="任务序号" prop="id" align="center" width="180">
                 <template slot-scope="{row}">
                     <span>{{ row.taskNo }}</span>
                 </template>
@@ -116,23 +75,23 @@
                     <span>{{ row.examNumber }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="来源" width="210" align="center">
+            <el-table-column label="简要案情" align="center" min-width="100">
                 <template slot-scope="{row}">
-                    <span>{{ row.fromStep }}</span>
+                    <span>{{ row.evidence.caseHappenTime +'在'+ row.evidence.caseAddress + row.evidence.caseCategory +'案' }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="转移人" width="100" align="center">
+            <el-table-column label="移交人" width="100" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.fromName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="接受人" width="210" align="center">
+            <el-table-column label="检验人" width="210" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.createName }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="转移时间" width="170" align="center">
+            <el-table-column label="移交时间" width="170" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
@@ -145,6 +104,7 @@
                     </router-link>
                 </template>
             </el-table-column>
+
         </el-table>
         <el-pagination
                 background
@@ -262,6 +222,15 @@
                 batchList(this.listQuery).then(response => {
                     this.list = response.list;
                     this.pages = response.pages
+
+                    this.list.map(data=>{
+                        if (data.evidence.caseHappenTime) {
+                            data.evidence.caseHappenTime = parseTime(data.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}')
+                        }else{
+                            data.evidence.caseHappenTime = ''
+                        }
+                        return data;
+                    })
 
                     // Just to simulate the time of the request
 

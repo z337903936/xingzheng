@@ -243,7 +243,7 @@
 </template>
 
 <script>
-    import { medicalDetail,writeResult } from '@/api/backlog'
+    import { medicalDetail,writeResult,taskDetails} from '@/api/backlog'
     import {parseTime} from '@/utils'
     import {fetchAdminMemberList} from '@/api/permissions'
     import {fetchList} from '@/api/dictionary'

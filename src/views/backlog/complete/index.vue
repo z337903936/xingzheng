@@ -48,13 +48,18 @@
 
 
             <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+                <router-link :to="'/material/batch/'+row.examBatchId"
+                             v-if="row.stepName === 'DNA送检' && row.stepName === '指纹送检' && row.stepName === '理化送检' && row.stepName === '电子物证送检'"
+                >
+                    <el-button v-waves type="success" size="mini" icon="el-icon-tickets" style="width: 100px">物证详情</el-button>
+                </router-link>
                 <template slot-scope="{row}">
-                    <!--<el-button type="primary" size="small" @click="handleAcceptTask(row)" v-if="row.status===1">-->
-                        <!--接受任务-->
-                    <!--</el-button>-->
-                    <!--<router-link :to="'/task/show-case/'+row.id">-->
-                    <!--<el-button type="primary" size="mini">查看</el-button>-->
-                    <!--</router-link>-->
+                    <router-link :to="'/search/update-search/'+row.id" v-if="row.stepName === '痕检现勘'">
+                        <el-button type="primary" size="mini" icon="el-icon-edit" >编辑</el-button>
+                    </router-link>
+                    <router-link :to="'/search/show-search/'+row.id" v-if="row.stepName === '痕检现勘'">
+                        <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
+                    </router-link>
                 </template>
             </el-table-column>
         </el-table>

@@ -253,7 +253,7 @@
             </el-table-column>
 
 
-            <el-table-column label="操作" align="center" width="230" fixed="right" class-name="small-padding fixed-width">
+            <el-table-column label="操作" align="center" width="430" fixed="right" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
                                @click="handleAction(row,true)" v-if="row.status===1 && (row.stepName === '申请物证入库' || row.stepName === '申请物证出库')">
@@ -270,7 +270,7 @@
                     </el-button>
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
                                @click="handleTaskAction(row)"
-                               v-if="row.status===1 && row.stepName !== '痕检现勘' && (row.stepName !== '申请物证入库' || row.stepName !== '申请物证出库') && row.stepName !== '法医现勘' && row.stepName !== '警情扭转' ">
+                               v-if="row.status===1 && row.stepName !== '痕检现勘' && row.stepName !== '申请物证入库' && row.stepName !== '申请物证出库' && row.stepName !== '法医现勘' && row.stepName !== '警情扭转' ">
                         任务操作
                     </el-button>
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
@@ -287,7 +287,7 @@
                         <el-button icon="el-icon-edit" type="primary" size="small">填写结果</el-button>
                     </router-link>
                     <router-link :to="'/material/batch/'+row.examBatchId"
-                                 v-if="row.stepName !== '痕检现勘' && (row.stepName !== '申请物证入库' || row.stepName !== '申请物证出库') && row.stepName !== '警情扭转'"
+                                 v-if="row.stepName !== '痕检现勘' && row.stepName !== '申请物证入库' && row.stepName !== '申请物证出库' && row.stepName !== '警情扭转'"
                     >
                         <el-button v-waves type="success" size="mini" icon="el-icon-tickets" style="width: 100px">物证详情</el-button>
                     </router-link>
@@ -626,6 +626,7 @@
         },
         created() {
             this.getList();
+            this.getUserList();
             this.search('案件类别').then(response => {
                 this.caseCategoryList = this.processData(response.list)
             });

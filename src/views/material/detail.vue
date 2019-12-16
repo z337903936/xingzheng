@@ -41,7 +41,42 @@
                 <!--</el-button>-->
             <!--</div>-->
         <!--</div>-->
+        <div class="tip">
+            <el-row :gutter="20" class="mb10">
+                <el-col :span="12" >
+                    勘查号:{{ heardDetail.evidence ?heardDetail.evidence.evidenceNo: '' }}
+                </el-col>
+                <el-col :span="12">
+                    简要案情:{{ heardDetail.evidence ?( heardDetail.evidence.caseHappenTime +'在'+ heardDetail.evidence.caseAddress + heardDetail.evidence.caseCategory +'案'): '' }}
+                </el-col>
 
+
+            </el-row>
+            <el-row :gutter="20" class="mb10">
+                <el-col :span="12">
+                    移交人:{{ heardDetail.evidenceMaterial ?heardDetail.evidenceMaterial.transferName: '' }}
+                </el-col>
+                <el-col :span="12">
+                    移交时间:{{ heardDetail.evidenceMaterial ?heardDetail.evidenceMaterial.transferTime : ''}}
+                </el-col>
+
+            </el-row>
+            <el-row :gutter="20" class="mb10">
+
+                <el-col :span="12">
+                    申请人:{{ heardDetail.evidence ?heardDetail.evidence.createName : ''}}
+                </el-col>
+                <el-col :span="12">
+                    申请时间:{{ heardDetail.evidence ?heardDetail.evidence.createTime : ''}}
+                </el-col>
+
+
+            </el-row>
+
+
+        </div>
+
+        <el-divider content-position="left"></el-divider>
         <el-table
                 v-loading="listLoading"
                 :key="tableKey"
@@ -51,14 +86,9 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="物证编码" prop="id" align="center" width="180">
+            <el-table-column label="物证名称" align="center" width="180">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidenceMaterial.materialNo }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="物证库编号" align="center" width="200">
-                <template slot-scope="{row}">
-                    <span>{{ row.evidenceMaterial.thirdMaterialNo }}</span>
+                    <span>{{ row.evidenceMaterial.name }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="物证类别" width="150" align="center">
@@ -66,43 +96,32 @@
                     <span>{{ row.evidenceMaterial.materialCategory  }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="利用情况" width="120" align="center">
+            <el-table-column label="保存时限"  align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.evidenceMaterial.usedType }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证名称" width="250" align="center">
+            <el-table-column label="物证库存放位置"  align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.evidenceMaterial.name }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="特征描述" width="300" align="center">
+            <el-table-column label="物证编号" width="300" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.evidenceMaterial.note }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证类型" width="170" align="center">
+            <el-table-column label="出库用途"  align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.evidenceMaterial.materialType }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="转移时间" width="210" align="center">
+
+            <el-table-column label="操作" align="center" width="230" fixed="right" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidenceMaterial.transferTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+
                 </template>
             </el-table-column>
-
-            <!--<el-table-column label="操作" align="center" width="230" fixed="right" class-name="small-padding fixed-width">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<router-link :to="'/material/edit/'+row.evidenceMaterial.id">-->
-                        <!--<el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>-->
-                    <!--</router-link>-->
-
-                    <!--<el-button v-waves type="primary" style="width: 70px"  size="mini" @click="handleDelete(row)" >-->
-                        <!--销毁申请-->
-                    <!--</el-button>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
         </el-table>
         <el-pagination
                 background
@@ -190,6 +209,7 @@
                 rules:{},
                 downloadLoading: false,
                 dialogdeleteForm: false,
+                heardDetail:{},
             }
         },
         created(){
@@ -227,7 +247,10 @@
                 batchMaterialList(this.listQuery).then(response => {
                     this.list = response.list;
                     this.pages = response.pages
-
+                    this.heardDetail =   this.list[0];
+                    this.heardDetail.evidence.caseHappenTime = parseTime(this.heardDetail.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}')?parseTime(this.heardDetail.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}'):''
+                    this.heardDetail.evidenceMaterial.transferTime= parseTime(this.heardDetail.evidenceMaterial.transferTime,'{y}-{m}-{d} {h}:{i}:{s}')
+                    this.heardDetail.evidence.createTime = parseTime(this.heardDetail.evidence.createTime,'{y}-{m}-{d} {h}:{i}:{s}')
                     // Just to simulate the time of the request
 
                         this.listLoading = false

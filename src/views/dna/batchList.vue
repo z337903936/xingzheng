@@ -1,34 +1,37 @@
 <template>
     <div class="app-container">
         <el-divider content-position="left">案件信息</el-divider>
-        <el-row :gutter="20" class="mb10">
-            <el-col :span="12" >
+        <div class="tip">
+            <el-row :gutter="20" class="mb10">
+                <el-col :span="12" >
                     勘查号:{{ heardDetail.evidence ?heardDetail.evidence.evidenceNo: '' }}
-            </el-col>
-            <el-col :span="12">
+                </el-col>
+                <el-col :span="12">
                     案件编号:{{ heardDetail.evidence ?heardDetail.evidence.caseNo: '' }}
-            </el-col>
+                </el-col>
 
 
-        </el-row>
-        <el-row :gutter="20" class="mb10">
-            <el-col :span="12">
-                发案时间:{{ heardDetail.evidence ?heardDetail.evidence.caseHappenTime: '' }}
-            </el-col>
-            <el-col :span="12">
-                案件类别:{{ heardDetail.evidence ?heardDetail.evidence.caseCategory : ''}}
-            </el-col>
+            </el-row>
+            <el-row :gutter="20" class="mb10">
+                <el-col :span="12">
+                    发案时间:{{ heardDetail.evidence ?heardDetail.evidence.caseHappenTime: '' }}
+                </el-col>
+                <el-col :span="12">
+                    案件类别:{{ heardDetail.evidence ?heardDetail.evidence.caseCategory : ''}}
+                </el-col>
 
-        </el-row>
-        <el-row :gutter="20" class="mb10">
+            </el-row>
+            <el-row :gutter="20" class="mb10">
 
-            <el-col :span="12">
-                发案地点:{{ heardDetail.evidence ?heardDetail.evidence.caseAddress : ''}}
-            </el-col>
+                <el-col :span="12">
+                    发案地点:{{ heardDetail.evidence ?heardDetail.evidence.caseAddress : ''}}
+                </el-col>
 
 
-        </el-row>
+            </el-row>
 
+
+        </div>
 
         <el-divider content-position="left">批次物证列表</el-divider>
         <div style="float: right;margin-bottom: 10px">
@@ -92,7 +95,7 @@
             </el-table-column>
             <el-table-column label="操作" align="center" fixed="right" width="280" class="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <router-link :to="'/material/result/'+row.id+'/'+row.stepName">
+                    <router-link :to="'/material/result/'+row.materialId+'/'+row.stepName">
                         <el-button v-waves type="success" size="mini" style="width: 90px" icon="el-icon-tickets">填写结果</el-button>
                     </router-link>
                     <!--<el-button type="success" size="mini" style="width: 90px" icon="el-icon-tickets" @click="handleWriteResult(row)">-->
@@ -360,6 +363,13 @@
     .mb10 {
         margin-bottom: 10px;
     }
+    .tip {
+        padding: 8px 16px;
+        background-color: #ecf8ff;
+        border-radius: 4px;
+        border-left: 5px solid #50bfff;
+        margin: 20px 0;
+    }
 </style>
 
 <script>
@@ -559,7 +569,7 @@
                     this.list = response.list;
                     this.pages = response.pages
                     this.heardDetail = this.list[0];
-
+                    this.heardDetail.evidence.caseHappenTime = parseTime(this.heardDetail.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}');
                     // Just to simulate the time of the request
                     this.listLoading = false
 

@@ -60,47 +60,7 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <!--<el-table-column label="DNA编号" prop="id" align="center" width="180">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.dnaNo }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
 
-            <!--<el-table-column label="送检时间" width="170" align="center">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.requestTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="提取人" align="center" min-width="100">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.handlerName }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="勘查号" width="210" align="center">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.evidenceNo }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="任务号" width="210px" align="center">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.taskNo }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="移交人" width="100" align="center">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.requestName }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="检验结果" width="210" align="center">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.examResult }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="文书去向" width="110" align="center">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.documentRoute }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
             <el-table-column label="任务序号" prop="id" align="center" width="180">
                 <template slot-scope="{row}">
                     <span>{{ row.taskNo }}</span>

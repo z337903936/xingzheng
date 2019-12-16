@@ -481,6 +481,7 @@
       </el-form-item>
       <el-form-item label-width="auto">
         <el-button type="primary" size="mini" @click="dialogSuspectPersonListForm=true">添加嫌疑人</el-button>
+
         <el-table
                 :data="list.suspectPersonList"
                 border
@@ -515,6 +516,20 @@
             </template>
           </el-table-column>
           <el-table-column
+                  prop="sex" width="120"
+                  label="性别" align="center">
+            <template slot-scope="{row}">
+              <span>{{ row.sex }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+                  prop="huji" width="120"
+                  label="户籍" align="center">
+            <template slot-scope="{row}">
+              <span>{{ row.huji }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
                   prop="crackStatus" width="120"
                   label="状态" align="center">
             <template slot-scope="{row}">
@@ -537,6 +552,7 @@
       </el-form-item>
       <el-form-item label-width="auto">
         <el-button type="primary" size="mini" @click="dialogLostDetailListForm=true">添加损失情况</el-button>
+        <el-tag v-if="isEdit">损失价值合计：{{ list.totalLost }}</el-tag>
         <el-table
           :data="list.lostDetailList"
 
@@ -770,7 +786,7 @@
         label-width="70px"
         style="width: 70%; margin-left:50px;">
 
-        <el-form-item label="名字" prop="name">
+        <el-form-item label="名称" prop="name">
           <el-input v-model="lostDetailListForm.name"/>
         </el-form-item>
         <el-form-item label="型号" prop="model">
@@ -783,7 +799,7 @@
           <el-input v-model="lostDetailListForm.value" type="number" />
         </el-form-item>
         <el-form-item label="数量" prop="amount">
-          <el-input v-model="lostDetailListForm.amount"/>
+          <el-input v-model="lostDetailListForm.amount" type="number"/>
         </el-form-item>
 
       </el-form>
@@ -826,6 +842,19 @@
                     :label="item.value"
                     :value="item.value"/>
           </el-select>
+        </el-form-item>
+        <el-form-item label="性别" prop="sex">
+          <el-select v-model="suspectPersonListForm.sex" placeholder="请选择" center style="width: 100%">
+            <el-option
+                    v-for="item in sex"
+                    :key="item.title"
+                    :label="item.title"
+                    :value="item.title"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="户籍" prop="huji">
+          <el-input v-model="suspectPersonListForm.huji"/>
         </el-form-item>
         <el-form-item label="作案特点" prop="crimeDetail">
           <el-input v-model="suspectPersonListForm.crimeDetail"/>
@@ -1346,6 +1375,8 @@ export default {
         idNo: '',
         solveMethod: '',
         crimeDetail: '',
+        huji: '',
+        sex: '',
       },
 
       lostDetailListForm: {
@@ -1807,15 +1838,50 @@ export default {
       return result;
     },
     handleClose(done){
-      if (this.isEdit)
-        this.submitForm();
-      done();
+      var change = 0;
+      this.materialPhotoList.map(data=>{
+        console.log(data)
+        if (!data.status){
+          change++;
+        }
+      })
+
+      if (!change) {
+        if (this.isEdit)
+          this.submitForm();
+        done();
+      }else{
+        this.$confirm('有物证信息未编辑!')
+                .then(_ => {
+
+                })
+                .catch(_ => {});
+      }
+
     },
     handleCloseButton(){
-      if (this.isEdit)
-        this.submitForm();
-      this.fetchData(this.list.id);
-      this.dialogMaterialListForm = false
+      var change = 0;
+      this.materialPhotoList.map(data=>{
+
+        if (!data.status){
+          change++;
+        }
+      })
+
+      if (!change) {
+        if (this.isEdit)
+          this.submitForm();
+        this.fetchData(this.list.id);
+        this.dialogMaterialListForm = false
+      }else{
+        this.$confirm('有物证信息未编辑!')
+                .then(_ => {
+
+                })
+                .catch(_ => {});
+      }
+
+
     },
     handleCurrentChange(row){
       if (row.status){
@@ -2421,6 +2487,7 @@ export default {
         this.list.concernedPersonList.splice(this.dialogConcernedPersonListFormIndex, 1, temp)
         this.dialogConcernedPersonListForm = false
         this.resetConcernedPersonListForm()
+        this.judgeCP(this.list.concernedPersonList);
       }
 
     },
@@ -2696,152 +2763,162 @@ export default {
 
     },
     submitForm(toAddMaterial = false,out=false) {
-      this.$refs.listForm.validate(valid => {
-        if (valid) {
-          var data = Object.assign({}, this.list)
-          data.caseId = this.caseId
-          data = this.changeTime(data, true)
-          if (data.instanceNo === this.$store.getters.instanceNo) {
-            data.instanceNo = ''
-          } if (data.caseNo === this.$store.getters.caseNo) {
-            data.caseNo = ''
-          } if (data.thirdEvidenceNo === this.$store.getters.evidenceNo) {
-            data.thirdEvidenceNo = ''
-          }
+      if (this.list.lostDetailList.length === 0){
+        this.$confirm('请输入损失情况!')
+                .then(_ => {
 
-          if (data.supporterUidArray){
-            if (data.supporterUidArray.length > 0) {
-              data.supporterUid = data.supporterUidArray.join(',')
+                }).catch(_ => {
+
+                });
+      }else{
+        this.$refs.listForm.validate(valid => {
+          if (valid) {
+            var data = Object.assign({}, this.list)
+            data.caseId = this.caseId
+            data = this.changeTime(data, true)
+            if (data.instanceNo === this.$store.getters.instanceNo) {
+              data.instanceNo = ''
+            } if (data.caseNo === this.$store.getters.caseNo) {
+              data.caseNo = ''
+            } if (data.thirdEvidenceNo === this.$store.getters.evidenceNo) {
+              data.thirdEvidenceNo = ''
             }
-          }
-          if (data.crimeTime) {
-            if (data.crimeTime.length > 0) {
-              data.crimeTime = JSON.stringify(data.crimeTime)
-            }
-          }
 
-          if (data.sceneType) {
-            if (data.sceneType.length > 0) {
-              data.sceneType = JSON.stringify(data.sceneType)
-            }
-          }
-
-          if (data.invadeType) {
-            if (data.invadeType.length > 0) {
-              data.invadeType = JSON.stringify(data.invadeType)
-            }
-          }
-
-          if (data.escapeType) {
-            if (data.escapeType.length > 0) {
-              data.escapeType = JSON.stringify(data.escapeType)
-            }
-          }
-
-
-          if (data.caseHappenRegion.constructor === Array) {
-            data.caseHappenRegion = data.caseHappenRegion.slice(-1)[0]
-          }
-          if (data.caseCategory.constructor === Array) {
-            data.caseCategory = data.caseCategory.slice(-1)[0]
-          }
-          if (data.sceneType.constructor === Array) {
-            data.sceneType = data.sceneType.slice(-1)[0]
-          }
-
-          if (data.invadeType.constructor === Array) {
-            data.invadeType = data.invadeType.slice(-1)[0]
-          }
-          if (data.escapeType.constructor === Array) {
-            data.escapeType = data.escapeType.slice(-1)[0]
-          }
-          this.loading = true
-
-          if (this.isEdit) {
-
-            updateSearch(data).then(response => {
-              if (response.code === 200) {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success',
-                  showClose: true,
-                  duration: 2000
-                })
-                this.fetchData(this.list.id)
-
-                if (out) {
-                  this.$router.push({
-                    path: '/search/index',
-                    query: {
-                      t: +new Date()
-                    }
-                  })
-                  this.$store.dispatch('delView', this.$route)
-                }
-                // this.list = response;
-                // this.list.suspectPersonList = response.suspectPersonList;
-                // this.proResponse()
-              } else {
-                this.$message({
-                  message: response.reason,
-                  type: 'success',
-                  showClose: true,
-                  duration: 2000
-                })
+            if (data.supporterUidArray){
+              if (data.supporterUidArray.length > 0) {
+                data.supporterUid = data.supporterUidArray.join(',')
               }
-            })
-            this.loading = false
+            }
+            if (data.crimeTime) {
+              if (data.crimeTime.length > 0) {
+                data.crimeTime = JSON.stringify(data.crimeTime)
+              }
+            }
+
+            if (data.sceneType) {
+              if (data.sceneType.length > 0) {
+                data.sceneType = JSON.stringify(data.sceneType)
+              }
+            }
+
+            if (data.invadeType) {
+              if (data.invadeType.length > 0) {
+                data.invadeType = JSON.stringify(data.invadeType)
+              }
+            }
+
+            if (data.escapeType) {
+              if (data.escapeType.length > 0) {
+                data.escapeType = JSON.stringify(data.escapeType)
+              }
+            }
+
+
+            if (data.caseHappenRegion.constructor === Array) {
+              data.caseHappenRegion = data.caseHappenRegion.slice(-1)[0]
+            }
+            if (data.caseCategory.constructor === Array) {
+              data.caseCategory = data.caseCategory.slice(-1)[0]
+            }
+            if (data.sceneType.constructor === Array) {
+              data.sceneType = data.sceneType.slice(-1)[0]
+            }
+
+            if (data.invadeType.constructor === Array) {
+              data.invadeType = data.invadeType.slice(-1)[0]
+            }
+            if (data.escapeType.constructor === Array) {
+              data.escapeType = data.escapeType.slice(-1)[0]
+            }
+            this.loading = true
+
+            if (this.isEdit) {
+
+              updateSearch(data).then(response => {
+                if (response.code === 200) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    showClose: true,
+                    duration: 2000
+                  })
+                  this.fetchData(this.list.id)
+
+                  if (out) {
+                    this.$router.push({
+                      path: '/search/index',
+                      query: {
+                        t: +new Date()
+                      }
+                    })
+                    this.$store.dispatch('delView', this.$route)
+                  }
+                  // this.list = response;
+                  // this.list.suspectPersonList = response.suspectPersonList;
+                  // this.proResponse()
+                } else {
+                  this.$message({
+                    message: response.reason,
+                    type: 'success',
+                    showClose: true,
+                    duration: 2000
+                  })
+                }
+              })
+              this.loading = false
+            } else {
+              createSearch(data).then(response => {
+                if (response.code === 200) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    showClose: true,
+                    duration: 2000
+                  })
+
+                  this.list = this.changeTime(this.list, false)
+
+                  if (toAddMaterial) {
+                    const id = response.id
+                    this.isEdit = true
+                    this.materialListForm.evidenceId = id
+                    this.searchId = id
+                    this.list.id = id
+                    this.dialogPoint = false
+                  }else{
+                    this.$router.push({
+                      path: '/search/index',
+                      query: {
+                        t: +new Date()
+                      }
+                    })
+                    this.$store.dispatch('delView', this.$route)
+                  }
+
+                } else {
+                  this.$message({
+                    message: response.reason,
+                    type: 'success',
+                    showClose: true,
+                    duration: 2000
+                  })
+                }
+              })
+              this.loading = false
+            }
           } else {
-            createSearch(data).then(response => {
-              if (response.code === 200) {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success',
-                  showClose: true,
-                  duration: 2000
-                })
-
-                this.list = this.changeTime(this.list, false)
-
-                if (toAddMaterial) {
-                  const id = response.id
-                  this.isEdit = true
-                  this.materialListForm.evidenceId = id
-                  this.searchId = id
-                  this.list.id = id
-                  this.dialogPoint = false
-                }else{
-                  this.$router.push({
-                    path: '/search/index',
-                    query: {
-                      t: +new Date()
-                    }
-                  })
-                  this.$store.dispatch('delView', this.$route)
-                }
-
-              } else {
-                this.$message({
-                  message: response.reason,
-                  type: 'success',
-                  showClose: true,
-                  duration: 2000
-                })
-              }
+            this.$message({
+              message: '操作失败，请检查数据',
+              type: 'error',
+              showClose: true,
+              duration: 2000
             })
             this.loading = false
+            return false
           }
-        } else {
-          this.$message({
-            message: '操作失败，请检查数据',
-            type: 'error',
-            showClose: true,
-            duration: 2000
-          })
-          this.loading = false
-          return false
-        }
-      })
+        })
+      }
+
     }
 
   }

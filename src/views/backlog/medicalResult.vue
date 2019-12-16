@@ -156,9 +156,16 @@
                     needToPushToCharger: '',
                     usedType: '',
                 },
+                userList: [],
+                userShowList: [],
+                caseCategoryList: [],
             }
         },
         created() {
+            this.getUserList();
+            this.search('案件类别').then(response => {
+                this.caseCategoryList = this.processData(response.list)
+            });
             if (this.isEdit) {
                 const id = this.$route.params && this.$route.params.id
                 this.resultFrom.id = id;
@@ -172,6 +179,95 @@
 
                 }).catch(err => {
                     console.log(err)
+                })
+            },
+            selectUpdate(val) {
+                this.$forceUpdate()
+            },
+            filterUserSearch(value){
+                if (value) {
+                    this.userShowList = this.userList.filter(data=>{
+                        var p =  /^[a-zA-Z]+$/;
+                        if (p.test(value)) {
+                            if (data.py.toLowerCase().indexOf(value.toLowerCase())>-1)
+                                return data
+                        }else{
+                            if (data.title.indexOf(value)>-1)
+                                return data
+                        }
+                    })
+                }else{
+                    this.userShowList = this.userList;
+                }
+            },
+            restUserSearch(change){
+                if (!change) {
+                    this.userShowList = this.userList;
+                }
+
+            },
+            countDict(val) {
+                val = val.slice(-1)[0]
+                const send = {
+                    name: val
+                };
+                this.$store.dispatch('PostUserUseDict', send)
+            },
+            search(parentName, filter = null) {
+                return new Promise((resolve, reject) => {
+                    const data = {
+                        filter: filter,
+                        parentName: parentName
+                    }
+                    resolve(fetchList(data))
+                })
+            },
+            remoteSearch(node, value) {
+                var p = /^[a-zA-Z]+$/;
+                if (p.test(value)) {
+                    if (node.data.py.toLowerCase().indexOf(value.toLowerCase()) > -1)
+                        return true
+                } else {
+                    if (node.data.label.indexOf(value) > -1)
+                        return true
+                }
+            },
+            processData(data) {
+                return data.map(item => {
+                    var sendData = {
+                        value: item.name,
+                        label: item.name,
+                        py: item.pinyinAbbr
+                    }
+                    if (item.children.length > 0) {
+                        sendData.children = this.processData(item.children)
+                    }
+
+                    return sendData
+                })
+            },
+            filterSearch(node, value) {
+                var p = /^[a-zA-Z]+$/
+                if (p.test(value)) {
+                    if (node.data.py.toLowerCase().indexOf(value.toLowerCase()) > -1) {
+                        return true
+                    }
+                } else {
+                    if (node.data.label.indexOf(value) > -1) {
+                        return true
+                    }
+                }
+            },
+            getUserList() {
+                fetchAdminMemberList({}).then(response => {
+                    this.userList = response.list.map(data => {
+                        return {
+                            id: data.id,
+                            title: data.realName,
+                            py:data.pinyinAbbr,
+                        }
+                    })
+                    this.userShowList = this.userList
                 })
             },
             submitForm(){
