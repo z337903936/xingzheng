@@ -11,7 +11,7 @@
            <div style=" margin-top: 10px;">待办任务</div>
          </el-col>
          <el-col :span="3">
-           <el-button type="success" @click="gotoUndone" plain>去完成任务</el-button>
+           <el-button type="primary" @click="gotoUndone" plain>去完成任务</el-button>
          </el-col>
        </el-row>
 
