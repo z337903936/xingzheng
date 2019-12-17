@@ -614,8 +614,8 @@
       <el-form-item label-width="auto">
         <el-button type="primary" size="mini" @click="handleClickToAddMaterial">添加物证</el-button>
         <el-button type="primary" size="mini" @click="submitTask">批量提交物证</el-button>
-        <el-button type="primary" size="mini" @click="">批量借出物证</el-button>
-        <el-button type="primary" size="mini" @click="">批量存入物证库</el-button>
+        <el-button type="primary" size="mini" @click="submitMaterialOutStock">批量借出物证</el-button>
+        <el-button type="primary" size="mini" @click="submitMaterialinStock">批量存入物证库</el-button>
         <el-table
           :data="list.materialList"
           border
