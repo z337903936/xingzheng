@@ -817,7 +817,7 @@
 
     <el-dialog :close-on-click-modal="false" :visible.sync="dialogSuspectPersonListForm" title="嫌疑人" width="30%">
       <el-form
-              ref="lostDetailListForm"
+              ref="suspectPersonListForm"
               :rules="suspectPersonListFormRules"
               :model="suspectPersonListForm"
               label-position="left"
@@ -1348,13 +1348,13 @@ export default {
       listRules: {},
       lostDetailListFormRules: {
         name: [
-          { required: true, message: '请输入名称', trigger: 'change' }
+          { required: true, message: '请输入名称'}
         ],
         value: [
-          {type: 'number', required: true, message: '请输入价值', trigger: 'change' }
+          { required: true, message: '请输入价值' }
         ],
         amount: [
-          {type: 'number', required: true, message: '请输入数量', trigger: 'change' }
+          {required: true, message: '请输入数量' }
         ],
       },
       concernedPersonListFormRules: {},
@@ -1908,6 +1908,7 @@ export default {
         row.index = rowIndex;
        },
     setStayPart(val) {
+      console.log((new Date()).valueOf());
       var data ={
         id: '',
         materialNo: '',
@@ -1918,7 +1919,7 @@ export default {
         materialType: '',
         extractTime: (new Date()).valueOf(),
         extractMethod: '',
-        extractUid: this.list.mainChargerUid,
+        extractUid: this.$store.getters.id,
         extractName: '',
         imgUrl: val.imgUrl,
         stayPart: val.originalFileName,
@@ -2604,8 +2605,10 @@ export default {
           })
           this.materialListForm.materialNo = response.materialNo;
           this.materialListForm.status = 1;
+          this.materialListForm.id = response.id
+          if (this.materialListForm.extractTime.toString().length === 10) { this.materialListForm.extractTime = this.materialListForm.extractTime *1000 }
           this.$set(this.materialPhotoList,this.materialListForm.index,this.materialListForm);
-          this.resetMaterialListForm()
+          // this.resetMaterialListForm()
         } else {
           this.$message({
             message: response.reason,
@@ -2632,7 +2635,8 @@ export default {
                 showClose: true,
                 duration: 2000
               })
-
+              // if (data.extractTime.toString().length === 10) { data.extractTime = data.extractTime *1000 }
+              // this.$set(this.materialPhotoList,data.index,data);
             } else {
               this.$message({
                 message: response.reason,
@@ -2654,6 +2658,7 @@ export default {
               data.materialNo = response.materialNo;
               data.status = 1;
               data.id = response.id;
+              if (data.extractTime.toString().length === 10) { data.extractTime = data.extractTime *1000 }
               this.$set(this.materialPhotoList,data.index,data);
             } else {
               this.$message({
@@ -2695,8 +2700,9 @@ export default {
             showClose: true,
             duration: 2000
           })
-
-          this.resetMaterialListForm()
+          if (this.materialListForm.extractTime.toString().length === 10) { this.materialListForm.extractTime = this.materialListForm.extractTime *1000 }
+          this.$set(this.materialPhotoList,this.materialListForm.index,this.materialListForm);
+          // this.resetMaterialListForm()
         } else {
           this.$message({
             message: response.reason,

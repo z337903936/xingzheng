@@ -32,12 +32,16 @@
 
             <el-table-column label="简要案情" align="center" style="min-width: 600px">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidence.caseHappenTime + row.evidence.caseAddress + row.evidence.caseCategory }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="案件类别" align="center" width="150">
-                <template slot-scope="{row}">
-                    <span>{{ row.evidence.caseCategory }}</span>
+                    <span>{{ row.evidence.caseHappenTime }}</span>
+                    <span v-if="row.evidence.caseHappenTime && row.evidence.caseAddress">
+                        在
+                    </span>
+                    <span>
+                        {{ row.evidence.caseAddress + row.evidence.caseCategory  }}
+                    </span>
+                    <span v-if=" row.evidence.caseCategory">
+                        案
+                    </span>
                 </template>
             </el-table-column>
             <el-table-column label="状态" align="center" width="100">

@@ -24,6 +24,8 @@
 
                 <el-input v-model="listQuery.evidenceNo" placeholder="勘查号" class="mb10" style="width: 200px;"
                           @keyup.enter.native="handleFilter"/>
+                <el-input v-model="listQuery.taskNo" placeholder="任务号" class="mb10" style="width: 200px;"
+                          @keyup.enter.native="handleFilter"/>
                 <!--<div style="margin-top: 10px">-->
                     <!--<el-input v-model="listQuery.taskNo" placeholder="任务号" class="mb10" style="width: 200px;"-->
                               <!--@keyup.enter.native="handleFilter"/>-->
@@ -61,12 +63,12 @@
                 style="width: 100%;"
         >
 
-            <el-table-column label="任务序号" prop="id" align="center" width="180">
+            <el-table-column label="任务号" prop="id" align="center" width="120">
                 <template slot-scope="{row}">
                     <span>{{ row.taskNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="现勘号" prop="id" align="center" width="180">
+            <el-table-column label="现勘号" prop="id" align="center" width="120">
                 <template slot-scope="{row}">
                     <span>{{ row.evidenceNo }}</span>
                 </template>
@@ -92,12 +94,12 @@
             </el-table-column>
             <el-table-column label="移交人" width="100" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.fromName }}</span>
+                    <span>{{ row.createName }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="检验人" width="210" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.createName }}</span>
+                    <span>{{  row.fromUser }}</span>
                 </template>
             </el-table-column>
 
@@ -173,6 +175,7 @@
                     evidenceNo: undefined,
                     fromName: undefined,
                     filters: undefined,
+                    taskNo: undefined,
                 },
                 rules:{},
                 downloadLoading: false,

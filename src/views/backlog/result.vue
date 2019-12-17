@@ -344,10 +344,13 @@
                 this.materialTypeList = this.processData(response.list)
             });
             this.material = JSON.parse(this.$route.query.material);
+            console.log(this.material);
             this.resultDetail = this.material;
             this.stepName =  this.resultDetail.stepName
             this.resultFrom.materialId =  this.material.evidenceMaterial.id
             this.resultFrom.batchId =  this.material.batchId
+            this.resultFrom.usedType =  this.material.evidenceMaterial.usedType
+            this.resultFrom.examOrg =  this.$store.getters.orgName
             const id = this.$route.params && this.$route.params.id
             this.resultFrom.id = id;
             if (this.isEdit) {

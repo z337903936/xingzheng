@@ -4,7 +4,7 @@
         <div class="tip">
             <el-row :gutter="20" class="mb10">
                 <el-col :span="12" >
-                    勘查号:{{ heardDetail.evidence ?heardDetail.evidence.evidenceNo: '' }}
+                    勘查号:{{ heardDetail.evidence ?heardDetail.evidence.selfEvidenceNo: '' }}
                 </el-col>
                 <el-col :span="12">
                     案件编号:{{ heardDetail.evidence ?heardDetail.evidence.caseNo: '' }}

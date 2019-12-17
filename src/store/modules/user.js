@@ -1,6 +1,7 @@
 import { loginByUsername, logout, getUserInfo } from '@/api/login'
 import { getToken, setToken, removeToken, getUID, setUID, removeUID } from '@/utils/auth'
 import { fetchList } from '@/api/paramConfig'
+import { taskList } from '@/api/backlog'
 import { userDictList,userUseDict,delUserUseDict } from '@/api/dictionary'
 const user = {
   state: {
@@ -18,6 +19,7 @@ const user = {
     instanceNo: '',
     evidenceNo: '',
     roles: [],
+    orgName:'',
     webName:'',
     setting: {
       articlePlatform: []
@@ -25,6 +27,9 @@ const user = {
   },
 
   mutations: {
+    SET_ORGNAME: (state, orgName) => {
+      state.orgName = orgName
+    },
     SET_CODE: (state, code) => {
       state.code = code
     },
@@ -130,6 +135,8 @@ const user = {
              commit('SET_EVIDENCE', data.value)
            if (data.key ==='PARAM_KEY_TITLE')
              commit('SET_WEBNAME', data.value)
+           if (data.key ==='PARAM_KEY_ORG_NAME')
+             commit('SET_ORGNAME', data.value)
          })
        })
       })

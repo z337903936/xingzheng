@@ -238,14 +238,19 @@
 
             <el-table-column label="简要案情" align="center" style="min-width: 600px">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidence.caseHappenTime +'在'+ row.evidence.caseAddress + row.evidence.caseCategory +'案' }}</span>
+                    <span>{{ row.evidence.caseHappenTime }}</span>
+                    <span v-if="row.evidence.caseHappenTime && row.evidence.caseAddress">
+                        在
+                    </span>
+                    <span>
+                        {{ row.evidence.caseAddress + row.evidence.caseCategory  }}
+                    </span>
+                    <span v-if=" row.evidence.caseCategory">
+                        案
+                    </span>
                 </template>
             </el-table-column>
-            <el-table-column label="案件类别" align="center" width="150">
-                <template slot-scope="{row}">
-                    <span>{{ row.evidence.caseCategory }}</span>
-                </template>
-            </el-table-column>
+
             <el-table-column label="状态" align="center" width="100">
                 <template slot-scope="{row}">
                     <span>{{ row.status | statusFilter }}</span>
@@ -305,6 +310,9 @@
                                v-if="row.status===2 && (row.stepName==='痕检现勘' ||  row.stepName === '警情扭转') ">
                         取消勘查
                     </el-button>
+                    <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘' || row.stepName === '警情扭转'">
+                        <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
+                    </router-link>
                 </template>
             </el-table-column>
         </el-table>
