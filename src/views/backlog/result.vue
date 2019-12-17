@@ -349,6 +349,10 @@
             this.stepName =  this.resultDetail.stepName
             this.resultFrom.materialId =  this.material.evidenceMaterial.id
             this.resultFrom.batchId =  this.material.batchId
+            if (this.material.handlerUid) {
+                this.resultFrom.examUid =  this.material.handlerUid
+            }
+
             this.resultFrom.usedType =  this.material.evidenceMaterial.usedType
             this.resultFrom.examOrg =  this.$store.getters.orgName
             const id = this.$route.params && this.$route.params.id

@@ -586,6 +586,7 @@
                 return this.batch.status === 1 || this.batch.status === -1;
             },
             gotoMaterialResult(row){
+                row.handlerUid = this.batch.handlerUid;
                 this.$router.push({ name:'materialResult',params:{id:row.id},query: { material:JSON.stringify(row)}})
             },
             submitPush(){

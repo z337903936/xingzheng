@@ -107,7 +107,15 @@
             </el-table-column>
             <el-table-column label="检验人" width="210" align="center">
                 <template slot-scope="{row}">
-                    <span>{{  row.fromUser }}</span>
+                    <span>{{  row.handlerName }}</span>
+                </template>
+            </el-table-column> <el-table-column label="送检单位" width="210" align="center">
+                <template slot-scope="{row}">
+                    <span>{{  row.requireOrg }}</span>
+                </template>
+            </el-table-column> <el-table-column label="送检时间" width="210" align="center">
+                <template slot-scope="{row}">
+                    <span>{{  row.requireTime  | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
 

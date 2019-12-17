@@ -61,12 +61,20 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="任务序号" prop="id" align="center" width="180">
+            <el-table-column label="任务序号" prop="id" align="center" width="120">
                 <template slot-scope="{row}">
                     <span>{{ row.taskNo }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="现勘号" prop="id" align="center" width="180">
+            <el-table-column label="任务号" prop="id" align="center" width="120">
+                <template slot-scope="{row}">
+                    <span v-if="row.stepName ==='DNA送检'">{{ row.evidence.dnaTaskNo }}</span>
+                    <span v-if="row.stepName ==='指纹送检'">{{ row.evidence.fpTaskNo }}</span>
+                    <span v-if="row.stepName ==='电子物证送检'">{{ row.evidence.digiTaskNo }}</span>
+                    <span v-if="row.stepName ==='理化送检'">{{ row.evidence.cheTaskNo }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="现勘号" prop="id" align="center" width="120">
                 <template slot-scope="{row}">
                     <span>{{ row.evidenceNo }}</span>
                 </template>
@@ -92,12 +100,12 @@
             </el-table-column>
             <el-table-column label="移交人" width="100" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.fromName }}</span>
+                    <span>{{ row.createName }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="检验人" width="210" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.createName }}</span>
+                    <span>{{  row.fromUser }}</span>
                 </template>
             </el-table-column>
 
@@ -109,9 +117,11 @@
 
             <el-table-column label="操作" align="center" fixed="right" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <router-link :to="'/material/batch/'+row.id">
-                        <el-button v-waves type="primary" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>
-                    </router-link>
+                    <!--<router-link :to="{ name:'materialBatch',params:{id:row.id},query: { batch: JOSN.stringify(row)}}">-->
+                    <!--<el-button v-waves type="primary" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>-->
+                    <!--</router-link>-->
+                    <el-button v-waves type="primary" size="mini" style="width: 100px" @click="gotobatchList(row)"  icon="el-icon-tickets">物证详情</el-button>
+
                 </template>
             </el-table-column>
         </el-table>
@@ -186,6 +196,9 @@
             });
         },
         methods: {
+            gotobatchList(row){
+                this.$router.push({ name:'materialBatch',params:{id:row.id},query: { batch:JSON.stringify(row)}})
+            },
             reset() {
                 this.listQuery = {
                     page: 1,
