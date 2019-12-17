@@ -196,6 +196,16 @@ export default {
                 showClose: true,
                 duration: 1000
               })
+              this.$store.dispatch('Backlog').then(data=>{
+                if (data.list.length >0){
+                  this.$notify({
+                    title: '系统消息',
+                    message: '您有新的待办任务',
+                    duration: 0,
+                    type: 'success'
+                  });
+                }
+              })
               this.$router.push({ path: this.redirect || '/' })
             }).catch((res) => {
               this.$message({

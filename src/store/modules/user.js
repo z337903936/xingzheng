@@ -152,6 +152,19 @@ const user = {
         })
       })
     },
+    Backlog({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        const data = {
+          status: 1
+        }
+        taskList(data).then(data => {
+
+          resolve(data)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
 
     // 第三方验证登录
     // LoginByThirdparty({ commit, state }, code) {
