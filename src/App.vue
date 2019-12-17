@@ -11,7 +11,7 @@
         name: 'App',
         data() {
             return {
-                url: 'ws://starnew.cn/ws/',
+                url: 'wss://starnew.cn/ws/',
                 websock: undefined,
                 showNotify: true,
                 showNotifyA: true,
