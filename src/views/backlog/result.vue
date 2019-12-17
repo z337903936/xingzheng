@@ -309,7 +309,8 @@
                     },
                 ],
                 resultFrom: {
-                    id: '',
+                    materialId: '',
+                    batchId: '',
                     examUid: '',
                     examOrg: '',
                     materialType: '',
@@ -345,7 +346,8 @@
             this.material = JSON.parse(this.$route.query.material);
             this.resultDetail = this.material;
             this.stepName =  this.resultDetail.stepName
-            console.log(this.material)
+            this.resultFrom.materialId =  this.material.evidenceMaterial.id
+            this.resultFrom.batchId =  this.material.batchId
             const id = this.$route.params && this.$route.params.id
             this.resultFrom.id = id;
             if (this.isEdit) {
