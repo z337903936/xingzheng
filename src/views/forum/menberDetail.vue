@@ -164,7 +164,7 @@
             var data = this.postForm
             delete data.updateTime
             delete data.createdTime
-            data.publishTime = data.publishTime / 1000
+            // data.publishTime = data.publishTime / 1000
             data.categoryId = data.categoryId + ''
             if (this.isEdit) {
               updateForum(data).then(data => {
