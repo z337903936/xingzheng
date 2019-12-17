@@ -66,7 +66,7 @@
           :disabled="sendSmsButtonDisable"
           type="primary"
           class="btn-primary"
-          >{{ sendSmsButtonTitle }}
+        >{{ sendSmsButtonTitle }}
         </el-button>
       </el-form-item>
 
@@ -259,7 +259,7 @@ export default {
 
   /* reset element-ui css */
   .login-container {
-    background-image: url("../../../static/img/login2.png");
+    background-image: url("../../../static/img/login.jpg");
     background-repeat:no-repeat;
     background-size:100% 100%;
     -moz-background-size:100% 100%;
