@@ -310,8 +310,11 @@
                                v-if="row.status===2 && (row.stepName==='痕检现勘' ||  row.stepName === '警情扭转') ">
                         取消勘查
                     </el-button>
-                    <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘' || row.stepName === '警情扭转'">
+                    <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘'">
                         <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
+                    </router-link>
+                    <router-link :to="'/alarm/edit-alarm/'+row.id" v-if="row.stepName === '警情扭转'">
+                        <el-button type="success" size="mini" icon="el-icon-zoom-in">编辑查看</el-button>
                     </router-link>
                 </template>
             </el-table-column>

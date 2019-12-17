@@ -92,13 +92,14 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="现场保护情况" prop="sceneProtect">
-            <el-select v-model="list.sceneProtect" placeholder="请选择" clearable center style="width: 100%">
+          <el-form-item label="监控情况" prop="sceneProtect">
+            <el-select v-model="list.hasCamera" placeholder="请选择" clearable center style="width: 100%">
               <el-option
-                v-for="item in sceneProtectType"
-                :key="item.title"
-                :label="item.title"
-                :value="item.title"
+                label="有"
+                value="true"
+              /> <el-option
+                label="无"
+                value="false"
               />
             </el-select>
           </el-form-item>
@@ -399,9 +400,9 @@
       </el-form-item>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="是否有监控" prop="hasCamera">
-            <el-checkbox v-model="list.hasCamera"/>
-          </el-form-item>
+          <!--<el-form-item label="是否有监控" prop="hasCamera">-->
+            <!--<el-checkbox v-model="list.hasCamera"/>-->
+          <!--</el-form-item>-->
         </el-col>
         <el-col :span="8">
           <el-form-item label="是否十类案件" prop="isTenCase" >
@@ -701,49 +702,49 @@
       <el-divider>三录</el-divider>
       <el-row :gutter="10">
         <el-col :span="12">
-          <el-upload
-                  drag
-                  multiple
-                  :show-file-list="false"
-                  :on-success="handleFileSuccess"
-                  action="/v1/cp/upload/">
-            <i class="el-icon-upload"/>
-            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          </el-upload>
+          <!--<el-upload-->
+                  <!--drag-->
+                  <!--multiple-->
+                  <!--:show-file-list="false"-->
+                  <!--:on-success="handleFileSuccess"-->
+                  <!--action="/v1/cp/upload/">-->
+            <!--<i class="el-icon-upload"/>-->
+            <!--<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>-->
+          <!--</el-upload>-->
         </el-col>
         <el-col :span="12">
-          <el-button type="primary" size="mini" @click="submitSanlu">批量提交</el-button>
-          <el-table
-                  :data="list.sanLuList"
-                  border
-                  row-key="id"
-                  @selection-change="selectFile"
-                  max-height="150"
+          <el-button type="primary" size="mini" @click="submitSanlu">批量提交三录</el-button>
+          <!--<el-table-->
+                  <!--:data="list.sanLuList"-->
+                  <!--border-->
+                  <!--row-key="id"-->
+                  <!--@selection-change="selectFile"-->
+                  <!--max-height="150"-->
 
-          >
-            <el-table-column
-                    v-model="fileId"
-                    type="selection"
-                    width="55"/>
+          <!--&gt;-->
+            <!--<el-table-column-->
+                    <!--v-model="fileId"-->
+                    <!--type="selection"-->
+                    <!--width="55"/>-->
 
-            <el-table-column
-                    prop="materialNo"
-                    label="文件名" align="center"
-            >
-              <template slot-scope="{row}">
-                <span>{{ row.fileName }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" fixed="right" width="150" align="center">
-              <template slot-scope="scope">
-                <el-button
-                        size="mini"
-                        type="danger"
-                        @click="handleDeleteSanlu( scope.row)">删除
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
+            <!--<el-table-column-->
+                    <!--prop="materialNo"-->
+                    <!--label="文件名" align="center"-->
+            <!--&gt;-->
+              <!--<template slot-scope="{row}">-->
+                <!--<span>{{ row.fileName }}</span>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
+            <!--<el-table-column label="操作" fixed="right" width="150" align="center">-->
+              <!--<template slot-scope="scope">-->
+                <!--<el-button-->
+                        <!--size="mini"-->
+                        <!--type="danger"-->
+                        <!--@click="handleDeleteSanlu( scope.row)">删除-->
+                <!--</el-button>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
+          <!--</el-table>-->
         </el-col>
 
       </el-row>
@@ -1329,7 +1330,7 @@ export default {
         caseHappenTime: '',
         caseHappenRegion: '',
         sceneProtect: '',
-        sceneProtectName: '',
+        sceneProtectName: '有',
         caseCategory: '',
         mainChargerUid: '',
         supporterUid: '',
@@ -1736,14 +1737,9 @@ export default {
         this.dialogPointContent = '提交三录'
         this.dialogPoint = true
       } else {
-        if (this.fileId.length===0){
-          this.$confirm('请选择三录数据!')
-                  .then(_ => {
-                  })
-                  .catch(_ => {});
-        } else{
           const data = {
-            list: this.fileId
+            list: [],
+            evidenceId: this.list.id
           }
           submitSanlu(data).then(response => {
             if (response.code === 200) {
@@ -1762,7 +1758,7 @@ export default {
               })
             }
           })
-        }
+
       }
 
 
