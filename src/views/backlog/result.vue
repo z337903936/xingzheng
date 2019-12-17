@@ -161,6 +161,18 @@
                                         :label="item.title"
                                         :value="item.title"/>
                             </el-select>
+                            <el-popover
+                                    placement="right"
+                                    width="500"
+                                    trigger="click">
+                                <el-table :data="usetypeList">
+                                    <el-table-column width="100" property="operatorName" label="操作员"></el-table-column>
+                                    <el-table-column width="100" property="useType" label="利用情况"></el-table-column>
+                                    <el-table-column width="120" property="evidenceNo" label="现勘号"></el-table-column>
+                                    <el-table-column width="140" property="createTime" label="填写时间"></el-table-column>
+                                </el-table>
+                                <el-button type="primary" slot="reference" plain>利用情况详情</el-button>
+                            </el-popover>
                         </el-form-item>
 
                     </el-col>
@@ -251,6 +263,7 @@
     import {fetchAdminMemberList} from '@/api/permissions'
     import {fetchList} from '@/api/dictionary'
     import waves from '@/directive/waves' // waves directive
+    import {usetypeList} from '@/api/material'
 
     export default {
         name: "materialResult",
@@ -335,7 +348,8 @@
                 emitProps:{
                     emitPath:false
                 },
-                material:{}
+                material:{},
+                usetypeList:null,
             }
         },
         created() {
@@ -352,7 +366,6 @@
             if (this.material.handlerUid) {
                 this.resultFrom.examUid =  this.material.handlerUid
             }
-
             this.resultFrom.usedType =  this.material.evidenceMaterial.usedType
             this.resultFrom.examOrg =  this.$store.getters.orgName
             const id = this.$route.params && this.$route.params.id
@@ -360,8 +373,19 @@
             if (this.isEdit) {
                 this.fetchData(id)
             }
+            this.getUseType();
         },
         methods:{
+            getUseType(){
+                if (this.resultDetail.evidence.id){
+                    const data={
+                        evidenceId:this.resultDetail.evidence.id
+                    }
+                    usetypeList(data).then(response=>{
+                        this.usetypeList = response.list
+                    })
+                }
+            },
             selectUpdate(val) {
                 this.$forceUpdate()
             },

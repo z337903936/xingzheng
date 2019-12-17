@@ -1028,7 +1028,20 @@
                   :label="item.title"
                   :value="item.title"/>
               </el-select>
+              <el-popover
+                      placement="right"
+                      width="500"
+                      trigger="click">
+                <el-table :data="usetypeList">
+                  <el-table-column width="100" property="operatorName" label="操作员"></el-table-column>
+                  <el-table-column width="100" property="useType" label="利用情况"></el-table-column>
+                  <el-table-column width="120" property="evidenceNo" label="现勘号"></el-table-column>
+                  <el-table-column width="140" property="createTime" label="填写时间"></el-table-column>
+                </el-table>
+                <el-button type="primary" slot="reference" plain>利用情况详情</el-button>
+              </el-popover>
             </el-form-item>
+
           </el-col>
         </el-row>
 
@@ -1136,6 +1149,7 @@
       </div>
     </el-dialog>
 
+
   </div>
 </template>
 
@@ -1147,6 +1161,7 @@ import {fetchList,userDictList} from '@/api/dictionary'
 import { fetchAdminMemberList } from '@/api/permissions'
 import Upload from '@/components/Upload/SingleImage3'
 import {parseTime} from '@/utils'
+import {usetypeList} from '@/api/material'
 
 export default {
   name: 'MenberDetail',
@@ -1166,6 +1181,7 @@ export default {
       }
     }
     return {
+      usetypeList:null,
       props: {
         multiple: true,
         emitPath:false
@@ -1596,6 +1612,7 @@ export default {
       const id = this.$route.params && this.$route.params.id;
       this.fetchData(id)
       this.list.id = id
+      this.getUseType();
 
     }else{
       this.list.mainChargerUid = this.$store.getters.id;
@@ -1704,6 +1721,16 @@ export default {
 
   },
   methods: {
+    getUseType(){
+      if (this.list.id){
+        const data={
+          evidenceId:this.list.id
+        }
+        usetypeList(data).then(response=>{
+          this.usetypeList = response.list
+        })
+      }
+    },
     submitSanlu() {
       if (this.list.id == null) {
         this.dialogPointContent = '提交三录'
@@ -2423,49 +2450,45 @@ export default {
 
     },
     addConcernedPersonListForm() {
-
-        if (valid) {
-          if (this.concernedPersonListForm.idType.constructor === Array) {
-            this.concernedPersonListForm.idType = this.concernedPersonListForm.idType.slice(-1)[0]
-          }
-          if (this.isEdit) {
-            this.concernedPersonListForm.evidenceId = this.list.id
-            createPerson(this.concernedPersonListForm).then(response => {
-              if (response.code === 200) {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success',
-                  showClose: true,
-                  duration: 2000
-                })
-                this.dialogConcernedPersonListForm = false
-                this.resetConcernedPersonListForm()
-                if (this.isEdit)
-                  this.submitForm()
-
-
-              } else {
-                this.$message({
-                  message: response.reason,
-                  type: 'success',
-                  showClose: true,
-                  duration: 2000
-                })
-              }
+      if (this.concernedPersonListForm.idType.constructor === Array) {
+        this.concernedPersonListForm.idType = this.concernedPersonListForm.idType.slice(-1)[0]
+      }
+      if (this.isEdit) {
+        this.concernedPersonListForm.evidenceId = this.list.id
+        createPerson(this.concernedPersonListForm).then(response => {
+          if (response.code === 200) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              showClose: true,
+              duration: 2000
             })
-          } else {
-            this.sex.map(data => {
-              if (data.id == this.concernedPersonListForm.sex) {
-                this.concernedPersonListForm.sexShow = data.title
-              }
-            })
-
-            this.list.concernedPersonList.push(this.concernedPersonListForm)
             this.dialogConcernedPersonListForm = false
             this.resetConcernedPersonListForm()
-          }
-        }
+            if (this.isEdit)
+              this.submitForm()
 
+
+          } else {
+            this.$message({
+              message: response.reason,
+              type: 'success',
+              showClose: true,
+              duration: 2000
+            })
+          }
+        })
+      } else {
+        this.sex.map(data => {
+          if (data.id == this.concernedPersonListForm.sex) {
+            this.concernedPersonListForm.sexShow = data.title
+          }
+        })
+
+        this.list.concernedPersonList.push(this.concernedPersonListForm)
+        this.dialogConcernedPersonListForm = false
+        this.resetConcernedPersonListForm()
+      }
 
 
     },

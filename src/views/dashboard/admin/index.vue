@@ -108,7 +108,6 @@ export default {
         monthEvidences:0,
         dayData:[],
         eviData:[],
-
         stealData:[],
       },
       list:''
@@ -151,6 +150,7 @@ export default {
         var dayData = []
         var eviData = []
         var stealData = []
+
         this.state.dayStatList.map(data=>{
           dayData.push(data.day);
           eviData.push(data.evidences)
@@ -160,6 +160,7 @@ export default {
         this.state.dayStealStatList.map(data=>{
           stealData.push(data.evidences)
         });
+        
         this.state.stealData = stealData
 
 

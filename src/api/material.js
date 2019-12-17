@@ -81,3 +81,13 @@ export function dnyMaterialIn(data) {
         data
     })
 }
+
+
+
+export function usetypeList(data) {
+    return request({
+        url: '/v1/cp/material_use_type/',
+        method: 'get',
+        params: data
+    })
+}
