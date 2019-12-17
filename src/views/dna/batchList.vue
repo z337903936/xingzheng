@@ -583,7 +583,7 @@
                 })
             },
             resultDisable(){
-                return this.batch.status === 1;
+                return this.batch.status === 1 || this.batch.status === -1;
             },
             gotoMaterialResult(row){
                 this.$router.push({ name:'materialResult',params:{id:row.id},query: { material:JSON.stringify(row)}})
