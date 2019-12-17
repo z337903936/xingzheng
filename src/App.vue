@@ -39,9 +39,10 @@
                     if (data.type === 'ANALYSIS_TASK') {
                         if (this.showNotifyA) {
                             this.$notify({
-                                title: '提示',
+                                title: '系统消息',
                                 message: '您有新的研判任务',
                                 duration: 0,
+                                type: 'success',
                                 onClose: function () {
                                     _this.showNotifyA = true;
                                 }
@@ -55,12 +56,13 @@
                     if (data.type === 'TODO_TASK') {
                         if (this.showNotify) {
                             this.$notify({
-                                title: '提示',
-                                message: '您有新的任务',
+                                title: '系统消息',
+                                message: '您有新的待办任务',
                                 duration: 0,
                                 onClose: function () {
                                     _this.showNotify = true;
-                                }
+                                },
+                                type: 'success'
                             });
                             this.showNotify = false;
                         }
