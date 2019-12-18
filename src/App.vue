@@ -19,18 +19,18 @@
         },
         created() {
             this.initWebSocket()
+            setInterval(() => {
+                this.websocketsend(JSON.stringify({type:'ping',time:(new Date()).valueOf()}));
+            }, 2000);
         },
         methods: {
             initWebSocket() { //初始化weosocket
 
                 this.websock = new WebSocket(this.url, getUID());
-
                 this.websock.onopen = this.websocketonopen;
                 this.websock.onmessage = this.websocketonmessage;
             },
             websocketonmessage(e) {
-
-
                 var data = JSON.parse(e.data);
                 console.log(data)
 
