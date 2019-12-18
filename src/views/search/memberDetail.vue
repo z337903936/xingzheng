@@ -11,6 +11,30 @@
       <el-divider>痕检信息</el-divider>
       <el-row :gutter="20">
         <el-col :span="12">
+          <el-form-item label="警情号" prop="instanceNo">
+            <el-input v-model="list.instanceNo"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="案件编号" prop="caseNo">
+            <el-input v-model="list.caseNo"/>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="现勘号" prop="thirdEvidenceNo">
+            <el-input v-model="list.thirdEvidenceNo"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="勘查号" prop="selfEvidenceNo" >
+            <el-input v-model="list.selfEvidenceNo" placeholder="系统自动生成" disabled/>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
           <el-form-item label="勘查开始" prop="examBeginTime">
             <el-date-picker
               v-model="list.examBeginTime"
@@ -95,12 +119,10 @@
           <el-form-item label="监控情况" prop="sceneProtect">
             <el-select v-model="list.hasCamera" placeholder="请选择" clearable center style="width: 100%">
               <el-option
-                label="有"
-                value="true"
-              /> <el-option
-                label="无"
-                value="false"
-              />
+                      v-for="item in hasCamera"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"/>
             </el-select>
           </el-form-item>
         </el-col>
@@ -371,30 +393,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="警情号" prop="instanceNo">
-            <el-input v-model="list.instanceNo"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="案件编号" prop="caseNo">
-            <el-input v-model="list.caseNo"/>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="现勘号" prop="thirdEvidenceNo">
-            <el-input v-model="list.thirdEvidenceNo"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="勘查号" prop="selfEvidenceNo" >
-            <el-input v-model="list.selfEvidenceNo" placeholder="系统自动生成" disabled/>
-          </el-form-item>
-        </el-col>
-      </el-row>
+
       <el-form-item label="作案过程" prop="crimeDetail">
         <el-input v-model="list.crimeDetail" type="textarea"/>
       </el-form-item>
@@ -614,7 +613,7 @@
       <el-divider>物证信息</el-divider>
       <el-form-item label-width="auto">
         <el-button type="primary" size="mini" @click="handleClickToAddMaterial">添加物证</el-button>
-        <el-button type="primary" size="mini" @click="submitTask">批量提交物证</el-button>
+        <el-button type="primary" size="mini" @click="submitTask">批量送检</el-button>
         <el-button type="primary" size="mini" @click="submitMaterialOutStock">批量借出物证</el-button>
         <el-button type="primary" size="mini" @click="submitMaterialinStock">批量存入物证库</el-button>
         <el-table
@@ -627,6 +626,44 @@
             v-model="taskId"
             type="selection"
             width="55"/>
+          <el-table-column
+                  prop="materialCategory" align="center"
+                  label="物证类别">
+            <template slot-scope="{row}">
+
+              <span>{{ row.materialCategory }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+                  prop="name" align="center"
+                  label="物证名称">
+            <template slot-scope="{row}">
+              <span>{{ row.name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+                  prop="stayPart" align="center"
+                  label="遗留部位">
+            <template slot-scope="{row}">
+              <span>{{ row.stayPart }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+                  prop="extractMethod" align="center"
+                  label="提取方法">
+            <template slot-scope="{row}">
+              <span>{{ row.extractMethod }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+                  prop="extractTime"
+                  label="提取日期" align="center"
+                  width="100px">
+            <template slot-scope="{row}">
+              <span v-if="row.extractTime !== ''">{{ row.extractTime*1000 | parseTime('{y}-{m}-{d}') }}</span>
+              <span v-else/>
+            </template>
+          </el-table-column>
           <el-table-column
             prop="materialNo"
             label="物证编码" align="center"
@@ -645,37 +682,7 @@
               <span>{{ row.thirdMaterialNo }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="materialCategory" align="center"
-            label="物证类别">
-            <template slot-scope="{row}">
 
-              <span>{{ row.materialCategory }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="extractTime"
-            label="提取日期" align="center"
-            width="100px">
-            <template slot-scope="{row}">
-              <span v-if="row.extractTime !== ''">{{ row.extractTime*1000 | parseTime('{y}-{m}-{d}') }}</span>
-              <span v-else/>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="extractMethod" align="center"
-            label="提取方法">
-            <template slot-scope="{row}">
-              <span>{{ row.extractMethod }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="extractUid" align="center"
-            label="提取人">
-            <template slot-scope="{row}">
-              <span>{{ row.extractName }}</span>
-            </template>
-          </el-table-column>
           <el-table-column
             prop="extractUid"
             label="图片" align="center"
@@ -1194,7 +1201,15 @@ export default {
       imageUrl: '',
       dialogPoint: false,
       dialogPointContent: '添加物证',
-      sceneProtectUidList: [
+      hasCamera: [
+        {
+          label: '无',
+          value: false
+        }, {
+          label: '有',
+          value: true,
+        }
+      ],  sceneProtectUidList: [
         {
           title: '无'
         }, {
@@ -2346,7 +2361,7 @@ export default {
       }
     },
     handleEditSuspectPersonListForm(index, row) {
-      this.suspectPersonList = Object.assign({}, row) // copy obj
+      this.suspectPersonListForm = Object.assign({}, row) // copy obj
       this.dialogSuspectPersonListFormIndex = index
       this.dialogSuspectPersonListFormMethod = 'edit'
       this.dialogSuspectPersonListForm = true
