@@ -33,9 +33,11 @@
           </el-row>
           <el-row>
             <el-col :span="18">
+              <el-form-item  label-width="100px" label="内容:" prop="content" required>
               <div class="editor-container">
                 <Tinymce ref="editor" :height="400" v-model="postForm.content"/>
               </div>
+              </el-form-item>
             </el-col>
             <el-col :span="18">
               <el-form-item style="margin-bottom: 40px;" label-width="100px" label="文章首图 560*345">
@@ -97,6 +99,17 @@
           callback()
         }
       }
+      const validateContentRequire = (rule, value, callback) => {
+        if (value === '') {
+          this.$message({
+            message: '请输入内容',
+            type: 'error'
+          })
+          callback(new Error('请输入内容'))
+        } else {
+          callback()
+        }
+      }
       return {
         postForm: Object.assign({}, defaultForm),
         loading: false,
@@ -105,7 +118,7 @@
         rules: {
           title: [{ validator: validateRequire }],
           categoryId: [{ validator: validateRequire }],
-          content: [{ validator: validateRequire }],
+          content: [{ validator: validateContentRequire }],
           headPic: [{ validator: validateRequire }],
         },
         tempRoute: {}
@@ -176,6 +189,13 @@
                     showClose: true,
                     duration: 1000
                   })
+                  this.$router.push({
+                    path: '/forum/index',
+                    query: {
+                      t: +new Date()
+                    }
+                  })
+                  this.$store.dispatch('delView', this.$route)
                 } else {
                   this.$message({
                     message: data.reason,
@@ -198,6 +218,13 @@
                     showClose: true,
                     duration: 1000
                   })
+                  this.$router.push({
+                    path: '/forum/index',
+                    query: {
+                      t: +new Date()
+                    }
+                  })
+                  this.$store.dispatch('delView', this.$route)
                 } else {
                   this.$message({
                     message: data.reason,

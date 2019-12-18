@@ -160,7 +160,7 @@ export default {
         this.state.dayStealStatList.map(data=>{
           stealData.push(data.evidences)
         });
-        
+
         this.state.stealData = stealData
 
 
