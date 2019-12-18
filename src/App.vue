@@ -45,7 +45,9 @@
                                 type: 'success',
                                 onClose: function () {
                                     _this.showNotifyA = true;
-                                }
+                                },
+                                position: 'top-left',
+
                             });
                             this.showNotifyA = false;
                         }
@@ -62,6 +64,7 @@
                                 onClose: function () {
                                     _this.showNotify = true;
                                 },
+                                position: 'top-left',
                                 type: 'success'
                             });
                             this.showNotify = false;
@@ -82,3 +85,10 @@
         }
     }
 </script>
+
+<style>
+    .el-notification{
+        padding: 10px 16px !important;
+        width: 246px !important;
+    }
+</style>

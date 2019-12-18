@@ -11,7 +11,7 @@
         >
             <el-table-column  type="expand" ref="expand">
                 <template slot-scope="{row}">
-                    <el-form label-position="left" inline class="table-expand" v-if="row.fromStep === '警情扭转'">
+                    <el-form label-position="left" inline class="table-expand" v-if="row.fromStep === '接警'">
                         <el-form-item label="报告人">
                             <span>{{ row.record.reporter }}</span>
                         </el-form-item>
@@ -253,10 +253,11 @@
 
             <el-table-column label="状态" align="center" width="100">
                 <template slot-scope="{row}">
-                    <span>{{ row.status | statusFilter }}</span>
+                    <span v-if="row.status === 1"><el-tag effect="dark" >未领取</el-tag></span>
+                    <span v-if="row.status === 2"><el-tag effect="dark" type="success">进行中</el-tag></span>
+                    <span v-if="row.status === -1"><el-tag effect="dark" type="info">已拒绝</el-tag></span>
                 </template>
             </el-table-column>
-
 
             <el-table-column label="操作" align="center" width="430" fixed="right" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">

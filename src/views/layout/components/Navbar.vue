@@ -8,7 +8,7 @@
               fit="fill"></el-image>
       {{ this.$store.getters.webName }}
     </div>
-    <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
+
 
     <!--<breadcrumb class="breadcrumb-container"/>-->
 
@@ -30,7 +30,7 @@
           <!--<theme-picker class="theme-switch right-menu-item"/>-->
         <!--</el-tooltip>-->
       </template>
-
+      <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
           <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">

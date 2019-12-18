@@ -202,7 +202,9 @@ export default {
                     title: '系统消息',
                     message: '您有新的待办任务',
                     duration: 0,
-                    type: 'success'
+                    type: 'success',
+                    position: 'top-left',
+
                   });
                 }
               })
@@ -252,7 +254,10 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
   /* 修复input 背景不协调 和光标变色 */
   /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
+.el-notification{
+  padding: 10px 16px !important;
+  width: 246px !important;
+}
   $bg: #283443;
   $light_gray: #eee;
   $cursor: #fff;
