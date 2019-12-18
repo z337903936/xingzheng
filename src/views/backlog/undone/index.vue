@@ -274,7 +274,12 @@
                     </router-link>
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
                                @click="handleAcceptTask(row)"
-                               v-if="row.status===1 && (row.stepName === '法医现勘' ||  row.stepName === '警情扭转') ">
+                               v-if="row.status===1 && row.stepName === '法医现勘'">
+                        接收任务
+                    </el-button>
+                    <el-button type="primary" size="small" icon="el-icon-document-checked"
+                               @click="handleTaskAlarmAction(row)"
+                               v-if="row.status===1 &&  row.stepName === '警情扭转' ">
                         接收任务
                     </el-button>
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
@@ -315,7 +320,7 @@
                         <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
                     </router-link>
                     <router-link :to="'/alarm/edit-alarm/'+row.record.id" v-if="row.stepName === '警情扭转'">
-                        <el-button type="success" size="mini" icon="el-icon-zoom-in" style="width: 100px">查看编辑</el-button>
+                        <el-button type="success" size="mini" icon="el-icon-zoom-in" style="width: 100px">编辑</el-button>
                     </router-link>
                 </template>
             </el-table-column>
@@ -909,6 +914,11 @@
                 this.acceptTaskFrom.stepId = task.id
 
             },
+            handleTaskAlarmAction(task) {
+                this.acceptTaskFrom.stepId = task.id
+                this.acceptTask();
+
+            },
             actionTask(type) {
                 let data = this.acceptTaskFrom;
                 data.agree = type;
@@ -947,7 +957,7 @@
                             showClose: true,
                             duration: 2000
                         })
-                        this.dialogFormAction = false;
+                        this.dialogFormAccept = false;
                         this.getList();
 
                     } else {
