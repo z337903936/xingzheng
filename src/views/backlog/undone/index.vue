@@ -256,9 +256,9 @@
                     <span v-if="row.status === 1"><el-tag effect="dark" >未领取</el-tag></span>
                     <span v-if="row.status === 2"><el-tag effect="dark" type="success">进行中</el-tag></span>
                     <span v-if="row.status === -1"><el-tag effect="dark" type="info">已拒绝</el-tag></span>
-                    <span>
+                    <div>
                         {{ row.reason }}
-                    </span>
+                    </div>
                 </template>
             </el-table-column>
 
