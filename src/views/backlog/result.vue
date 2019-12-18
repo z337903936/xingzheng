@@ -372,17 +372,21 @@
             this.resultFrom.id = id;
             if (this.isEdit) {
                 this.fetchData(id)
+
             }
             this.getUseType();
         },
         methods:{
             getUseType(){
-                if (this.resultDetail.evidence.id){
+                if (this.material.evidenceMaterial){
                     const data={
-                        evidenceId:this.resultDetail.evidence.id
+                        materialId:this.material.evidenceMaterial.id
                     }
                     usetypeList(data).then(response=>{
-                        this.usetypeList = response.list
+                        this.usetypeList = response.list.map(item=>{
+                            item.createTime = parseTime(createTime,'{y}-{m}-{d} {h}:{i}:{s}')
+                            return item;
+                        })
                     })
                 }
             },

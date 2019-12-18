@@ -1628,7 +1628,7 @@ export default {
       const id = this.$route.params && this.$route.params.id;
       this.fetchData(id)
       this.list.id = id
-      this.getUseType();
+      // this.getUseType();
 
     }else{
       this.list.mainChargerUid = this.$store.getters.id;
@@ -1738,12 +1738,15 @@ export default {
   },
   methods: {
     getUseType(){
-      if (this.list.id){
+      if (this.isEdit){
         const data={
-          evidenceId:this.list.id
+          materialId:this.materialListForm.id
         }
         usetypeList(data).then(response=>{
-          this.usetypeList = response.list
+          this.usetypeList = response.list.map(item=>{
+            item.createTime = parseTime(createTime,'{y}-{m}-{d} {h}:{i}:{s}')
+            return item;
+          })
         })
       }
     },
@@ -1932,13 +1935,15 @@ export default {
 
     },
     handleCurrentChange(row){
+      this.materialListForm = row;
       if (row.status){
+        this.getUseType();
         this.dialogMaterialListFormMethod = 'edit';
       }else{
         this.dialogMaterialListFormMethod = 'add';
       }
 
-      this.materialListForm = row;
+
 
     },
      tableRowClassName ({row, rowIndex}) {
@@ -2714,7 +2719,9 @@ export default {
       row.extractTime = row.extractTime * 1000
       this.materialListForm = Object.assign({}, row) // copy obj
       this.dialogMaterialListFormMethod = 'edit'
+      this.getUseType()
       this.dialogMaterialListForm = true
+
     },
     updateMaterialListForm() {
       // if (this.isEdit) {
