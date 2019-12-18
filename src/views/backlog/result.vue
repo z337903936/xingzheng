@@ -154,7 +154,7 @@
                     </div>
                     <el-col :span="12">
                         <el-form-item label="利用情况" prop="useType">
-                            <el-select v-model="resultFrom.usedType" clearable placeholder="请选择"  style="width: 100%">
+                            <el-select v-model="resultFrom.usedType" clearable placeholder="请选择"  style="width: 100%" @change="selectUpdate">
                                 <el-option
                                         v-for="item in usedType"
                                         :key="item.title"
@@ -358,8 +358,9 @@
                 this.materialTypeList = this.processData(response.list)
             });
             this.material = JSON.parse(this.$route.query.material);
-            console.log(this.material);
+
             this.resultDetail = this.material;
+            this.resultDetail.evidenceMaterial.extractTime = parseTime(this.resultDetail.evidenceMaterial.extractTime,'{y}-{m}-{d} {h}:{i}:{s}')
             this.stepName =  this.resultDetail.stepName
             this.resultFrom.materialId =  this.material.evidenceMaterial.id
             this.resultFrom.batchId =  this.material.batchId
@@ -368,15 +369,16 @@
             }
             this.resultFrom.usedType =  this.material.evidenceMaterial.usedType
             this.resultFrom.examOrg =  this.$store.getters.orgName
+
             const id = this.$route.params && this.$route.params.id
             this.resultFrom.id = id;
             if (this.isEdit) {
                 this.fetchData(id)
-
             }
             this.getUseType();
         },
         methods:{
+
             getUseType(){
                 if (this.material.evidenceMaterial){
                     const data={

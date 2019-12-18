@@ -256,6 +256,9 @@
                     <span v-if="row.status === 1"><el-tag effect="dark" >未领取</el-tag></span>
                     <span v-if="row.status === 2"><el-tag effect="dark" type="success">进行中</el-tag></span>
                     <span v-if="row.status === -1"><el-tag effect="dark" type="info">已拒绝</el-tag></span>
+                    <span>
+                        {{ row.reason }}
+                    </span>
                 </template>
             </el-table-column>
 
@@ -911,6 +914,7 @@
             },
             handleTaskAction(task) {
                 this.dialogFormAction = true;
+                this.acceptTaskFrom.requireOrg = this.$store.getters.name;
                 this.acceptTaskFrom.stepId = task.id
 
             },
@@ -944,6 +948,16 @@
                         })
                     }
                 })
+            },
+            restRequireTime(){
+                acceptTaskFrom={
+                    stepId: '',
+                        recordNo: undefined,
+                        requireOrg: '',
+                        requireTime: '',
+                        reason: '',
+                        agree: undefined,
+                }
             },
             acceptTask() {
                 let data = this.acceptTaskFrom;

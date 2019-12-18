@@ -609,6 +609,13 @@
                                         showClose: true,
                                         duration: 1000
                                     })
+                                    this.$store.dispatch('delView', this.$route)
+                                    this.$router.push({
+                                        path: '/alarm/index',
+                                        query: {
+                                            t: +new Date()
+                                        }
+                                    })
 
                                 } else {
                                     this.$message({
@@ -632,13 +639,14 @@
                                         showClose: true,
                                         duration: 1000
                                     })
+                                    this.$store.dispatch('delView', this.$route)
                                     this.$router.push({
                                         path: '/alarm/index',
                                         query: {
                                             t: +new Date()
                                         }
                                     })
-                                    this.$store.dispatch('delView', this.$route)
+
                                 } else {
                                     this.$message({
                                         message: data.reason,

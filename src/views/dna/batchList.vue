@@ -14,7 +14,7 @@
             </el-row>
             <el-row :gutter="20" class="mb10">
                 <el-col :span="12">
-                    发案时间:{{ heardDetail.evidence ?heardDetail.evidence.caseHappenTime: '' }}
+                    发案时间:{{ heardDetail.evidence ?heardDetail.evidence.caseBeginTime: '' }}
                 </el-col>
                 <el-col :span="12">
                     案件类别:{{ heardDetail.evidence ?heardDetail.evidence.caseCategory : ''}}
@@ -554,7 +554,8 @@
             this.getUserList()
 
             this.heardDetail = this.batch;
-            this.heardDetail.evidence.caseHappenTime = parseTime(this.heardDetail.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}');
+            console.log(this.batch);
+            this.heardDetail.evidence.caseBeginTime = parseTime(this.heardDetail.evidence.caseBeginTime,'{y}-{m}-{d} {h}:{i}:{s}');
             this.taskFrom.evidenceId = this.heardDetail.evidence.id;
 
             this.search('检材类型').then(response=>{
