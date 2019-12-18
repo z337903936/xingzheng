@@ -26,9 +26,9 @@ export default {
     // if (!this.roles.includes('admin')) {
     //   this.currentRole = 'editorDashboard'
     // }
-    if (!this.roles.includes('admin') && !this.roles.includes('管理员') && !this.roles.includes('超级管理员')) {
-      this.currentRole = 'editorDashboard'
-    }
+    // if (!this.roles.includes('admin') && !this.roles.includes('管理员') && !this.roles.includes('超级管理员')) {
+    //   this.currentRole = 'editorDashboard'
+    // }
   }
 }
 </script>

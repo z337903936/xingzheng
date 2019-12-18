@@ -140,7 +140,7 @@
             </el-table-column>
             <el-table-column label="技术员" align="center" width="150">
                 <template slot-scope="{row}">
-                    <span>{{ row.techName }}</span>
+                    <span>{{ row.techName.replace(/,/g," ") }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="状态" align="center" width="150">
