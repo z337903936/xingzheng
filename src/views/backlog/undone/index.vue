@@ -313,8 +313,8 @@
                     <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘'">
                         <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
                     </router-link>
-                    <router-link :to="'/alarm/edit-alarm/'+row.id" v-if="row.stepName === '警情扭转'">
-                        <el-button type="success" size="mini" icon="el-icon-zoom-in">编辑查看</el-button>
+                    <router-link :to="'/alarm/edit-alarm/'+row.record.id" v-if="row.stepName === '警情扭转'">
+                        <el-button type="success" size="mini" icon="el-icon-zoom-in" style="width: 100px">查看编辑</el-button>
                     </router-link>
                 </template>
             </el-table-column>

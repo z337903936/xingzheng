@@ -69,11 +69,14 @@
                     <el-button v-waves type="primary" size="mini" style="width: 100px" @click="gotobatchList(row)"  icon="el-icon-tickets"
                                v-if="row.stepName === 'DNA送检' && row.stepName === '指纹送检' && row.stepName === '理化送检' && row.stepName === '电子物证送检'">
                         物证详情</el-button>
-                    <router-link :to="'/search/update-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘' || row.stepName === '警情扭转' ">
+                    <router-link :to="'/search/update-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘'">
                         <el-button type="primary" size="mini" icon="el-icon-edit" >编辑</el-button>
                     </router-link>
-                    <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘' || row.stepName === '警情扭转'">
+                    <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘'">
                         <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
+                    </router-link>
+                    <router-link :to="'/alarm/edit-alarm/'+row.record.id" v-if="row.stepName === '警情扭转'">
+                        <el-button type="success" size="mini" icon="el-icon-zoom-in" style="width: 100px">查看编辑</el-button>
                     </router-link>
                 </template>
             </el-table-column>
