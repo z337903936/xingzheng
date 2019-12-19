@@ -147,7 +147,7 @@
                                         v-model="postForm.footprint"
                                         :filter-method="filterSearch"
                                         :show-all-levels="false"
-                                        clearable clearable
+                                        clearable
                                         :props="emitProps"
                                         filterable
                                         style="width: 100%"
@@ -407,6 +407,9 @@
                     if (this.postForm.escapeType){
                         this.postForm.escapeType = JSON.parse(this.postForm.escapeType)
                     }
+                    if (this.postForm.footprint){
+                        this.postForm.footprint = JSON.parse(this.postForm.footprint)
+                    }
 
 
                     if (this.postForm.caseHappenRegion){
@@ -467,6 +470,12 @@
                 if (data.caseCategory) {
                     if (data.caseCategory.length > 0) {
                         data.caseCategory = JSON.stringify(data.caseCategory)
+                    }
+                }
+
+                 if (data.footprint) {
+                    if (data.footprint.length > 0) {
+                        data.footprint = JSON.stringify(data.footprint)
                     }
                 }
 

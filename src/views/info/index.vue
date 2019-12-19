@@ -414,28 +414,36 @@
                 filterEvidence(this.listQuery).then(response => {
                     this.list = response.list;
                     this.list.map(res=>{
+                        console.log(res.crimeTime);
                         if (res.crimeTime){
                             if (res.crimeTime.startsWith('[',0)){
                                 if (JSON.parse(res.crimeTime).constructor === Array){
                                     res.crimeTime = JSON.parse(res.crimeTime).join(' ')
                                 }
+                            }else{
+                                res.crimeTime = res.crimeTime.replace("\"","").replace("\"","");
                             }
-
                         }
                         if (res.sceneType){
-                            if (JSON.parse(res.sceneType).constructor === Array){
-                                res.sceneType = JSON.parse(res.sceneType).join(' ')
+                            if (res.sceneType.startsWith('[',0)){
+                                if (JSON.parse(res.sceneType).constructor === Array){
+                                    res.sceneType = JSON.parse(res.sceneType).join(' ')
+                                }
+                            }else{
+                                res.sceneType = res.sceneType.replace("\"","").replace("\"","");
                             }
                         }
                         if (res.invadeType){
                             if (JSON.parse(res.invadeType).constructor === Array){
                                 res.invadeType = JSON.parse(res.invadeType).join(' ')
                             }
+                            res.invadeType = res.invadeType.replace("\"","").replace("\"","");
                         }
                         if (res.escapeType){
                             if (JSON.parse(res.escapeType).constructor === Array){
                                 res.escapeType = JSON.parse(res.escapeType).join(' ')
                             }
+                            res.escapeType = res.escapeType.replace("\"","").replace("\"","");
                         }
                         return res;
                     })

@@ -19,9 +19,7 @@
         },
         created() {
             this.initWebSocket()
-            setInterval(() => {
-                this.websocketsend(JSON.stringify({type:'ping',time:(new Date()).valueOf()}));
-            }, 2000);
+
         },
         methods: {
             initWebSocket() { //初始化weosocket
@@ -29,6 +27,8 @@
                 this.websock = new WebSocket(this.url, getUID());
                 this.websock.onopen = this.websocketonopen;
                 this.websock.onmessage = this.websocketonmessage;
+                this.websock.onerror = this.websocketonerror;
+                this.websock.onclose = this.websocketclose;
             },
             websocketonmessage(e) {
                 var data = JSON.parse(e.data);
@@ -76,11 +76,19 @@
             websocketonopen() { //连接建立之后执行send方法发送数据
                 // var test = {'X-AUTH-TOKEN-UID':getUID()}
                 // this.websocketsend(JSON.stringify(test))
-
+                setInterval(() => {
+                    this.websocketsend(JSON.stringify({type:'ping',time:(new Date()).valueOf()}));
+                }, 3000);
             },
             websocketsend(Data) {//数据发送
                 this.websock.send(Data)
             },
+            websocketonerror(){//连接建立失败重连
+                this.initWebSocket()
+            },
+            websocketclose(e){  //关闭重连
+                this.initWebSocket()
+            }
 
         }
     }

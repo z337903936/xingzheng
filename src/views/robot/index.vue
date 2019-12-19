@@ -31,9 +31,9 @@
                     <el-button v-waves type="primary"  icon="el-icon-edit" style="float: right;margin-right: 20px">创建任务</el-button>
                 </router-link>
 
-                <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
-                <!--导出-->
-                <!--</el-button>-->
+                <el-button v-waves type="primary" icon="el-icon-download" @click="">
+                导出
+                </el-button>
             </div>
         </div>
 
@@ -83,7 +83,11 @@
 
                 </template>
             </el-table-column>
-
+            <el-table-column label="足迹" align="center" width="150">
+                <template slot-scope="{row}">
+                    <span>{{ row.footprint }}</span>
+                </template>
+            </el-table-column>
             <el-table-column label="勘查时间" width="300" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
@@ -103,6 +107,7 @@
                     <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
+
 
             <el-table-column label="任务状态" width="110" align="center">
                 <template slot-scope="{row}">
@@ -323,6 +328,11 @@
                         if (res.caseCategory){
                             if (JSON.parse(res.caseCategory).constructor === Array){
                                 res.caseCategory = JSON.parse(res.caseCategory).join(' ')
+                            }
+                        }
+                        if (res.footprint){
+                            if (JSON.parse(res.footprint).constructor === Array){
+                                res.footprint = JSON.parse(res.footprint).join(' ')
                             }
                         }
                         return res;

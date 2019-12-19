@@ -110,7 +110,7 @@ export default {
         eviData:[],
         stealData:[],
       },
-      list:''
+      list:[]
     }
   },
   created() {
