@@ -26,6 +26,11 @@
                     <span>{{ row.createName  }}</span>
                 </template>
             </el-table-column>
+            <el-table-column label="申请时间"  width="200" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.applyTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')  }}</span>
+                </template>
+            </el-table-column>
 
             <el-table-column label="任务状态" width="110" align="center">
                 <template slot-scope="{row}">

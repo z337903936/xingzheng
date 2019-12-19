@@ -441,6 +441,7 @@
     import {writeResult} from '@/api/backlog'
     import {fetchList,userDictList} from '@/api/dictionary'
     import {submitMaterialinStock} from '@/api/search'
+
     export default {
         name: 'materialBatch',
         directives: {waves},
@@ -587,8 +588,8 @@
                 return this.batch.status === 1 || this.batch.status === -1;
             },
             gotoMaterialResult(row){
-                row.handlerUid = this.batch.handlerUid;
-                this.$router.push({ name:'materialResult',params:{id:row.id},query: { material:JSON.stringify(row)}})
+                // row.handlerUid = this.batch.handlerUid;
+                this.$router.push({ name:'materialResult',params:{id:row.id},query: {handlerUid:this.batch.handlerUid, batchId:this.curId}})
             },
             submitPush(){
                 batchPush({

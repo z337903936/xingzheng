@@ -244,11 +244,16 @@
                     </el-col>
 
                 </el-row>
-                <el-form-item style="margin-bottom: 40px;text-align: center;" label-width="100px">
-                    <el-button  style="width: 200px" type="primary"
-                               @click="submitForm">保存
+                <div style="text-align: center">
+                    <el-button  style="width: 150px" type="primary"
+                                @click="submitForm">保存
                     </el-button>
-                </el-form-item>
+                    <el-button  style="width:150px" type="primary"
+                                @click="gotoNextMaterialResult">下一个物证
+                    </el-button>
+                </div>
+
+
 
             </div>
 
@@ -264,6 +269,7 @@
     import {fetchList} from '@/api/dictionary'
     import waves from '@/directive/waves' // waves directive
     import {usetypeList} from '@/api/material'
+    import {  batchMaterialList,batchPush } from '@/api/common'
 
     export default {
         name: "materialResult",
@@ -350,6 +356,17 @@
                 },
                 material:{},
                 usetypeList:null,
+                batchId:null,
+                listQuery: {
+                    page: 0,
+                    batchId: undefined,
+                },
+                list:[],
+                next:{
+                    id:undefined,
+                    handlerUid:undefined,
+                    batchId:undefined,
+                },
             }
         },
         created() {
@@ -357,28 +374,64 @@
             this.search('检材类型').then(response=>{
                 this.materialTypeList = this.processData(response.list)
             });
-            this.material = JSON.parse(this.$route.query.material);
+            const id = this.$route.params && this.$route.params.id
+            this.batchId = this.$route.query.batchId;
+            this.resultFrom.examUid = this.$route.query.handlerUid;
+            this.resultFrom.id = id;
 
-            this.resultDetail = this.material;
-            this.resultDetail.evidenceMaterial.extractTime = parseTime(this.resultDetail.evidenceMaterial.extractTime,'{y}-{m}-{d} {h}:{i}:{s}')
-            this.stepName =  this.resultDetail.stepName
-            this.resultFrom.materialId =  this.material.evidenceMaterial.id
-            this.resultFrom.batchId =  this.material.batchId
-            if (this.material.handlerUid) {
-                this.resultFrom.examUid =  this.material.handlerUid
-            }
-            this.resultFrom.usedType =  this.material.evidenceMaterial.usedType
+            this.getList(this.batchId);
+            // this.material = JSON.parse(this.$route.query.material);
+            // console.log(this.material);
+            this.next.batchId = this.batchId;
+            this.next.handlerUid = this.resultFrom.examUid;
+
+
+
+
+
             this.resultFrom.examOrg =  this.$store.getters.orgName
 
-            const id = this.$route.params && this.$route.params.id
-            this.resultFrom.id = id;
+
             if (this.isEdit) {
                 this.fetchData(id)
             }
             this.getUseType();
         },
         methods:{
+            gotoNextMaterialResult(){
+                // row.handlerUid = this.batch.handlerUid;
+                this.$router.push({ name:'materialResult',params:{id:this.next.id},query: {handlerUid:this.next.handlerUid, batchId:this.next.batchId}})
+            },
+            getList(id) {
+                this.listQuery.batchId = id
+                let  next = false;
+                batchMaterialList(this.listQuery).then(response => {
+                    this.list = response.list;
 
+                    this.list.map(item=>{
+                        console.log(Number(this.resultFrom.id) === item.id)
+                        if (item.id === Number(this.resultFrom.id)){
+                            this.material = item;
+                            next = true;
+                        }
+                        if (next){
+                            this.next.id = item.id;
+                            next=false;
+                        }
+                    })
+
+                    this.resultDetail = this.material;
+                    this.resultDetail.evidenceMaterial.extractTime = parseTime(this.resultDetail.evidenceMaterial.extractTime,'{y}-{m}-{d} {h}:{i}:{s}')
+                    this.stepName =  this.resultDetail.stepName
+                    this.resultFrom.materialId =  this.material.evidenceMaterial.id
+                    this.resultFrom.batchId =  this.material.batchId
+
+                    this.resultFrom.usedType =  this.material.evidenceMaterial.usedType
+
+                })
+
+
+            },
             getUseType(){
                 if (this.material.evidenceMaterial){
                     const data={

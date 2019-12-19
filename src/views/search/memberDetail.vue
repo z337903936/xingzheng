@@ -2636,7 +2636,11 @@ export default {
       }
 
       if (data.extractTime.toString().length > 10) { data.extractTime = parseInt(data.extractTime / 1000) }
-      createMaterial(data).then(response => {
+      const  sendData={
+        evidenceId:this.materialListForm.evidenceId,
+        materialList:[data]
+      }
+      createMaterial(sendData).then(response => {
         if (response.code === 200) {
           this.$message({
             message: '操作成功',
@@ -2644,6 +2648,7 @@ export default {
             showClose: true,
             duration: 2000
           })
+          response = response.list[0]
           this.materialListForm.materialNo = response.materialNo;
           this.materialListForm.status = 1;
           this.materialListForm.id = response.id
@@ -2652,7 +2657,7 @@ export default {
           this.$set(this.materialPhotoList,this.materialListForm.index,this.materialListForm);
           index++
           if (this.materialPhotoList[index]) {
-            console.log(index)
+
               this.materialListForm =  this.materialPhotoList[index]
               this.$refs.materialPhotoList.setCurrentRow(this.$refs.materialPhotoList.data[index]);
           }
@@ -2668,60 +2673,70 @@ export default {
       })
     },
     addMultipleMaterialListForm(){
+      var sendData = {
+        evidenceId:this.list.id,
+        materialList:[],
+      }
+      var arrayPush=[]
       this.materialPhotoList.map(data=>{
-
         if (data.materialCategory.constructor === Array) {
           data.materialCategory = data.materialCategoryShow
         }
         if (data.extractTime.toString().length > 10) { data.extractTime = parseInt(data.extractTime / 1000) }
+        if (data.status !== 1){
+          arrayPush.push(data)
+        }
         if (data.status === 1){
-          updateMaterial(data).then(response => {
-            if (response.code === 200) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                showClose: true,
-                duration: 2000
-              })
-              // if (data.extractTime.toString().length === 10) { data.extractTime = data.extractTime *1000 }
-              // this.$set(this.materialPhotoList,data.index,data);
-            } else {
-              this.$message({
-                message: response.reason,
-                type: 'success',
-                showClose: true,
-                duration: 2000
-              })
-            }
-          })
+          // updateMaterial(data).then(response => {
+          //   if (response.code === 200) {
+          //     this.$message({
+          //       message: '操作成功',
+          //       type: 'success',
+          //       showClose: true,
+          //       duration: 2000
+          //     })
+          //     // if (data.extractTime.toString().length === 10) { data.extractTime = data.extractTime *1000 }
+          //     // this.$set(this.materialPhotoList,data.index,data);
+          //   } else {
+          //     this.$message({
+          //       message: response.reason,
+          //       type: 'success',
+          //       showClose: true,
+          //       duration: 2000
+          //     })
+          //   }
+          // })
         } else{
-          createMaterial(data).then(response => {
-            if (response.code === 200) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                showClose: true,
-                duration: 2000
-              });
-              data.materialNo = response.materialNo;
-              data.status = 1;
-              data.id = response.id;
-              if (data.extractTime.toString().length === 10) { data.extractTime = data.extractTime *1000 }
-              this.$set(this.materialPhotoList,data.index,data);
-            } else {
-              this.$message({
-                message: response.reason,
-                type: 'success',
-                showClose: true,
-                duration: 2000
-              })
-            }
+        }
+      })
+      sendData.materialList = arrayPush;
+      createMaterial(sendData).then(response => {
+        if (response.code === 200) {
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            showClose: true,
+            duration: 2000
+          });
+          if (this.isEdit)
+            this.submitForm();
+          this.fetchData(this.list.id);
+          this.dialogMaterialListForm = false
+
+          // data.materialNo = response.materialNo;
+          // data.status = 1;
+          // data.id = response.id;
+          // if (data.extractTime.toString().length === 10) { data.extractTime = data.extractTime *1000 }
+          // this.$set(this.materialPhotoList,data.index,data);
+        } else {
+          this.$message({
+            message: response.reason,
+            type: 'success',
+            showClose: true,
+            duration: 2000
           })
         }
-
       })
-
-
 
     },
     handleEditMaterialListForm(row) {

@@ -40,7 +40,7 @@
                         if (this.showNotifyA) {
                             this.$notify({
                                 title: '系统消息',
-                                message: '您有新的研判任务',
+                                message: '您有新的串并结果',
                                 duration: 0,
                                 type: 'success',
                                 onClose: function () {

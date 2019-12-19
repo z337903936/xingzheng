@@ -31,9 +31,7 @@
                     <el-button v-waves type="primary"  icon="el-icon-edit" style="float: right;margin-right: 20px">创建任务</el-button>
                 </router-link>
 
-                <el-button v-waves type="primary" icon="el-icon-download" @click="">
-                导出
-                </el-button>
+
             </div>
         </div>
 

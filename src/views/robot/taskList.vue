@@ -133,8 +133,11 @@
             <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <router-link :to="'/robot/taskResult/'+row.id">
-                        <el-button type="success" size="mini" icon=""  style="width: 100px">查看结果</el-button>
+                        <el-button type="primary" size="mini" icon=""  style="width: 100px">查看结果</el-button>
                     </router-link>
+                    <el-button type="success" size="mini" icon="el-icon-download" @click="" style="width: 100px">
+                        导出
+                    </el-button>
                 </template>
             </el-table-column>
 

@@ -12,42 +12,42 @@
             >
                 <el-table-column label="勘查号"  align="center" width="120">
                     <template slot-scope="{row}">
-                        <span>{{ row.selfEvidenceNo }}</span>
+                        <span>{{ row.evidence.selfEvidenceNo }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="发案日期"  align="center" width="100">
                     <template slot-scope="{row}">
-                        <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d}') }}</span>
+                        <span>{{ row.evidence.examBeginTime | parseTime('{y}-{m}-{d}') }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="发案地址" align="center">
                     <template slot-scope="{row}">
-                        <span>{{ row.caseAddress }}</span>
+                        <span>{{ row.evidence.caseAddress }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="案件性质" align="center">
                     <template slot-scope="{row}">
-                        <span>{{ row.caseCategory }}</span>
+                        <span>{{ row.evidence.caseCategory }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="发案区划" align="center">
                     <template slot-scope="{row}">
-                        <span>{{ row.caseHappenRegion }}</span>
+                        <span>{{ row.evidence.caseHappenRegion }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="侵入方式" align="center">
                     <template slot-scope="{row}">
-                        <span>{{ row.invadeType }}</span>
+                        <span>{{ row.evidence.invadeType }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="作案工具" align="center">
                     <template slot-scope="{row}">
-                        <span>{{ row.crimeTools }}</span>
+                        <span>{{ row.evidence.crimeTools }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="足迹" align="center">
                     <template slot-scope="{row}">
-                        <span>{{ row.footprint }}</span>
+                        <span>{{ row.evidence.footprint }}</span>
                     </template>
                 </el-table-column>
 
