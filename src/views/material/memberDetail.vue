@@ -289,7 +289,7 @@
                         this.postForm.transferTime =  data.transferTime*1000;
                     else if (this.postForm.transferTime === 0)
                         this.postForm.transferTime = '';
-                    
+
                 }).catch(err => {
                     console.log(err)
                 })
@@ -340,13 +340,14 @@
                                         showClose: true,
                                         duration: 1000
                                     })
+                                    this.$store.dispatch('delView', this.$route)
                                     this.$router.push({
                                         path: '/material/index',
                                         query: {
                                             t: +new Date()
                                         }
                                     })
-                                    this.$store.dispatch('delView', this.$route)
+
                                 } else {
                                     this.$message({
                                         message: data.reason,

@@ -360,13 +360,14 @@
                                         showClose: true,
                                         duration: 1000
                                     })
+                                    this.$store.dispatch('delView', this.$route)
                                     this.$router.push({
                                         path: '/dna/index',
                                         query: {
                                             t: +new Date()
                                         }
                                     })
-                                    this.$store.dispatch('delView', this.$route)
+
                                 } else {
                                     this.$message({
                                         message: data.reason,

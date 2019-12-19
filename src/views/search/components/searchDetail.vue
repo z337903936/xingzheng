@@ -292,7 +292,7 @@
                     prop="extractTime"
                     label="提取日期">
                 <template slot-scope="{row}">
-                    <span>{{ row.extractTime }}</span>
+                    <span>{{ row.extractTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -326,6 +326,52 @@
                 type: Object,
                 default: {}
             }
+        },
+        watch:{
+            'list': {
+                handler(newData, oldData) {
+                    if (this.list.crimeTime){
+                        if (this.list.crimeTime.startsWith('[',0)){
+                            if (JSON.parse(this.list.crimeTime).constructor === Array){
+                                this.list.crimeTime = JSON.parse(this.list.crimeTime).join(' ')
+                            }
+                        }else{
+                            this.list.crimeTime = this.list.crimeTime.replace("\"","").replace("\"","");
+                        }
+                    }
+
+                    if (this.list.sceneType){
+                        if (this.list.sceneType.startsWith('[',0)){
+                            if (JSON.parse(this.list.sceneType).constructor === Array){
+                                this.list.sceneType = JSON.parse(this.list.sceneType).join(' ')
+                            }
+                        }else{
+
+                            this.list.sceneType = this.list.sceneType.replace("\"","").replace("\"","");
+                        }
+                    }
+                    if (this.list.invadeType){
+                        if (this.list.invadeType.startsWith('[',0)){
+                            if (JSON.parse(this.list.invadeType).constructor === Array){
+                                this.list.invadeType = JSON.parse(this.list.invadeType).join(' ')
+                            }
+                        }
+
+                        this.list.invadeType = this.list.invadeType.replace("\"","").replace("\"","");
+                    }
+                    if (this.list.escapeType){
+                        if (this.list.escapeType.startsWith('[',0)){
+                            if (JSON.parse(this.list.escapeType).constructor === Array){
+                                this.list.escapeType = JSON.parse(this.list.escapeType).join(' ')
+                            }
+                        }
+
+                        this.list.escapeType = this.list.escapeType.replace("\"","").replace("\"","");
+                    }
+                },
+                deep: true,
+                immediate: true
+            },
         },
         data(){
             return{
@@ -461,6 +507,10 @@
                 })
                 this.list.crimeTime = text.join(',');
             }
+
+
+
+
         },
         methods: {
 

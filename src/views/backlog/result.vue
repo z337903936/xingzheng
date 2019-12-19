@@ -345,6 +345,7 @@
                     needTransferDocument: '',
                     needPutInStock: '',
                     materialDetail: '',
+                    id:undefined,
                 },
                 resultDetail:{},
                 userList: [],
@@ -362,6 +363,7 @@
                     batchId: undefined,
                 },
                 list:[],
+                // next:undefined,
                 next:{
                     id:undefined,
                     handlerUid:undefined,
@@ -378,19 +380,15 @@
             this.batchId = this.$route.query.batchId;
             this.resultFrom.examUid = this.$route.query.handlerUid;
             this.resultFrom.id = id;
-
             this.getList(this.batchId);
             // this.material = JSON.parse(this.$route.query.material);
             // console.log(this.material);
-            this.next.batchId = this.batchId;
-            this.next.handlerUid = this.resultFrom.examUid;
-
-
-
 
 
             this.resultFrom.examOrg =  this.$store.getters.orgName
 
+            this.next.batchId = this.batchId;
+            this.next.handlerUid = this.resultFrom.examUid;
 
             if (this.isEdit) {
                 this.fetchData(id)
@@ -399,9 +397,47 @@
         },
         methods:{
             gotoNextMaterialResult(){
-                // row.handlerUid = this.batch.handlerUid;
-                this.$router.push({ name:'materialResult',params:{id:this.next.id},query: {handlerUid:this.next.handlerUid, batchId:this.next.batchId}})
+
+                if (!this.next.id) {
+                    this.$confirm('暂无下一条数据!')
+                        .then(_ => {
+
+                        })
+                        .catch(_ => {});
+                }else{
+                    this.submitForm();
+                    this.$store.dispatch('delView', this.$route)
+                    this.$router.push({ name:'materialResult',params:{id:this.next.id},query: {handlerUid:this.next.handlerUid, batchId:this.next.batchId}})
+                }
+
             },
+           /* gotoNextMaterialResult(){
+                // row.handlerUid = this.batch.handlerUid;
+                // this.$router.push({ name:'materialResult',params:{id:this.next.id},query: {handlerUid:this.next.handlerUid, batchId:this.next.batchId}})
+                this.$store.dispatch('delView', this.$route)
+                this.resultFrom ={
+                    id: this.next,
+                    materialId: '',
+                    batchId: '',
+                    examUid: this.$route.query.handlerUid,
+                    examOrg: this.$store.getters.orgName,
+                    materialType: '',
+                    examResult: '',
+                    checkPeople: '',
+                    sex: '',
+                    idNo: '',
+                    checkOutTime: '',
+                    huji: '',
+                    useType: '',
+                    documentNo: '',
+                    needToPushToCharger: '',
+                    needTransferDocument: '',
+                    needPutInStock: '',
+                    materialDetail: '',
+                };
+                this.getList(this.batchId);
+
+            },*/
             getList(id) {
                 this.listQuery.batchId = id
                 let  next = false;
@@ -409,15 +445,17 @@
                     this.list = response.list;
 
                     this.list.map(item=>{
-                        console.log(Number(this.resultFrom.id) === item.id)
+
+
                         if (item.id === Number(this.resultFrom.id)){
                             this.material = item;
                             next = true;
                         }
-                        if (next){
+                        if (next && item.id!==Number(this.resultFrom.id)){
                             this.next.id = item.id;
                             next=false;
                         }
+
                     })
 
                     this.resultDetail = this.material;
@@ -551,6 +589,25 @@
                     this.userShowList = this.userList;
                 }
 
+            },
+            countDict(val,type){
+                if (val) {
+                    if (val.constructor === Array){
+                        val.map(data=>{
+                            const send={
+                                name:data,
+                                cateName:type
+                            };
+                            this.$store.dispatch('PostUserUseDict', send)
+                        })
+                    }else{
+                        const send={
+                            name:val,
+                            cateName:type
+                        };
+                        this.$store.dispatch('PostUserUseDict', send)
+                    }
+                }
             },
 
         }

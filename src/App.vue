@@ -18,8 +18,9 @@
             }
         },
         created() {
-            this.initWebSocket()
-
+            if (this.$store.getters.id){
+                this.initWebSocket()
+            }
         },
         methods: {
             initWebSocket() { //初始化weosocket

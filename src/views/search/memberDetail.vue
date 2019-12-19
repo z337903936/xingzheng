@@ -2934,13 +2934,14 @@ export default {
                   this.fetchData(this.list.id)
 
                   if (out) {
+                    this.$store.dispatch('delView', this.$route)
                     this.$router.push({
                       path: '/search/index',
                       query: {
                         t: +new Date()
                       }
                     })
-                    this.$store.dispatch('delView', this.$route)
+
                   }
                   // this.list = response;
                   // this.list.suspectPersonList = response.suspectPersonList;
@@ -2975,13 +2976,14 @@ export default {
                     this.list.id = id
                     this.dialogPoint = false
                   }else{
+                    this.$store.dispatch('delView', this.$route)
                     this.$router.push({
                       path: '/search/index',
                       query: {
                         t: +new Date()
                       }
                     })
-                    this.$store.dispatch('delView', this.$route)
+
                   }
 
                 } else {

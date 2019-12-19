@@ -21,7 +21,7 @@
                     </el-step>
                 </el-steps>
             </el-col>
-            <el-col :span="20" style="height: 100%">
+            <el-col :span="20" style="height: 100%;text-align: center">
                 <el-collapse v-model="activeNames">
                     <el-collapse-item name="痕检">
                         <template slot="title" >
@@ -226,6 +226,9 @@
                             }
                         })
                     }
+
+
+
 
 
 
