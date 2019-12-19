@@ -47,13 +47,13 @@
                 </el-table-column>
                 <el-table-column label="足迹" align="center">
                     <template slot-scope="{row}">
-                        <span>{{ row.evidence.footprint }}</span>
+                        <span>{{ row.evidence.footprint.replace(/,/g," ") }}</span>
                     </template>
                 </el-table-column>
 
                 <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
                     <template slot-scope="{row}">
-                        <router-link :to="'/search/show-search/'+row.id">
+                        <router-link :to="'/search/show-search/'+row.evidence.id">
                             <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
                         </router-link>
                     </template>
@@ -119,6 +119,52 @@
                 composeDetail(id).then(response => {
                     this.listUse = response.list;
                     this.pagesUse = response.pages;
+                    this.listUse.map(res=>{
+
+                        // if (res.evidence.crimeTime){
+                        //     if (res.evidence.crimeTime.startsWith('[',0)){
+                        //         if (JSON.parse(res.evidence.crimeTime).constructor === Array){
+                        //             res.evidence.crimeTime = JSON.parse(res.evidence.crimeTime).join(' ')
+                        //         }
+                        //     }else{
+                        //         res.evidence.crimeTime = res.evidence.crimeTime.replace("\"","").replace("\"","");
+                        //     }
+                        // }
+                        // if (res.evidence.sceneType){
+                        //     if (res.evidence.sceneType.startsWith('[',0)){
+                        //         if (JSON.parse(res.evidence.sceneType).constructor === Array){
+                        //             res.evidence.sceneType = JSON.parse(res.evidence.sceneType).join(' ')
+                        //         }
+                        //     }else{
+                        //         res.evidence.sceneType = res.evidence.sceneType.replace("\"","").replace("\"","");
+                        //     }
+                        // }
+                        if (res.evidence.invadeType){
+                            if (res.evidence.invadeType.startsWith('[',0)){
+                                if (JSON.parse(res.evidence.invadeType).constructor === Array){
+                                    res.evidence.invadeType = JSON.parse(res.evidence.invadeType).join(' ')
+                                }
+                            }
+
+                            res.evidence.invadeType = res.evidence.invadeType.replace("\"","").replace("\"","");
+                        }
+                        // if (res.evidence.escapeType){
+                        //     if (res.evidence.escapeType.startsWith('[',0)){
+                        //         if (JSON.parse(res.evidence.escapeType).constructor === Array){
+                        //             res.evidence.escapeType = JSON.parse(res.evidence.escapeType).join(' ')
+                        //         }
+                        //     }
+                        //
+                        //     res.evidence.escapeType = res.evidence.escapeType.replace("\"","").replace("\"","");
+                        // }
+                        // if (res.evidence.footprint){
+                        //     if (JSON.parse(res.evidence.footprint).constructor === Array){
+                        //         res.evidence.footprint = JSON.parse(res.evidence.footprint).join(' ')
+                        //     }
+                        //     res.evidence.footprint = res.evidence.footprint.replace("\"","").replace("\"","");
+                        // }
+                        return res;
+                    })
 
                     // Just to simulate the time of the request
 

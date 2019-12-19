@@ -167,7 +167,7 @@
             </el-table-column>
             <el-table-column label="足迹" width="110" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.footprint }}</span>
+                    <span>{{ row.footprint.replace(/,/g," ") }}</span>
                 </template>
             </el-table-column>
 
@@ -414,7 +414,7 @@
                 filterEvidence(this.listQuery).then(response => {
                     this.list = response.list;
                     this.list.map(res=>{
-                        console.log(res.crimeTime);
+
                         if (res.crimeTime){
                             if (res.crimeTime.startsWith('[',0)){
                                 if (JSON.parse(res.crimeTime).constructor === Array){

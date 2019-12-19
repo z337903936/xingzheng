@@ -233,6 +233,7 @@
                 composeList(this.listQuery).then(response => {
                     this.list = response.list;
                     this.pages = response.pages
+
                     // Just to simulate the time of the request
                     this.listLoading = false
 

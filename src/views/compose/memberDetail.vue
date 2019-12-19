@@ -66,7 +66,7 @@
                 </el-table-column>
                 <el-table-column label="足迹" align="center">
                     <template slot-scope="{row}">
-                        <span>{{ row.footprint }}</span>
+                        <span>{{ row.footprint.replace(/,/g," ") }}</span>
                     </template>
                 </el-table-column>
 
@@ -228,7 +228,7 @@
             </el-table-column>
             <el-table-column label="足迹" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.footprint }}</span>
+                    <span>{{ row.footprint.replace(/,/g," ") }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">

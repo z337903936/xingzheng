@@ -83,7 +83,7 @@
             </el-table-column>
             <el-table-column label="足迹" align="center" width="150">
                 <template slot-scope="{row}">
-                    <span>{{ row.footprint }}</span>
+                    <span>{{ row.footprint.replace(/,/g," ") }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="勘查时间" width="300" align="center">
