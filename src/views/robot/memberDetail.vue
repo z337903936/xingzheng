@@ -407,7 +407,9 @@
                     if (this.postForm.escapeType){
                         this.postForm.escapeType = JSON.parse(this.postForm.escapeType)
                     }
+
                     if (this.postForm.footprint){
+
                         this.postForm.footprint = JSON.parse(this.postForm.footprint)
                     }
 
@@ -440,42 +442,56 @@
                 if (data.crimeTime) {
                     if (data.crimeTime.length > 0) {
                         data.crimeTime = JSON.stringify(data.crimeTime)
+                    }else{
+                        data.crimeTime = ''
                     }
                 }
 
                  if (data.caseHappenRegion) {
                     if (data.caseHappenRegion.length > 0) {
                         data.caseHappenRegion = JSON.stringify(data.caseHappenRegion)
+                    }else{
+                        data.caseHappenRegion = ''
                     }
                 }
 
                 if (data.sceneType) {
                     if (data.sceneType.length > 0) {
                         data.sceneType = JSON.stringify(data.sceneType)
+                    }else{
+                        data.sceneType = ''
                     }
                 }
 
                 if (data.invadeType) {
                     if (data.invadeType.length > 0) {
                         data.invadeType = JSON.stringify(data.invadeType)
+                    }else{
+                        data.invadeType = ''
                     }
                 }
 
                 if (data.escapeType) {
                     if (data.escapeType.length > 0) {
                         data.escapeType = JSON.stringify(data.escapeType)
+                    }else{
+                        data.escapeType = ''
                     }
                 }
 
                 if (data.caseCategory) {
                     if (data.caseCategory.length > 0) {
                         data.caseCategory = JSON.stringify(data.caseCategory)
+                    }else{
+                        data.caseCategory = ''
                     }
                 }
 
                  if (data.footprint) {
                     if (data.footprint.length > 0) {
                         data.footprint = JSON.stringify(data.footprint)
+                    }else{
+                        data.footprint = ''
                     }
                 }
 

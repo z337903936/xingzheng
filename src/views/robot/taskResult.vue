@@ -157,7 +157,7 @@
             },
             selectTask(selection) {
                 this.taskId = selection.map(data => {
-                    return data.id
+                    return data.evidence.id
                 })
             },
             applyCompose(){

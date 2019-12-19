@@ -245,7 +245,7 @@
                     <span>
                         {{ row.evidence.caseAddress + row.evidence.caseCategory  }}
                     </span>
-                    <span v-if=" row.evidence.caseCategory">
+                    <span v-if="row.evidence.caseCategory">
                         案
                     </span>
                 </template>
@@ -915,6 +915,7 @@
             handleTaskAction(task) {
                 this.dialogFormAction = true;
                 this.acceptTaskFrom.requireOrg = this.$store.getters.name;
+                this.acceptTaskFrom.requireTime = task.requireTime ? task.requireTime*1000:task.createTime*1000
                 this.acceptTaskFrom.stepId = task.id
 
             },
