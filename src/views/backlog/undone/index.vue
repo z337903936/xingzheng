@@ -308,7 +308,7 @@
                     <!--&gt;-->
                         <!--<el-button v-waves type="success" size="mini" icon="el-icon-tickets" style="width: 100px">物证详情</el-button>-->
                     <!--</router-link>-->
-                    <el-button v-waves type="primary" size="mini" style="width: 100px" @click="gotobatchList(row)"  icon="el-icon-tickets"
+                    <el-button v-waves type="primary" size="small" style="width: 100px" @click="gotobatchList(row)"  icon="el-icon-tickets"
                                v-if="row.stepName !== '痕检现勘' && row.stepName !== '申请物证入库' && row.stepName !== '申请物证出库' && row.stepName !== '警情扭转'">
                         物证详情</el-button>
                     <router-link :to="'/search/update-search/'+row.evidenceId"
@@ -320,11 +320,11 @@
                         取消勘查
                     </el-button>
                     <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘'">
-                        <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
+                        <el-button type="success" size="small" icon="el-icon-zoom-in">查看</el-button>
                     </router-link>
-                    <router-link :to="'/alarm/edit-alarm/'+row.record.id" v-if="row.stepName === '警情扭转'">
-                        <el-button type="success" size="mini" icon="el-icon-zoom-in" style="width: 100px">编辑</el-button>
-                    </router-link>
+                    <!--<router-link :to="'/alarm/edit-alarm/'+row.record.id" v-if="row.stepName === '警情扭转'">-->
+                        <!--<el-button type="success" size="mini" icon="el-icon-zoom-in" style="width: 100px">编辑</el-button>-->
+                    <!--</router-link>-->
                 </template>
             </el-table-column>
         </el-table>

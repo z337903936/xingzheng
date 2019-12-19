@@ -461,7 +461,7 @@
           </el-table-column>
           <el-table-column
             prop="residence"  width="160"
-            label="常住地址" align="center">
+            label="地址" align="center">
             <template slot-scope="{row}">
               <span>{{ row.residence }}</span>
             </template>
@@ -932,7 +932,7 @@
         <el-form-item label="联系电话" prop="contactNumber">
           <el-input v-model="concernedPersonListForm.contactNumber"/>
         </el-form-item>
-        <el-form-item label="常住地址" prop="residence">
+        <el-form-item label="地址" prop="residence">
           <el-input v-model="concernedPersonListForm.residence"/>
         </el-form-item>
 
@@ -1114,6 +1114,7 @@
               ref="materialPhotoList"
               :data="materialPhotoList"
               current-row-key="id"
+              row-key="1"
               highlight-current-row
               @current-change="handleCurrentChange"
               :row-class-name="tableRowClassName"
@@ -1951,7 +1952,7 @@ export default {
         row.index = rowIndex;
        },
     setStayPart(val) {
-      console.log((new Date()).valueOf());
+
       var data ={
         id: '',
         materialNo: '',
@@ -2133,7 +2134,7 @@ export default {
 
     fetchData(id) {
       fetchSearch(id).then(data => {
-        this.list = data
+        this.list = Object.assign({},data)
         this.proResponse()
 
       }).catch(err => {
@@ -2626,6 +2627,7 @@ export default {
         this.submitForm(true)
       }
     },
+
     addMaterialListForm() {
       var data =Object.assign({}, this.materialListForm)
 
@@ -2645,8 +2647,15 @@ export default {
           this.materialListForm.materialNo = response.materialNo;
           this.materialListForm.status = 1;
           this.materialListForm.id = response.id
+          var index = this.materialListForm.index;
           if (this.materialListForm.extractTime.toString().length === 10) { this.materialListForm.extractTime = this.materialListForm.extractTime *1000 }
           this.$set(this.materialPhotoList,this.materialListForm.index,this.materialListForm);
+          index++
+          if (this.materialPhotoList[index]) {
+            console.log(index)
+              this.materialListForm =  this.materialPhotoList[index]
+              this.$refs.materialPhotoList.setCurrentRow(this.$refs.materialPhotoList.data[index]);
+          }
           // this.resetMaterialListForm()
         } else {
           this.$message({

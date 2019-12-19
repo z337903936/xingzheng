@@ -155,14 +155,37 @@
 
                     </el-col>
                 </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-form-item label="法医任务号" prop="materialTo">
+                            <el-input v-model="resultFrom.medicalTaskNo"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="鉴定结论" prop="conclusion">
+                            <el-select v-model="resultFrom.conclusion"
+                                       filterable
+                                       clearable
+                                       class="filter-item"
+                                       @change="selectUpdate"
+                                       value-key="id"
+                                       style="width: 100%">
+                                <el-option
+                                        v-for="item in conclusion"
+                                        :key="item.title"
+                                        :label="item.title"
+                                        :value="item.title"/>
+                            </el-select>
+                        </el-form-item>
 
+
+                    </el-col>
+                </el-row>
                 <!--<el-form-item label="是否推送给主办痕检" prop="needToPushToCharger">-->
                 <!--<el-checkbox v-model="resultFrom.needToPushToCharger"></el-checkbox>-->
                 <!--</el-form-item>-->
 
-                <el-form-item label="鉴定结论" prop="conclusion">
-                    <el-input v-model="resultFrom.conclusion"/>
-                </el-form-item>
+
 
                 <el-form-item label="备注栏" prop="note">
                     <el-input v-model="resultFrom.note" type="textarea"
@@ -199,6 +222,27 @@
         },
         data(){
             return{
+                conclusion: [
+                    {
+                        title: '轻微伤'
+                    }, {
+                        title: '轻伤二级 '
+                    }, {
+                        title: '轻伤一级'
+                    }, {
+                        title: '重伤二级'
+                    },{
+                        title: '重伤一级'
+                    },{
+                        title: '未构成轻微伤'
+                    },{
+                        title: '不予评定'
+                    },{
+                        title: '不予受理'
+                    },{
+                        title: '评伤残等级'
+                    },
+                ],
                 resultFrom: {
                     id: '',
                     result: '',
@@ -217,6 +261,7 @@
                     note: '',
                     needToPushToCharger: '',
                     usedType: '',
+                    medicalTaskNo: '',
                 },
                 userList: [],
                 userShowList: [],
