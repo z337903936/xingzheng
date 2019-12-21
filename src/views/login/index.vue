@@ -104,7 +104,7 @@ export default {
     }
     return {
       loginForm: {
-        username: 'A350998',
+        username: 'A350997',
         password: '123456',
         vcode: '123456'
         // captcha: ''

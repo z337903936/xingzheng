@@ -804,10 +804,12 @@
           <el-input v-model="lostDetailListForm.feather"/>
         </el-form-item>
         <el-form-item label="价值" prop="value">
-          <el-input v-model="lostDetailListForm.value" type="number" />
+          <el-input v-model="lostDetailListForm.value" type="number" >
+            <i slot="suffix" >元</i>
+          </el-input>
         </el-form-item>
         <el-form-item label="数量" prop="amount">
-          <el-input v-model="lostDetailListForm.amount" type="number"/>
+          <el-input v-model="lostDetailListForm.amount" placeholder="不填默认为1" type="number" />
         </el-form-item>
 
       </el-form>
@@ -961,11 +963,6 @@
       >
         <el-row :gutter="20">
           <el-col :span="8">
-            <el-form-item label="物证编号" prop="thirdMaterialNo">
-              <el-input v-model="materialListForm.thirdMaterialNo" :disabled="true" placeholder="系统自动生成" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
             <el-form-item label="物证类别" prop="materialCategory">
               <el-popover
                       placement="left"
@@ -991,24 +988,19 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="可靠程度" prop="reliabilityLevel">
-              <el-select v-model="materialListForm.reliabilityLevel" clearable placeholder="请选择">
-                <el-option
-                        v-for="item in reliabilityLevel"
-                        :key="item.title"
-                        :label="item.title"
-                        :value="item.title"/>
-              </el-select>
+            <el-form-item label="物证名称" prop="name">
+              <el-input v-model="materialListForm.name"/>
             </el-form-item>
-          </el-col>
-        </el-row>
 
-        <el-row :gutter="20">
+          </el-col>
           <el-col :span="8">
             <el-form-item label="遗留部位" prop="stayPart">
               <el-input v-model="materialListForm.stayPart"/>
             </el-form-item>
           </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
           <el-col :span="8">
             <el-form-item label="提取方法" prop="extractMethod">
               <el-input v-if="isInput" v-model="materialListForm.extractMethod"/>
@@ -1026,6 +1018,19 @@
                         :value="item.value"/>
               </el-select>
             </el-form-item>
+          </el-col>
+          <el-col :span="8">
+
+              <el-form-item label="可靠程度" prop="reliabilityLevel">
+                <el-select v-model="materialListForm.reliabilityLevel" clearable placeholder="请选择">
+                  <el-option
+                          v-for="item in reliabilityLevel"
+                          :key="item.title"
+                          :label="item.title"
+                          :value="item.title"/>
+                </el-select>
+              </el-form-item>
+
           </el-col>
           <el-col :span="8">
             <el-form-item label="利用情况" prop="usedType">
@@ -1055,40 +1060,42 @@
 
         <el-row :gutter="20">
           <el-col :span="8">
+            <el-form-item label="提取人" prop="extractUid">
+              <el-select
+                      v-model="materialListForm.extractUid"
+                      :filter-method="filterUserSearch"
+                      filterable clearable
+                      placeholder="请选择"
+                      center
+                      style="width: 100%"
+                      @visible-change="restUserSearch">
+                <el-option
+                        v-for="item in userShowList"
+                        :key="item.id"
+                        :label="item.title"
+                        :value="item.id"/>
+              </el-select>
+            </el-form-item>
+
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="提取日期" prop="extractTime">
 
               <el-date-picker
-                v-model="materialListForm.extractTime"
-                type="date" clearable
-                value-format="timestamp"
-                placeholder="选择时间"
-                style="width: 100%"
+                      v-model="materialListForm.extractTime"
+                      type="date" clearable
+                      value-format="timestamp"
+                      placeholder="选择时间"
+                      style="width: 100%"
               />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="提取人" prop="extractUid">
-              <el-select
-                v-model="materialListForm.extractUid"
-                :filter-method="filterUserSearch"
-                filterable clearable
-                placeholder="请选择"
-                center
-                style="width: 100%"
-                @visible-change="restUserSearch">
-                <el-option
-                  v-for="item in userShowList"
-                  :key="item.id"
-                  :label="item.title"
-                  :value="item.id"/>
-              </el-select>
+            <el-form-item label="物证编号" prop="thirdMaterialNo">
+              <el-input v-model="materialListForm.thirdMaterialNo" :disabled="true" placeholder="系统自动生成" />
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
 
-            <el-form-item label="物证名称" prop="name">
-              <el-input v-model="materialListForm.name"/>
-            </el-form-item>
+
           </el-col>
         </el-row>
         <el-form-item label="特征描述" prop="note">
@@ -1383,12 +1390,12 @@ export default {
         name: [
           { required: true, message: '请输入名称'}
         ],
-        value: [
-          { required: true, message: '请输入价值' }
-        ],
-        amount: [
-          {required: true, message: '请输入数量' }
-        ],
+        // value: [
+        //   { required: true, message: '请输入价值' }
+        // ],
+        // amount: [
+        //   {required: true, message: '请输入数量' }
+        // ],
       },
       concernedPersonListFormRules: {},
       materialListFormRules: {},
@@ -2218,6 +2225,9 @@ export default {
     addLostDetailListForm() {
       this.$refs.lostDetailListForm.validate(valid => {
         if (valid){
+          if (!this.lostDetailListForm.amount){
+            this.lostDetailListForm.amount =1
+          }
           if (this.isEdit) {
             this.lostDetailListForm.evidenceId = this.list.id
             createLost(this.lostDetailListForm).then(response => {
@@ -2260,6 +2270,9 @@ export default {
     updateLostDetailListForm() {
       this.$refs.lostDetailListForm.validate(valid => {
         if (valid){
+          if (!this.lostDetailListForm.amount){
+            this.lostDetailListForm.amount =1
+          }
           if (this.isEdit) {
             updateLost(this.lostDetailListForm).then(response => {
               if (response.code === 200) {
@@ -2434,22 +2447,33 @@ export default {
       }
     },
 
-    judgeCP(newData){
-      if (newData.length > 0) {
-        var count = 0;
-        newData.map(item=>{
-          if (item.idType === '死者'){
-            count++
-          }
-        })
 
-        if (count)
-          this.list.isDeathCase = true;
-        else
-          this.list.isDeathCase = false
-      } else {
-        this.list.isDeathCase = false
-      }
+    judgeCP(newData){
+
+        // if (this.list.concernedPersonList.length === 0){
+          if (newData.idType === '死者'){
+            this.list.isDeathCase = true;
+          }
+        // }else{
+        //   var count = 0;
+        //   if (newData.idType === '死者'){
+        //     this.list.isDeathCase = true;
+        //     count++;
+        //   }
+        //   this.list.concernedPersonList.map(item=>{
+        //     if (item.idType === '死者'){
+        //       count++
+        //     }
+        //   })
+        //
+        //   if (count)
+        //     this.list.isDeathCase = true;
+        //   else
+        //     this.list.isDeathCase = false
+        // }
+
+
+
     },
     resetConcernedPersonListForm() {
       this.concernedPersonListForm = {
@@ -2463,7 +2487,7 @@ export default {
       }
       this.dialogConcernedPersonListFormMethod = 'add'
       this.dialogConcernedPersonListFormIndex = ''
-      this.judgeCP(this.list.concernedPersonList);
+      // this.judgeCP(this.list.concernedPersonList);
 
     },
     addConcernedPersonListForm() {
@@ -2480,6 +2504,7 @@ export default {
               showClose: true,
               duration: 2000
             })
+            this.judgeCP(this.concernedPersonListForm)
             this.dialogConcernedPersonListForm = false
             this.resetConcernedPersonListForm()
             if (this.isEdit)
@@ -2501,7 +2526,7 @@ export default {
             this.concernedPersonListForm.sexShow = data.title
           }
         })
-
+        this.judgeCP(this.concernedPersonListForm)
         this.list.concernedPersonList.push(this.concernedPersonListForm)
         this.dialogConcernedPersonListForm = false
         this.resetConcernedPersonListForm()
@@ -2528,6 +2553,7 @@ export default {
               showClose: true,
               duration: 2000
             })
+            this.judgeCP(this.concernedPersonListForm)
             this.dialogConcernedPersonListForm = false
             this.resetConcernedPersonListForm()
             if (this.isEdit)
@@ -2548,12 +2574,12 @@ export default {
             this.concernedPersonListForm.sexShow = data.title
           }
         })
-
+        this.judgeCP(this.concernedPersonListForm)
         var temp = Object.assign({}, this.concernedPersonListForm)// copy obj
         this.list.concernedPersonList.splice(this.dialogConcernedPersonListFormIndex, 1, temp)
         this.dialogConcernedPersonListForm = false
         this.resetConcernedPersonListForm()
-        this.judgeCP(this.list.concernedPersonList);
+
       }
 
     },
@@ -2586,7 +2612,7 @@ export default {
         })
       } else {
         this.list.concernedPersonList.splice(index, 1)
-        this.judgeCP(this.list.concernedPersonList);
+
       }
 
     },

@@ -38,6 +38,13 @@ export function parseTime(time, cFormat) {
   return time_str
 }
 
+export function formatDate(time){
+  time = time * 1000
+  const d = new Date(time)
+  const date = d.getFullYear()+'年'+(d.getMonth() + 1) +'月' + d.getDate() + '日'
+  return date;
+}
+
 export function formatTime(time, option) {
   time = +time * 1000
   const d = new Date(time)

@@ -46,7 +46,12 @@
             </el-table-column>
             <el-table-column label="状态" align="center" width="100">
                 <template slot-scope="{row}">
-                    <span>{{ row.status | statusFilter }}</span>
+                    <span v-if="row.status === 3"><el-tag effect="dark" type="success">已完成</el-tag></span>
+                    <span v-if="row.status === -1"><el-tag effect="dark" type="info">已拒绝</el-tag></span>
+                    <span v-if="row.status === -2"><el-tag effect="dark" type="info">取消现勘</el-tag></span>
+                    <div>
+                        {{ row.reason }}
+                    </div>
                 </template>
             </el-table-column>
 
@@ -69,15 +74,15 @@
                     <el-button v-waves type="primary" size="mini" style="width: 100px" @click="gotobatchList(row)"  icon="el-icon-tickets"
                                v-if="row.stepName === 'DNA送检' || row.stepName === '指纹送检' || row.stepName === '理化送检' || row.stepName === '电子物证送检'">
                         物证详情</el-button>
-                    <router-link :to="'/search/update-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘'">
+                    <router-link :to="'/search/update-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘' || row.stepName === '警情扭转'">
                         <el-button type="primary" size="mini" icon="el-icon-edit" >编辑</el-button>
                     </router-link>
-                    <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘'">
+                    <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘' ">
                         <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
                     </router-link>
-                    <router-link :to="'/alarm/edit-alarm/'+row.record.id" v-if="row.stepName === '警情扭转'">
-                        <el-button type="success" size="mini" icon="el-icon-zoom-in" style="width: 100px">编辑</el-button>
-                    </router-link>
+                    <!--<router-link :to="'/alarm/edit-alarm/'+row.record.id" v-if="row.stepName === '警情扭转'">-->
+                        <!--<el-button type="success" size="mini" icon="el-icon-zoom-in" style="width: 100px">编辑</el-button>-->
+                    <!--</router-link>-->
                 </template>
             </el-table-column>
         </el-table>
@@ -97,10 +102,11 @@
 
 <script>
     import { accetpTask,taskList,writeResult } from '@/api/backlog'
-    import {parseTime} from '@/utils'
+    import {parseTime,formatDate} from '@/utils'
     import { fetchAdminMemberList} from '@/api/permissions'
     import {fetchList} from '@/api/dictionary'
     import waves from '@/directive/waves' // waves directive
+
     export default {
         name: "Complete",
         directives: {waves},
@@ -145,7 +151,7 @@
                             data.examBatchId = data.examBatch.id;
                         }
                         if (data.evidence.caseHappenTime) {
-                            data.evidence.caseHappenTime = parseTime(data.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}')
+                            data.evidence.caseHappenTime = formatDate(data.evidence.caseHappenTime)
                         }else{
                             data.evidence.caseHappenTime = ''
                         }

@@ -49,24 +49,9 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="任务名" prop="id" align="center" width="180">
-                <template slot-scope="{row}">
-                    <span>{{ row.stepName }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="任务序号" prop="id" align="center" width="180">
-                <template slot-scope="{row}">
-                    <span>{{ row.taskNo }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="现勘号" prop="id" align="center" width="180">
+            <el-table-column label="勘查号" prop="id" align="center" width="180">
                 <template slot-scope="{row}">
                     <span>{{ row.evidenceNo }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="物证数量" align="center" min-width="100">
-                <template slot-scope="{row}">
-                    <span>{{ row.examNumber }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="简要案情" align="center" min-width="200">
@@ -83,22 +68,28 @@
                     </span>
                 </template>
             </el-table-column>
-            <el-table-column label="转移人" width="100" align="center">
+            <el-table-column label="物证数量" prop="id" align="center" width="180">
+                <template slot-scope="{row}">
+                    <span>{{ row.examNumber }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="移交人" prop="id" align="center" width="180">
                 <template slot-scope="{row}">
                     <span>{{ row.fromName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="接收人" width="210" align="center">
-                <template slot-scope="{row}">
-                    <span>{{ row.createName }}</span>
-                </template>
-            </el-table-column>
-
-            <el-table-column label="转移时间" width="170" align="center">
+            <el-table-column label="移交时间" prop="id" align="center" width="180">
                 <template slot-scope="{row}">
                     <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
+            <el-table-column label="物证库存放位置" prop="id" align="center" width="180">
+                <template slot-scope="{row}">
+                    <span>{{ row.stepName }}</span>
+                </template>
+            </el-table-column>
+
+
 
             <el-table-column label="操作" align="center" width="330" fixed="right" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">

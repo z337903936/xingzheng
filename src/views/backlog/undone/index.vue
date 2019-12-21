@@ -256,6 +256,7 @@
                     <span v-if="row.status === 1"><el-tag effect="dark" >未领取</el-tag></span>
                     <span v-if="row.status === 2"><el-tag effect="dark" type="success">进行中</el-tag></span>
                     <span v-if="row.status === -1"><el-tag effect="dark" type="info">已拒绝</el-tag></span>
+                    <span v-if="row.status === -2"><el-tag effect="dark" type="info">取消现勘</el-tag></span>
                     <div>
                         {{ row.reason }}
                     </div>
@@ -266,11 +267,11 @@
                 <template slot-scope="{row}">
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
                                @click="handleAction(row,true)" v-if="row.status===1 && (row.stepName === '申请物证入库' || row.stepName === '申请物证出库')">
-                        同意入库
+                        同意
                     </el-button>
                     <el-button type="warning" size="small" icon="el-icon-document-delete"
                                @click="handleAction(row,false)" v-if="row.status===1 && (row.stepName === '申请物证入库' || row.stepName === '申请物证出库')">
-                        拒绝入库
+                        拒绝
                     </el-button>
                     <router-link :to="'/material/detail/'+row.examBatch.id" v-if="row.stepName === '申请物证入库' || row.stepName === '申请物证出库'">
                         <el-button v-waves type="primary" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>
