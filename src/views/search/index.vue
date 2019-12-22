@@ -115,12 +115,12 @@
                     <span>{{ row.caseCategory }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="主办" align="center" width="150">
+            <el-table-column label="主办" align="center" width="100">
                 <template slot-scope="{row}">
                     <span>{{ row.mainChargerName.replace(/,/g," ") }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="协办" align="center" width="150">
+            <el-table-column label="协办" align="center" width="100">
                 <template slot-scope="{row}">
                     <span>{{ row.supporterName.replace(/,/g," ") }}</span>
                 </template>
@@ -131,13 +131,13 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="是否死亡" align="center" width="90">
+            <el-table-column label="是否死亡" align="center" width="70">
                 <template slot-scope="{row}">
                     <span>{{ row.isDeathCase?'是':'否' }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
+            <el-table-column label="操作" align="center" fixed="right" width="380" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <router-link :to="'/search/update-search/'+row.id">
                         <el-button type="primary" size="mini" icon="el-icon-edit" >编辑</el-button>
@@ -149,10 +149,9 @@
                     <router-link :to="'/transferLog/index/'+row.id">
                         <el-button type="success" size="mini" style="width: 80px">物证去向</el-button>
                     </router-link>
-
-                    <!--<el-button size="mini" type="success">-->
-                        <!--查看-->
-                    <!--</el-button>-->
+                    <el-button size="mini"  style="width: 90px"type="success" @click="handleExportExcelAlone(row.id)">
+                        导出Excel
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -174,7 +173,7 @@
 </template>
 
 <script>
-    import {searchList} from '@/api/search'
+    import {searchList,exportExcelAlone} from '@/api/search'
     import waves from '@/directive/waves' // waves directive
     import {fetchList} from '@/api/dictionary'
     import {parseTime} from '@/utils'
@@ -237,6 +236,9 @@
             })
         },
         methods: {
+            handleExportExcelAlone(id){
+                exportExcelAlone(id).then()
+            },
             reset() {
                 this.listQuery = {
                     page: 1,

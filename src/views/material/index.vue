@@ -83,11 +83,7 @@
                     <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="物证库存放位置" prop="id" align="center" width="180">
-                <template slot-scope="{row}">
-                    <span>{{ row.stepName }}</span>
-                </template>
-            </el-table-column>
+
 
 
 

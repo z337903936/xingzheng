@@ -376,23 +376,20 @@
             this.search('检材类型').then(response=>{
                 this.materialTypeList = this.processData(response.list)
             });
-            const id = this.$route.params && this.$route.params.id
+            const id = this.$route.params && this.$route.params.id;
             this.batchId = this.$route.query.batchId;
-            this.resultFrom.examUid = this.$route.query.handlerUid;
+            this.resultFrom.examUid = this.$store.getters.id;
             this.resultFrom.id = id;
             this.getList(this.batchId);
             // this.material = JSON.parse(this.$route.query.material);
             // console.log(this.material);
-
 
             this.resultFrom.examOrg =  this.$store.getters.orgName
 
             this.next.batchId = this.batchId;
             this.next.handlerUid = this.resultFrom.examUid;
 
-            if (this.isEdit) {
-                this.fetchData(id)
-            }
+            // this.fetchData(id)
             this.getUseType();
         },
         methods:{

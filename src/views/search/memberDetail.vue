@@ -952,6 +952,33 @@
     </el-dialog>
 
     <el-dialog :visible.sync="dialogMaterialListForm" :close-on-click-modal="false" title="物证" width="50%"  :before-close="handleClose">
+      <div v-if="dialogMaterialListFormMethod === 'edit'">
+        <el-divider content-position="left">物证结果</el-divider>
+        <el-row :gutter="20" style="margin-left: 40px">
+          <el-col :span="12">
+            检验结果：{{ materialListForm.examResult ? materialListForm.examResult:'' }}
+          </el-col>
+          <el-col :span="12">
+            比中人员：{{ materialListForm.checkPeople ? materialListForm.checkPeople:'' }}
+          </el-col>
+
+          <el-col :span="12" style="margin-top: 10px">
+
+            性别：{{ materialListForm.sex ? materialListForm.sex:'' }}
+          </el-col>
+          <el-col :span="12" style="margin-top: 10px">
+            身份证号：{{ materialListForm.idNo ? materialListForm.idNo:'' }}
+
+          </el-col>
+
+          <el-col :span="12" style="margin-top: 10px">
+            比中时间：{{ materialListForm.checkOutTime ? materialListForm.checkOutTime:'' }}
+          </el-col>
+
+
+        </el-row>
+        <el-divider content-position="left">编辑物证</el-divider>
+      </div>
       <el-form
         ref="materialListForm"
         :rules="materialListFormRules"
@@ -1117,6 +1144,7 @@
               @click="addMultipleMaterialListForm()">
         批量保存
       </el-button>
+
       <el-table
               ref="materialPhotoList"
               :data="materialPhotoList"
@@ -1156,6 +1184,7 @@
           </template>
         </el-table-column>
       </el-table>
+
 
 
       <div slot="footer" class="dialog-footer">
