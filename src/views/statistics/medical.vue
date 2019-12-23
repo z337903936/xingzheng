@@ -39,7 +39,7 @@
 
                 @selection-change="handleSelectionChange"
         >
-            <el-table-column type="selection" align="center" width="70"  />
+            <el-table-column type="selection" align="center"   />
             <el-table-column label="名称" width="90" align="center" prop="userName">
                 <template slot-scope="{row}">
                     <span>{{ row.userName }}</span>
@@ -50,82 +50,82 @@
                     <span>{{ row.createTime | parseTime('{y}-{m}-{d}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="出现场数" align="center" width="100" prop="joinCount">
+            <el-table-column label="出现场数" align="center"  prop="joinCount">
                 <template slot-scope="{row}">
                     <span>{{ row.joinCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="烧死" align="center" width="100" prop="burnToDeathCount">
+            <el-table-column label="烧死" align="center"  prop="burnToDeathCount">
                 <template slot-scope="{row}">
                     <span>{{ row.burnToDeathCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="绞死" align="center" width="100" prop="hangToDeathCount">
+            <el-table-column label="绞死" align="center"  prop="hangToDeathCount">
                 <template slot-scope="{row}">
                     <span>{{ row.hangToDeathCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="中毒" align="center" width="100" prop="poisonToDeathCount">
+            <el-table-column label="中毒" align="center"  prop="poisonToDeathCount">
                 <template slot-scope="{row}">
                     <span>{{ row.poisonToDeathCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="高坠" width="120" align="center" prop="fallToDeathCount">
+            <el-table-column label="高坠" align="center" prop="fallToDeathCount">
                 <template slot-scope="{row}">
                     <span>{{ row.fallToDeathCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="溺死" width="100" align="center" prop="drownToDeathCount">
+            <el-table-column label="溺死" align="center" prop="drownToDeathCount">
                 <template slot-scope="{row}">
                     <span>{{ row.drownToDeathCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="其他" width="100" align="center" prop="otherDeathCount">
+            <el-table-column label="其他"  align="center" prop="otherDeathCount">
                 <template slot-scope="{row}">
                     <span>{{ row.otherDeathCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="伤害致死" width="100" align="center" prop="hurtToDeathCount">
+            <el-table-column label="伤害致死"  align="center" prop="hurtToDeathCount">
                 <template slot-scope="{row}">
                     <span>{{ row.hurtToDeathCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="出具鉴定书数" width="100" align="center" prop="documentCount">
+            <el-table-column label="出具鉴定书数"  align="center" prop="documentCount">
                 <template slot-scope="{row}">
                     <span>{{ row.documentCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="伤情鉴定总数" width="100" align="center" prop="injuryTotalCount">
+            <el-table-column label="伤情鉴定总数"  align="center" prop="injuryTotalCount">
                 <template slot-scope="{row}">
                     <span>{{ row.injuryTotalCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="轻伤" width="100" align="center" prop="littleInjuryCount">
+            <el-table-column label="轻伤"  align="center" prop="littleInjuryCount">
                 <template slot-scope="{row}">
                     <span>{{ row.littleInjuryCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="重伤" width="100" align="center" prop="seriousInjuryCount">
+            <el-table-column label="重伤" align="center" prop="seriousInjuryCount">
                 <template slot-scope="{row}">
                     <span>{{ row.seriousInjuryCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="伤残等级" width="100" align="center" prop="injuryLevelCount">
+            <el-table-column label="伤残等级"  align="center" prop="injuryLevelCount">
                 <template slot-scope="{row}">
                     <span>{{ row.injuryLevelCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="未构成轻微伤" width="100" align="center" prop="notCauseBitInjuryCount">
+            <el-table-column label="未构成轻微伤" align="center" prop="notCauseBitInjuryCount">
                 <template slot-scope="{row}">
                     <span>{{ row.notCauseBitInjuryCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="中止鉴定" width="100" align="center" prop="stopInjuryCount">
+            <el-table-column label="中止鉴定"  align="center" prop="stopInjuryCount">
                 <template slot-scope="{row}">
                     <span>{{ row.stopInjuryCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="不宜鉴定" width="100" align="center" prop="notAvailAbleCount">
+            <el-table-column label="不宜鉴定"  align="center" prop="notAvailAbleCount">
                 <template slot-scope="{row}">
                     <span>{{ row.notAvailAbleCount }}</span>
                 </template>

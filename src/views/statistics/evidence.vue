@@ -39,7 +39,7 @@
 
                 @selection-change="handleSelectionChange"
         >
-            <el-table-column type="selection" align="center" width="70"  />
+            <el-table-column type="selection" align="center"   />
             <el-table-column label="名称" width="90" align="center" prop="userName">
                 <template slot-scope="{row}">
                     <span>{{ row.userName }}</span>
@@ -50,47 +50,47 @@
                     <span>{{ row.createTime | parseTime('{y}-{m}-{d}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="送检案件起数" align="center" width="100" prop="handleCount">
+            <el-table-column label="送检案件起数" align="center"  prop="handleCount">
                 <template slot-scope="{row}">
                     <span>{{ row.sendExamCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="比中数" align="center" width="100" prop="compareHitCount">
+            <el-table-column label="比中数" align="center"  prop="compareHitCount">
                 <template slot-scope="{row}">
                     <span>{{ row.compareHitCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="微量检材份数" align="center" width="100" prop="minorMaterialCount">
+            <el-table-column label="微量检材份数" align="center"  prop="minorMaterialCount">
                 <template slot-scope="{row}">
                     <span>{{ row.minorMaterialCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="单一分型" align="center" width="100" prop="simpleMaterialCount">
+            <el-table-column label="单一分型" align="center"  prop="simpleMaterialCount">
                 <template slot-scope="{row}">
                     <span>{{ row.simpleMaterialCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="混合可拆分" align="center" width="100" prop="mixMaterialCount">
+            <el-table-column label="混合可拆分" align="center"  prop="mixMaterialCount">
                 <template slot-scope="{row}">
                     <span>{{ row.mixMaterialCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="微量检出数" align="center" width="100" prop="minorHitCount">
+            <el-table-column label="微量检出数" align="center"  prop="minorHitCount">
                 <template slot-scope="{row}">
                     <span>{{ row.minorHitCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="常规检材数" align="center" width="100" prop="normalMaterialCount">
+            <el-table-column label="常规检材数" align="center" prop="normalMaterialCount">
                 <template slot-scope="{row}">
                     <span>{{ row.normalMaterialCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="常规检出数" align="center" width="100" prop="normalMaterialHitCount">
+            <el-table-column label="常规检出数" align="center"  prop="normalMaterialHitCount">
                 <template slot-scope="{row}">
                     <span>{{ row.normalMaterialHitCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="备注" align="center" width="100" prop="note">
+            <el-table-column label="备注" align="center" prop="note">
                 <template slot-scope="{row}">
                     <span>{{ row.note }}</span>
                 </template>
