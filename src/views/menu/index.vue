@@ -14,7 +14,7 @@
       :data="list"
       :expand-on-click-node="false"
       node-key="id"
-      style="width: 30%"
+      style="width: 46%"
 
     >
       <span slot-scope="{ node, data }" class="custom-tree-node">

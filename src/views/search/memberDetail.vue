@@ -2484,27 +2484,27 @@ export default {
 
     judgeCP(newData){
 
-        // if (this.list.concernedPersonList.length === 0){
+        if (this.list.concernedPersonList.length === 0){
           if (newData.idType === '死者'){
             this.list.isDeathCase = true;
           }
-        // }else{
-        //   var count = 0;
-        //   if (newData.idType === '死者'){
-        //     this.list.isDeathCase = true;
-        //     count++;
-        //   }
-        //   this.list.concernedPersonList.map(item=>{
-        //     if (item.idType === '死者'){
-        //       count++
-        //     }
-        //   })
-        //
-        //   if (count)
-        //     this.list.isDeathCase = true;
-        //   else
-        //     this.list.isDeathCase = false
-        // }
+        }else{
+          var count = 0;
+          if (newData.idType === '死者'){
+            this.list.isDeathCase = true;
+            count++;
+          }
+          this.list.concernedPersonList.map(item=>{
+            if (item.idType === '死者'){
+              count++
+            }
+          })
+
+          if (count)
+            this.list.isDeathCase = true;
+          else
+            this.list.isDeathCase = false
+        }
 
 
 
@@ -2631,7 +2631,16 @@ export default {
               showClose: true,
               duration: 2000
             })
-
+            var count = 0;
+            this.list.concernedPersonList.map(item=>{
+              if (item.idType === '死者'){
+                count++
+              }
+            })
+            if (count)
+              this.list.isDeathCase = true;
+            else
+              this.list.isDeathCase = false
             if (this.isEdit)
               this.submitForm()
 

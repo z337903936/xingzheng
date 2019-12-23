@@ -915,7 +915,7 @@
             },
             handleTaskAction(task) {
                 this.dialogFormAction = true;
-                this.acceptTaskFrom.requireOrg = this.$store.getters.name;
+                this.acceptTaskFrom.requireOrg = task.fromUser;
                 this.acceptTaskFrom.requireTime = task.requireTime ? task.requireTime*1000:task.createTime*1000
                 this.acceptTaskFrom.stepId = task.id
 

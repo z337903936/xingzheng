@@ -44,7 +44,7 @@
         <div class="tip">
             <el-row :gutter="20" class="mb10">
                 <el-col :span="12" >
-                    勘查号:{{ heardDetail.evidence ?heardDetail.evidence.evidenceNo: '' }}
+                    勘查号:{{ heardDetail.evidence ?heardDetail.evidence.selfEvidenceNo: '' }}
                 </el-col>
                 <el-col :span="12">
                     简要案情:{{ heardDetail.evidence ?( heardDetail.evidence.caseHappenTime +'在'+ heardDetail.evidence.caseAddress + heardDetail.evidence.caseCategory +'案'): '' }}
@@ -66,9 +66,7 @@
                 <el-col :span="12">
                     申请人:{{ heardDetail.evidence ?heardDetail.evidence.createName : ''}}
                 </el-col>
-                <el-col :span="12">
-                    申请时间:{{ heardDetail.evidence ?heardDetail.evidence.createTime : ''}}
-                </el-col>
+
 
 
             </el-row>

@@ -75,7 +75,7 @@
             </el-table-column>
             <el-table-column label="移交人" prop="id" align="center" width="180">
                 <template slot-scope="{row}">
-                    <span>{{ row.fromName }}</span>
+                    <span>{{ row.fromUser }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="移交时间" prop="id" align="center" width="180">
