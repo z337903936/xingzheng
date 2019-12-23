@@ -1144,11 +1144,7 @@
               @click="addMultipleMaterialListForm()">
         批量保存
       </el-button>
-      <el-button
-              type="primary" style="float: right;margin-right: 10px"
-              @click="addMultipleMaterialListForm()">
-        批量保存
-      </el-button>
+
 
       <el-table
               ref="materialPhotoList"

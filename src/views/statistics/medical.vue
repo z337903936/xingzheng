@@ -50,86 +50,95 @@
                     <span>{{ row.createTime | parseTime('{y}-{m}-{d}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="出现场数" align="center"  prop="joinCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.joinCount }}</span>
-                </template>
+            <el-table-column label="现场勘查情况统计" align="center" >
+                <el-table-column label="出现场数" align="center"  prop="joinCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.joinCount }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="烧死" align="center"  prop="burnToDeathCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.burnToDeathCount }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="缢死" align="center"  prop="hangToDeathCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.hangToDeathCount }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="中毒" align="center"  prop="poisonToDeathCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.poisonToDeathCount }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="高坠" align="center" prop="fallToDeathCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.fallToDeathCount }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="溺死" align="center" prop="drownToDeathCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.drownToDeathCount }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="其他"  align="center" prop="otherDeathCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.otherDeathCount }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="伤害致死"  align="center" prop="hurtToDeathCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.hurtToDeathCount }}</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="出具鉴定书数"  align="center" prop="documentCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.documentCount }}</span>
+                    </template>
+                </el-table-column>
             </el-table-column>
-            <el-table-column label="烧死" align="center"  prop="burnToDeathCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.burnToDeathCount }}</span>
-                </template>
+            <el-table-column label="伤情鉴定情况统计" align="center" >
+                <el-table-column label="伤情鉴定总数"  align="center" prop="injuryTotalCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.injuryTotalCount }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="轻伤"  align="center" prop="littleInjuryCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.littleInjuryCount }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="重伤" align="center" prop="seriousInjuryCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.seriousInjuryCount }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="伤残等级"  align="center" prop="injuryLevelCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.injuryLevelCount }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="未构成轻微伤" align="center" prop="notCauseBitInjuryCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.notCauseBitInjuryCount }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="中止鉴定"  align="center" prop="stopInjuryCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.stopInjuryCount }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="不宜鉴定"  align="center" prop="notAvailAbleCount">
+                    <template slot-scope="{row}">
+                        <span>{{ row.notAvailAbleCount }}</span>
+                    </template>
+                </el-table-column>
             </el-table-column>
-            <el-table-column label="绞死" align="center"  prop="hangToDeathCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.hangToDeathCount }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="中毒" align="center"  prop="poisonToDeathCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.poisonToDeathCount }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="高坠" align="center" prop="fallToDeathCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.fallToDeathCount }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="溺死" align="center" prop="drownToDeathCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.drownToDeathCount }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="其他"  align="center" prop="otherDeathCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.otherDeathCount }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="伤害致死"  align="center" prop="hurtToDeathCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.hurtToDeathCount }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="出具鉴定书数"  align="center" prop="documentCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.documentCount }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="伤情鉴定总数"  align="center" prop="injuryTotalCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.injuryTotalCount }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="轻伤"  align="center" prop="littleInjuryCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.littleInjuryCount }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="重伤" align="center" prop="seriousInjuryCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.seriousInjuryCount }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="伤残等级"  align="center" prop="injuryLevelCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.injuryLevelCount }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="未构成轻微伤" align="center" prop="notCauseBitInjuryCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.notCauseBitInjuryCount }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="中止鉴定"  align="center" prop="stopInjuryCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.stopInjuryCount }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="不宜鉴定"  align="center" prop="notAvailAbleCount">
-                <template slot-scope="{row}">
-                    <span>{{ row.notAvailAbleCount }}</span>
-                </template>
-            </el-table-column>
+
+
+
+
 
         </el-table>
 
@@ -195,7 +204,8 @@
             handleSelect(){
                 this.downloadSelectLoading = true
                 import('@/vendor/Export2Excel').then(excel => {
-                    const tHeader = ['名称','统计时间','出现场数',
+                    const multiHeader = [['名称','统计时间','现场勘查情况统计','','','','','','','', '伤情鉴定情况统计','','','','','','','',]]
+                    const tHeader = ['','','出现场数',
                         '烧死','绞死','中毒','高坠','溺死',
                         '其他','伤害致死','出具鉴定书数','伤情鉴定总数','轻伤',
                         '重伤','伤残等级','未构成轻微伤','中止鉴定','不宜鉴定',
@@ -204,7 +214,7 @@
                         'hangToDeathCount','poisonToDeathCount', 'fallToDeathCount', 'drownToDeathCount', 'otherDeathCount', 'hurtToDeathCount',
                         'documentCount', 'injuryTotalCount', 'littleInjuryCount', 'seriousInjuryCount', 'injuryLevelCount','notCauseBitInjuryCount',
                         'stopInjuryCount', 'notAvailAbleCount']
-
+                    const merges = ['A1:A2', 'B1:B2', 'C1:J1', 'K1:Q1']
                     const list = this.multipleSelection
                     const data = this.formatJson(filterVal, list)
                     let title = ''
@@ -213,25 +223,30 @@
                     }
 
                     excel.export_json_to_excel({
-                        header: tHeader,
-                        data,
-                        filename: '法医工作情况统计'+title
+                        multiHeader:multiHeader,
+                        header:tHeader,
+                        data:data,
+                        filename: '法医工作情况统计'+title,
+                        merges:merges,
                     })
+                    this.$refs.multipleTable.clearSelection()
                     this.downloadSelectLoading = false
                 })
             },
             handleDownload() {
                 this.downloadLoading = true
                 import('@/vendor/Export2Excel').then(excel => {
-                    const tHeader = ['名称','统计时间','出现场数',
+                    const multiHeader = [['名称','统计时间','现场勘查情况统计','','','','','','','', '伤情鉴定情况统计','','','','','','','',]]
+                    const tHeader = ['','','出现场数',
                         '烧死','绞死','中毒','高坠','溺死',
                         '其他','伤害致死','出具鉴定书数','伤情鉴定总数','轻伤',
                         '重伤','伤残等级','未构成轻微伤','中止鉴定','不宜鉴定',
-                      ]
+                    ]
                     const filterVal = ['userName', 'createTime', 'joinCount', 'burnToDeathCount',
                         'hangToDeathCount','poisonToDeathCount', 'fallToDeathCount', 'drownToDeathCount', 'otherDeathCount', 'hurtToDeathCount',
                         'documentCount', 'injuryTotalCount', 'littleInjuryCount', 'seriousInjuryCount', 'injuryLevelCount','notCauseBitInjuryCount',
                         'stopInjuryCount', 'notAvailAbleCount']
+                    const merges = ['A1:A2', 'B1:B2', 'C1:J1', 'K1:Q1']
                     const data = this.formatJson(filterVal, this.list)
                     let title = ''
                     if (this.searchTime){
@@ -239,11 +254,13 @@
                     }
 
                     excel.export_json_to_excel({
-                        header: tHeader,
-                        data,
-                        filename: '法医工作情况统计'+title
+                        multiHeader:multiHeader,
+                        header:tHeader,
+                        data:data,
+                        filename: '法医工作情况统计'+title,
+                        merges:merges,
                     })
-                    this.$refs.multipleTable.clearSelection()
+
                     this.downloadLoading = false
                 })
             },

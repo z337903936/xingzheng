@@ -153,6 +153,7 @@
                         data,
                         filename: '破案情况统计'+title
                     })
+                    this.$refs.multipleTable.clearSelection()
                     this.downloadSelectLoading = false
                 })
             },
@@ -174,7 +175,7 @@
                         data,
                         filename: '破案情况统计'+title
                     })
-                    this.$refs.multipleTable.clearSelection()
+
                     this.downloadLoading = false
                 })
             },

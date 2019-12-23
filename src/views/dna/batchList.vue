@@ -94,8 +94,8 @@
             </el-table-column>
             <el-table-column label="状态"  align="center" width="120px">
                 <template slot-scope="{row}">
-                    <span v-if="row.evidenceMaterial">未填写</span>
-                    <span v-if="row.evidenceMaterial">已填写</span>
+                    <span v-if="row.evidenceMaterialResult.status===1">未填写</span>
+                    <span v-if="row.evidenceMaterialResult.status===2">已填写</span>
                 </template>
             </el-table-column>
             <el-table-column label="操作" align="center" fixed="right" width="280" class="small-padding fixed-width">
@@ -561,7 +561,7 @@
             this.getUserList()
 
             this.heardDetail = this.batch;
-            console.log(this.batch);
+
             this.heardDetail.evidence.caseBeginTime = parseTime(this.heardDetail.evidence.caseBeginTime,'{y}-{m}-{d} {h}:{i}:{s}');
             this.taskFrom.evidenceId = this.heardDetail.evidence.id;
 
@@ -595,7 +595,7 @@
             },
             gotoMaterialResult(row){
                 // row.handlerUid = this.batch.handlerUid;
-                this.$router.push({ name:'materialResult',params:{id:row.id},query: {handlerUid:this.batch.handlerUid, batchId:this.curId}})
+                this.$router.push({ name:'materialResult',params:{id:row.id},query: {result:row.evidenceMaterialResult.id,handlerUid:this.batch.handlerUid, batchId:this.curId,status:row.evidenceMaterialResult.status}})
             },
             submitPush(){
                 batchPush({

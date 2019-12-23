@@ -369,6 +369,7 @@
                     handlerUid:undefined,
                     batchId:undefined,
                 },
+                curId:null
             }
         },
         created() {
@@ -380,7 +381,10 @@
             this.batchId = this.$route.query.batchId;
             this.resultFrom.examUid = this.$store.getters.id;
             this.resultFrom.id = id;
+            this.curId = id;
+            console.log(this.resultFrom.id )
             this.getList(this.batchId);
+
             // this.material = JSON.parse(this.$route.query.material);
             // console.log(this.material);
 
@@ -388,8 +392,12 @@
 
             this.next.batchId = this.batchId;
             this.next.handlerUid = this.resultFrom.examUid;
+            let status = this.$route.query.status;
+            let result = this.$route.query.result;
+            if (status !== 1) {
+                this.fetchData(result)
+            }
 
-            // this.fetchData(id)
             this.getUseType();
         },
         methods:{
@@ -408,47 +416,21 @@
                 }
 
             },
-           /* gotoNextMaterialResult(){
-                // row.handlerUid = this.batch.handlerUid;
-                // this.$router.push({ name:'materialResult',params:{id:this.next.id},query: {handlerUid:this.next.handlerUid, batchId:this.next.batchId}})
-                this.$store.dispatch('delView', this.$route)
-                this.resultFrom ={
-                    id: this.next,
-                    materialId: '',
-                    batchId: '',
-                    examUid: this.$route.query.handlerUid,
-                    examOrg: this.$store.getters.orgName,
-                    materialType: '',
-                    examResult: '',
-                    checkPeople: '',
-                    sex: '',
-                    idNo: '',
-                    checkOutTime: '',
-                    huji: '',
-                    useType: '',
-                    documentNo: '',
-                    needToPushToCharger: '',
-                    needTransferDocument: '',
-                    needPutInStock: '',
-                    materialDetail: '',
-                };
-                this.getList(this.batchId);
 
-            },*/
             getList(id) {
+
                 this.listQuery.batchId = id
                 let  next = false;
+
                 batchMaterialList(this.listQuery).then(response => {
                     this.list = response.list;
 
                     this.list.map(item=>{
-
-
-                        if (item.id === Number(this.resultFrom.id)){
+                        if (item.id === Number(this.curId )){
                             this.material = item;
                             next = true;
                         }
-                        if (next && item.id!==Number(this.resultFrom.id)){
+                        if (next && item.id!==Number(this.curId )){
                             this.next.id = item.id;
                             next=false;
                         }
@@ -456,6 +438,7 @@
                     })
 
                     this.resultDetail = this.material;
+                    console.log(this.resultDetail);
                     this.resultDetail.evidenceMaterial.extractTime = parseTime(this.resultDetail.evidenceMaterial.extractTime,'{y}-{m}-{d} {h}:{i}:{s}')
                     this.stepName =  this.resultDetail.stepName
                     this.resultFrom.materialId =  this.material.evidenceMaterial.id
