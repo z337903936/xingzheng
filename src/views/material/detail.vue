@@ -184,8 +184,15 @@
                </div>
 
                 <div v-if="actionForm.stepName === '申请物证出库'">
-                    <el-form-item label="出库用途" prop="reason">
-                        <el-input v-model="actionForm.storagePlace"/>
+                    <el-form-item label="出库用途" prop="borrowReason">
+                        <el-select v-model="actionForm.borrowReason" placeholder="请选择" clearable center style="width: 100%">
+                            <el-option
+                                    v-for="item in borrowReason"
+                                    :key="item.value"
+                                    :label="item.value"
+                                    :value="item.value"
+                            />
+                        </el-select>
                     </el-form-item>
                 </div>
 
@@ -257,14 +264,44 @@
                     storagePlace:undefined,
                     storageDuration:undefined,
                     borrowReason:undefined,
-                }
+                },
+                borrowReason:[],
             }
         },
         created(){
             const id = this.$route.params && this.$route.params.id
             this.getList(id)
+            this.search('出库用途').then(response=>{
+                this.borrowReason = this.processData(response.list)
+            });
         },
         methods: {
+            search(parentName,filter=null){
+                return new Promise((resolve, reject) => {
+                    const data = {
+                        filter:filter,
+                        parentName:parentName
+                    };
+                    resolve(fetchList(data))
+                })
+
+            },
+
+            processData(data){
+                return data.map(item=>{
+                    var sendData = {
+                        value:item.name,
+                        label:item.name,
+                        id:item.id,
+                        py:item.pinyinAbbr,
+                    }
+                    if (item.children.length >0){
+                        sendData.children = this.processData(item.children);
+                    }
+
+                    return sendData;
+                })
+            },
             handleAction(data){
                 this.actionForm = data.evidenceMaterial;
                 this.actionForm.stepName = data.stepName

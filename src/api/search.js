@@ -1,10 +1,13 @@
 import request from '@/utils/request'
 
 export function exportExcelAlone(id) {
+    let header = new Array()
+    header['Accept'] = "application/vnd.ms-excel"
     return request({
         url: '/v1/cp/export_evidence/'+id+'/',
         method: 'get',
-        params: {}
+        params: {},
+        header:header
     })
 }
 export function searchList(data) {

@@ -92,6 +92,12 @@
                     <span>{{ row.evidenceMaterial.thirdMaterialNo }}</span>
                 </template>
             </el-table-column>
+            <el-table-column label="状态"  align="center" width="120px">
+                <template slot-scope="{row}">
+                    <span v-if="row.evidenceMaterial">未填写</span>
+                    <span v-if="row.evidenceMaterial">已填写</span>
+                </template>
+            </el-table-column>
             <el-table-column label="操作" align="center" fixed="right" width="280" class="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <!--<router-link :to="{name:'materialResult',params:row}" >-->
