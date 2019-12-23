@@ -223,7 +223,8 @@
                 caseHappenRegionList:[],
 
                 calendarTypeOptions:{},
-                downloadLoading:false
+                downloadLoading:false,
+                userId:'',
             }
         },
         created() {
@@ -235,13 +236,14 @@
             this.search('行政区划').then(data => {
                 this.caseHappenRegionList = this.processData(data.list)
             })
+            this.userId = this.$store.getters.id
         },
         methods: {
             gotoUpdate(row){
                 this.$router.push({ path: '/search/update-search/'+row.id })
             },
             Disable(row){
-                return this.$store.getters.id === row.createUid
+                return  this.userId !== row.createUid
             },
             handleExportExcelAlone(row){
                 exportExcelAlone(row.id).then(response=>{

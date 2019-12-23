@@ -1929,7 +1929,6 @@ export default {
     handleClose(done){
       var change = 0;
       this.materialPhotoList.map(data=>{
-        console.log(data)
         if (!data.status){
           change++;
         }
@@ -1942,9 +1941,13 @@ export default {
       }else{
         this.$confirm('有物证信息未编辑!')
                 .then(_ => {
-
+                  if (this.isEdit)
+                    this.submitForm();
+                  done();
                 })
-                .catch(_ => {});
+                .catch(_ => {
+
+                });
       }
 
     },
@@ -1965,7 +1968,10 @@ export default {
       }else{
         this.$confirm('有物证信息未编辑!')
                 .then(_ => {
-
+                  if (this.isEdit)
+                    this.submitForm();
+                  this.fetchData(this.list.id);
+                  this.dialogMaterialListForm = false
                 })
                 .catch(_ => {});
       }

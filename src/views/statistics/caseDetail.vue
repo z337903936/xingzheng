@@ -22,87 +22,87 @@
 
                 @selection-change="handleSelectionChange"
         >
-            <el-table-column type="selection" align="center" width="70" />
-            <el-table-column label="名称" width="90" align="center" prop="userName">
+            <el-table-column type="selection" align="center" width="40"  />
+            <el-table-column label="名称" width="75" align="center" prop="userName">
                 <template slot-scope="{row}">
                     <span>{{ row.userName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="统计时间" width="160" align="center" prop="createTime">
+            <el-table-column label="统计时间" width="110" align="center" prop="createTime">
                 <template slot-scope="{row}">
                     <span>{{ row.createTime | parseTime('{y}-{m}-{d}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="当日勘查数" align="center" width="100" prop="dayEvidences">
+            <el-table-column label="当日勘查数" align="center" width="40" prop="dayEvidences">
                 <template slot-scope="{row}">
                     <span>{{ row.dayEvidences }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="现勘数" align="center" width="100" prop="evidences">
+            <el-table-column label="现勘数" align="center" width="40" prop="evidences">
                 <template slot-scope="{row}">
                     <span>{{ row.evidences }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="盗抢骗案件" align="center" width="100" prop="stealRobCount">
+            <el-table-column label="盗抢骗案件" align="center" width="40" prop="stealRobCount">
                 <template slot-scope="{row}">
                     <span>{{ row.stealRobCount }}</span>
                 </template>
             </el-table-column>
 
             <el-table-column label="十类" align="center">
-                <el-table-column label="入室盗窃" align="center" width="100" prop="invadeStealCount">
+                <el-table-column label="入室盗窃" align="center" width="40" prop="invadeStealCount">
                     <template slot-scope="{row}">
                         <span>{{ row.invadeStealCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="盗窃车内财物" width="120" align="center" prop="stealFromCarCount">
+                <el-table-column label="盗窃车内财物" width="40" align="center" prop="stealFromCarCount">
                     <template slot-scope="{row}">
                         <span>{{ row.stealFromCarCount }}</span>
                     </template>
                 </el-table-column>
 
-                <el-table-column label="绑架" width="100" align="center" prop="kidnapCount">
+                <el-table-column label="绑架" width="40" align="center" prop="kidnapCount">
                     <template slot-scope="{row}">
                         <span>{{ row.kidnapCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="强奸" width="100" align="center" prop="rapeCount">
+                <el-table-column label="强奸" width="40" align="center" prop="rapeCount">
                     <template slot-scope="{row}">
                         <span>{{ row.rapeCount }}</span>
                     </template>
                 </el-table-column>
 
-                <el-table-column label="故意杀人" width="100" align="center" prop="murderCount">
+                <el-table-column label="故意杀人" width="40" align="center" prop="murderCount">
                     <template slot-scope="{row}">
                         <span>{{ row.murderCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="伤害致死" width="100" align="center" prop="hurtToDeathCount">
+                <el-table-column label="伤害致死" width="40" align="center" prop="hurtToDeathCount">
                     <template slot-scope="{row}">
                         <span>{{ row.hurtToDeathCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="破坏" width="100" align="center" prop="damageCount">
+                <el-table-column label="破坏" width="40" align="center" prop="damageCount">
                     <template slot-scope="{row}">
                         <span>{{ row.damageCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="放火" width="100" align="center" prop="arsonCount">
+                <el-table-column label="放火" width="40" align="center" prop="arsonCount">
                     <template slot-scope="{row}">
                         <span>{{ row.arsonCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="爆炸" width="100" align="center" prop="explodeCount">
+                <el-table-column label="爆炸" width="40" align="center" prop="explodeCount">
                     <template slot-scope="{row}">
                         <span>{{ row.explodeCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="投毒" width="100" align="center" prop="poisonCount">
+                <el-table-column label="投毒" width="40" align="center" prop="poisonCount">
                     <template slot-scope="{row}">
                         <span>{{ row.poisonCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="入室抢劫" width="100" align="center" prop="robAtRoomCount">
+                <el-table-column label="入室抢劫" width="40" align="center" prop="robAtRoomCount">
                     <template slot-scope="{row}">
                         <span>{{ row.robAtRoomCount }}</span>
                     </template>
@@ -110,107 +110,107 @@
             </el-table-column>
 
             <el-table-column label="非十类" align="center">
-                <el-table-column label="盗窃" width="100" align="center" prop="stealCount">
+                <el-table-column label="盗窃" width="40" align="center" prop="stealCount">
                     <template slot-scope="{row}">
                         <span>{{ row.stealCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="死亡" width="100" align="center" prop="deathCount">
+                <el-table-column label="死亡" width="40" align="center" prop="deathCount">
                     <template slot-scope="{row}">
                         <span>{{ row.deathCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="故意伤害" width="100" align="center" prop="intentHurtCount">
+                <el-table-column label="故意伤害" width="40" align="center" prop="intentHurtCount">
                     <template slot-scope="{row}">
                         <span>{{ row.intentHurtCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="抢劫" width="100" align="center" prop="robCount">
+                <el-table-column label="抢劫" width="40" align="center" prop="robCount">
                     <template slot-scope="{row}">
                         <span>{{ row.robCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="打架斗殴" width="100" align="center" prop="fightCount">
+                <el-table-column label="打架斗殴" width="40" align="center" prop="fightCount">
                     <template slot-scope="{row}">
                         <span>{{ row.fightCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="容留他人吸毒" width="120" align="center" prop="allowTakeDragCount">
+                <el-table-column label="容留他人吸毒" width="40" align="center" prop="allowTakeDragCount">
                     <template slot-scope="{row}">
                         <span>{{ row.allowTakeDragCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="寻衅滋事" width="100" align="center" prop="quarrelCount">
+                <el-table-column label="寻衅滋事" width="40" align="center" prop="quarrelCount">
                     <template slot-scope="{row}">
                         <span>{{ row.quarrelCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="诈骗" width="100" align="center" prop="defraudCount">
+                <el-table-column label="诈骗" width="40" align="center" prop="defraudCount">
                     <template slot-scope="{row}">
                         <span>{{ row.defraudCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="敲诈勒索" width="100" align="center" prop="blackmailCount">
+                <el-table-column label="敲诈勒索" width="40" align="center" prop="blackmailCount">
                     <template slot-scope="{row}">
                         <span>{{ row.blackmailCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="贩卖毒品" width="100" align="center" prop="sellDrugCount">
+                <el-table-column label="贩卖毒品" width="40" align="center" prop="sellDrugCount">
                     <template slot-scope="{row}">
                         <span>{{ row.sellDrugCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="危害公共安全" width="120" align="center" prop="endangerCount">
+                <el-table-column label="危害公共安全" width="40" align="center" prop="endangerCount">
                     <template slot-scope="{row}">
                         <span>{{ row.endangerCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="非法拘禁" width="100" align="center" prop="falseImprisonmentCount">
+                <el-table-column label="非法拘禁" width="40" align="center" prop="falseImprisonmentCount">
                     <template slot-scope="{row}">
                         <span>{{ row.falseImprisonmentCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="制造毒品" width="100" align="center" prop="makeDrugCount">
+                <el-table-column label="制造毒品" width="40" align="center" prop="makeDrugCount">
                     <template slot-scope="{row}">
                         <span>{{ row.makeDrugCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="非法存储枪支" width="120" align="center" prop="illegalStoreGunCount">
+                <el-table-column label="非法存储枪支" width="40" align="center" prop="illegalStoreGunCount">
                     <template slot-scope="{row}">
                         <span>{{ row.illegalStoreGunCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="其它" width="100" align="center" prop="otherCount">
+                <el-table-column label="其它" width="40" align="center" prop="otherCount">
                     <template slot-scope="{row}">
                         <span>{{ row.otherCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="故意毁坏财物" width="120" align="center" prop="intenseRuinMaterialCount">
+                <el-table-column label="故意毁坏财物" width="40" align="center" prop="intenseRuinMaterialCount">
                     <template slot-scope="{row}">
                         <span>{{ row.intenseRuinMaterialCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="其他妨害社会" width="120" align="center" prop="otherHarmfulCount">
+                <el-table-column label="其他妨害社会" width="40" align="center" prop="otherHarmfulCount">
                     <template slot-scope="{row}">
                         <span>{{ row.otherHarmfulCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="吸毒" width="100" align="center" prop="takeDrugCount">
+                <el-table-column label="吸毒" width="40" align="center" prop="takeDrugCount">
                     <template slot-scope="{row}">
                         <span>{{ row.takeDrugCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="猥亵" width="100" align="center" prop="obsceneCount">
+                <el-table-column label="猥亵" width="40" align="center" prop="obsceneCount">
                     <template slot-scope="{row}">
                         <span>{{ row.obsceneCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="其他侵财" width="100" align="center" prop="otherInvadeMoneyCount">
+                <el-table-column label="其他侵财" width="40" align="center" prop="otherInvadeMoneyCount">
                     <template slot-scope="{row}">
                         <span>{{ row.otherInvadeMoneyCount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="抢夺" width="100" align="center" prop="snatchCount">
+                <el-table-column label="抢夺" width="40" align="center" prop="snatchCount">
                     <template slot-scope="{row}">
                         <span>{{ row.snatchCount }}</span>
                     </template>
