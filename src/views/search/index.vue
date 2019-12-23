@@ -62,6 +62,9 @@
                     </el-select>
                     <el-input v-model="listQuery.filters" placeholder="关键字" style="width: 200px;"
                               @keyup.enter.native="handleFilter"/>
+                    <el-button style="float: right;margin-right: 10px" v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleExportExcel">
+                        导出
+                    </el-button>
                     <el-button v-waves type="primary" icon="el-icon-refresh" @click="reset"
                                style="float: right;margin-right: 20px">
                         清空搜索条件
@@ -74,9 +77,7 @@
                     </router-link>
                 </div>
 
-                <!--<el-button v-waves :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">-->
-                <!--导出-->
-                <!--</el-button>-->
+
             </div>
         </div>
 
@@ -149,7 +150,7 @@
                     <router-link :to="'/transferLog/index/'+row.id">
                         <el-button type="success" size="mini" style="width: 80px">物证去向</el-button>
                     </router-link>
-                    <el-button size="mini"  style="width: 90px"type="success" @click="handleExportExcelAlone(row.id)">
+                    <el-button size="mini"  style="width: 90px"type="success" @click="handleExportExcelAlone(row)">
                         导出Excel
                     </el-button>
                 </template>
@@ -173,7 +174,7 @@
 </template>
 
 <script>
-    import {searchList,exportExcelAlone} from '@/api/search'
+    import {searchList,exportExcelAlone,exportExcel} from '@/api/search'
     import waves from '@/directive/waves' // waves directive
     import {fetchList} from '@/api/dictionary'
     import {parseTime} from '@/utils'
@@ -222,7 +223,7 @@
                 caseHappenRegionList:[],
 
                 calendarTypeOptions:{},
-
+                downloadLoading:false
             }
         },
         created() {
@@ -242,8 +243,40 @@
             Disable(row){
                 return this.$store.getters.id === row.createUid
             },
-            handleExportExcelAlone(id){
-                exportExcelAlone(id).then()
+            handleExportExcelAlone(row){
+                exportExcelAlone(row.id).then(response=>{
+                    var blob = new Blob([response], { type: 'data:application/vnd.ms-excel' });
+                    var downloadUrl = URL.createObjectURL(blob);
+                    var a = document.createElement("a");
+                    a.href = downloadUrl;
+                    a.download = '现勘'+row.selfEvidenceNo+".xls";
+                    document.body.appendChild(a);
+                    a.click();
+                    // let blob = new Blob([response], {type: "application/vnd.ms-excel;charset=utf-8"});
+                    // let url = window.URL.createObjectURL(blob);
+                    // window.location.href = url;
+                })
+            },
+            handleExportExcel(){
+                this.downloadLoading = true
+                if (this.searchTime) {
+                    if (this.searchTime[0].toString().length > 10) {
+                        this.listQuery.beginTime = this.searchTime[0] / 1000
+                    }
+                    if (this.searchTime[1].toString().length > 10) {
+                        this.listQuery.endTime = this.searchTime[1] / 1000
+                    }
+                }
+                exportExcel(this.listQuery).then(response=>{
+                    var blob = new Blob([response], { type: 'data:application/vnd.ms-excel' });
+                    var downloadUrl = URL.createObjectURL(blob);
+                    var a = document.createElement("a");
+                    a.href = downloadUrl;
+                    a.download = "现勘报告.xls";
+                    document.body.appendChild(a);
+                    a.click();
+                    this.downloadLoading = false;
+                })
             },
             reset() {
                 this.listQuery = {
