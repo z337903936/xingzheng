@@ -2987,7 +2987,7 @@ export default {
             this.loading = true
 
             if (this.isEdit) {
-
+              data.needGenerateEvidenceNo = 1;
               updateSearch(data).then(response => {
                 if (response.code === 200) {
                   this.$message({

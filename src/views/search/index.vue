@@ -139,9 +139,9 @@
 
             <el-table-column label="操作" align="center" fixed="right" width="380" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <router-link :to="'/search/update-search/'+row.id">
-                        <el-button type="primary" size="mini" icon="el-icon-edit" >编辑</el-button>
-                    </router-link>
+                    <!--<router-link :to="'/search/update-search/'+row.id" >-->
+                        <el-button type="primary" size="mini" icon="el-icon-edit" :disabled="Disable(row)" @click="gotoUpdate(row)">编辑</el-button>
+                    <!--</router-link>-->
 
                     <router-link :to="'/search/show-search/'+row.id">
                         <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
@@ -236,6 +236,12 @@
             })
         },
         methods: {
+            gotoUpdate(row){
+                this.$router.push({ path: '/search/update-search/'+row.id })
+            },
+            Disable(row){
+                return this.$store.getters.id === row.createUid
+            },
             handleExportExcelAlone(id){
                 exportExcelAlone(id).then()
             },
