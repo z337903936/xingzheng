@@ -283,7 +283,7 @@
                     </el-button>
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
                                @click="handleTaskAlarmAction(row)"
-                               v-if="row.status===1 &&  row.stepName === '警情扭转' ">
+                               v-if="row.status===1 &&  row.stepName === '警情扭转' ||  row.stepName === '比中反馈' ">
                         接收任务
                     </el-button>
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
@@ -313,7 +313,7 @@
                                v-if="row.stepName !== '痕检现勘' && row.stepName !== '申请物证入库' && row.stepName !== '申请物证出库' && row.stepName !== '警情扭转'">
                         物证详情</el-button>
                     <router-link :to="'/search/update-search/'+row.evidenceId"
-                                 v-if="row.status===2 && (row.stepName==='痕检现勘' ||  row.stepName === '警情扭转') ">
+                                 v-if="row.status===2 && (row.stepName==='痕检现勘' ||  row.stepName === '警情扭转' ) ">
                         <el-button icon="el-icon-edit" type="primary" size="small">编辑现勘</el-button>
                     </router-link>
                     <el-button type="warning" size="small" icon="el-icon-tickets" @click="handleCancelEvidence(row.record)"
