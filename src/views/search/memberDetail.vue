@@ -969,13 +969,11 @@
           </el-col>
           <el-col :span="12" style="margin-top: 10px">
             身份证号：{{ materialListForm.idNo ? materialListForm.idNo:'' }}
-
           </el-col>
 
           <el-col :span="12" style="margin-top: 10px">
             比中时间：{{ materialListForm.checkOutTime ? materialListForm.checkOutTime:'' }}
           </el-col>
-
 
         </el-row>
         <el-divider content-position="left">编辑物证</el-divider>
@@ -1137,6 +1135,11 @@
       </el-form>
       <el-button
               type="primary" style="float: right"
+              @click="addmaterialPhoto()">
+        添加无图片物证
+      </el-button>
+      <el-button
+              type="primary" style="float: right;margin-right: 10px"
               @click="dialogMaterialListFormMethod === 'add'?addMaterialListForm():updateMaterialListForm()">
         保存
       </el-button>
@@ -2704,8 +2707,42 @@ export default {
         this.submitForm(true)
       }
     },
-
+    addmaterialPhoto(){
+      var data ={
+        id: '',
+        materialNo: '',
+        hasTransfered: false,
+        thirdMaterialNo: '',
+        materialCategory: '',
+        materialCategoryShow: '',
+        materialType: '',
+        extractTime: (new Date()).valueOf(),
+        extractMethod: '',
+        extractUid: this.$store.getters.id,
+        extractName: '',
+        imgUrl: '',
+        stayPart: '',
+        reliabilityLevel: '疑似',
+        usedType: '',
+        name: '',
+        note: '',
+        noned: '',
+        evidenceId: this.list.id,
+        status:0,
+      };
+      this.materialPhotoList.push(data);
+    },
     addMaterialListForm() {
+      if (!this.materialListForm.evidenceId){
+        this.$confirm('请选择物证!')
+                .then(_ => {
+
+                })
+                .catch(_ => {
+
+                });
+        return;
+      }
       var data =Object.assign({}, this.materialListForm)
 
       if (data.materialCategory.constructor === Array) {
@@ -2826,6 +2863,16 @@ export default {
     },
     updateMaterialListForm() {
       // if (this.isEdit) {
+      if (!this.materialListForm.evidenceId){
+        this.$confirm('请选择物证!')
+                .then(_ => {
+
+                })
+                .catch(_ => {
+
+                });
+        return;
+      }
       var data =Object.assign({}, this.materialListForm)
 
       if (data.materialCategory.constructor === Array) {

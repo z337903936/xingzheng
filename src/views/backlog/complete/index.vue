@@ -9,6 +9,59 @@
                 highlight-current-row
                 style="width: 100%;"
         >
+            <el-table-column  type="expand" ref="expand">
+                <template slot-scope="{row}">
+                    <el-form label-position="left" inline class="table-expand" v-if="row.status === -2">
+                        <el-form-item label="报告人">
+                            <span>{{ row.record.reporter }}</span>
+                        </el-form-item>
+                        <el-form-item label="报告单位">
+                            <span>{{ row.record.reportOrg }}</span>
+                        </el-form-item>
+                        <el-form-item label="接警时间">
+                            <span>{{  pareTime(row.record.receiptTime) }}</span>
+                        </el-form-item>
+                        <el-form-item label="联系电话">
+                            <span>{{ row.record.contactPhoneNumber }}</span>
+                        </el-form-item>
+                        <el-form-item label="案件类别">
+                            <span>{{ row.record.caseCategory }}</span>
+                        </el-form-item>
+                        <el-form-item label="案发时间">
+                            <span>{{ pareTime(row.record.caseTime)  }}</span>
+                        </el-form-item>
+                        <el-form-item label="警情号">
+                            <span>{{ row.record.instanceNo }}</span>
+                        </el-form-item>
+                        <el-form-item label="案发地点">
+                            <span>{{ row.record.caseAddress }}</span>
+                        </el-form-item>
+                        <el-form-item label="案发摘要">
+                            <span>{{ row.record.caseDigest }}</span>
+                        </el-form-item>
+                        <el-form-item label="损失情况">
+                            <span>{{ row.record.lostDetail }}</span>
+                        </el-form-item>
+                        <el-form-item label="技术值班队长">
+                            <span>{{ row.record.monitorName }}</span>
+                        </el-form-item>
+                        <el-form-item label="值班技术员">
+                            <span>{{ row.record.techName }}</span>
+                        </el-form-item>
+                        <el-form-item label="大队值班领导">
+                            <span>{{ row.record.leaderName }}</span>
+                        </el-form-item>
+                        <el-form-item label="接警人">
+                            <span>{{ row.record.receiptName }}</span>
+                        </el-form-item>
+                        <el-form-item label="驾驶员">
+                            <span>{{ row.record.driverName }}</span>
+                        </el-form-item>
+                    </el-form>
+
+                </template>
+
+            </el-table-column >
             <el-table-column label="任务单号" align="center" width="120">
                 <template slot-scope="{row}">
                     <span>{{ row.taskNo }}</span>
@@ -78,7 +131,7 @@
                         <router-link :to="'/search/update-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘' || row.stepName === '警情扭转'">
                             <el-button type="primary" size="mini" icon="el-icon-edit" >编辑</el-button>
                         </router-link>
-                        <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘' || row.stepName === '警情扭转'">
+                        <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘'">
                             <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
                         </router-link>
                     </div>
@@ -140,6 +193,23 @@
             this.getList();
         },
         methods:{
+            pareTime(time) {
+                if (time) {
+                    return this.formatDate(time * 1000)
+                } else {
+                    return ''
+                }
+            },
+            formatDate(now) {
+                var time = new Date(now)
+                var year = time.getFullYear();
+                var month = time.getMonth() + 1;
+                var date = time.getDate();
+                var hour = time.getHours();
+                var minute = time.getMinutes();
+                var second = time.getSeconds();
+                return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
+            },
             gotobatchList(row){
                 this.$router.push({ name:'materialBatch',params:{id:row.examBatch.id},query: { batch:JSON.stringify(row)}})
             },
@@ -192,3 +262,29 @@
         }
     }
 </script>
+<style scoped>
+    .el-table >>> .el-table__expanded-cell[class*="cell"] {
+        background-color: #f0f0f0 !important;
+    }
+
+    .table-expand {
+        font-size: 0;
+
+    }
+
+    .table-expand label {
+        width: 90px;
+        color: #99a9bf;
+    }
+
+    .table-expand .el-form-item {
+        margin-right: 0;
+        margin-bottom: 0;
+        width: 50%;
+    }
+
+    .el-row {
+        margin-bottom: 20px;
+    }
+
+</style>
