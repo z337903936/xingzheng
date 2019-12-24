@@ -328,6 +328,7 @@
                             showClose: true,
                             duration: 2000
                         })
+                        this.getList()
                         this.$router.push({
                             path: '/search/update-search/' + response.evidenceId,
                             query: {
