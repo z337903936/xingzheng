@@ -592,13 +592,16 @@
                 })
             },
             resultDisable(row){
-                return (this.heardDetail.status === 1 || this.heardDetail.status === -1) && this.$store.getters.id === row.evidenceMaterialResult.createUid;
+                if (!row.evidenceMaterialResult){
+                    return true ;
+                }
+                if (this.$store.getters.id !== row.evidenceMaterialResult.createUid)
+                    return true ;
+                return (this.heardDetail.status === 1 || this.heardDetail.status === -1);
             },
             gotoMaterialResult(row){
                 // row.handlerUid = this.batch.handlerUid;
-                if (!row.evidenceMaterialResult){
-                    return ;
-                }
+
                 this.$router.push({ name:'materialResult',params:{id:row.id},query: {result:row.evidenceMaterialResult.id,handlerUid:this.batch.handlerUid, batchId:this.curId,status:row.evidenceMaterialResult.status}})
             },
             submitPush(){
