@@ -951,6 +951,7 @@
       </div>
     </el-dialog>
 
+
     <el-dialog :visible.sync="dialogMaterialListForm" :close-on-click-modal="false" title="物证" width="50%"  :before-close="handleClose">
       <div v-if="dialogMaterialListFormMethod === 'edit'">
         <el-divider content-position="left">物证结果</el-divider>
@@ -1927,6 +1928,7 @@ export default {
       return result;
     },
     handleClose(done){
+
       var change = 0;
       this.materialPhotoList.map(data=>{
         if (!data.status){
@@ -1950,8 +1952,10 @@ export default {
                 });
       }
 
+
     },
     handleCloseButton(){
+
       var change = 0;
       this.materialPhotoList.map(data=>{
 
@@ -1979,6 +1983,7 @@ export default {
 
     },
     handleCurrentChange(row){
+
       this.materialListForm = row;
       if (row.status){
         this.getUseType();
@@ -2685,7 +2690,8 @@ export default {
       this.dialogMaterialListFormMethod = 'add'
     },
     handleClickToAddMaterial() {
-      this.resetMaterialListForm()
+      this.dialogMaterialListFormMethod = 'add';
+      // this.resetMaterialListForm()
       if (this.list.id == null) {
         this.dialogPointContent = '添加物证'
         this.dialogPoint = true

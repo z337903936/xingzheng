@@ -93,7 +93,7 @@
                 </template>
             </el-table-column>
             <el-table-column label="状态"  align="center" width="120px">
-                <template slot-scope="{row}">
+                <template slot-scope="{row}" v-if="row.evidenceMaterialResult">
                     <span v-if="row.evidenceMaterialResult.status===1">未填写</span>
                     <span v-if="row.evidenceMaterialResult.status===2">已填写</span>
                 </template>
@@ -103,7 +103,7 @@
                     <!--<router-link :to="{name:'materialResult',params:row}" >-->
                         <!--<el-button v-waves type="success" size="mini" style="width: 90px" icon="el-icon-tickets" :disabled="resultDisable()">填写结果</el-button>-->
                     <!--</router-link>-->
-                    <el-button v-waves type="success" size="mini" style="width: 90px" icon="el-icon-tickets" :disabled="resultDisable()" @click="gotoMaterialResult(row)">填写结果</el-button>
+                    <el-button v-waves type="success" size="mini" style="width: 90px" icon="el-icon-tickets" :disabled="resultDisable(row)" @click="gotoMaterialResult(row)">填写结果</el-button>
                     <!--<el-button type="success" size="mini" style="width: 90px" icon="el-icon-tickets" @click="handleWriteResult(row)">-->
                         <!--填写结果-->
                     <!--</el-button>-->
@@ -561,6 +561,7 @@
             this.getUserList()
 
             this.heardDetail = this.batch;
+            console.log(this.heardDetail);
 
             this.heardDetail.evidence.caseBeginTime = parseTime(this.heardDetail.evidence.caseBeginTime,'{y}-{m}-{d} {h}:{i}:{s}');
             this.taskFrom.evidenceId = this.heardDetail.evidence.id;
@@ -590,11 +591,14 @@
                     }
                 })
             },
-            resultDisable(){
-                return (this.batch.status === 1 || this.batch.status === -1) && this.$store.getters.id === row.evidenceMaterialResult.createUid;
+            resultDisable(row){
+                return (this.heardDetail.status === 1 || this.heardDetail.status === -1) && this.$store.getters.id === row.evidenceMaterialResult.createUid;
             },
             gotoMaterialResult(row){
                 // row.handlerUid = this.batch.handlerUid;
+                if (!row.evidenceMaterialResult){
+                    return ;
+                }
                 this.$router.push({ name:'materialResult',params:{id:row.id},query: {result:row.evidenceMaterialResult.id,handlerUid:this.batch.handlerUid, batchId:this.curId,status:row.evidenceMaterialResult.status}})
             },
             submitPush(){

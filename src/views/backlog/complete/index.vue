@@ -31,15 +31,15 @@
             </el-table-column>
 
             <el-table-column label="简要案情" align="center" style="min-width: 600px">
-                <template slot-scope="{row}">
-                    <span>{{ row.evidence.caseHappenTime }}</span>
-                    <span v-if="row.evidence.caseHappenTime && row.evidence.caseAddress">
+                <template slot-scope="{row}" v-if="row.evidence">
+                    <span>{{ row.evidence?row.evidence.caseHappenTime:'' }}</span>
+                    <span v-if="row.evidence && row.evidence.caseHappenTime && row.evidence.caseAddress">
                         在
                     </span>
                     <span>
-                        {{ row.evidence.caseAddress + row.evidence.caseCategory  }}
+                        {{ row.evidence ? row.evidence.caseAddress:'' + row.evidence ? row.evidence.caseCategory:''  }}
                     </span>
-                    <span v-if=" row.evidence.caseCategory">
+                    <span v-if="row.evidence && row.evidence.caseCategory">
                         案
                     </span>
                 </template>
@@ -74,12 +74,15 @@
                     <el-button v-waves type="primary" size="mini" style="width: 100px" @click="gotobatchList(row)"  icon="el-icon-tickets"
                                v-if="row.stepName === 'DNA送检' || row.stepName === '指纹送检' || row.stepName === '理化送检' || row.stepName === '电子物证送检'">
                         物证详情</el-button>
-                    <router-link :to="'/search/update-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘' || row.stepName === '警情扭转'">
-                        <el-button type="primary" size="mini" icon="el-icon-edit" >编辑</el-button>
-                    </router-link>
-                    <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘' ">
-                        <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
-                    </router-link>
+                    <div v-if="row.evidence">
+                        <router-link :to="'/search/update-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘' || row.stepName === '警情扭转'">
+                            <el-button type="primary" size="mini" icon="el-icon-edit" >编辑</el-button>
+                        </router-link>
+                        <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘' || row.stepName === '警情扭转'">
+                            <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
+                        </router-link>
+                    </div>
+
                     <!--<router-link :to="'/alarm/edit-alarm/'+row.record.id" v-if="row.stepName === '警情扭转'">-->
                         <!--<el-button type="success" size="mini" icon="el-icon-zoom-in" style="width: 100px">编辑</el-button>-->
                     <!--</router-link>-->
@@ -150,11 +153,14 @@
                         if (data.examBatch){
                             data.examBatchId = data.examBatch.id;
                         }
-                        if (data.evidence.caseHappenTime) {
-                            data.evidence.caseHappenTime = formatDate(data.evidence.caseHappenTime)
-                        }else{
-                            data.evidence.caseHappenTime = ''
+                        if (data.evidence) {
+                            if (data.evidence.caseHappenTime) {
+                                data.evidence.caseHappenTime = formatDate(data.evidence.caseHappenTime)
+                            }else{
+                                data.evidence.caseHappenTime = ''
+                            }
                         }
+
                         return data;
                     })
 

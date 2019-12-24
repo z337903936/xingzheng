@@ -347,7 +347,7 @@
                     label-width="120px"
                     style="width: 80%; margin-left:50px;">
 
-                <el-form-item label="送检单位" prop="name">
+                <el-form-item label="送检单位" prop="requireOrg">
                     <el-input v-model="acceptTaskFrom.requireOrg"/>
                 </el-form-item>
 
@@ -906,6 +906,8 @@
                 })
             },
             handleAcceptTask(task) {
+                this.acceptTaskFrom.requireOrg = task.fromUser;
+                this.acceptTaskFrom.requireTime = task.requireTime ? task.requireTime*1000:task.createTime*1000
                 this.dialogFormAccept = true;
                 if ( task=== '警情扭转') {
                     this.acceptTaskFrom.recordNo = task.id
@@ -922,6 +924,7 @@
             },
             handleTaskAlarmAction(task) {
                 this.acceptTaskFrom.stepId = task.id
+                // this.acceptTaskFrom.requireOrg = task.fromUser;
                 this.acceptTask();
 
             },

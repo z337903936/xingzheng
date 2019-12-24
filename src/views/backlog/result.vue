@@ -176,7 +176,12 @@
                         </el-form-item>
 
                     </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="检查图片" >
+                            <Upload v-model="resultFrom.imgUrl"></Upload>
+                        </el-form-item>
 
+                    </el-col>
                     <el-col :span="12">
                         <!--<el-form-item label="物证是否入库" prop="needPutInStock">-->
                         <!--<el-checkbox v-model="resultFrom.needPutInStock"></el-checkbox>-->
@@ -188,9 +193,9 @@
 
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="鉴定文书号" prop="documentNo">
-                            <el-input v-model="resultFrom.documentNo"/>
-                        </el-form-item>
+                        <!--<el-form-item label="鉴定文书号" prop="documentNo">-->
+                            <!--<el-input v-model="resultFrom.documentNo"/>-->
+                        <!--</el-form-item>-->
 
                     </el-col>
 
@@ -270,10 +275,12 @@
     import waves from '@/directive/waves' // waves directive
     import {usetypeList} from '@/api/material'
     import {  batchMaterialList,batchPush } from '@/api/common'
+    import Upload from '@/components/Upload/SingleImage4'
 
     export default {
         name: "materialResult",
         directives: {waves},
+        components: { Upload },
         props: {
             isEdit: {
                 type: Boolean,
@@ -345,6 +352,7 @@
                     needTransferDocument: '',
                     needPutInStock: '',
                     materialDetail: '',
+                    imgUrl: '',
                     id:undefined,
                 },
                 resultDetail:{},
