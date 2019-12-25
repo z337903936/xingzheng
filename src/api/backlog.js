@@ -51,9 +51,9 @@ export function writeResult(data) {
         data
     })
 }
-export function medicalWriteResult(data) {
+export function medicalWriteResult(id,data) {
     return request({
-        url: '/v1/cp/evidence_medical_record_list/',
+        url: '/v1/cp/medical_task_result/'+id+'/',
         method: 'post',
         data
     })

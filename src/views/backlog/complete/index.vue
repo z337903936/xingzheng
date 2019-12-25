@@ -115,10 +115,14 @@
                     <router-link :to="'/material/detail/'+row.examBatch.id" v-if=" row.stepName === '申请物证入库'  || row.stepName === '申请物证出库' ">
                         <el-button v-waves type="primary" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>
                     </router-link>
-                    <router-link :to="'/medical/result/'+row.id"
-                                 v-if=" row.stepName === '法医现勘' ">
-                        <el-button icon="el-icon-edit" type="primary" size="small">填写结果</el-button>
-                    </router-link>
+                    <el-button type="primary" size="small" icon="el-icon-edit" @click="gotoMedicalResult(row)"
+                               v-if="row.stepName === '法医现勘' ">
+                        填写结果
+                    </el-button>
+                    <!--<router-link :to="'/medical/result/'+row.id"-->
+                                 <!--v-if=" row.stepName === '法医现勘' ">-->
+                        <!--<el-button icon="el-icon-edit" type="primary" size="small">填写结果</el-button>-->
+                    <!--</router-link>-->
                     <!--<router-link :to="'/material/batch/'+row.examBatchId"-->
                                  <!--v-if="row.stepName === 'DNA送检' && row.stepName === '指纹送检' && row.stepName === '理化送检' && row.stepName === '电子物证送检'"-->
                     <!--&gt;-->
@@ -193,6 +197,9 @@
             this.getList();
         },
         methods:{
+            gotoMedicalResult(row){
+                this.$router.push({ name:'medicalResult',params:{id:row.id},query: { evidence:JSON.stringify(row)}})
+            },
             pareTime(time) {
                 if (time) {
                     return this.formatDate(time * 1000)

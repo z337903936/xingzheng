@@ -375,6 +375,8 @@
                 next:{
                     id:undefined,
                     handlerUid:undefined,
+                    result:undefined,
+                    status:undefined,
                     batchId:undefined,
                 },
                 curId:null
@@ -420,7 +422,7 @@
                 }else{
                     this.submitForm();
                     this.$store.dispatch('delView', this.$route)
-                    this.$router.push({ name:'materialResult',params:{id:this.next.id},query: {handlerUid:this.next.handlerUid, batchId:this.next.batchId}})
+                    this.$router.push({ name:'materialResult',params:{id:this.next.id},query: {result:this.next.result,handlerUid:this.next.handlerUid, batchId:this.next.batchId,status:this.next.status}})
                 }
 
             },
@@ -440,13 +442,15 @@
                         }
                         if (next && item.id!==Number(this.curId )){
                             this.next.id = item.id;
+                            this.next.result = item.evidenceMaterialResult.id;
+                            this.next.status = item.evidenceMaterialResult.status;
                             next=false;
                         }
 
                     })
 
                     this.resultDetail = this.material;
-                    console.log(this.resultDetail);
+
                     this.resultDetail.evidenceMaterial.extractTime = parseTime(this.resultDetail.evidenceMaterial.extractTime,'{y}-{m}-{d} {h}:{i}:{s}')
                     this.stepName =  this.resultDetail.stepName
                     this.resultFrom.materialId =  this.material.evidenceMaterial.id
@@ -476,6 +480,8 @@
             },
             fetchData(id) {
                 taskDetails(id).then(data => {
+                    if(data.checkOutTime && data.checkOutTime.toString().length === 10)
+                        data.checkOutTime = data.checkOutTime * 1000;
                     this.resultFrom = Object.assign({}, data);
                     // this.resultDetail = Object.assign({}, data);
 

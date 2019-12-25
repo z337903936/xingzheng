@@ -205,7 +205,7 @@
 </template>
 
 <script>
-    import { medicalWriteResult } from '@/api/backlog'
+    import { medicalWriteResult,medicalDetails } from '@/api/backlog'
     import {parseTime} from '@/utils'
     import {fetchAdminMemberList} from '@/api/permissions'
     import {fetchList} from '@/api/dictionary'
@@ -266,7 +266,8 @@
                 userList: [],
                 userShowList: [],
                 caseCategoryList: [],
-
+                evidenceDetail:'',
+                batchId:''
             }
         },
         created() {
@@ -274,16 +275,25 @@
             this.search('案件类别').then(response => {
                 this.caseCategoryList = this.processData(response.list)
             });
-            if (this.isEdit) {
-                const id = this.$route.params && this.$route.params.id
-                this.resultFrom.id = id;
-                this.fetchData(id)
-            }
+            this.evidenceDetail = JSON.parse(this.$route.query.evidence);
+            this.batchId = this.evidenceDetail.id;
+            // const id = this.$route.params && this.$route.params.id
+            // this.resultFrom.id = id;
+
+            this.fetchData(this.evidenceDetail.evidenceMedicalRecord.id)
         },
         methods:{
             fetchData(id) {
                 medicalDetails(id).then(data => {
+                    if(data.documentDate && data.documentDate.toString().length === 10)
+                        data.documentDate = data.documentDate * 1000;
+                    if(data.delegateTime && data.delegateTime.toString().length === 10)
+                        data.delegateTime = data.delegateTime * 1000;
                     this.resultFrom = Object.assign({}, data);
+                    if (!this.resultFrom.delegateUid) {
+                        this.resultFrom.delegateUid = ''
+                    }
+
 
                 }).catch(err => {
                     console.log(err)
@@ -382,7 +392,7 @@
                 let data = Object.assign({}, this.resultFrom)
                 if (data.documentDate.toString().length > 10)
                     data.documentDate = parseInt(data.documentDate / 1000);
-                    medicalWriteResult(data).then(response => {
+                    medicalWriteResult(this.batchId,data).then(response => {
                         if (response.code === 200) {
                             this.$message({
                                 message: '操作成功',
