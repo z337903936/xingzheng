@@ -249,7 +249,6 @@
                     documentNo: '',
                     documentDate: '',
                     taskNo: '',
-                    delegateOrg: '',
                     delegateUid: '',
                     digest: '',
                     deathDetail: '',
@@ -262,6 +261,7 @@
                     needToPushToCharger: '',
                     usedType: '',
                     medicalTaskNo: '',
+                    delegateTime: '',
                 },
                 userList: [],
                 userShowList: [],
@@ -292,6 +292,7 @@
                         data.delegateTime = data.delegateTime * 1000;
                     this.$delete(data,'filters')
                     this.resultFrom = data;
+
                     if (!this.resultFrom.delegateUid) {
                         this.resultFrom.delegateUid = ''
                     }
@@ -391,7 +392,27 @@
                 })
             },
             submitForm(){
-                let data = Object.assign({}, this.resultFrom)
+                // let data = Object.assign({}, this.resultFrom)
+                let data = {
+                    id: this.resultFrom.id,
+                    result: this.resultFrom.result,
+                    documentNo: this.resultFrom.documentNo,
+                    documentDate: this.resultFrom.documentDate,
+                    taskNo: this.resultFrom.taskNo,
+                    delegateUid: this.resultFrom.delegateUid,
+                    digest: this.resultFrom.digest,
+                    deathDetail: this.resultFrom.deathDetail,
+                    extractMaterial: this.resultFrom.extractMaterial,
+                    conclusion: this.resultFrom.conclusion,
+                    examUid: this.resultFrom.examUid,
+                    materialTo: this.resultFrom.materialTo,
+                    caseCategory: this.resultFrom.caseCategory,
+                    note: this.resultFrom.note,
+                    needToPushToCharger: this.resultFrom.needToPushToCharger,
+                    usedType: this.resultFrom.usedType,
+                    medicalTaskNo: this.resultFrom.medicalTaskNo,
+                    delegateTime: this.resultFrom.delegateTime,
+                };
                 if (data.documentDate.toString().length > 10)
                     data.documentDate = parseInt(data.documentDate / 1000);
                 if (data.delegateTime.toString().length > 10)
