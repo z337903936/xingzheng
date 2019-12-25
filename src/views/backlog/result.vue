@@ -154,7 +154,7 @@
                     </div>
                     <el-col :span="12">
                         <el-form-item label="利用情况" prop="useType">
-                            <el-select v-model="resultFrom.usedType" clearable placeholder="请选择"  style="width: 100%" @change="selectUpdate">
+                            <el-select v-model="resultFrom.useType" clearable placeholder="请选择"  style="width: 100%" @change="selectUpdate">
                                 <el-option
                                         v-for="item in usedType"
                                         :key="item.title"
@@ -387,12 +387,13 @@
             this.search('检材类型').then(response=>{
                 this.materialTypeList = this.processData(response.list)
             });
+
             const id = this.$route.params && this.$route.params.id;
             this.batchId = this.$route.query.batchId;
             this.resultFrom.examUid = this.$store.getters.id;
+            this.resultFrom.batchId =  this.batchId
             this.resultFrom.id = id;
             this.curId = id;
-            console.log(this.resultFrom.id )
             this.getList(this.batchId);
 
             // this.material = JSON.parse(this.$route.query.material);
@@ -455,9 +456,9 @@
                     this.resultDetail.evidenceMaterial.extractTime = parseTime(this.resultDetail.evidenceMaterial.extractTime,'{y}-{m}-{d} {h}:{i}:{s}')
                     this.stepName =  this.resultDetail.stepName
                     this.resultFrom.materialId =  this.material.evidenceMaterial.id
-                    this.resultFrom.batchId =  this.material.batchId
 
-                    this.resultFrom.usedType =  this.material.evidenceMaterial.usedType
+
+                    this.resultFrom.useType =  this.material.evidenceMaterial.useType
 
                 })
 
@@ -484,6 +485,8 @@
                     if(data.checkOutTime && data.checkOutTime.toString().length === 10)
                         data.checkOutTime = data.checkOutTime * 1000;
                     this.resultFrom = Object.assign({}, data);
+                    this.resultFrom.batchId =  this.batchId;
+                    console.log('success')
                     // this.resultDetail = Object.assign({}, data);
 
                 }).catch(err => {

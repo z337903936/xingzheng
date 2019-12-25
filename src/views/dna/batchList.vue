@@ -554,6 +554,7 @@
             }
         },
         created() {
+            this.$forceUpdate();
             this.batch =  JSON.parse(this.$route.query.batch);
             const id = this.$route.params && this.$route.params.id
             this.curId = id;
