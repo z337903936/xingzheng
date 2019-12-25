@@ -1,5 +1,14 @@
 import request from '@/utils/request'
 
+
+export function medicalResult(data) {
+    return request({
+        url: '/v1/cp/evidence_medical_record_list/',
+        method: 'post',
+        data
+    })
+}
+
 export function taskList(query) {
     return request({
         url: '/v1/cp/group_case_step_list/',
@@ -51,9 +60,9 @@ export function writeResult(data) {
         data
     })
 }
-export function medicalWriteResult(id,data) {
+export function medicalWriteResult(data) {
     return request({
-        url: '/v1/cp/medical_task_result/'+id+'/',
+        url: '/v1/cp/medical_task_result/'+data.id+'/',
         method: 'post',
         data
     })
@@ -65,3 +74,4 @@ export function cancelEvidence(data) {
         data
     })
 }
+

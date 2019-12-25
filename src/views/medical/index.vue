@@ -203,9 +203,7 @@
                     this.pages = response.pages
 
                     // Just to simulate the time of the request
-                    setTimeout(() => {
-                        this.listLoading = false
-                    },1000)
+                    this.listLoading = false
                 })
             },
             handleFilter () {

@@ -127,7 +127,7 @@
 
             <el-table-column label="委托人" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.delegateName  }}</span>
+                    <span>{{ row.delegateOrg  }}</span>
                 </template>
             </el-table-column>
 
@@ -172,9 +172,9 @@
 
             <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <router-link :to="'/medical/result/'+row.id">
-                        <el-button icon="el-icon-edit" type="primary" size="small">填写结果</el-button>
-                    </router-link>
+                    <el-button type="primary" size="small" icon="el-icon-edit" @click="gotoMedicalResult(row)" :disabled="resultDisable(row)">
+                        填写结果
+                    </el-button>
                     <!--<el-button type="primary" size="small" icon="el-icon-document-checked"-->
                                <!--@click="handleAcceptTask(row)"-->
                                <!--v-if="row.status===1">-->
@@ -235,13 +235,15 @@
 
 
 <script>
-    import {medicalWriteResult} from '@/api/backlog'
+    import {medicalResult} from '@/api/backlog'
     import {parseTime} from '@/utils'
     import {fetchAdminMemberList} from '@/api/permissions'
     import {fetchList} from '@/api/dictionary'
+    import waves from '@/directive/waves' // waves directive
 
     export default {
         name: "Backlog",
+        directives: {waves},
         filters: {
 
             statusFilter(status) {
@@ -282,6 +284,18 @@
             this.getUserList();
         },
         methods: {
+            resultDisable(row){
+
+                if (this.$store.getters.id !== row.examUid)
+                    return true ;
+                return false;
+            },
+            gotoMedicalResult(row){
+                this.$router.push({ name:'medicalResult',params:{id:row.id},query: { evidence:JSON.stringify(row),isDetail:true}})
+            },
+            selectUpdate(val){
+                this.$forceUpdate();
+            },
             reset() {
                 this.listQuery = {
                     page: 1,
@@ -347,7 +361,7 @@
             },
             getList() {
                 this.listLoading = true;
-                medicalWriteResult(this.listQuery).then(response => {
+                medicalResult(this.listQuery).then(response => {
                     this.list = response.list
                     // this.pages = response.pages
 

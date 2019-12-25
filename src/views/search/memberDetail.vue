@@ -2643,7 +2643,7 @@ export default {
             })
             var count = 0;
             this.list.concernedPersonList.map(item=>{
-              if (item.idType === '死者'){
+              if (item.idType === '死者' && item.id !== row.id){
                 count++
               }
             })
@@ -2653,6 +2653,8 @@ export default {
               this.list.isDeathCase = false
             if (this.isEdit)
               this.submitForm()
+
+
 
           } else {
             this.$message({
@@ -2665,6 +2667,16 @@ export default {
         })
       } else {
         this.list.concernedPersonList.splice(index, 1)
+        var count = 0;
+        this.list.concernedPersonList.map(item=>{
+          if (item.idType === '死者' && item.id !== row.id){
+            count++
+          }
+        })
+        if (count)
+          this.list.isDeathCase = true;
+        else
+          this.list.isDeathCase = false
 
       }
 

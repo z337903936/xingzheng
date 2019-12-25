@@ -29,7 +29,7 @@
                     </el-col>
                     <el-col :span="12">
 
-                        <el-form-item label="文书日期" prop="sort">
+                        <el-form-item label="文书日期" prop="documentDate">
                             <el-date-picker
                                     v-model="resultFrom.documentDate"
                                     type="date"
@@ -157,7 +157,7 @@
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <el-form-item label="法医任务号" prop="materialTo">
+                        <el-form-item label="法医任务号" prop="medicalTaskNo">
                             <el-input v-model="resultFrom.medicalTaskNo"/>
                         </el-form-item>
                     </el-col>
@@ -267,7 +267,7 @@
                 userShowList: [],
                 caseCategoryList: [],
                 evidenceDetail:'',
-                batchId:''
+
             }
         },
         created() {
@@ -276,11 +276,13 @@
                 this.caseCategoryList = this.processData(response.list)
             });
             this.evidenceDetail = JSON.parse(this.$route.query.evidence);
-            this.batchId = this.evidenceDetail.id;
-            // const id = this.$route.params && this.$route.params.id
-            // this.resultFrom.id = id;
+            if (this.$route.query.isDetail){
+                this.fetchData(this.evidenceDetail.id)
+            } else{
 
-            this.fetchData(this.evidenceDetail.evidenceMedicalRecord.id)
+                this.fetchData(this.evidenceDetail.evidenceMedicalRecord.id)
+            }
+
         },
         methods:{
             fetchData(id) {
@@ -290,6 +292,7 @@
                     if(data.delegateTime && data.delegateTime.toString().length === 10)
                         data.delegateTime = data.delegateTime * 1000;
                     this.resultFrom = Object.assign({}, data);
+                    console.log(data);
                     if (!this.resultFrom.delegateUid) {
                         this.resultFrom.delegateUid = ''
                     }
@@ -392,7 +395,10 @@
                 let data = Object.assign({}, this.resultFrom)
                 if (data.documentDate.toString().length > 10)
                     data.documentDate = parseInt(data.documentDate / 1000);
-                    medicalWriteResult(this.batchId,data).then(response => {
+                if (data.delegateTime.toString().length > 10)
+                    data.delegateTime = parseInt(data.delegateTime / 1000);
+
+                    medicalWriteResult(data).then(response => {
                         if (response.code === 200) {
                             this.$message({
                                 message: '操作成功',
