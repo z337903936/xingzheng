@@ -414,6 +414,7 @@
             gotoNextMaterialResult(){
 
                 if (!this.next.id) {
+                    this.submitForm();
                     this.$confirm('暂无下一条数据!')
                         .then(_ => {
 
