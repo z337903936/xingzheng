@@ -279,7 +279,6 @@
             if (this.$route.query.isDetail){
                 this.fetchData(this.evidenceDetail.id)
             } else{
-
                 this.fetchData(this.evidenceDetail.evidenceMedicalRecord.id)
             }
 
@@ -291,8 +290,8 @@
                         data.documentDate = data.documentDate * 1000;
                     if(data.delegateTime && data.delegateTime.toString().length === 10)
                         data.delegateTime = data.delegateTime * 1000;
-                    this.resultFrom = Object.assign({}, data);
-                    console.log(data);
+                    this.$delete(data,'filters')
+                    this.resultFrom = data;
                     if (!this.resultFrom.delegateUid) {
                         this.resultFrom.delegateUid = ''
                     }
