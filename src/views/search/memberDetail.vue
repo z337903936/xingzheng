@@ -1071,7 +1071,7 @@
                       placement="right"
                       width="500"
                       trigger="click">
-                <el-table :data="usetypeList">
+                <el-table :data="usetypeList" height="250">
                   <el-table-column width="100" property="operatorName" label="操作员"></el-table-column>
                   <el-table-column width="100" property="useType" label="利用情况"></el-table-column>
                   <el-table-column width="120" property="evidenceNo" label="现勘号"></el-table-column>

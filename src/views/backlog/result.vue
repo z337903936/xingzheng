@@ -164,8 +164,9 @@
                             <el-popover
                                     placement="right"
                                     width="500"
-                                    trigger="click">
-                                <el-table :data="usetypeList">
+                                    trigger="click"
+                            >
+                                <el-table :data="usetypeListShow"  height="250">
                                     <el-table-column width="100" property="operatorName" label="操作员"></el-table-column>
                                     <el-table-column width="100" property="useType" label="利用情况"></el-table-column>
                                     <el-table-column width="120" property="evidenceNo" label="现勘号"></el-table-column>
@@ -364,7 +365,7 @@
                     emitPath:false
                 },
                 material:{},
-                usetypeList:null,
+                usetypeListShow:null,
                 batchId:null,
                 listQuery: {
                     page: 0,
@@ -409,7 +410,7 @@
                 this.fetchData(result)
             }
 
-            this.getUseType();
+
         },
         methods:{
             gotoNextMaterialResult(){
@@ -450,7 +451,7 @@
                         }
 
                     })
-
+                    this.getUseType();
                     this.resultDetail = this.material;
 
                     this.resultDetail.evidenceMaterial.extractTime = parseTime(this.resultDetail.evidenceMaterial.extractTime,'{y}-{m}-{d} {h}:{i}:{s}')
@@ -473,8 +474,8 @@
                         materialId:this.material.evidenceMaterial.id
                     }
                     usetypeList(data).then(response=>{
-                        this.usetypeList = response.list.map(item=>{
-                            item.createTime = parseTime(createTime,'{y}-{m}-{d} {h}:{i}:{s}')
+                        this.usetypeListShow = response.list.map(item=>{
+                            item.createTime = parseTime(item.createTime,'{y}-{m}-{d} {h}:{i}:{s}')
                             return item;
                         })
                     })
