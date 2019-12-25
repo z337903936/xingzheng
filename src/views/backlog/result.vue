@@ -456,10 +456,11 @@
 
                     this.resultDetail.evidenceMaterial.extractTime = parseTime(this.resultDetail.evidenceMaterial.extractTime,'{y}-{m}-{d} {h}:{i}:{s}')
                     this.stepName =  this.resultDetail.stepName
+                    this.resultFrom.materialId =  this.material.evidenceMaterial.id
                     if (status !== 1) {
 
                     }else{
-                        this.resultFrom.materialId =  this.material.evidenceMaterial.id
+
                         this.resultFrom.useType =  this.material.evidenceMaterial.useType
                     }
 
@@ -490,8 +491,7 @@
                         data.checkOutTime = data.checkOutTime * 1000;
                     this.resultFrom = Object.assign({}, data);
                     this.resultFrom.batchId =  this.batchId;
-                    console.log(this.resultFrom);
-                    console.log(data);
+                  
                     // this.resultDetail = Object.assign({}, data);
 
                 }).catch(err => {
