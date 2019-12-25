@@ -553,6 +553,15 @@
                 }
             }
         },
+        watch: {
+            '$route' (to, from) {
+                // 对路由变化作出响应...
+                if (to.name!==from.name){
+                    this.getList(this.curId)
+                }
+
+            }
+        },
         created() {
             this.$forceUpdate();
             this.batch =  JSON.parse(this.$route.query.batch);

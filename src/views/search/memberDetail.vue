@@ -1071,7 +1071,7 @@
                       placement="right"
                       width="500"
                       trigger="click">
-                <el-table :data="usetypeList" height="250">
+                <el-table :data="usetypeListShow" height="250">
                   <el-table-column width="100" property="operatorName" label="操作员"></el-table-column>
                   <el-table-column width="100" property="useType" label="利用情况"></el-table-column>
                   <el-table-column width="120" property="evidenceNo" label="现勘号"></el-table-column>
@@ -1231,7 +1231,7 @@ export default {
       }
     }
     return {
-      usetypeList:null,
+      usetypeListShow:null,
       props: {
         multiple: true,
         emitPath:false
@@ -1785,8 +1785,8 @@ export default {
           materialId:this.materialListForm.id
         }
         usetypeList(data).then(response=>{
-          this.usetypeList = response.list.map(item=>{
-            item.createTime = parseTime(createTime,'{y}-{m}-{d} {h}:{i}:{s}')
+          this.usetypeListShow = response.list.map(item=>{
+            item.createTime = parseTime(item.createTime ,'{y}-{m}-{d}')
             return item;
           })
         })

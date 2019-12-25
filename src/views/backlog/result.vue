@@ -475,7 +475,7 @@
                     }
                     usetypeList(data).then(response=>{
                         this.usetypeListShow = response.list.map(item=>{
-                            item.createTime = parseTime(item.createTime,'{y}-{m}-{d} {h}:{i}:{s}')
+                            item.createTime = parseTime(item.createTime,'{y}-{m}-{d}')
                             return item;
                         })
                     })
