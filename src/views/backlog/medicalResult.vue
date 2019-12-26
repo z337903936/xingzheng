@@ -417,7 +417,9 @@
                     data.documentDate = parseInt(data.documentDate / 1000);
                 if (data.delegateTime.toString().length > 10)
                     data.delegateTime = parseInt(data.delegateTime / 1000);
-
+                    data.medicalTaskNo = data.evidence.medicalTaskNo
+                    delete data.evidence
+                    delete data.filters
                     medicalWriteResult(data).then(response => {
                         if (response.code === 200) {
                             this.$message({
