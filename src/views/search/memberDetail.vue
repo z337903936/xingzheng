@@ -957,7 +957,7 @@
         <el-divider content-position="left">物证结果</el-divider>
         <el-row :gutter="20" style="margin-left: 40px">
           <el-col :span="12">
-            检验结果：{{ materialListForm.examResult ? materialListForm.examResult:'' }}
+            检验结果：{{ materialListForm.examResult ? materialListForm.examResult:'' }} &nbsp;&nbsp;{{ materialListForm.materialDetail ? materialListForm.materialDetail:'' }}
           </el-col>
           <el-col :span="12">
             比中人员：{{ materialListForm.checkPeople ? materialListForm.checkPeople:'' }}
