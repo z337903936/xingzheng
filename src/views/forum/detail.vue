@@ -248,10 +248,14 @@
                     articleId:val.id,
                     enable:type,
                 }
+                var content = '收藏成功'
+                if (!type) {
+                    content = '已取消收藏'
+                }
                 favForum(data).then(res=>{
                     if (res.code === 200) {
                         this.$message({
-                            message: '收藏成功',
+                            message: content,
                             type: 'success',
                             showClose: true,
                             duration: 1000
@@ -273,10 +277,14 @@
                     commentId:val.id,
                     hasLike:type,
                 }
+                var content = '点赞成功'
+                if (!type) {
+                    content = '已取消点赞'
+                }
                 commentLikeAction(data).then(res=>{
                     if (res.code === 200) {
                         this.$message({
-                            message: '点赞成功',
+                            message: content,
                             type: 'success',
                             showClose: true,
                             duration: 1000

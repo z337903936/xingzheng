@@ -67,6 +67,7 @@
     import { fetchAllCateList } from '@/api/category'
     import { fetchForumList,delForum } from '@/api/forum'
     import { parseTime } from '@/utils'
+
     export default {
         name: "forum",
         data(){
@@ -76,7 +77,7 @@
                category:[],
                listQuery: {
                    page: 1,
-                   cateId: undefined,
+                   cateId: 0,
                },
                pages:0,
                paginationShow: true,
