@@ -104,7 +104,7 @@
                 if (activeName !== 'all'){
                     this.listQuery.cateId = activeName;
                 }else{
-                    this.listQuery.cateId = undefined;
+                    this.listQuery.cateId = 0;
                 }
                 this.getList();
             },
