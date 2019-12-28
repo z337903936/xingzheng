@@ -181,77 +181,77 @@
       },
 
       submitForm() {
-        console.log(this.postForm)
-        // this.$refs.postForm.validate(valid => {
-        //   if (valid) {
-        //     this.loading = true
-        //     var data = this.postForm
-        //     delete data.updateTime
-        //     delete data.createdTime
-        //     // data.publishTime = data.publishTime / 1000
-        //     data.categoryId = data.categoryId + ''
-        //     if (this.isEdit) {
-        //       updateForum(data).then(data => {
-        //         this.loading = false
-        //         if (data.code == 200) {
-        //           this.$message({
-        //             message: '保存成功',
-        //             type: 'success',
-        //             showClose: true,
-        //             duration: 1000
-        //           })
-        //           this.$store.dispatch('delView', this.$route)
-        //           this.$router.push({
-        //             path: '/forum/index',
-        //             query: {
-        //               t: +new Date()
-        //             }
-        //           })
-        //
-        //         } else {
-        //           this.$message({
-        //             message: data.reason,
-        //             type: 'error',
-        //             showClose: true,
-        //             duration: 1000
-        //           })
-        //         }
-        //       }).catch(err => {
-        //         console.log(err)
-        //         this.loading = false
-        //       })
-        //     } else {
-        //       createForum(data).then(data => {
-        //         this.loading = false
-        //         if (data.code == 200) {
-        //           this.$message({
-        //             message: '保存成功',
-        //             type: 'success',
-        //             showClose: true,
-        //             duration: 1000
-        //           })
-        //           this.$router.push({
-        //             path: '/forum/index',
-        //             query: {
-        //               t: +new Date()
-        //             }
-        //           })
-        //           this.$store.dispatch('delView', this.$route)
-        //         } else {
-        //           this.$message({
-        //             message: data.reason,
-        //             type: 'error',
-        //             showClose: true,
-        //             duration: 1000
-        //           })
-        //         }
-        //       }).catch(err => {
-        //         console.log(err)
-        //         this.loading = false
-        //       })
-        //     }
-        //   }
-        // })
+        
+        this.$refs.postForm.validate(valid => {
+          if (valid) {
+            this.loading = true
+            var data = this.postForm
+            delete data.updateTime
+            delete data.createdTime
+            // data.publishTime = data.publishTime / 1000
+            data.categoryId = data.categoryId + ''
+            if (this.isEdit) {
+              updateForum(data).then(data => {
+                this.loading = false
+                if (data.code == 200) {
+                  this.$message({
+                    message: '保存成功',
+                    type: 'success',
+                    showClose: true,
+                    duration: 1000
+                  })
+                  this.$store.dispatch('delView', this.$route)
+                  this.$router.push({
+                    path: '/forum/index',
+                    query: {
+                      t: +new Date()
+                    }
+                  })
+
+                } else {
+                  this.$message({
+                    message: data.reason,
+                    type: 'error',
+                    showClose: true,
+                    duration: 1000
+                  })
+                }
+              }).catch(err => {
+                console.log(err)
+                this.loading = false
+              })
+            } else {
+              createForum(data).then(data => {
+                this.loading = false
+                if (data.code == 200) {
+                  this.$message({
+                    message: '保存成功',
+                    type: 'success',
+                    showClose: true,
+                    duration: 1000
+                  })
+                  this.$router.push({
+                    path: '/forum/index',
+                    query: {
+                      t: +new Date()
+                    }
+                  })
+                  this.$store.dispatch('delView', this.$route)
+                } else {
+                  this.$message({
+                    message: data.reason,
+                    type: 'error',
+                    showClose: true,
+                    duration: 1000
+                  })
+                }
+              }).catch(err => {
+                console.log(err)
+                this.loading = false
+              })
+            }
+          }
+        })
       }
     }
   }
