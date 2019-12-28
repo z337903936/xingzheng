@@ -132,7 +132,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="是否死亡" align="center" width="70">
+            <el-table-column label="是否死亡" align="center" width="100">
                 <template slot-scope="{row}">
                     <span>{{ row.isDeathCase?'是':'否' }}</span>
                 </template>
