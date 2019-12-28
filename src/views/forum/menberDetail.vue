@@ -181,7 +181,6 @@
       },
 
       submitForm() {
-        
         this.$refs.postForm.validate(valid => {
           if (valid) {
             this.loading = true

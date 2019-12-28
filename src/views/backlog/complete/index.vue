@@ -128,7 +128,7 @@
                     <!--&gt;-->
                         <!--<el-button v-waves type="success" size="mini" icon="el-icon-tickets" style="width: 100px">物证详情</el-button>-->
                     <!--</router-link>-->
-                    <el-button v-waves type="info" size="mini" style="width: 100px" @click="gotobatchList(row)"  icon="el-icon-tickets"
+                    <el-button v-waves type="primary" plain size="mini" style="width: 100px" @click="gotobatchList(row)"  icon="el-icon-tickets"
                                v-if="row.stepName === 'DNA送检' || row.stepName === '指纹送检' || row.stepName === '理化送检' || row.stepName === '电子物证送检'">
                         物证详情</el-button>
                     <div v-if="row.evidence">

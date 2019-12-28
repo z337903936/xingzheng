@@ -148,7 +148,7 @@
                     </el-tooltip>
                     <el-tooltip class="item" effect="dark" content="查看" placement="top">
                         <router-link :to="'/search/show-search/'+row.id">
-                            <el-button type="info" size="mini" icon="el-icon-zoom-in" ></el-button>
+                            <el-button type="primary" plain size="mini" icon="el-icon-zoom-in" ></el-button>
                         </router-link>
                     </el-tooltip>
 
