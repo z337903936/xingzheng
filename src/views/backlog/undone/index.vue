@@ -274,7 +274,7 @@
                         拒绝
                     </el-button>
                     <router-link :to="'/material/detail/'+row.examBatch.id" v-if="row.stepName === '申请物证入库' || row.stepName === '申请物证出库'">
-                        <el-button v-waves type="primary" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>
+                        <el-button v-waves type="info" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>
                     </router-link>
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
                                @click="handleAcceptTask(row)"
@@ -309,7 +309,7 @@
                     <!--&gt;-->
                         <!--<el-button v-waves type="success" size="mini" icon="el-icon-tickets" style="width: 100px">物证详情</el-button>-->
                     <!--</router-link>-->
-                    <el-button v-waves type="primary" size="small" style="width: 100px" @click="gotobatchList(row)"  icon="el-icon-tickets"
+                    <el-button v-waves type="info" size="small" style="width: 100px" @click="gotobatchList(row)"  icon="el-icon-tickets"
                                v-if="row.stepName === 'DNA送检' || row.stepName === '指纹送检' || row.stepName === '理化送检' || row.stepName === '电子物证送检'">
                         物证详情</el-button>
                     <router-link :to="'/search/update-search/'+row.evidenceId"
@@ -321,7 +321,7 @@
                         取消勘查
                     </el-button>
                     <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘'">
-                        <el-button type="success" size="small" icon="el-icon-zoom-in">查看</el-button>
+                        <el-button type="info" size="small" icon="el-icon-zoom-in">查看</el-button>
                     </router-link>
                     <!--<router-link :to="'/alarm/edit-alarm/'+row.record.id" v-if="row.stepName === '警情扭转'">-->
                         <!--<el-button type="success" size="mini" icon="el-icon-zoom-in" style="width: 100px">编辑</el-button>-->

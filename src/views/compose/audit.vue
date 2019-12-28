@@ -46,7 +46,7 @@
                         拒绝
                     </el-button>
                     <router-link :to="'/compose/detail/'+row.id" style="margin-left: 10px">
-                        <el-button v-waves  type="success" size="mini" icon="el-icon-zoom-in" style="width: 100px">查看</el-button>
+                        <el-button v-waves  type="info" size="mini" icon="el-icon-zoom-in" style="width: 100px">查看</el-button>
                     </router-link>
                 </template>
             </el-table-column>

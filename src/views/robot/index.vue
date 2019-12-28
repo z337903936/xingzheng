@@ -118,7 +118,7 @@
                         <el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>
                     </router-link>
                     <router-link :to="'/robot/taskList/'+row.id">
-                        <el-button v-waves type="primary" icon="el-icon-tickets" size="mini" style="width: 100px" >任务批次</el-button>
+                        <el-button v-waves type="info" icon="el-icon-tickets" size="mini" style="width: 100px" >任务批次</el-button>
                     </router-link>
 
                     <el-button v-waves type="success" icon="el-icon-video-play" size="mini" style="width: 100px"  v-if="row.status !==2" @click="handleTask(row,true)">

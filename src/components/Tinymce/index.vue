@@ -2,7 +2,7 @@
   <div :class="{fullscreen:fullscreen}" class="tinymce-container editor-container">
     <textarea :id="tinymceId" class="tinymce-textarea"/>
     <div class="editor-custom-btn-container">
-      <editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK"/>
+      <!--<editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK"/>-->
     </div>
   </div>
 </template>
@@ -11,6 +11,7 @@
 import editorImage from './components/editorImage'
 import plugins from './plugins'
 import toolbar from './toolbar'
+import axios from 'axios'
 
 export default {
   name: 'Tinymce',
@@ -97,7 +98,10 @@ export default {
         menubar: this.menubar,
         plugins: plugins,
         end_container_on_empty_block: true,
-        powerpaste_word_import: 'clean',
+        powerpaste_word_import: 'propmt',// 参数可以是propmt, merge, clear，效果自行切换对比
+        powerpaste_html_import: 'propmt',// propmt, merge, clear
+        powerpaste_allow_local_images: true,
+        paste_data_images: true,
         code_dialog_height: 450,
         code_dialog_width: 1000,
         advlist_bullet_styles: 'square',
@@ -120,7 +124,7 @@ export default {
           editor.on('FullscreenStateChanged', (e) => {
             _this.fullscreen = e.state
           })
-        }
+        },
         // 整合七牛上传
         // images_dataimg_filter(img) {
         //   setTimeout(() => {
@@ -136,24 +140,36 @@ export default {
         //   }, 0);
         //   return img
         // },
-        // images_upload_handler(blobInfo, success, failure, progress) {
-        //   progress(0);
-        //   const token = _this.$store.getters.token;
-        //   getToken(token).then(response => {
-        //     const url = response.data.qiniu_url;
-        //     const formData = new FormData();
-        //     formData.append('token', response.data.qiniu_token);
-        //     formData.append('key', response.data.qiniu_key);
-        //     formData.append('file', blobInfo.blob(), url);
-        //     upload(formData).then(() => {
-        //       success(url);
-        //       progress(100);
-        //     })
-        //   }).catch(err => {
-        //     failure('出现未知问题，刷新页面，或者联系程序员')
-        //     console.log(err);
-        //   });
-        // },
+        images_upload_handler(blobInfo, success, failure, progress) {
+          progress(0);
+          const token = _this.$store.getters.token;
+          // getToken(token).then(response => {
+          //   const url = response.data.qiniu_url;
+            const formData = new FormData();
+            formData.append('token', '');
+            formData.append('key', '');
+            formData.append('file', blobInfo.blob());
+            console.log(blobInfo)
+            // formData.append('file', blobInfo.blob(), url);
+          axios.post('/v1/cp/upload/',formData,{
+            'Content-Type':'multipart/form-data'
+          }).then(data => {
+            console.log(data)
+            if (data.data.code === 200){
+              success(data.data.imgUrl);
+              progress(100);
+            } else{
+                failure('出现未知问题，刷新页面，或者联系程序员')
+                console.log(err);
+            }
+
+              })
+
+          // }).catch(err => {
+          //   failure('出现未知问题，刷新页面，或者联系程序员')
+          //   console.log(err);
+          // });
+        },
       })
     },
     destroyTinymce() {

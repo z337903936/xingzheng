@@ -40,7 +40,7 @@
           <router-link :to="'/article/editCategory/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">编辑</el-button>
           </router-link>
-          <el-button size="small" icon="el-icon-delete" @click="deleteCategory(scope.row.id)">删除</el-button>
+          <el-button  type="danger" size="small" icon="el-icon-delete" @click="deleteCategory(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

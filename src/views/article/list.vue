@@ -69,7 +69,7 @@
           <router-link :to="'/article/editArticle/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">编辑</el-button>
           </router-link>
-          <el-button size="small" icon="el-icon-delete" @click="deleteArticle(scope.row.id)">删除</el-button>
+          <el-button type="danger" size="small" icon="el-icon-delete" @click="deleteArticle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

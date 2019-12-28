@@ -500,7 +500,6 @@
             },
             submitForm(){
                 let data = Object.assign({}, this.resultFrom)
-
                 if(data.checkOutTime && data.checkOutTime.toString().length > 10)
                     data.checkOutTime = parseInt(data.checkOutTime / 1000);
                 if(data.checkOutTime === '')

@@ -93,10 +93,10 @@
             </el-table-column>
             <el-table-column label="操作" align="center" width="230" fixed="right" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
-                    <el-button v-if="row.approveStatus ===1" v-waves type="primary" style="width: 70px"  size="mini" @click="handleDeleteAction(row,1)" >
+                    <el-button v-if="row.approveStatus ===1" v-waves type="success" style="width: 70px"  size="mini" @click="handleDeleteAction(row,1)" >
                         同意
                     </el-button>
-                    <el-button v-if="row.approveStatus ===1" v-waves type="primary" style="width: 70px"  size="mini" @click="handleDeleteAction(row,2)" >
+                    <el-button v-if="row.approveStatus ===1" v-waves type="warning" style="width: 70px"  size="mini" @click="handleDeleteAction(row,2)" >
                         驳回
                     </el-button>
                 </template>

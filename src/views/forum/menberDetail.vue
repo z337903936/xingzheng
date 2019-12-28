@@ -36,6 +36,8 @@
               <el-form-item  label-width="100px" label="内容:" prop="content" required>
               <div class="editor-container">
                 <Tinymce ref="editor" :height="400" v-model="postForm.content"/>
+                <!--<editor v-model="postForm.content"></editor>-->
+                <!--<ckeditor :editor="editor" v-model="postForm.content" :config="editorConfig"></ckeditor>-->
               </div>
               </el-form-item>
             </el-col>
@@ -63,8 +65,9 @@
 </template>
 
 <script>
-  import Tinymce from '@/components/Tinymce'
+  // import ClassicEditor  from '@ckeditor/ckeditor5-build-classic'
   import Upload from '@/components/Upload/singleImage3'
+  import Tinymce from '@/components/Tinymce'
   import { validateNumber } from '@/utils/validate'
   import { createForum,updateForum } from '@/api/forum'
   import { fetchAllCateList } from '@/api/category'
@@ -111,6 +114,14 @@
         }
       }
       return {
+        // editor: ClassicEditor,
+        // editorConfig: {
+        //   language: 'zh-cn',
+        //   ckfinder: {
+        //     uploadUrl: `/v1/cp/upload/`,
+        //     // 后端处理上传逻辑返回json数据,包括uploaded 上传的字节数 和url两个字段
+        //   },
+        // },
         postForm: Object.assign({}, defaultForm),
         loading: false,
         userListOptions: [],
@@ -170,85 +181,86 @@
       },
 
       submitForm() {
-
-        this.$refs.postForm.validate(valid => {
-          if (valid) {
-            this.loading = true
-            var data = this.postForm
-            delete data.updateTime
-            delete data.createdTime
-            // data.publishTime = data.publishTime / 1000
-            data.categoryId = data.categoryId + ''
-            if (this.isEdit) {
-              updateForum(data).then(data => {
-                this.loading = false
-                if (data.code == 200) {
-                  this.$message({
-                    message: '保存成功',
-                    type: 'success',
-                    showClose: true,
-                    duration: 1000
-                  })
-                  this.$store.dispatch('delView', this.$route)
-                  this.$router.push({
-                    path: '/forum/index',
-                    query: {
-                      t: +new Date()
-                    }
-                  })
-
-                } else {
-                  this.$message({
-                    message: data.reason,
-                    type: 'error',
-                    showClose: true,
-                    duration: 1000
-                  })
-                }
-              }).catch(err => {
-                console.log(err)
-                this.loading = false
-              })
-            } else {
-              createForum(data).then(data => {
-                this.loading = false
-                if (data.code == 200) {
-                  this.$message({
-                    message: '保存成功',
-                    type: 'success',
-                    showClose: true,
-                    duration: 1000
-                  })
-                  this.$router.push({
-                    path: '/forum/index',
-                    query: {
-                      t: +new Date()
-                    }
-                  })
-                  this.$store.dispatch('delView', this.$route)
-                } else {
-                  this.$message({
-                    message: data.reason,
-                    type: 'error',
-                    showClose: true,
-                    duration: 1000
-                  })
-                }
-              }).catch(err => {
-                console.log(err)
-                this.loading = false
-              })
-            }
-          }
-        })
+        console.log(this.postForm)
+        // this.$refs.postForm.validate(valid => {
+        //   if (valid) {
+        //     this.loading = true
+        //     var data = this.postForm
+        //     delete data.updateTime
+        //     delete data.createdTime
+        //     // data.publishTime = data.publishTime / 1000
+        //     data.categoryId = data.categoryId + ''
+        //     if (this.isEdit) {
+        //       updateForum(data).then(data => {
+        //         this.loading = false
+        //         if (data.code == 200) {
+        //           this.$message({
+        //             message: '保存成功',
+        //             type: 'success',
+        //             showClose: true,
+        //             duration: 1000
+        //           })
+        //           this.$store.dispatch('delView', this.$route)
+        //           this.$router.push({
+        //             path: '/forum/index',
+        //             query: {
+        //               t: +new Date()
+        //             }
+        //           })
+        //
+        //         } else {
+        //           this.$message({
+        //             message: data.reason,
+        //             type: 'error',
+        //             showClose: true,
+        //             duration: 1000
+        //           })
+        //         }
+        //       }).catch(err => {
+        //         console.log(err)
+        //         this.loading = false
+        //       })
+        //     } else {
+        //       createForum(data).then(data => {
+        //         this.loading = false
+        //         if (data.code == 200) {
+        //           this.$message({
+        //             message: '保存成功',
+        //             type: 'success',
+        //             showClose: true,
+        //             duration: 1000
+        //           })
+        //           this.$router.push({
+        //             path: '/forum/index',
+        //             query: {
+        //               t: +new Date()
+        //             }
+        //           })
+        //           this.$store.dispatch('delView', this.$route)
+        //         } else {
+        //           this.$message({
+        //             message: data.reason,
+        //             type: 'error',
+        //             showClose: true,
+        //             duration: 1000
+        //           })
+        //         }
+        //       }).catch(err => {
+        //         console.log(err)
+        //         this.loading = false
+        //       })
+        //     }
+        //   }
+        // })
       }
     }
   }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  @import "~@/styles/mixin.scss";
 
+  @import "~@/styles/mixin.scss";
+  .ck-editor__editable { min-height: 400px !important; }
   .createPost-container {
     position: relative;
     .createPost-main-container {
@@ -262,7 +274,7 @@
         }
       }
       .editor-container {
-        min-height: 500px;
+        /*min-height: 500px;*/
         margin: 0 0 30px;
         .editor-upload-btn-container {
           text-align: right;

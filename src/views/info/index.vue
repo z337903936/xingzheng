@@ -201,7 +201,7 @@
             <el-table-column label="操作" fixed="right" align="center" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <router-link :to="'/search/show-search/'+row.id">
-                        <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
+                        <el-button type="primary" size="mini" icon="el-icon-zoom-in">查看</el-button>
                     </router-link>
                 </template>
             </el-table-column>

@@ -141,18 +141,29 @@
             <el-table-column label="操作" align="center" fixed="right" width="380" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <!--<router-link :to="'/search/update-search/'+row.id" >-->
-                        <el-button type="primary" size="mini" icon="el-icon-edit" :disabled="Disable(row)" @click="gotoUpdate(row)">编辑</el-button>
                     <!--</router-link>-->
+                    <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+                        <el-button type="primary" size="mini" icon="el-icon-edit" :disabled="Disable(row)" @click="gotoUpdate(row)"></el-button>
 
-                    <router-link :to="'/search/show-search/'+row.id">
-                        <el-button type="success" size="mini" icon="el-icon-zoom-in">查看</el-button>
-                    </router-link>
-                    <router-link :to="'/transferLog/index/'+row.id">
-                        <el-button type="success" size="mini" style="width: 80px">物证去向</el-button>
-                    </router-link>
-                    <el-button size="mini"  style="width: 90px"type="success" @click="handleExportExcelAlone(row)">
-                        导出Excel
-                    </el-button>
+                    </el-tooltip>
+                    <el-tooltip class="item" effect="dark" content="查看" placement="top">
+                        <router-link :to="'/search/show-search/'+row.id">
+                            <el-button type="info" size="mini" icon="el-icon-zoom-in" ></el-button>
+                        </router-link>
+                    </el-tooltip>
+
+                    <el-tooltip class="item" effect="dark" content="物证去向" placement="top">
+                        <router-link :to="'/transferLog/index/'+row.id">
+                            <el-button type="success" size="mini"  icon="el-icon-document"></el-button>
+                        </router-link>
+                    </el-tooltip>
+                    <el-tooltip class="item" effect="dark" content="导出Excel" placement="top">
+                        <el-button size="mini" type="warning" @click="handleExportExcelAlone(row)" icon="el-icon-download">
+
+                        </el-button>
+                    </el-tooltip>
+
+
                 </template>
             </el-table-column>
         </el-table>
