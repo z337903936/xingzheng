@@ -93,7 +93,7 @@ export default {
         selector: `#${this.tinymceId}`,
         height: this.height,
         body_class: 'panel-body ',
-        object_resizing: false,
+        object_resizing: true,
         toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
         menubar: this.menubar,
         plugins: plugins,
@@ -101,7 +101,10 @@ export default {
         powerpaste_word_import: 'propmt',// 参数可以是propmt, merge, clear，效果自行切换对比
         powerpaste_html_import: 'propmt',// propmt, merge, clear
         powerpaste_allow_local_images: true,
-        paste_data_images: true,
+        powerpaste_keep_unsupported_src:true,
+        // paste_data_images: true,
+        // images_upload_url:'/v1/cp/upload/',
+        automatic_uploads:true,
         code_dialog_height: 450,
         code_dialog_width: 1000,
         advlist_bullet_styles: 'square',
@@ -109,7 +112,8 @@ export default {
         imagetools_cors_hosts: ['www.tinymce.com', 'codepen.io'],
         default_link_target: '_blank',
         link_title: false,
-        nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
+        nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin\\
+
         init_instance_callback: editor => {
           if (_this.value) {
             editor.setContent(_this.value)
@@ -125,6 +129,10 @@ export default {
             _this.fullscreen = e.state
           })
         },
+        // paste_preprocess: function(plugin, args) {
+        //   console.log(args.content);
+        //   console.log(plugin);
+        // },
         // 整合七牛上传
         // images_dataimg_filter(img) {
         //   setTimeout(() => {
@@ -148,8 +156,7 @@ export default {
             const formData = new FormData();
             formData.append('token', '');
             formData.append('key', '');
-            formData.append('file', blobInfo.blob());
-            console.log(blobInfo.blob())
+            formData.append('file', blobInfo.blob(),blobInfo.filename());
             // formData.append('file', blobInfo.blob(), url);
           axios.post('/v1/cp/upload/',formData,{
             'Content-Type':'multipart/form-data'
