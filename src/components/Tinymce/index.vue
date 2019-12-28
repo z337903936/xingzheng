@@ -142,14 +142,14 @@ export default {
         // },
         images_upload_handler(blobInfo, success, failure, progress) {
           progress(0);
-          const token = _this.$store.getters.token;
+          // const token = _this.$store.getters.token;
           // getToken(token).then(response => {
           //   const url = response.data.qiniu_url;
             const formData = new FormData();
             formData.append('token', '');
             formData.append('key', '');
             formData.append('file', blobInfo.blob());
-            console.log(blobInfo)
+            console.log(blobInfo.blob())
             // formData.append('file', blobInfo.blob(), url);
           axios.post('/v1/cp/upload/',formData,{
             'Content-Type':'multipart/form-data'
