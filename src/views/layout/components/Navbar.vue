@@ -98,7 +98,8 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .webName{
+
+    .webName{
     position: fixed;
     color: white;
     letter-spacing: 11px;

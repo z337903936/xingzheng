@@ -86,14 +86,14 @@
             </el-table-column>
             <el-table-column label="简要案情" align="center" min-width="200">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidence.caseHappenTime }}</span>
-                    <span v-if="row.evidence.caseHappenTime && row.evidence.caseAddress">
+                    <span>{{ row.evidence?row.evidence.caseHappenTime:'' }}</span>
+                    <span v-if="row.evidence && row.evidence.caseHappenTime && row.evidence.caseAddress">
                         在
                     </span>
                     <span>
-                        {{ row.evidence.caseAddress + row.evidence.caseCategory  }}
+                        {{ row.evidence ? row.evidence.caseAddress:'' + row.evidence ? row.evidence.caseCategory:''  }}
                     </span>
-                    <span v-if=" row.evidence.caseCategory">
+                    <span v-if="row.evidence && row.evidence.caseCategory">
                         案
                     </span>
                 </template>
@@ -155,7 +155,7 @@
     import {dnaList, fetchDna, createDna, updateDna} from '@/api/dna'
     import { batchList, batchMaterialList } from '@/api/common'
     import waves from '@/directive/waves' // waves directive
-    import {parseTime} from '@/utils'
+    import {parseTime,formatDate} from '@/utils'
     import { fetchAdminMemberList} from '@/api/permissions'
     import {fetchList} from '@/api/dictionary'
 
@@ -247,7 +247,7 @@
 
                     this.list.map(data=>{
                         if (data.evidence.caseHappenTime) {
-                            data.evidence.caseHappenTime = parseTime(data.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}')
+                            data.evidence.caseHappenTime = formatDate(data.evidence.caseHappenTime)
                         }else{
                             data.evidence.caseHappenTime = ''
                         }

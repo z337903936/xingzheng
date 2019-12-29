@@ -112,20 +112,24 @@
                         title:'其他',
                     },
                 ],
-                usedType:[
+                usedType: [
                     {
-                        title:'查档认定',
+                        title: '尚未利用'
                     }, {
-                        title:'鉴定认定',
+                        title: '查档认定'
                     }, {
-                        title:'串并认定',
-                    },{
-                        title:'排除嫌疑',
-                    },{
-                        title:'其他利用',
-                    },{
-                        title:'尚未利用',
-                    },
+                        title: '确定嫌疑'
+                    }, {
+                        title: '疑似嫌疑'
+                    }, {
+                        title: '排除嫌疑'
+                    },   {
+                        title: '鉴定认定'
+                    }, {
+                        title: '串并认定'
+                    }, {
+                        title: '其他利用'
+                    }
                 ],
                 materialListForm: {
                     id: '',

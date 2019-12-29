@@ -50,6 +50,8 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "~@/styles/mixin.scss";
+
+
   .app-wrapper {
     @include clearfix;
     position: relative;

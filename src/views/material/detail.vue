@@ -222,6 +222,7 @@
     import {parseTime} from '@/utils'
     import { fetchAdminMemberList} from '@/api/permissions'
     import {  batchMaterialList } from '@/api/common'
+    import {fetchList} from '@/api/dictionary'
 
     export default {
         name: 'Material',
@@ -301,11 +302,13 @@
                 })
             },
             handleAction(data){
-                this.actionForm = data.evidenceMaterial;
+                // this.actionForm = data.evidenceMaterial;
                 this.actionForm.stepName = data.stepName
+                this.actionForm.id = data.materialId
                 this.dialogActionForm = true;
             },
             editAction(){
+                console.log(this.actionForm)
                 updateMaterial(this.actionForm).then(response=>{
                     if (response.code === 200) {
                         this.$message({

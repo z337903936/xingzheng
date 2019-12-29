@@ -238,14 +238,14 @@
 
             <el-table-column label="简要案情" align="center" style="min-width: 600px">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidence.caseHappenTime }}</span>
-                    <span v-if="row.evidence.caseHappenTime && row.evidence.caseAddress">
+                    <span v-if="row.evidence">{{row.evidence.caseHappenTime }}</span>
+                    <span v-if="row.evidence && row.evidence.caseHappenTime && row.evidence.caseAddress">
                         在
                     </span>
-                    <span>
+                    <span v-if="row.evidence">
                         {{ row.evidence.caseAddress + row.evidence.caseCategory  }}
                     </span>
-                    <span v-if="row.evidence.caseCategory">
+                    <span v-if="row.evidence && row.evidence.caseCategory">
                         案
                     </span>
                 </template>
@@ -263,18 +263,18 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="操作" align="center" width="430" fixed="right" class-name="small-padding fixed-width">
+            <el-table-column label="操作" align="left" width="430" fixed="right" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
                                @click="handleAction(row,true)" v-if="row.status===1 && (row.stepName === '申请物证入库' || row.stepName === '申请物证出库')">
-                        同意
+                        同&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;意
                     </el-button>
                     <el-button type="warning" size="small" icon="el-icon-document-delete"
                                @click="handleAction(row,false)" v-if="row.status===1 && (row.stepName === '申请物证入库' || row.stepName === '申请物证出库')">
-                        拒绝
+                        拒&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;绝
                     </el-button>
                     <router-link :to="'/material/detail/'+row.examBatch.id" v-if="row.stepName === '申请物证入库' || row.stepName === '申请物证出库'">
-                        <el-button v-waves type="info" size="mini" style="width: 100px"  icon="el-icon-tickets">物证详情</el-button>
+                        <el-button v-waves type="primary" size="small" style="width: 100px;margin-left: 10px;"  icon="el-icon-tickets">物证详情</el-button>
                     </router-link>
                     <el-button type="primary" size="small" icon="el-icon-document-checked"
                                @click="handleAcceptTask(row)"
@@ -309,19 +309,19 @@
                     <!--&gt;-->
                         <!--<el-button v-waves type="success" size="mini" icon="el-icon-tickets" style="width: 100px">物证详情</el-button>-->
                     <!--</router-link>-->
-                    <el-button v-waves type="primary" plain size="small" style="width: 100px" @click="gotobatchList(row)"  icon="el-icon-tickets"
+                    <el-button v-waves type="primary"  size="small" style="width: 100px" @click="gotobatchList(row)"  icon="el-icon-tickets"
                                v-if="row.stepName === 'DNA送检' || row.stepName === '指纹送检' || row.stepName === '理化送检' || row.stepName === '电子物证送检'">
                         物证详情</el-button>
                     <router-link :to="'/search/update-search/'+row.evidenceId"
                                  v-if="row.status===2 && (row.stepName==='痕检现勘' ||  row.stepName === '警情扭转' ) ">
-                        <el-button icon="el-icon-edit" type="primary" size="small">编辑现勘</el-button>
+                        <el-button icon="el-icon-edit" type="primary" size="small" style="margin-left: 10px;">编辑现勘</el-button>
                     </router-link>
                     <el-button type="warning" size="small" icon="el-icon-tickets" @click="handleCancelEvidence(row.record)"
                                v-if="row.status===2 && (row.stepName==='痕检现勘' ||  row.stepName === '警情扭转') ">
                         取消勘查
                     </el-button>
                     <router-link :to="'/search/show-search/'+row.evidence.id" v-if="row.stepName === '痕检现勘'">
-                        <el-button type="primary" plain size="small" icon="el-icon-zoom-in">查看</el-button>
+                        <el-button type="primary" plain size="small" icon="el-icon-zoom-in" style="margin-left: 10px;width: 100px">查&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;看</el-button>
                     </router-link>
                     <!--<router-link :to="'/alarm/edit-alarm/'+row.record.id" v-if="row.stepName === '警情扭转'">-->
                         <!--<el-button type="success" size="mini" icon="el-icon-zoom-in" style="width: 100px">编辑</el-button>-->
@@ -571,7 +571,7 @@
 
 <script>
     import {accetpTask, taskList, writeResult,medicalWriteResult,cancelEvidence} from '@/api/backlog'
-    import {parseTime} from '@/utils'
+    import {parseTime,formatDate} from '@/utils'
     import {fetchAdminMemberList} from '@/api/permissions'
     import {fetchList} from '@/api/dictionary'
     import waves from '@/directive/waves' // waves directive
@@ -594,17 +594,21 @@
             return {
                 usedType: [
                     {
+                        title: '尚未利用'
+                    }, {
                         title: '查档认定'
                     }, {
+                        title: '确定嫌疑'
+                    }, {
+                        title: '疑似嫌疑'
+                    }, {
+                        title: '排除嫌疑'
+                    },   {
                         title: '鉴定认定'
                     }, {
                         title: '串并认定'
                     }, {
-                        title: '排除嫌疑'
-                    }, {
                         title: '其他利用'
-                    }, {
-                        title: '尚未利用'
                     }
                 ],
                 list: [],
@@ -787,10 +791,12 @@
                         if (data.examBatch){
                             data.examBatchId = data.examBatch.id;
                         }
-                        if (data.evidence.caseHappenTime) {
-                            data.evidence.caseHappenTime = parseTime(data.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}')
-                        }else{
-                            data.evidence.caseHappenTime = ''
+                        if (data.evidence){
+                            if (data.evidence.caseHappenTime) {
+                                data.evidence.caseHappenTime = formatDate(data.evidence.caseHappenTime)
+                            }else{
+                                data.evidence.caseHappenTime = ''
+                            }
                         }
                         return data;
                     })

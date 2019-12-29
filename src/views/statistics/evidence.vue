@@ -60,6 +60,11 @@
                     <span>{{ row.compareHitCount }}</span>
                 </template>
             </el-table-column>
+            <el-table-column label="比中率" align="center" prop="compareHitCountRate">
+                <template slot-scope="{row}">
+                    <span>{{ row.compareHitCountRate }}</span>
+                </template>
+            </el-table-column>
             <el-table-column label="微量检材份数" align="center"  prop="minorMaterialCount">
                 <template slot-scope="{row}">
                     <span>{{ row.minorMaterialCount }}</span>
@@ -80,6 +85,11 @@
                     <span>{{ row.minorHitCount }}</span>
                 </template>
             </el-table-column>
+            <el-table-column label="有效检出率" align="center" prop="effectiveRate">
+                <template slot-scope="{row}">
+                    <span>{{ row.effectiveRate }}</span>
+                </template>
+            </el-table-column>
             <el-table-column label="常规检材数" align="center" prop="normalMaterialCount">
                 <template slot-scope="{row}">
                     <span>{{ row.normalMaterialCount }}</span>
@@ -88,6 +98,11 @@
             <el-table-column label="常规检出数" align="center"  prop="normalMaterialHitCount">
                 <template slot-scope="{row}">
                     <span>{{ row.normalMaterialHitCount }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="常规检出率" align="center" prop="normalMaterialHitCountRate">
+                <template slot-scope="{row}">
+                    <span>{{ row.normalMaterialHitCountRate }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="备注" align="center" prop="note">
@@ -131,6 +146,15 @@
           this.getList()
         },
         methods:{
+            getPercent(num, total) {
+
+                num = parseFloat(num);
+                total = parseFloat(total);
+                if (isNaN(num) || isNaN(total)) {
+                    return "-";
+                }
+                return total <= 0 ? "0%" : (Math.round(num / total * 10000) / 100.00) + "%";
+            },
             handleCurrentChange(row){
                 this.$router.push({ name:'evidenceDetail',query: { detail:JSON.stringify(row.detailList)}})
             },
@@ -143,7 +167,12 @@
                 evidenceStatistics(this.listQuery).then(response => {
                     this.list = response.list
                     // Just to simulate the time of the request
-
+                    this.list.map(data => {
+                        data.compareHitCountRate = this.getPercent(data.compareHitCount,data.sendExamCount);
+                        data.effectiveRate = this.getPercent(data.mixMaterialCount + data.simpleMaterialCount,data.minorMaterialCount);
+                        data.normalMaterialHitCountRate = this.getPercent(data.normalMaterialHitCount,data.normalMaterialCount);
+                        return data;
+                    });
                     this.listLoading = false
 
                 })
@@ -162,10 +191,15 @@
             handleSelect(){
                 this.downloadSelectLoading = true
                 import('@/vendor/Export2Excel').then(excel => {
-                    const tHeader = ['名称','统计时间','送检案件起数',
-                        '比中数','微量检材份数','单一分型','混合可拆分','微量检出数','常规检材数','常规检出数','备注',]
-                    const filterVal = ['userName', 'createTime', 'sendExamCount', 'compareHitCount',
-                        'minorMaterialCount','simpleMaterialCount','mixMaterialCount','minorHitCount','normalMaterialCount','normalMaterialHitCount','note',]
+                    const tHeader = ['名称', '统计时间', '送检案件起数',
+                        '比中数', '比中率', '微量检材份数', '单一分型', '混合可拆分', '微量检出数', '有效检出率', '常规检材数', '常规检出数', '常规检出率', '备注',]
+                    const filterVal = ['userName', 'createTime', 'sendExamCount', 'compareHitCount', 'compareHitCountRate',
+                        'minorMaterialCount', 'simpleMaterialCount', 'mixMaterialCount', 'minorHitCount', 'effectiveRate', 'normalMaterialCount', 'normalMaterialHitCount', 'normalMaterialHitCountRate', 'note',]
+                    //
+                    // const tHeader = ['名称','统计时间','送检案件起数',
+                    //     '比中数','微量检材份数','单一分型','混合可拆分','微量检出数','常规检材数','常规检出数','备注',]
+                    // const filterVal = ['userName', 'createTime', 'sendExamCount', 'compareHitCount',
+                    //     'minorMaterialCount','simpleMaterialCount','mixMaterialCount','minorHitCount','normalMaterialCount','normalMaterialHitCount','note',]
                     const list = this.multipleSelection
                     const data = this.formatJson(filterVal, list)
                     let title = ''
@@ -184,10 +218,10 @@
             handleDownload() {
                 this.downloadLoading = true
                 import('@/vendor/Export2Excel').then(excel => {
-                    const tHeader = ['名称','统计时间','送检案件起数',
-                        '比中数','微量检材份数','单一分型','混合可拆分','微量检出数','常规检材数','常规检出数','备注',]
-                    const filterVal = ['userName', 'createTime', 'sendExamCount', 'compareHitCount',
-                        'minorMaterialCount','simpleMaterialCount','mixMaterialCount','minorHitCount','normalMaterialCount','normalMaterialHitCount','note',]
+                    const tHeader = ['名称', '统计时间', '送检案件起数',
+                        '比中数', '比中率', '微量检材份数', '单一分型', '混合可拆分', '微量检出数', '有效检出率', '常规检材数', '常规检出数', '常规检出率', '备注',]
+                    const filterVal = ['userName', 'createTime', 'sendExamCount', 'compareHitCount', 'compareHitCountRate',
+                        'minorMaterialCount', 'simpleMaterialCount', 'mixMaterialCount', 'minorHitCount', 'effectiveRate', 'normalMaterialCount', 'normalMaterialHitCount', 'normalMaterialHitCountRate', 'note',]
                     const data = this.formatJson(filterVal, this.list)
                     let title = ''
                     if (this.searchTime){

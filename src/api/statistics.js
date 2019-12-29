@@ -35,3 +35,25 @@ export function evidenceStatistics(query) {
         params: query
     })
 }
+export function materialStatistics(query) {
+    return request({
+        url: '/v1/cp/case_spot_material_stat/',
+        method: 'get',
+        params: query
+    })
+}
+export function stealStatistics(query) {
+    return request({
+        url: '/v1/cp/steal_rob_material_stat/',
+        method: 'get',
+        params: query
+    })
+}
+
+export function analyStatistics(query) {
+    return request({
+        url: '/v1/cp/dna_quality_analysis_stat/',
+        method: 'get',
+        params: query
+    })
+}
