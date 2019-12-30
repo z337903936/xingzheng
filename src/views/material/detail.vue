@@ -106,7 +106,11 @@
             </el-table-column>
             <el-table-column label="物证编号" width="300" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidenceMaterial.materialNo }}</span>
+                    <span>
+                        <barcode v-model="row.evidenceMaterial.materialNo">
+                            Show this if the rendering fails.
+                        </barcode>
+                    </span>
                 </template>
             </el-table-column>
             <el-table-column label="出库用途"  align="center">
@@ -166,10 +170,17 @@
                     label-width="140px"
                     style="width: 80%; margin-left:50px;">
                <div v-if="actionForm.stepName === '申请物证入库'">
-                   <el-form-item label="物证库存放位置" prop="reason">
-                       <el-input v-model="actionForm.storagePlace"/>
+                   <el-form-item label="物证库存放位置" prop="storagePlace">
+                       <el-select v-model="actionForm.storagePlace" placeholder="请选择" clearable center style="width: 100%">
+                           <el-option
+                                   v-for="item in storagePlace"
+                                   :key="item.value"
+                                   :label="item.value"
+                                   :value="item.value"
+                           />
+                       </el-select>
                    </el-form-item>
-                   <el-form-item label="保存时限" prop="reason">
+                   <el-form-item label="保存时限" prop="storageDuration">
                        <el-select v-model="actionForm.storageDuration" placeholder="请选择" clearable center style="width: 100%">
                            <el-option
                                    v-for="item in storageDuration"
@@ -214,6 +225,14 @@
     .mb10 {
         margin-bottom: 10px;
     }
+    .tip {
+        padding: 8px 16px;
+        background-color: #ecf8ff;
+        border-radius: 4px;
+        border-left: 5px solid #50bfff;
+        margin: 20px 0;
+        color: #606266;
+    }
 </style>
 
 <script>
@@ -223,10 +242,14 @@
     import { fetchAdminMemberList} from '@/api/permissions'
     import {  batchMaterialList } from '@/api/common'
     import {fetchList} from '@/api/dictionary'
+    import VueBarcode from 'vue-barcode';
 
     export default {
         name: 'Material',
         directives: {waves},
+        components: {
+            'barcode': VueBarcode
+        },
         data() {
             return {
                 storageDuration: [
@@ -265,6 +288,7 @@
                     borrowReason:undefined,
                 },
                 borrowReason:[],
+                storagePlace:[],
                 curId:'',
             }
         },
@@ -274,6 +298,9 @@
             this.getList(id)
             this.search('出库用途').then(response=>{
                 this.borrowReason = this.processData(response.list)
+            });
+            this.search('物证库存放位置').then(response=>{
+                this.storagePlace = this.processData(response.list)
             });
         },
         methods: {

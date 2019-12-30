@@ -55,7 +55,7 @@
                     <span>{{ row.requireName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="送检时间" width="160" align="center" >
+            <el-table-column label="送检时间" width="100" align="center" >
                 <template slot-scope="{row}">
                     <span>{{ row.requireTime | parseTime('{y}-{m}-{d}') }}</span>
                 </template>
@@ -73,7 +73,7 @@
                             <span>{{ row.toolsCount }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="指掌脚印" align="center"  >
+                    <el-table-column label="指掌脚印" align="center"  width="70" >
                         <template slot-scope="{row}">
                             <span>{{ row.palmFootCount }}</span>
                         </template>
@@ -140,27 +140,27 @@
 
             <el-table-column label="常规检材" align="center" >
                 <el-table-column label="检材类型" align="center" >
-                    <el-table-column label="瓶口" align="center"  >
+                    <el-table-column label="瓶口" align="center" width="50" >
                         <template slot-scope="{row}">
                             <span>{{ row.capCount }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="烟蒂" align="center"  >
+                    <el-table-column label="烟蒂" align="center"  width="50">
                         <template slot-scope="{row}">
                             <span>{{ row.smokeCapCount }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="血迹" align="center"  >
+                    <el-table-column label="血迹" align="center"  width="50">
                         <template slot-scope="{row}">
                             <span>{{ row.bloodCount }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="擦拭物" align="center"  >
+                    <el-table-column label="擦拭物" align="center"  width="50">
                         <template slot-scope="{row}">
                             <span>{{ row.regularWipeCount }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="合计" align="center"  >
+                    <el-table-column label="合计" align="center" width="50" >
                         <template slot-scope="{row}">
                             <span>{{ row.totalC }}</span>
                         </template>
@@ -168,12 +168,12 @@
                 </el-table-column>
 
                 <el-table-column label="检验结果" align="center" >
-                        <el-table-column label="检出" align="center" >
+                        <el-table-column label="检出" align="center" width="50">
                             <template slot-scope="{row}">
                                 <span>{{ row.regularExamOutCount }}</span>
                             </template>
                         </el-table-column>
-                        <el-table-column label="未检出" align="center"  >
+                        <el-table-column label="未检出" align="center"  width="50">
                             <template slot-scope="{row}">
                                 <span>{{ row.regularNotExamOutCount }}</span>
                             </template>

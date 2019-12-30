@@ -434,6 +434,7 @@
         border-radius: 4px;
         border-left: 5px solid #50bfff;
         margin: 20px 0;
+        color: #606266;
     }
 </style>
 

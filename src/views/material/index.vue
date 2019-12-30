@@ -128,7 +128,7 @@
     import {fetchMaterialList,delMaterial,applyDelMaterial,agreeMaterialIn,dnyMaterialIn} from '@/api/material'
     import { batchList, batchMaterialList } from '@/api/common'
     import waves from '@/directive/waves' // waves directive
-    import {parseTime} from '@/utils'
+    import {parseTime,formatDate} from '@/utils'
     import { fetchAdminMemberList} from '@/api/permissions'
 
 
@@ -174,7 +174,7 @@
                     this.pages = response.pages
                     this.list.map(data=>{
                         if (data.evidence.caseHappenTime) {
-                            data.evidence.caseHappenTime = parseTime(data.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}')
+                            data.evidence.caseHappenTime = formatDate(data.evidence.caseHappenTime)
                         }else{
                             data.evidence.caseHappenTime = ''
                         }
