@@ -219,7 +219,7 @@
 <script>
     import {fetchMaterialList,delMaterial,applyDelMaterial,updateMaterial} from '@/api/material'
     import waves from '@/directive/waves' // waves directive
-    import {parseTime} from '@/utils'
+    import {parseTime,formatDate} from '@/utils'
     import { fetchAdminMemberList} from '@/api/permissions'
     import {  batchMaterialList } from '@/api/common'
     import {fetchList} from '@/api/dictionary'
@@ -265,10 +265,12 @@
                     borrowReason:undefined,
                 },
                 borrowReason:[],
+                curId:'',
             }
         },
         created(){
             const id = this.$route.params && this.$route.params.id
+            this.curId = id;
             this.getList(id)
             this.search('出库用途').then(response=>{
                 this.borrowReason = this.processData(response.list)
@@ -317,6 +319,7 @@
                             showClose: true,
                             duration: 2000
                         })
+                        this.getList(this.curId)
                         this.dialogActionForm = false;
                     } else {
                         this.$message({
@@ -341,6 +344,7 @@
                             showClose: true,
                             duration: 2000
                         })
+                        this.getList(this.curId)
                         this.dialogdeleteForm = false;
                     } else {
                         this.$message({
@@ -353,13 +357,13 @@
                 })
             },
             getList(id) {
-                this.listQuery.batchId = id
+                this.listQuery.batchId = id;
                 this.listLoading = true;
                 batchMaterialList(this.listQuery).then(response => {
                     this.list = response.list;
-                    this.pages = response.pages
+                    this.pages = response.pages;
                     this.heardDetail =   this.list[0];
-                    this.heardDetail.evidence.caseHappenTime = parseTime(this.heardDetail.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}')?parseTime(this.heardDetail.evidence.caseHappenTime,'{y}-{m}-{d} {h}:{i}:{s}'):''
+                    this.heardDetail.evidence.caseHappenTime = formatDate(this.heardDetail.evidence.caseHappenTime)?formatDate(this.heardDetail.evidence.caseHappenTime):''
                     this.heardDetail.evidenceMaterial.transferTime= parseTime(this.heardDetail.evidenceMaterial.transferTime,'{y}-{m}-{d} {h}:{i}:{s}')
                     this.heardDetail.evidence.createTime = parseTime(this.heardDetail.evidence.createTime,'{y}-{m}-{d} {h}:{i}:{s}')
                     // Just to simulate the time of the request
