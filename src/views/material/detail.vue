@@ -107,7 +107,8 @@
             <el-table-column label="物证编号" width="300" align="center">
                 <template slot-scope="{row}">
                     <span>
-                        <barcode v-model="row.evidenceMaterial.materialNo">
+                        {{ row.evidenceMaterial.materialNo }}
+                        <barcode :id="'print'+ row.evidenceMaterial.id" v-model="row.evidenceMaterial.materialNo" style="height: 0">
                             Show this if the rendering fails.
                         </barcode>
                     </span>
@@ -119,11 +120,18 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="操作" align="center" width="230" fixed="right" class-name="small-padding fixed-width">
+            <el-table-column label="操作" align="center" width="290" fixed="right" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <el-button v-waves type="primary" size="mini" icon="el-icon-edit"  style="width: 70px" @click="handleAction(row)" >
                         编辑
                     </el-button>
+                    <el-button v-waves type="primary" size="mini" icon="el-icon-printer"  style="width: 70px" v-print="'#print'+ row.evidenceMaterial.id" >
+                        打印
+                    </el-button>
+                    <el-button v-waves type="success" size="mini"  icon="el-icon-tickets"  style="width: 70px"  @click="gotoTime(row)">
+                        详情
+                    </el-button>
+
                 </template>
             </el-table-column>
         </el-table>
@@ -304,6 +312,9 @@
             });
         },
         methods: {
+            gotoTime(row){
+                this.$router.push({ name:'time',query: {materialId:row.materialId,materialNo:row.materialNo}})
+            },
             search(parentName,filter=null){
                 return new Promise((resolve, reject) => {
                     const data = {

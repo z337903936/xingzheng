@@ -103,7 +103,7 @@
                     </el-form>
                 </template>
             </el-table-column>
-            <el-table-column label="接警号" width="120px" align="center">
+            <el-table-column label="接警号" width="140px" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.recordNo }}</span>
                 </template>

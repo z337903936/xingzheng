@@ -91,3 +91,11 @@ export function usetypeList(data) {
         params: data
     })
 }
+
+export function timeList(data) {
+    return request({
+        url: '/v1/cp/material_borrow_list/',
+        method: 'get',
+        params: data
+    })
+}

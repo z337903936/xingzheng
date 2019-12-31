@@ -22,7 +22,9 @@ import './permission' // permission control
 
 import * as filters from './filters' // global filters
 import CKEditor from '@ckeditor/ckeditor5-vue';
+import Print from 'vue-print-nb'
 
+Vue.use(Print);
 Vue.use( CKEditor );
 
 Vue.use(Element, {
