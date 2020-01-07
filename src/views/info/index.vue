@@ -152,7 +152,7 @@
             </el-table-column>
             <el-table-column label="作案区划" width="110" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.caseAddress }}</span>
+                    <span>{{ row.caseHappenRegion }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="案件类别" width="150" align="center">

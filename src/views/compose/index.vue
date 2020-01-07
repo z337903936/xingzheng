@@ -117,7 +117,10 @@
         }, {
             id: 2,
             title: '已通过'
-        }
+        }, {
+        id: 3,
+        title: '未通过'
+      }
     ];
 
     export default {

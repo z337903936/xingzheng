@@ -10,7 +10,7 @@
                 highlight-current-row
                 style="width: 100%;"
         >
-            <el-table-column label="批次号"  align="center" width="180" >
+            <el-table-column label="批次号"  align="center" width="125" >
                 <template slot-scope="{row}">
                     <span>{{ row.batchNo }}</span>
                 </template>
@@ -26,11 +26,11 @@
                     <span>{{ row.matchCount }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="勘查时间" width="300" align="center">
+            <el-table-column label="勘查时间" width="145" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                    <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
                     <span> - </span>
-                    <span>{{ row.examEndTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                    <span>{{ row.examEndTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
                 </template>
             </el-table-column>
             <!--<el-table-column label="勘查开始时间" width="200" align="center">-->
@@ -38,9 +38,9 @@
                     <!--<span>{{ row.examEndTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>-->
                 <!--</template>-->
             <!--</el-table-column>-->
-            <el-table-column label="任务开始时间" width="200" align="center">
+            <el-table-column label="任务开始时间" width="140" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.beginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                    <span>{{ row.beginTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
                 </template>
             </el-table-column>
             <!--<el-table-column label="任务结束时间" width="200" align="center">-->
@@ -79,46 +79,6 @@
 
                 </template>
             </el-table-column>
-            <!--<el-table-column label="案件分类" align="center" width="200">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.caseCategory }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="处所" align="center" width="200">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.sceneType }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="作案时机" align="center" width="200">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.crimeTime }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="案件发生区域" align="center" width="200">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.caseHappenRegion }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="侵入方式" align="center" width="200">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.invadeType }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="作案出口" align="center" width="200">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.escapeType }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="作案工具" align="center" width="200">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.crimeTools }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="作案过程" align="center" width="200">-->
-                <!--<template slot-scope="{row}">-->
-                    <!--<span>{{ row.crimeDetail }}</span>-->
-                <!--</template>-->
-            <!--</el-table-column>-->
             <el-table-column label="作案人数 " align="center" width="90">
                 <template slot-scope="{row}">
                     <span>{{ row.crimePeoples===0?'不确定':row.status===1?'1人':row.status===2?'两个':'多人' }}</span>

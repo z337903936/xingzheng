@@ -138,19 +138,20 @@
                                 :label="item.title"
                                 :value="item.id"/>
                     </el-select>
-                    <el-select
-                            v-model="listQuery.supporterName"
-                            :filter-method="filterUserSearch"
-                            filterable
-                            placeholder="协办人"
-                            center
-                            @visible-change="restUserSearch">
-                        <el-option
-                                v-for="item in userShowList"
-                                :key="item.id"
-                                :label="item.title"
-                                :value="item.id"/>
-                    </el-select>
+
+                  <el-cascader
+                    :options="invadeTypeList"
+                    v-model="listQuery.invadeType"
+                    :filter-method="filterSearch"
+                    :show-all-levels="false"
+                    placeholder="侵入方式"
+                    @change="countDict($event,'侵入方式')"
+                    :props="emitProps"
+                    filterable
+                    style="width: 200px"
+                  />
+                  <el-input v-model="listQuery.evidenceNo" placeholder="勘查号" style="width: 200px;"
+                            @keyup.enter.native="handleFilter"/>
                     <el-input v-model="listQuery.filters" placeholder="关键字" style="width: 200px;"
                               @keyup.enter.native="handleFilter"/>
                     <el-button v-waves type="primary" icon="el-icon-refresh" @click="reset"
@@ -330,11 +331,13 @@
                     beginTime: undefined,
                     endTime: undefined,
                     filters: undefined,
+                    evidenceNo: undefined,
                     status: 0,
                 },
                 caseTypeList:[],
                 userShowList: [],
                 caseHappenRegionList:[],
+                invadeTypeList:[],
                 calendarTypeOptions:{},
                 taskId: [],
                 taskUseId: [],
@@ -363,6 +366,9 @@
             this.getUserList()
             this.search('案件类别').then(response=>{
                 this.caseTypeList = this.processData(response.list)
+            });
+            this.search('侵入方式').then(response=>{
+                this.invadeTypeList = this.processData(response.list)
             });
             this.search('行政区划').then(data => {
                 this.caseHappenRegionList = this.processData(data.list)

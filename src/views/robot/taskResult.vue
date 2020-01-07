@@ -22,28 +22,28 @@
                     v-model="taskId"
                     type="selection"
                     width="55"/>
-            <el-table-column label="勘查号"  align="center" width="220px" >
+            <el-table-column label="勘查号"  align="center" width="160px" >
                 <template slot-scope="{row}">
                     <span>{{ row.evidence.selfEvidenceNo }}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column label="发案日期"  align="center" width="320px">
+            <el-table-column label="发案日期"  align="center" width="180px">
                 <template slot-scope="{row}">
-                    <span>{{ row.evidence.caseHappenTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                    <span>{{ row.evidence.caseHappenTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="发案地址"   align="center" width="320px">
+            <el-table-column label="发案地址"   align="center" width="340px">
                 <template slot-scope="{row}">
                     <span>{{ row.evidence.caseAddress }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="发案区划" align="center" width="320px">
+            <el-table-column label="发案区划" align="center" width="140px">
                 <template slot-scope="{row}">
                     <span>{{ row.evidence.caseHappenRegion }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="案件性质" align="center" width="220px">
+            <el-table-column label="案件性质" align="center" width="280px">
                 <template slot-scope="{row}">
                     <span>{{ row.evidence.caseType  }}</span>
                 </template>
@@ -53,7 +53,17 @@
                     <span>{{ row.evidence.mainChargerName }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" align="center" fixed="right" width="280" class-name="small-padding fixed-width">
+            <el-table-column label="是否串并过" align="center" width="140px">
+                <template slot-scope="{row}">
+                  <el-button v-if="row.showType==='NOT_COMPOSE'" type="info" size="mini" disabled>未串并</el-button>
+                  <el-button v-if="row.showType==='COMPOSING'" type="info" size="mini" disabled>正在串并</el-button>
+                  <router-link v-if="row.showType==='COMPOSED'" :to="'/compose/detail/'+row.composeTaskDetail.composeId" style="margin-left: 10px">
+                    <el-button  type="success" size="mini">查看串并</el-button>
+                  </router-link>
+
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center" fixed="right" width="170" class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <router-link :to="'/search/show-search/'+row.evidenceId">
                         <el-button type="primary" size="mini" >查看</el-button>

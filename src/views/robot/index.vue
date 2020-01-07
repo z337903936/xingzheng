@@ -88,9 +88,9 @@
             </el-table-column>
             <el-table-column label="勘查时间" width="300" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                    <span>{{ row.examBeginTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
                     <span> - </span>
-                    <span>{{ row.examEndTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                    <span>{{ row.examEndTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
                 </template>
             </el-table-column>
 
@@ -100,9 +100,9 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="创建日期"  width="200" align="center">
+            <el-table-column label="创建日期"  width="160" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                    <span>{{ row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
                 </template>
             </el-table-column>
 
@@ -118,10 +118,10 @@
                         <el-button v-waves type="primary" size="mini"  icon="el-icon-edit">编辑</el-button>
                     </router-link>
                     <router-link :to="'/robot/taskList/'+row.id">
-                        <el-button v-waves type="info" icon="el-icon-tickets" size="mini" style="width: 100px" >任务批次</el-button>
+                        <el-button v-waves type="success" icon="el-icon-tickets" size="mini" style="width: 100px" >任务批次</el-button>
                     </router-link>
 
-                    <el-button v-waves type="success" icon="el-icon-video-play" size="mini" style="width: 100px"  v-if="row.status !==2" @click="handleTask(row,true)">
+                    <el-button v-waves type="warning" icon="el-icon-video-play" size="mini" style="width: 100px"  v-if="row.status !==2" @click="handleTask(row,true)">
                         开始任务
                     </el-button>
                     <el-button v-waves type="warning" icon="el-icon-video-pause" size="mini" style="width: 100px"  v-if="row.status ===2" @click="handleTask(row,false)">
