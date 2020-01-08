@@ -112,7 +112,7 @@
 
         <template slot-scope="{row}">
           <router-link v-if=" row.stepName === '申请物证入库' || row.stepName === '申请物证出库' " :to="'/material/detail/'+row.examBatch.id">
-            <el-button v-waves type="info" size="mini" style="width: 100px" icon="el-icon-tickets">物证详情</el-button>
+            <el-button v-waves type="primary" plain size="mini" style="width: 100px" icon="el-icon-tickets">物证详情</el-button>
           </router-link>
           <el-button
             v-if="row.stepName === '法医现勘' "

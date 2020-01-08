@@ -181,11 +181,10 @@
               v-model="actionForm.storagePlace"
               :options="storagePlace"
               :show-all-levels="false"
-              :props="{emitPath: false}"
               style="width: 100%" />
           </el-form-item>
           <el-form-item label="存放具体位置">
-            <template v-if="actionForm.storagePlace === '痕迹物证保存区' || actionForm.storagePlace === '法医物证保存区'">
+            <template v-if="actionForm.storagePlace && actionForm.storagePlace[0] === '常规保存区'">
               <el-cascader
                 v-model="actionForm.storageDetail"
                 :options="storageDetail"
@@ -266,33 +265,8 @@ export default {
     'barcode': VueBarcode
   },
   data() {
-    let storageDetail = []
-    const col = []
-    for (let i = 1; i <= 20; i++) {
-      const row = []
-      for (let j = 1; j <= 20; j++) {
-        row.push({
-          label: j + '层',
-          value: j + '层'
-        })
-      }
-      col.push({
-        label: i + '列',
-        value: i + '列',
-        children: row
-      })
-    }
-    storageDetail = [{
-      label: 'A组',
-      value: 'A组',
-      children: col
-    }, {
-      label: 'B组',
-      value: 'B组',
-      children: col
-    }]
     return {
-      storageDetail: storageDetail,
+      storageDetail: [],
       storageDuration: [
         {
           title: '临时保存'
@@ -336,7 +310,7 @@ export default {
   },
   watch: {
     'actionForm.storagePlace'(e) {
-      if (e === '痕迹物证保存区' || e === '法医物证保存区') {
+      if (e[0] === '常规保存区') {
         this.actionForm.storageDetail = []
       } else {
         this.actionForm.storageDetail = ''
@@ -352,6 +326,9 @@ export default {
     })
     this.search('物证库存放位置').then(response => {
       this.storagePlace = this.processData(response.list)
+    })
+    this.search('物证保管位置').then(response => {
+      this.storageDetail = this.processData(response.list)
     })
   },
   methods: {
@@ -390,10 +367,14 @@ export default {
       this.dialogActionForm = true
     },
     editAction() {
-      if (Array.isArray(this.actionForm.storageDetail)) {
-        this.actionForm.storageDetail = this.actionForm.storageDetail.join('')
+      let actionForm = Object.assign({}, this.actionForm)
+      if (actionForm.storagePlace && actionForm.storagePlace.length) {
+        actionForm.storagePlace = actionForm.storagePlace[actionForm.storagePlace.length - 1]
       }
-      updateMaterial(this.actionForm).then(response => {
+      if (Array.isArray(actionForm.storageDetail)) {
+        actionForm.storageDetail = actionForm.storageDetail.join('')
+      }
+      updateMaterial(actionForm).then(response => {
         if (response.code === 200) {
           this.$message({
             message: '操作成功',
