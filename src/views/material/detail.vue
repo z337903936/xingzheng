@@ -324,10 +324,10 @@ export default {
     this.search('出库用途').then(response => {
       this.borrowReason = this.processData(response.list)
     })
-    this.search('物证库存放位置').then(response => {
+    this.search('物证库分区').then(response => {
       this.storagePlace = this.processData(response.list)
     })
-    this.search('物证保管位置').then(response => {
+    this.search('物证存放具体位置').then(response => {
       this.storageDetail = this.processData(response.list)
     })
   },
@@ -367,7 +367,7 @@ export default {
       this.dialogActionForm = true
     },
     editAction() {
-      let actionForm = Object.assign({}, this.actionForm)
+      const actionForm = Object.assign({}, this.actionForm)
       if (actionForm.storagePlace && actionForm.storagePlace.length) {
         actionForm.storagePlace = actionForm.storagePlace[actionForm.storagePlace.length - 1]
       }
