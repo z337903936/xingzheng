@@ -38,7 +38,8 @@
           <el-form-item label="勘查开始" prop="examBeginTime">
             <el-date-picker
               v-model="list.examBeginTime"
-              type="datetime" clearable
+              type="datetime"
+              clearable
               value-format="timestamp"
               placeholder="选择时间"
               style="width: 100%"
@@ -49,7 +50,8 @@
           <el-form-item label="勘查结束" prop="examEndTime">
             <el-date-picker
               v-model="list.examEndTime"
-              type="datetime" clearable
+              type="datetime"
+              clearable
               value-format="timestamp"
               placeholder="选择时间"
               style="width: 100%"/>
@@ -61,7 +63,8 @@
           <el-form-item label="发案开始" prop="caseBeginTime">
             <el-date-picker
               v-model="list.caseBeginTime"
-              type="datetime" clearable
+              type="datetime"
+              clearable
               value-format="timestamp"
               placeholder="选择时间"
               style="width: 100%"/>
@@ -71,7 +74,8 @@
           <el-form-item label="发案结束" prop="caseEndTime">
             <el-date-picker
               v-model="list.caseEndTime"
-              type="datetime" clearable
+              type="datetime"
+              clearable
               value-format="timestamp"
               placeholder="选择时间"
               style="width: 100%"/>
@@ -89,25 +93,26 @@
         <el-col :span="12">
           <el-form-item label="案件类别" prop="caseCategory">
             <el-popover
-                    placement="left"
-                    width="200"
-                    trigger="manual"
-                    v-model="caseCategoryPopover">
+              v-model="caseCategoryPopover"
+              placement="left"
+              width="200"
+              trigger="manual">
               常用字典
               <ul>
                 <li v-for="item in caseTypeUserList"><el-link @click="list.caseCategory=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
               </ul>
-            <el-cascader
-              :options="caseTypeList"
-              v-model="list.caseCategory"
-              :filter-method="filterSearch"
-              :show-all-levels="false" clearable
-              @change="countDict($event,'案件类别')"
-              @visible-change="caseCategoryPopover = !caseCategoryPopover"
-              slot="reference"
-              :props="emitProps"
-              filterable
-              style="width: 100%"
+              <el-cascader
+                slot="reference"
+                :options="caseTypeList"
+                v-model="list.caseCategory"
+                :filter-method="filterSearch"
+                :show-all-levels="false"
+                :props="emitProps"
+                clearable
+                filterable
+                style="width: 100%"
+                @change="countDict($event,'案件类别')"
+                @visible-change="caseCategoryPopover = !caseCategoryPopover"
               />
             </el-popover>
           </el-form-item>
@@ -119,36 +124,37 @@
           <el-form-item label="监控情况" prop="sceneProtect">
             <el-select v-model="list.hasCamera" placeholder="请选择" clearable center style="width: 100%">
               <el-option
-                      v-for="item in hasCamera"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"/>
+                v-for="item in hasCamera"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"/>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="发案区划" prop="caseHappenRegion">
             <el-popover
-                    placement="left"
-                    width="200"
-                    trigger="manual"
-                    v-model="caseHappenRegionPopover">
+              v-model="caseHappenRegionPopover"
+              placement="left"
+              width="200"
+              trigger="manual">
               常用字典
               <ul>
                 <li v-for="item in caseHappenRegionUserList"><el-link @click="list.caseHappenRegion=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
               </ul>
-            <el-cascader
-              :options="caseHappenRegionList"
-              v-model="list.caseHappenRegion"
-              :filter-method="filterSearch"
-              :show-all-levels="false"
-              @change="countDict($event,'行政区划')"
-              @visible-change="caseHappenRegionPopover = !caseHappenRegionPopover"
-              slot="reference" clearable
-              :props="emitProps"
-              filterable
-              style="width: 100%"
-            />
+              <el-cascader
+                slot="reference"
+                :options="caseHappenRegionList"
+                v-model="list.caseHappenRegion"
+                :filter-method="filterSearch"
+                :show-all-levels="false"
+                :props="emitProps"
+                clearable
+                filterable
+                style="width: 100%"
+                @change="countDict($event,'行政区划')"
+                @visible-change="caseHappenRegionPopover = !caseHappenRegionPopover"
+              />
             </el-popover>
           </el-form-item>
         </el-col>
@@ -161,7 +167,8 @@
               v-model="list.mainChargerUid"
               :filter-method="filterUserSearch"
               filterable
-              disabled clearable
+              disabled
+              clearable
               placeholder="请选择"
               center
               style="width: 100%"
@@ -182,7 +189,8 @@
               :filter-method="filterUserSearch"
               filterable
               placeholder="请选择"
-              center clearable
+              center
+              clearable
               multiple
               style="width: 100%"
               @visible-change="restUserSearch"
@@ -205,7 +213,8 @@
               :filter-method="filterUserSearch"
               filterable
               placeholder="请选择"
-              center clearable
+              center
+              clearable
               style="width: 100%"
               @visible-change="restUserSearch">
               <el-option
@@ -223,7 +232,8 @@
               :filter-method="filterUserSearch"
               filterable
               placeholder="请选择"
-              center clearable
+              center
+              clearable
               style="width: 100%"
               @visible-change="restUserSearch">
               <el-option
@@ -252,7 +262,8 @@
             <el-select
               v-model="list.sceneProtectName"
               :filter-method="filterUserSearch"
-              filterable clearable
+              filterable
+              clearable
               placeholder="请选择"
               center
               style="width: 100%"
@@ -271,52 +282,54 @@
         <el-col :span="12">
           <el-form-item label="处所" prop="sceneType">
             <el-popover
-                    placement="left"
-                    width="200"
-                    trigger="manual"
-                    v-model="sceneTypePopover">
+              v-model="sceneTypePopover"
+              placement="left"
+              width="200"
+              trigger="manual">
               常用字典
               <ul>
                 <li v-for="item in sceneTypeUserList">
                   <el-link @click="list.sceneType = item.dictName.trim()" >{{ item.dictName }}</el-link>
                 </li>
               </ul>
-            <el-cascader
-              :options="sceneTypeList"
-              v-model="list.sceneType"
-              :filter-method="filterSearch"
-              :show-all-levels="false" clearable
-              @change="countDict($event,'作案选择处所')"
-              @visible-change="sceneTypePopover = !sceneTypePopover"
-              slot="reference"
-              filterable
-              :props="props"
-              style="width: 100%"/>
+              <el-cascader
+                slot="reference"
+                :options="sceneTypeList"
+                v-model="list.sceneType"
+                :filter-method="filterSearch"
+                :show-all-levels="false"
+                :props="props"
+                clearable
+                filterable
+                style="width: 100%"
+                @change="countDict($event,'作案选择处所')"
+                @visible-change="sceneTypePopover = !sceneTypePopover"/>
             </el-popover>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="作案时机" prop="crimeTime">
             <el-popover
-                    placement="left"
-                    width="200"
-                    trigger="manual"
-                    v-model="crimeTimePopover">
+              v-model="crimeTimePopover"
+              placement="left"
+              width="200"
+              trigger="manual">
               常用字典
               <ul>
                 <li v-for="item in crimeTimeUserList"><el-link @click="list.crimeTime=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
               </ul>
-            <el-cascader
-              :options="crimeTimeList"
-              v-model="list.crimeTime"
-              :filter-method="filterSearch"
-              :show-all-levels="false" clearable
-              @change="countDict($event,'作案时机')"
-              @visible-change="crimeTimePopover = !crimeTimePopover"
-              slot="reference"
-              :props="props"
-              filterable
-              style="width: 100%"/>
+              <el-cascader
+                slot="reference"
+                :options="crimeTimeList"
+                v-model="list.crimeTime"
+                :filter-method="filterSearch"
+                :show-all-levels="false"
+                :props="props"
+                clearable
+                filterable
+                style="width: 100%"
+                @change="countDict($event,'作案时机')"
+                @visible-change="crimeTimePopover = !crimeTimePopover"/>
             </el-popover>
           </el-form-item>
         </el-col>
@@ -326,50 +339,52 @@
         <el-col :span="12">
           <el-form-item label="侵入方式" prop="invadeType">
             <el-popover
-                    placement="left"
-                    width="200"
-                    trigger="manual"
-                    v-model="invadeTypePopover">
+              v-model="invadeTypePopover"
+              placement="left"
+              width="200"
+              trigger="manual">
               常用字典
               <ul>
                 <li v-for="item in invadeTypeUserList"><el-link @click="list.invadeType=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
               </ul>
-            <el-cascader
-              :options="invadeTypeList"
-              v-model="list.invadeType"
-              :filter-method="filterSearch"
-              :show-all-levels="false" clearable
-              @change="countDict($event,'侵入方式')"
-              @visible-change="invadeTypePopover = !invadeTypePopover"
-              slot="reference"
-              filterable
-              :props="props"
-              style="width: 100%"/>
+              <el-cascader
+                slot="reference"
+                :options="invadeTypeList"
+                v-model="list.invadeType"
+                :filter-method="filterSearch"
+                :show-all-levels="false"
+                :props="props"
+                clearable
+                filterable
+                style="width: 100%"
+                @change="countDict($event,'侵入方式')"
+                @visible-change="invadeTypePopover = !invadeTypePopover"/>
             </el-popover>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="作案出口" prop="escapeType">
             <el-popover
-                    placement="left"
-                    width="200"
-                    trigger="manual"
-                    v-model="escapeTypePopover">
+              v-model="escapeTypePopover"
+              placement="left"
+              width="200"
+              trigger="manual">
               常用字典
               <ul>
                 <li v-for="item in escapeTypeUserList"><el-link @click="list.escapeType=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
               </ul>
-            <el-cascader
-              :options="escapeTypeList"
-              v-model="list.escapeType"
-              :filter-method="filterSearch"
-              :show-all-levels="false" clearable
-              @change="countDict($event,'作案出口')"
-              @visible-change="escapeTypePopover = !escapeTypePopover"
-              slot="reference"
-              filterable
-              :props="props"
-              style="width: 100%"/>
+              <el-cascader
+                slot="reference"
+                :options="escapeTypeList"
+                v-model="list.escapeType"
+                :filter-method="filterSearch"
+                :show-all-levels="false"
+                :props="props"
+                clearable
+                filterable
+                style="width: 100%"
+                @change="countDict($event,'作案出口')"
+                @visible-change="escapeTypePopover = !escapeTypePopover"/>
             </el-popover>
           </el-form-item>
         </el-col>
@@ -400,7 +415,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <!--<el-form-item label="是否有监控" prop="hasCamera">-->
-            <!--<el-checkbox v-model="list.hasCamera"/>-->
+          <!--<el-checkbox v-model="list.hasCamera"/>-->
           <!--</el-form-item>-->
         </el-col>
         <el-col :span="8">
@@ -439,29 +454,36 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="idNo" align="center"
-            label="证件号" width="175">
+            prop="idNo"
+            align="center"
+            label="证件号"
+            width="175">
             <template slot-scope="{row}">
               <span>{{ row.idNo }}</span>
             </template>
           </el-table-column>
           <el-table-column
             prop="sex"
-            label="性别" align="center">
+            label="性别"
+            align="center">
             <template slot-scope="{row}">
               <span>{{ row.sexShow }}</span>
             </template>
           </el-table-column>
           <el-table-column
-            prop="contactNumber" width="120"
-            label="联系电话" align="center">
+            prop="contactNumber"
+            width="120"
+            label="联系电话"
+            align="center">
             <template slot-scope="{row}">
               <span>{{ row.contactNumber }}</span>
             </template>
           </el-table-column>
           <el-table-column
-            prop="residence"  width="160"
-            label="地址" align="center">
+            prop="residence"
+            width="160"
+            label="地址"
+            align="center">
             <template slot-scope="{row}">
               <span>{{ row.residence }}</span>
             </template>
@@ -483,55 +505,66 @@
         <el-button type="primary" size="mini" @click="dialogSuspectPersonListForm=true">添加嫌疑人</el-button>
 
         <el-table
-                :data="list.suspectPersonList"
-                border
-                style="width: 100%">
+          :data="list.suspectPersonList"
+          border
+          style="width: 100%">
           <el-table-column
-                  prop="name"
-                  label="名字"
+            prop="name"
+            label="名字"
           >
             <template slot-scope="{row}">
               <span>{{ row.name }}</span>
             </template>
           </el-table-column>
           <el-table-column
-                  prop="idNo" align="center"
-                  label="证件号" width="175">
+            prop="idNo"
+            align="center"
+            label="证件号"
+            width="175">
             <template slot-scope="{row}">
               <span>{{ row.idNo }}</span>
             </template>
           </el-table-column>
           <el-table-column
-                  prop="solveMethod"
-                  label="侦破方式" align="center">
+            prop="solveMethod"
+            label="侦破方式"
+            align="center">
             <template slot-scope="{row}">
               <span>{{ row.solveMethod }}</span>
             </template>
           </el-table-column>
           <el-table-column
-                  prop="crimeDetail" width="120"
-                  label="作案特点" align="center">
+            prop="crimeDetail"
+            width="120"
+            label="作案特点"
+            align="center">
             <template slot-scope="{row}">
               <span>{{ row.crimeDetail }}</span>
             </template>
           </el-table-column>
           <el-table-column
-                  prop="sex" width="120"
-                  label="性别" align="center">
+            prop="sex"
+            width="120"
+            label="性别"
+            align="center">
             <template slot-scope="{row}">
               <span>{{ row.sex }}</span>
             </template>
           </el-table-column>
           <el-table-column
-                  prop="huji" width="120"
-                  label="户籍" align="center">
+            prop="huji"
+            width="120"
+            label="户籍"
+            align="center">
             <template slot-scope="{row}">
               <span>{{ row.huji }}</span>
             </template>
           </el-table-column>
           <el-table-column
-                  prop="crackStatus" width="120"
-                  label="状态" align="center">
+            prop="crackStatus"
+            width="120"
+            label="状态"
+            align="center">
             <template slot-scope="{row}">
               <span>{{ row.crackStatus===1?'待破':row.crackStatus===2?'已技术比中':'已破' }}</span>
             </template>
@@ -540,12 +573,12 @@
           <el-table-column label="操作" fixed="right" width="150" align="center">
             <template slot-scope="scope">
               <el-button
-                      size="mini"
-                      @click="handleEditSuspectPersonListForm(scope.$index, scope.row)">编辑</el-button>
+                size="mini"
+                @click="handleEditSuspectPersonListForm(scope.$index, scope.row)">编辑</el-button>
               <el-button
-                      size="mini"
-                      type="danger"
-                      @click="handleDeleteSuspectPersonListForm(scope.$index, scope.row)">删除</el-button>
+                size="mini"
+                type="danger"
+                @click="handleDeleteSuspectPersonListForm(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -560,7 +593,8 @@
           style="width: 100%">
           <el-table-column
             prop="name"
-            label="名字" align="center"
+            label="名字"
+            align="center"
           >
             <template slot-scope="{row}">
               <span>{{ row.name }}</span>
@@ -568,7 +602,8 @@
           </el-table-column>
           <el-table-column
             prop="model"
-            label="型号" align="center"
+            label="型号"
+            align="center"
           >
             <template slot-scope="{row}">
               <span>{{ row.model }}</span>
@@ -576,21 +611,24 @@
           </el-table-column>
           <el-table-column
             prop="feather"
-            label="特征" align="center">
+            label="特征"
+            align="center">
             <template slot-scope="{row}">
               <span>{{ row.feather }}</span>
             </template>
           </el-table-column>
           <el-table-column
             prop="value"
-            label="价值" align="center">
+            label="价值"
+            align="center">
             <template slot-scope="{row}">
               <span>{{ row.value }}</span>
             </template>
           </el-table-column>
           <el-table-column
             prop="amount"
-            label="数量" align="center">
+            label="数量"
+            align="center">
             <template slot-scope="{row}">
               <span>{{ row.amount }}</span>
             </template>
@@ -627,38 +665,43 @@
             type="selection"
             width="55"/>
           <el-table-column
-                  prop="materialCategory" align="center"
-                  label="物证类别">
+            prop="materialCategory"
+            align="center"
+            label="物证类别">
             <template slot-scope="{row}">
 
               <span>{{ row.materialCategory }}</span>
             </template>
           </el-table-column>
           <el-table-column
-                  prop="name" align="center"
-                  label="物证名称">
+            prop="name"
+            align="center"
+            label="物证名称">
             <template slot-scope="{row}">
               <span>{{ row.name }}</span>
             </template>
           </el-table-column>
           <el-table-column
-                  prop="stayPart" align="center"
-                  label="遗留部位">
+            prop="stayPart"
+            align="center"
+            label="遗留部位">
             <template slot-scope="{row}">
               <span>{{ row.stayPart }}</span>
             </template>
           </el-table-column>
           <el-table-column
-                  prop="extractMethod" align="center"
-                  label="提取方法">
+            prop="extractMethod"
+            align="center"
+            label="提取方法">
             <template slot-scope="{row}">
               <span>{{ row.extractMethod }}</span>
             </template>
           </el-table-column>
           <el-table-column
-                  prop="extractTime"
-                  label="提取日期" align="center"
-                  width="100px">
+            prop="extractTime"
+            label="提取日期"
+            align="center"
+            width="100px">
             <template slot-scope="{row}">
               <span v-if="row.extractTime !== ''">{{ row.extractTime*1000 | parseTime('{y}-{m}-{d}') }}</span>
               <span v-else/>
@@ -666,7 +709,8 @@
           </el-table-column>
           <el-table-column
             prop="materialNo"
-            label="物证编码" align="center"
+            label="物证编码"
+            align="center"
             width="140"
           >
             <template slot-scope="{row}">
@@ -675,7 +719,8 @@
           </el-table-column>
           <el-table-column
             prop="thirdMaterialNo"
-            label="物证库编号" align="center"
+            label="物证库编号"
+            align="center"
             width="140"
           >
             <template slot-scope="{row}">
@@ -685,7 +730,8 @@
 
           <el-table-column
             prop="extractUid"
-            label="图片" align="center"
+            label="图片"
+            align="center"
             width="200">
             <template slot-scope="{row}">
               <span><img :src="row.imgUrl" height="100"></span>
@@ -708,55 +754,24 @@
       </el-form-item>
       <el-divider>三录</el-divider>
       <el-row :gutter="10">
-        <el-col :span="12">
-          <!--<el-upload-->
-                  <!--drag-->
-                  <!--multiple-->
-                  <!--:show-file-list="false"-->
-                  <!--:on-success="handleFileSuccess"-->
-                  <!--action="/v1/cp/upload/">-->
-            <!--<i class="el-icon-upload"/>-->
-            <!--<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>-->
-          <!--</el-upload>-->
-        </el-col>
-        <el-col :span="12">
-          <el-button type="primary" size="mini" @click="submitSanlu">批量提交三录</el-button>
-          <!--<el-table-->
-                  <!--:data="list.sanLuList"-->
-                  <!--border-->
-                  <!--row-key="id"-->
-                  <!--@selection-change="selectFile"-->
-                  <!--max-height="150"-->
-
-          <!--&gt;-->
-            <!--<el-table-column-->
-                    <!--v-model="fileId"-->
-                    <!--type="selection"-->
-                    <!--width="55"/>-->
-
-            <!--<el-table-column-->
-                    <!--prop="materialNo"-->
-                    <!--label="文件名" align="center"-->
-            <!--&gt;-->
-              <!--<template slot-scope="{row}">-->
-                <!--<span>{{ row.fileName }}</span>-->
-              <!--</template>-->
-            <!--</el-table-column>-->
-            <!--<el-table-column label="操作" fixed="right" width="150" align="center">-->
-              <!--<template slot-scope="scope">-->
-                <!--<el-button-->
-                        <!--size="mini"-->
-                        <!--type="danger"-->
-                        <!--@click="handleDeleteSanlu( scope.row)">删除-->
-                <!--</el-button>-->
-              <!--</template>-->
-            <!--</el-table-column>-->
-          <!--</el-table>-->
-        </el-col>
+        <el-form>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="submitSanlu">批量提交三录</el-button>
+          </el-form-item>
+        </el-form>
 
       </el-row>
 
-
+      <el-row>
+        <el-form>
+          <el-form-item label="案件侦破状态">
+            <el-radio-group v-model="list.crackStatus">
+              <el-radio :label="1">已破</el-radio>
+              <el-radio :label="0">未破</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-form>
+      </el-row>
 
       <div style="margin: 40px 0;text-align: center;" >
         <el-button v-loading="loading" type="primary" style="width: 200px" @click="submitForm(false,true)">保存</el-button>
@@ -827,12 +842,12 @@
 
     <el-dialog :close-on-click-modal="false" :visible.sync="dialogSuspectPersonListForm" title="嫌疑人" width="30%">
       <el-form
-              ref="suspectPersonListForm"
-              :rules="suspectPersonListFormRules"
-              :model="suspectPersonListForm"
-              label-position="left"
-              label-width="70px"
-              style="width: 70%; margin-left:50px;">
+        ref="suspectPersonListForm"
+        :rules="suspectPersonListFormRules"
+        :model="suspectPersonListForm"
+        label-position="left"
+        label-width="70px"
+        style="width: 70%; margin-left:50px;">
 
         <el-form-item label="名字" prop="name">
           <el-input v-model="suspectPersonListForm.name"/>
@@ -841,25 +856,27 @@
           <el-input v-model="suspectPersonListForm.idNo"/>
         </el-form-item>
         <el-form-item label="侦破方式" prop="solveMethod">
-          <el-select v-model="suspectPersonListForm.solveMethod"
-                     filterable clearable
-                     default-first-option
-                     placeholder="请选择"
-                      style="width: 100%">
+          <el-select
+            v-model="suspectPersonListForm.solveMethod"
+            filterable
+            clearable
+            default-first-option
+            placeholder="请选择"
+            style="width: 100%">
             <el-option
-                    v-for="item in solveMethodList"
-                    :key="item.value"
-                    :label="item.value"
-                    :value="item.value"/>
+              v-for="item in solveMethodList"
+              :key="item.value"
+              :label="item.value"
+              :value="item.value"/>
           </el-select>
         </el-form-item>
         <el-form-item label="性别" prop="sex">
           <el-select v-model="suspectPersonListForm.sex" placeholder="请选择" clearable center style="width: 100%">
             <el-option
-                    v-for="item in sex"
-                    :key="item.title"
-                    :label="item.title"
-                    :value="item.title"
+              v-for="item in sex"
+              :key="item.title"
+              :label="item.title"
+              :value="item.title"
             />
           </el-select>
         </el-form-item>
@@ -876,8 +893,8 @@
           取 消
         </el-button>
         <el-button
-                type="primary"
-                @click="dialogSuspectPersonListFormMethod=== 'add'?addSuspectPersonListForm():updateSuspectPersonListForm()">
+          type="primary"
+          @click="dialogSuspectPersonListFormMethod=== 'add'?addSuspectPersonListForm():updateSuspectPersonListForm()">
           确 定
         </el-button>
       </div>
@@ -897,25 +914,26 @@
         </el-form-item>
         <el-form-item label="身份类型" prop="idType" >
           <el-popover
-                  placement="left"
-                  width="200"
-                  trigger="manual"
-                  v-model="reportOrgPopover">
+            v-model="reportOrgPopover"
+            placement="left"
+            width="200"
+            trigger="manual">
             常用字典
             <ul>
               <li v-for="item in idTypeUserList"><el-link @click="concernedPersonListForm.idType=item.dictName" >{{ item.dictName }}</el-link></li>
             </ul>
-          <el-cascader
-            :options="idTypeList"
-            v-model="concernedPersonListForm.idType"
-            :filter-method="filterSearch"
-            @change="countDict($event,'身份类型')"
-            @visible-change="reportOrgPopover = !reportOrgPopover"
-            slot="reference" clearable
-            :props="emitProps"
-            :show-all-levels="false"
-            filterable
-            style="width: 100%"/>
+            <el-cascader
+              slot="reference"
+              :options="idTypeList"
+              v-model="concernedPersonListForm.idType"
+              :filter-method="filterSearch"
+              :props="emitProps"
+              :show-all-levels="false"
+              clearable
+              filterable
+              style="width: 100%"
+              @change="countDict($event,'身份类型')"
+              @visible-change="reportOrgPopover = !reportOrgPopover"/>
           </el-popover>
         </el-form-item>
         <el-form-item label="证件号" prop="idNo">
@@ -928,7 +946,7 @@
               :key="item.title"
               :label="item.title"
               :value="item.title"
-              />
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="联系电话" prop="contactNumber">
@@ -951,8 +969,7 @@
       </div>
     </el-dialog>
 
-
-    <el-dialog :visible.sync="dialogMaterialListForm" :close-on-click-modal="false" title="物证" width="50%"  :before-close="handleClose">
+    <el-dialog :visible.sync="dialogMaterialListForm" :close-on-click-modal="false" :before-close="handleClose" title="物证" width="50%">
       <div v-if="dialogMaterialListFormMethod === 'edit'">
         <el-divider content-position="left">物证结果</el-divider>
         <el-row :gutter="20" style="margin-left: 40px">
@@ -991,25 +1008,25 @@
           <el-col :span="8">
             <el-form-item label="物证类别" prop="materialCategory">
               <el-popover
-                      placement="left"
-                      width="200"
-                      trigger="manual"
-                      v-model="materialCategoryPopover">
+                v-model="materialCategoryPopover"
+                placement="left"
+                width="200"
+                trigger="manual">
                 常用字典
                 <ul>
                   <li v-for="item in materialCategoryUserList"><el-link @click="materialChange(item.dictName.trim());materialListForm.materialCategory=item.dictName.trim()" >{{ item.dictName }}</el-link></li>
                 </ul>
                 <el-cascader
-                        ref="materialCategoryList"
-                        :options="materialCategoryList"
-                        v-model="materialListForm.materialCategory"
-                        :filter-method="filterSearch"
-                        :show-all-levels="false"
-                        @change="countDictArray($event,'物证类型')"
-                        @visible-change="materialCategoryPopover = !materialCategoryPopover"
-                        slot="reference"
-                        filterable
-                        style="width: 100%"/>
+                  ref="materialCategoryList"
+                  slot="reference"
+                  :options="materialCategoryList"
+                  v-model="materialListForm.materialCategory"
+                  :filter-method="filterSearch"
+                  :show-all-levels="false"
+                  filterable
+                  style="width: 100%"
+                  @change="countDictArray($event,'物证类型')"
+                  @visible-change="materialCategoryPopover = !materialCategoryPopover"/>
               </el-popover>
             </el-form-item>
           </el-col>
@@ -1030,32 +1047,34 @@
           <el-col :span="8">
             <el-form-item label="提取方法" prop="extractMethod">
               <el-input v-if="isInput" v-model="materialListForm.extractMethod"/>
-              <el-select v-model="materialListForm.extractMethod"
-                         filterable clearable
-                         @change="countDictSelect"
-                         default-first-option
-                         v-if="!isInput"
-                         placeholder="请选择"
-                         style="width: 100%">
+              <el-select
+                v-if="!isInput"
+                v-model="materialListForm.extractMethod"
+                filterable
+                clearable
+                default-first-option
+                placeholder="请选择"
+                style="width: 100%"
+                @change="countDictSelect">
                 <el-option
-                        v-for="item in extractMethodList"
-                        :key="item.value"
-                        :label="item.value"
-                        :value="item.value"/>
+                  v-for="item in extractMethodList"
+                  :key="item.value"
+                  :label="item.value"
+                  :value="item.value"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
 
-              <el-form-item label="可靠程度" prop="reliabilityLevel">
-                <el-select v-model="materialListForm.reliabilityLevel" clearable placeholder="请选择">
-                  <el-option
-                          v-for="item in reliabilityLevel"
-                          :key="item.title"
-                          :label="item.title"
-                          :value="item.title"/>
-                </el-select>
-              </el-form-item>
+            <el-form-item label="可靠程度" prop="reliabilityLevel">
+              <el-select v-model="materialListForm.reliabilityLevel" clearable placeholder="请选择">
+                <el-option
+                  v-for="item in reliabilityLevel"
+                  :key="item.title"
+                  :label="item.title"
+                  :value="item.title"/>
+              </el-select>
+            </el-form-item>
 
           </el-col>
           <el-col :span="8">
@@ -1068,16 +1087,16 @@
                   :value="item.title"/>
               </el-select>
               <el-popover
-                      placement="right"
-                      width="500"
-                      trigger="click">
+                placement="right"
+                width="500"
+                trigger="click">
                 <el-table :data="usetypeListShow" height="250">
-                  <el-table-column width="100" property="operatorName" label="操作员"></el-table-column>
-                  <el-table-column width="100" property="useType" label="利用情况"></el-table-column>
-                  <el-table-column width="120" property="evidenceNo" label="现勘号"></el-table-column>
-                  <el-table-column width="140" property="createTime" label="填写时间"></el-table-column>
+                  <el-table-column width="100" property="operatorName" label="操作员"/>
+                  <el-table-column width="100" property="useType" label="利用情况"/>
+                  <el-table-column width="120" property="evidenceNo" label="现勘号"/>
+                  <el-table-column width="140" property="createTime" label="填写时间"/>
                 </el-table>
-                <el-button type="primary" slot="reference" plain>利用情况详情</el-button>
+                <el-button slot="reference" type="primary" plain>利用情况详情</el-button>
               </el-popover>
             </el-form-item>
 
@@ -1088,18 +1107,19 @@
           <el-col :span="8">
             <el-form-item label="提取人" prop="extractUid">
               <el-select
-                      v-model="materialListForm.extractUid"
-                      :filter-method="filterUserSearch"
-                      filterable clearable
-                      placeholder="请选择"
-                      center
-                      style="width: 100%"
-                      @visible-change="restUserSearch">
+                v-model="materialListForm.extractUid"
+                :filter-method="filterUserSearch"
+                filterable
+                clearable
+                placeholder="请选择"
+                center
+                style="width: 100%"
+                @visible-change="restUserSearch">
                 <el-option
-                        v-for="item in userShowList"
-                        :key="item.id"
-                        :label="item.title"
-                        :value="item.id"/>
+                  v-for="item in userShowList"
+                  :key="item.id"
+                  :label="item.title"
+                  :value="item.id"/>
               </el-select>
             </el-form-item>
 
@@ -1108,11 +1128,12 @@
             <el-form-item label="提取日期" prop="extractTime">
 
               <el-date-picker
-                      v-model="materialListForm.extractTime"
-                      type="date" clearable
-                      value-format="timestamp"
-                      placeholder="选择时间"
-                      style="width: 100%"
+                v-model="materialListForm.extractTime"
+                type="date"
+                clearable
+                value-format="timestamp"
+                placeholder="选择时间"
+                style="width: 100%"
               />
             </el-form-item>
           </el-col>
@@ -1121,76 +1142,73 @@
               <el-input v-model="materialListForm.thirdMaterialNo" :disabled="true" placeholder="系统自动生成" />
             </el-form-item>
 
-
           </el-col>
         </el-row>
         <el-form-item label="特征描述" prop="note">
           <el-input v-model="materialListForm.note" type="textarea"/>
         </el-form-item>
 
-
         <el-form-item label="物证图片" prop="registerName">
           <Upload v-model="materialListForm.imgUrl" @tell="setStayPart"/>
         </el-form-item>
       </el-form>
       <el-button
-              type="primary" style="float: right"
-              @click="addmaterialPhoto()">
+        type="primary"
+        style="float: right"
+        @click="addmaterialPhoto()">
         添加无图片物证
       </el-button>
       <el-button
-              type="primary" style="float: right;margin-right: 10px"
-              @click="dialogMaterialListFormMethod === 'add'?addMaterialListForm():updateMaterialListForm()">
+        type="primary"
+        style="float: right;margin-right: 10px"
+        @click="dialogMaterialListFormMethod === 'add'?addMaterialListForm():updateMaterialListForm()">
         保存
       </el-button>
       <el-button
-              type="primary" style="float: right;margin-right: 10px"
-              @click="addMultipleMaterialListForm()">
+        type="primary"
+        style="float: right;margin-right: 10px"
+        @click="addMultipleMaterialListForm()">
         批量保存
       </el-button>
 
-
       <el-table
-              ref="materialPhotoList"
-              :data="materialPhotoList"
-              current-row-key="id"
-              row-key="1"
-              highlight-current-row
-              @current-change="handleCurrentChange"
-              :row-class-name="tableRowClassName"
-              style="width: 100%">
+        ref="materialPhotoList"
+        :data="materialPhotoList"
+        :row-class-name="tableRowClassName"
+        current-row-key="id"
+        row-key="1"
+        highlight-current-row
+        style="width: 100%"
+        @current-change="handleCurrentChange">
         <el-table-column
-                type="index"
-                width="50">
-        </el-table-column>
-        <el-table-column label="物证编号"  align="center" >
+          type="index"
+          width="50"/>
+        <el-table-column label="物证编号" align="center" >
           <template slot-scope="{row}">
             <span>{{ row.materialNo }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="物证类型"  align="center">
+        <el-table-column label="物证类型" align="center">
           <template slot-scope="{row}">
             <span>{{ row.materialCategoryShow }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="提取日期"  align="center">
+        <el-table-column label="提取日期" align="center">
           <template slot-scope="{row}">
             <span>{{ row.extractTime | parseTime('{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="提取人"  align="center">
+        <el-table-column label="提取人" align="center">
           <template slot-scope="{row}">
             <span>{{ row.extractName }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="状态"  align="center">
+        <el-table-column label="状态" align="center">
           <template slot-scope="{row}">
             <span>{{ row.status?'已保存':'未保存' }}</span>
           </template>
         </el-table-column>
       </el-table>
-
-
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleCloseButton">
@@ -1199,19 +1217,18 @@
       </div>
     </el-dialog>
 
-
   </div>
 </template>
 
 <script>
 import { createSearch, fetchSearch, updateSearch, createPerson, updatePerson, delPerson, createLost, updateLost, delLost,
-  createMaterial, updateMaterial, delMaterial, submitMaterial,submitMaterialinStock,submitMaterialOutStock, createDocument,
-  updateDocument, delDocument,createSuspect, updateSuspect, delSuspect ,createSanlu, delSanlu, submitSanlu } from '@/api/search'
-import {fetchList,userDictList} from '@/api/dictionary'
+  createMaterial, updateMaterial, delMaterial, submitMaterial, submitMaterialinStock, submitMaterialOutStock, createDocument,
+  updateDocument, delDocument, createSuspect, updateSuspect, delSuspect, createSanlu, delSanlu, submitSanlu } from '@/api/search'
+import { fetchList, userDictList } from '@/api/dictionary'
 import { fetchAdminMemberList } from '@/api/permissions'
 import Upload from '@/components/Upload/SingleImage3'
-import {parseTime} from '@/utils'
-import {usetypeList} from '@/api/material'
+import { parseTime } from '@/utils'
+import { usetypeList } from '@/api/material'
 
 export default {
   name: 'MenberDetail',
@@ -1231,13 +1248,13 @@ export default {
       }
     }
     return {
-      usetypeListShow:null,
+      usetypeListShow: null,
       props: {
         multiple: true,
-        emitPath:false
+        emitPath: false
       },
-      emitProps:{
-        emitPath:false
+      emitProps: {
+        emitPath: false
       },
       tableKey: 0,
       imageUrl: '',
@@ -1249,9 +1266,9 @@ export default {
           value: false
         }, {
           label: '有',
-          value: true,
+          value: true
         }
-      ],  sceneProtectUidList: [
+      ], sceneProtectUidList: [
         {
           title: '无'
         }, {
@@ -1281,16 +1298,16 @@ export default {
       ],
       crimePeoplesType: [
         {
-          id:0,
+          id: 0,
           title: '不确定'
         }, {
-          id:1,
+          id: 1,
           title: '1人'
         }, {
-          id:2,
+          id: 2,
           title: '两个'
         }, {
-          id:3,
+          id: 3,
           title: '多人'
         }
       ],
@@ -1374,7 +1391,7 @@ export default {
           title: '疑似嫌疑'
         }, {
           title: '排除嫌疑'
-        },   {
+        }, {
           title: '鉴定认定'
         }, {
           title: '串并认定'
@@ -1420,14 +1437,14 @@ export default {
         concernedPersonList: [],
         materialList: [],
         suspectPersonList: [],
-        sanLuList: [],
+        sanLuList: []
 
       },
       listRules: {},
       lostDetailListFormRules: {
         name: [
-          { required: true, message: '请输入名称'}
-        ],
+          { required: true, message: '请输入名称' }
+        ]
         // value: [
         //   { required: true, message: '请输入价值' }
         // ],
@@ -1450,7 +1467,7 @@ export default {
       dialogMaterialListFormMethod: 'add',
       dialogSuspectPersonListFormMethod: 'add',
 
-      dialogSuspectPersonListFormIndex:'',
+      dialogSuspectPersonListFormIndex: '',
       taskId: [],
       fileId: [],
       materialCategoryList: [],
@@ -1464,7 +1481,7 @@ export default {
         solveMethod: '',
         crimeDetail: '',
         huji: '',
-        sex: '',
+        sex: ''
       },
 
       lostDetailListForm: {
@@ -1474,7 +1491,7 @@ export default {
         model: '',
         feather: '',
         value: '',
-        amount: '',
+        amount: ''
 
       },
       concernedPersonListForm: {
@@ -1485,7 +1502,7 @@ export default {
         idNo: '',
         sex: '',
         contactNumber: '',
-        residence: '',
+        residence: ''
 
       },
       materialListForm: {
@@ -1508,7 +1525,7 @@ export default {
         name: '',
         note: '',
         noned: '',
-        index: '',
+        index: ''
 
       },
 
@@ -1546,29 +1563,28 @@ export default {
       reportOrgUserList: [],
       materialCategoryUserList: [],
 
+      solveMethodList: [],
 
-      solveMethodList:[],
+      isInput: false,
+      caseCategoryPopover: false,
+      caseHappenRegionPopover: false,
+      crimeTimePopover: false,
+      sceneTypePopover: false,
+      invadeTypePopover: false,
+      escapeTypePopover: false,
+      materialCategoryPopover: false,
+      reportOrgPopover: false,
 
-      isInput:false,
-      caseCategoryPopover:false,
-      caseHappenRegionPopover:false,
-      crimeTimePopover:false,
-      sceneTypePopover:false,
-      invadeTypePopover:false,
-      escapeTypePopover:false,
-      materialCategoryPopover:false,
-      reportOrgPopover:false,
+      isDna: false,
+      isFingerprint: false,
+      materialPhotoList: [],
+      currenTable: '',
 
-      isDna:false,
-      isFingerprint:false,
-      materialPhotoList:[],
-      currenTable:'',
-
-
+      crackStatus: ''
     }
   },
   watch: {
-   /* 'list.concernedPersonList': {
+    /* 'list.concernedPersonList': {
       handler(newData, oldData) {
         if (newData.length > 0) {
          var count = 0;
@@ -1590,33 +1606,31 @@ export default {
     },*/
     'materialListForm.materialCategory': {
       handler(newData, oldData) {
-
-        if (newData){
+        if (newData) {
           if (newData.constructor === Array) {
             this.isFingerprint = false
             this.isDna = false
-            if (newData.indexOf('手印物证') > -1 ) {
+            if (newData.indexOf('手印物证') > -1) {
               this.isInput = false
               this.isFingerprint = true
-              this.extractMethodList = this.handprintMethodList;
-            }else if (newData.indexOf('足迹物证') > -1){
+              this.extractMethodList = this.handprintMethodList
+            } else if (newData.indexOf('足迹物证') > -1) {
               this.isInput = false
-              this.extractMethodList = this.footprintMethodList;
-            } else if (newData.indexOf('工具痕迹') > -1){
+              this.extractMethodList = this.footprintMethodList
+            } else if (newData.indexOf('工具痕迹') > -1) {
               this.isInput = false
-              this.extractMethodList = this.toolMethodList;
-            } else if (newData.indexOf('枪弹物证') > -1){
+              this.extractMethodList = this.toolMethodList
+            } else if (newData.indexOf('枪弹物证') > -1) {
               this.isInput = false
-              this.extractMethodList = this.bulletMethodList;
-            }else if (newData.indexOf('生物物证') > -1){
+              this.extractMethodList = this.bulletMethodList
+            } else if (newData.indexOf('生物物证') > -1) {
               this.isInput = false
 
               this.extractMethodList = this.dnaMethodList
-            }else{
+            } else {
               this.isInput = true
-
             }
-            this.materialListForm.materialCategoryShow= this.materialListForm.materialCategory.slice(-1)[0]
+            this.materialListForm.materialCategoryShow = this.materialListForm.materialCategory.slice(-1)[0]
             // this.$set(this.materialPhotoList,this.materialListForm.index,this.materialListForm);
           }
         }
@@ -1626,9 +1640,9 @@ export default {
     },
     'materialListForm.extractUid': {
       handler(newData, oldData) {
-        this.userList.map(data=>{
-          if (this.materialListForm.extractUid ===data.id) {
-            this.materialListForm.extractName = data.title;
+        this.userList.map(data => {
+          if (this.materialListForm.extractUid === data.id) {
+            this.materialListForm.extractName = data.title
           }
         })
       },
@@ -1637,56 +1651,52 @@ export default {
     },
     'list.caseAddress': {
       handler(newData, oldData) {
-          this.concernedPersonListForm.residence = newData;
+        this.concernedPersonListForm.residence = newData
       },
       deep: true,
       immediate: true
     },
     'list.caseCategory': {
       handler(newData, oldData) {
-        var data = this.searchMaterial(this.caseTypeList,newData)
-        if (data === "十类案件") {
+        var data = this.searchMaterial(this.caseTypeList, newData)
+        if (data === '十类案件') {
           this.list.isTenCase = true
-        }else{
+        } else {
           this.list.isTenCase = false
         }
-
       },
-      deep: true,
+      deep: true
     },
     'list.supporterUidArray': {
       handler(newData, oldData) {
-        if (newData){
+        if (newData) {
           if (newData.length > 0) {
             this.list.photographUid = newData[0]
-          }else{
-            this.list.photographUid = '';
+          } else {
+            this.list.photographUid = ''
           }
         }
-
       },
       deep: true,
       immediate: true
-    },
+    }
   },
   created() {
     if (this.isEdit) {
-      const id = this.$route.params && this.$route.params.id;
+      const id = this.$route.params && this.$route.params.id
       this.fetchData(id)
       this.list.id = id
       // this.getUseType();
-
-    }else{
-      this.list.mainChargerUid = this.$store.getters.id;
-      this.list.examBeginTime = (new Date() ).valueOf()+ 30 * 60 * 1000;
-      this.list.examEndTime = (new Date()).valueOf() + 120 * 60 * 1000;
-      this.list.caseHappenTime = (new Date()).valueOf();
-      this.list.caseBeginTime = (new Date()).valueOf();
-      this.list.caseEndTime = (new Date()).valueOf();
+    } else {
+      this.list.mainChargerUid = this.$store.getters.id
+      this.list.examBeginTime = (new Date()).valueOf() + 30 * 60 * 1000
+      this.list.examEndTime = (new Date()).valueOf() + 120 * 60 * 1000
+      this.list.caseHappenTime = (new Date()).valueOf()
+      this.list.caseBeginTime = (new Date()).valueOf()
+      this.list.caseEndTime = (new Date()).valueOf()
     }
 
-
-    this.getUserList();
+    this.getUserList()
     this.search('案件类别').then(data => {
       this.caseTypeList = this.processData(data.list)
     })
@@ -1727,11 +1737,11 @@ export default {
       this.footprintMethodList = this.processData(data.list)
     })
 
-   this.search('工具提取方法').then(data => {
+    this.search('工具提取方法').then(data => {
       this.toolMethodList = this.processData(data.list)
     })
 
-   this.search('枪弹提取方法').then(data => {
+    this.search('枪弹提取方法').then(data => {
       this.bulletMethodList = this.processData(data.list)
     })
     this.search('生物检材提取方法').then(data => {
@@ -1774,24 +1784,23 @@ export default {
     this.getUserDict('工具提取方法').then(data => {
       this.toolMethodUserList = data.list
     })
-   this.getUserDict('枪弹提取方法').then(data => {
+    this.getUserDict('枪弹提取方法').then(data => {
       this.bulletMethodUserList = data.list
     })
     this.getUserDict('生物检材提取方法').then(data => {
       this.dnaMethodUserList = data.list
     })
-
   },
   methods: {
-    getUseType(){
-      if (this.isEdit){
-        const data={
-          materialId:this.materialListForm.id
+    getUseType() {
+      if (this.isEdit) {
+        const data = {
+          materialId: this.materialListForm.id
         }
-        usetypeList(data).then(response=>{
-          this.usetypeListShow = response.list.map(item=>{
-            item.createTime = parseTime(item.createTime ,'{y}-{m}-{d}')
-            return item;
+        usetypeList(data).then(response => {
+          this.usetypeListShow = response.list.map(item => {
+            item.createTime = parseTime(item.createTime, '{y}-{m}-{d}')
+            return item
           })
         })
       }
@@ -1801,40 +1810,12 @@ export default {
         this.dialogPointContent = '提交三录'
         this.dialogPoint = true
       } else {
-          const data = {
-            list: [],
-            evidenceId: this.list.id
-          }
-          submitSanlu(data).then(response => {
-            if (response.code === 200) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                showClose: true,
-                duration: 2000
-              })
-            } else {
-              this.$message({
-                message: response.reason,
-                type: 'success',
-                showClose: true,
-                duration: 2000
-              })
-            }
-          })
-
-      }
-
-
-    },
-    handleFileSuccess(res) {
-      var file = {
-        fileName:res.originalFileName,
-        url:res.imgUrl,
-      }
-      if (this.isEdit){
-        file.id = this.list.id
-        createSanlu(file).then(response=>{
+        const data = {
+          list: [],
+          evidenceId: this.list.id,
+          crackStatus: this.crackStatus
+        }
+        submitSanlu(data).then(response => {
           if (response.code === 200) {
             this.$message({
               message: '操作成功',
@@ -1842,8 +1823,6 @@ export default {
               showClose: true,
               duration: 2000
             })
-            if (this.isEdit)
-              this.submitForm()
           } else {
             this.$message({
               message: response.reason,
@@ -1853,16 +1832,43 @@ export default {
             })
           }
         })
-      }else{
+      }
+    },
+    handleFileSuccess(res) {
+      var file = {
+        fileName: res.originalFileName,
+        url: res.imgUrl
+      }
+      if (this.isEdit) {
+        file.id = this.list.id
+        createSanlu(file).then(response => {
+          if (response.code === 200) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              showClose: true,
+              duration: 2000
+            })
+            if (this.isEdit) { this.submitForm() }
+          } else {
+            this.$message({
+              message: response.reason,
+              type: 'success',
+              showClose: true,
+              duration: 2000
+            })
+          }
+        })
+      } else {
         this.list.sanLuList.push(file)
       }
     },
-    handleDeleteSanlu(row){
-      var data={
-        id:row.id,
-        operation:'del',
+    handleDeleteSanlu(row) {
+      var data = {
+        id: row.id,
+        operation: 'del'
       }
-      delSanlu(data).then(response=>{
+      delSanlu(data).then(response => {
         if (response.code === 200) {
           this.$message({
             message: '操作成功',
@@ -1870,8 +1876,7 @@ export default {
             showClose: true,
             duration: 2000
           })
-          if (this.isEdit)
-            this.submitForm()
+          if (this.isEdit) { this.submitForm() }
         } else {
           this.$message({
             message: response.reason,
@@ -1882,133 +1887,112 @@ export default {
         }
       })
     },
-    materialChange(val){
+    materialChange(val) {
       this.isFingerprint = false
       this.isDna = false
-      this.materialListForm.materialCategoryShow= val;
-      var data = this.searchMaterial(this.materialCategoryList,val);
-      console.log(data);
-      if (data === '手印物证' ) {
+      this.materialListForm.materialCategoryShow = val
+      var data = this.searchMaterial(this.materialCategoryList, val)
+      console.log(data)
+      if (data === '手印物证') {
         this.isInput = false
         this.isFingerprint = true
-        this.extractMethodList = this.handprintMethodList;
-      }else if (data === '足迹物证'){
+        this.extractMethodList = this.handprintMethodList
+      } else if (data === '足迹物证') {
         this.isInput = false
-        this.extractMethodList = this.footprintMethodList;
-      } else if (data === '工具痕迹'){
+        this.extractMethodList = this.footprintMethodList
+      } else if (data === '工具痕迹') {
         this.isInput = false
-        this.extractMethodList = this.toolMethodList;
-      } else if (data === '枪弹物证'){
+        this.extractMethodList = this.toolMethodList
+      } else if (data === '枪弹物证') {
         this.isInput = false
-        this.extractMethodList = this.bulletMethodList;
-      }else if (data === '生物物证'){
+        this.extractMethodList = this.bulletMethodList
+      } else if (data === '生物物证') {
         this.isInput = false
         this.extractMethodList = this.dnaMethodList
-      }else{
+      } else {
         this.isInput = true
-
       }
     },
-    searchMaterial(val,change){
-      var result='';
-      val.map(item=>{
-        if (item.children){
-          item.children.map(data=>{
-            if (change === data.label)
-              result = item.label;
-            if (data.children){
-              data.children.map(data2=>{
-                if (change === data2.label)
-                  result = item.label;
-                if (data2.children){
-                  data2.children.map(data3=>{
-                    if (change === data3.label)
-                      result = item.label;
-
+    searchMaterial(val, change) {
+      var result = ''
+      val.map(item => {
+        if (item.children) {
+          item.children.map(data => {
+            if (change === data.label) { result = item.label }
+            if (data.children) {
+              data.children.map(data2 => {
+                if (change === data2.label) { result = item.label }
+                if (data2.children) {
+                  data2.children.map(data3 => {
+                    if (change === data3.label) { result = item.label }
                   })
                 }
               })
             }
           })
         }
-      });
-      return result;
+      })
+      return result
     },
-    handleClose(done){
-
-      var change = 0;
-      this.materialPhotoList.map(data=>{
-        if (!data.status){
-          change++;
+    handleClose(done) {
+      var change = 0
+      this.materialPhotoList.map(data => {
+        if (!data.status) {
+          change++
         }
       })
 
       if (!change) {
-        if (this.isEdit)
-          this.submitForm();
-        done();
-      }else{
+        if (this.isEdit) { this.submitForm() }
+        done()
+      } else {
         this.$confirm('有物证信息未编辑!')
-                .then(_ => {
-                  if (this.isEdit)
-                    this.submitForm();
-                  done();
-                })
-                .catch(_ => {
+          .then(_ => {
+            if (this.isEdit) { this.submitForm() }
+            done()
+          })
+          .catch(_ => {
 
-                });
+          })
       }
-
-
     },
-    handleCloseButton(){
-
-      var change = 0;
-      this.materialPhotoList.map(data=>{
-
-        if (!data.status){
-          change++;
+    handleCloseButton() {
+      var change = 0
+      this.materialPhotoList.map(data => {
+        if (!data.status) {
+          change++
         }
       })
 
       if (!change) {
-        if (this.isEdit)
-          this.submitForm();
-        this.fetchData(this.list.id);
+        if (this.isEdit) { this.submitForm() }
+        this.fetchData(this.list.id)
         this.dialogMaterialListForm = false
-      }else{
+      } else {
         this.$confirm('有物证信息未编辑!')
-                .then(_ => {
-                  if (this.isEdit)
-                    this.submitForm();
-                  this.fetchData(this.list.id);
-                  this.dialogMaterialListForm = false
-                })
-                .catch(_ => {});
+          .then(_ => {
+            if (this.isEdit) { this.submitForm() }
+            this.fetchData(this.list.id)
+            this.dialogMaterialListForm = false
+          })
+          .catch(_ => {})
       }
-
-
     },
-    handleCurrentChange(row){
-
-      this.materialListForm = row;
-      if (row.status){
-        this.getUseType();
-        this.dialogMaterialListFormMethod = 'edit';
-      }else{
-        this.dialogMaterialListFormMethod = 'add';
+    handleCurrentChange(row) {
+      this.materialListForm = row
+      if (row.status) {
+        this.getUseType()
+        this.dialogMaterialListFormMethod = 'edit'
+      } else {
+        this.dialogMaterialListFormMethod = 'add'
       }
-
-
-
     },
-     tableRowClassName ({row, rowIndex}) {
-        //把每一行的索引放进row
-        row.index = rowIndex;
-       },
+    tableRowClassName({ row, rowIndex }) {
+      // 把每一行的索引放进row
+      row.index = rowIndex
+    },
     setStayPart(val) {
-
-      var data ={
+      var data = {
         id: '',
         materialNo: '',
         hasTransfered: false,
@@ -2028,60 +2012,57 @@ export default {
         note: '',
         noned: '',
         evidenceId: this.list.id,
-        status:0,
-      };
-      this.materialPhotoList.push(data);
+        status: 0
+      }
+      this.materialPhotoList.push(data)
     },
-    getUserDict(parentName){
+    getUserDict(parentName) {
       return new Promise((resolve, reject) => {
         const data = {
-          cateName:parentName
-        };
+          cateName: parentName
+        }
         resolve(userDictList(data))
       })
     },
-    countDict(val,type){
+    countDict(val, type) {
       if (val) {
-        if (val.constructor === Array){
-          val.map(data=>{
-            const send={
-              name:data,
-              cateName:type
-            };
+        if (val.constructor === Array) {
+          val.map(data => {
+            const send = {
+              name: data,
+              cateName: type
+            }
             this.$store.dispatch('PostUserUseDict', send)
           })
-        }else{
-          const send={
-            name:val,
-            cateName:type
-          };
+        } else {
+          const send = {
+            name: val,
+            cateName: type
+          }
           this.$store.dispatch('PostUserUseDict', send)
         }
       }
     },
 
-    countDictArray(val,type){
-      val = val.slice(-1)[0];
-      const send={
-        name:val,
-        cateName:type
-      };
+    countDictArray(val, type) {
+      val = val.slice(-1)[0]
+      const send = {
+        name: val,
+        cateName: type
+      }
       this.$store.dispatch('PostUserUseDict', send)
-
     },
-    countDictSelect(val){
+    countDictSelect(val) {
       if (val) {
-        const send={
-          name:val
-        };
+        const send = {
+          name: val
+        }
         this.$store.dispatch('PostUserUseDict', send)
       }
-
     },
     selectUpdate(val) {
       this.$forceUpdate()
     },
-
 
     selectTask(selection) {
       this.taskId = selection.map(data => {
@@ -2094,13 +2075,13 @@ export default {
       })
     },
     submitTask() {
-      if (this.taskId.length===0){
+      if (this.taskId.length === 0) {
         this.$confirm('请选择提交物证!')
-                .then(_ => {
+          .then(_ => {
 
-                })
-                .catch(_ => {});
-      } else{
+          })
+          .catch(_ => {})
+      } else {
         const data = {
           list: this.taskId
         }
@@ -2122,16 +2103,15 @@ export default {
           }
         })
       }
-
     },
     submitMaterialOutStock() {
-      if (this.taskId.length===0){
+      if (this.taskId.length === 0) {
         this.$confirm('请选择提交物证!')
-                .then(_ => {
+          .then(_ => {
 
-                })
-                .catch(_ => {});
-      } else{
+          })
+          .catch(_ => {})
+      } else {
         const data = {
           list: this.taskId
         }
@@ -2153,16 +2133,15 @@ export default {
           }
         })
       }
-
     },
     submitMaterialinStock() {
-      if (this.taskId.length===0){
+      if (this.taskId.length === 0) {
         this.$confirm('请选择提交物证!')
-                .then(_ => {
+          .then(_ => {
 
-                })
-                .catch(_ => {});
-      } else{
+          })
+          .catch(_ => {})
+      } else {
         const data = {
           list: this.taskId
         }
@@ -2184,14 +2163,12 @@ export default {
           }
         })
       }
-
     },
 
     fetchData(id) {
       fetchSearch(id).then(data => {
-        this.list = Object.assign({},data)
+        this.list = Object.assign({}, data)
         this.proResponse()
-
       }).catch(err => {
         console.log(err)
       })
@@ -2265,16 +2242,16 @@ export default {
         model: '',
         feather: '',
         value: '',
-        amount: '',
+        amount: ''
       }
       this.dialogLostDetailListFormMethod = 'add'
       this.dialogLostDetailListFormIndex = ''
     },
     addLostDetailListForm() {
       this.$refs.lostDetailListForm.validate(valid => {
-        if (valid){
-          if (!this.lostDetailListForm.amount){
-            this.lostDetailListForm.amount =1
+        if (valid) {
+          if (!this.lostDetailListForm.amount) {
+            this.lostDetailListForm.amount = 1
           }
           if (this.isEdit) {
             this.lostDetailListForm.evidenceId = this.list.id
@@ -2286,11 +2263,9 @@ export default {
                   showClose: true,
                   duration: 2000
                 })
-                if (this.isEdit)
-                  this.submitForm()
+                if (this.isEdit) { this.submitForm() }
                 this.dialogLostDetailListForm = false
                 this.resetLostDetailListForm()
-
               } else {
                 this.$message({
                   message: response.reason,
@@ -2307,7 +2282,6 @@ export default {
           }
         }
       })
-
     },
     handleEditLostDetailListForm(index, row) {
       this.lostDetailListForm = Object.assign({}, row) // copy obj
@@ -2317,9 +2291,9 @@ export default {
     },
     updateLostDetailListForm() {
       this.$refs.lostDetailListForm.validate(valid => {
-        if (valid){
-          if (!this.lostDetailListForm.amount){
-            this.lostDetailListForm.amount =1
+        if (valid) {
+          if (!this.lostDetailListForm.amount) {
+            this.lostDetailListForm.amount = 1
           }
           if (this.isEdit) {
             updateLost(this.lostDetailListForm).then(response => {
@@ -2330,8 +2304,7 @@ export default {
                   showClose: true,
                   duration: 2000
                 })
-                if (this.isEdit)
-                  this.submitForm()
+                if (this.isEdit) { this.submitForm() }
 
                 this.dialogLostDetailListForm = false
                 this.resetLostDetailListForm()
@@ -2352,7 +2325,6 @@ export default {
           }
         }
       })
-
     },
     handleDeleteLostDetailListForm(index, row) {
       if (this.isEdit) {
@@ -2368,8 +2340,7 @@ export default {
               showClose: true,
               duration: 2000
             })
-            if (this.isEdit)
-              this.submitForm()
+            if (this.isEdit) { this.submitForm() }
             this.fetchData(this.list.id)
           } else {
             this.$message({
@@ -2391,15 +2362,15 @@ export default {
         model: '',
         feather: '',
         value: '',
-        amount: '',
+        amount: ''
       }
       this.dialogSuspectPersonListFormMethod = 'add'
       this.dialogSuspectPersonListFormIndex = ''
     },
     addSuspectPersonListForm() {
       if (this.isEdit) {
-        this.suspectPersonListForm.evidenceId = this.list.id;
-        console.log(this.suspectPersonListForm.evidenceId);
+        this.suspectPersonListForm.evidenceId = this.list.id
+        console.log(this.suspectPersonListForm.evidenceId)
         createSuspect(this.suspectPersonListForm).then(response => {
           if (response.code === 200) {
             this.$message({
@@ -2408,8 +2379,7 @@ export default {
               showClose: true,
               duration: 2000
             })
-            if (this.isEdit)
-              this.submitForm()
+            if (this.isEdit) { this.submitForm() }
             this.dialogSuspectPersonListForm = false
             this.resetSuspectPersonListForm()
           } else {
@@ -2443,8 +2413,7 @@ export default {
               showClose: true,
               duration: 2000
             })
-            if (this.isEdit)
-              this.submitForm()
+            if (this.isEdit) { this.submitForm() }
 
             this.dialogSuspectPersonListForm = false
             this.resetSuspectPersonListForm()
@@ -2478,9 +2447,7 @@ export default {
               showClose: true,
               duration: 2000
             })
-            if (this.isEdit)
-              this.submitForm()
-
+            if (this.isEdit) { this.submitForm() }
           } else {
             this.$message({
               message: response.reason,
@@ -2495,33 +2462,25 @@ export default {
       }
     },
 
-
-    judgeCP(newData){
-
-        if (this.list.concernedPersonList.length === 0){
-          if (newData.idType === '死者'){
-            this.list.isDeathCase = true;
-          }
-        }else{
-          var count = 0;
-          if (newData.idType === '死者'){
-            this.list.isDeathCase = true;
-            count++;
-          }
-          this.list.concernedPersonList.map(item=>{
-            if (item.idType === '死者'){
-              count++
-            }
-          })
-
-          if (count)
-            this.list.isDeathCase = true;
-          else
-            this.list.isDeathCase = false
+    judgeCP(newData) {
+      if (this.list.concernedPersonList.length === 0) {
+        if (newData.idType === '死者') {
+          this.list.isDeathCase = true
         }
+      } else {
+        var count = 0
+        if (newData.idType === '死者') {
+          this.list.isDeathCase = true
+          count++
+        }
+        this.list.concernedPersonList.map(item => {
+          if (item.idType === '死者') {
+            count++
+          }
+        })
 
-
-
+        if (count) { this.list.isDeathCase = true } else { this.list.isDeathCase = false }
+      }
     },
     resetConcernedPersonListForm() {
       this.concernedPersonListForm = {
@@ -2530,13 +2489,12 @@ export default {
         idNo: '',
         sex: '',
         contactNumber: '',
-        residence: this.list.caseAddress,
+        residence: this.list.caseAddress
 
       }
       this.dialogConcernedPersonListFormMethod = 'add'
       this.dialogConcernedPersonListFormIndex = ''
       // this.judgeCP(this.list.concernedPersonList);
-
     },
     addConcernedPersonListForm() {
       if (this.concernedPersonListForm.idType.constructor === Array) {
@@ -2555,10 +2513,7 @@ export default {
             this.judgeCP(this.concernedPersonListForm)
             this.dialogConcernedPersonListForm = false
             this.resetConcernedPersonListForm()
-            if (this.isEdit)
-              this.submitForm()
-
-
+            if (this.isEdit) { this.submitForm() }
           } else {
             this.$message({
               message: response.reason,
@@ -2579,8 +2534,6 @@ export default {
         this.dialogConcernedPersonListForm = false
         this.resetConcernedPersonListForm()
       }
-
-
     },
     handleEditConcernedPersonListForm(index, row) {
       this.concernedPersonListForm = Object.assign({}, row) // copy obj
@@ -2604,9 +2557,7 @@ export default {
             this.judgeCP(this.concernedPersonListForm)
             this.dialogConcernedPersonListForm = false
             this.resetConcernedPersonListForm()
-            if (this.isEdit)
-              this.submitForm()
-
+            if (this.isEdit) { this.submitForm() }
           } else {
             this.$message({
               message: response.reason,
@@ -2627,9 +2578,7 @@ export default {
         this.list.concernedPersonList.splice(this.dialogConcernedPersonListFormIndex, 1, temp)
         this.dialogConcernedPersonListForm = false
         this.resetConcernedPersonListForm()
-
       }
-
     },
     handleDeleteConcernedPersonListForm(index, row) {
       if (this.isEdit) {
@@ -2645,21 +2594,14 @@ export default {
               showClose: true,
               duration: 2000
             })
-            var count = 0;
-            this.list.concernedPersonList.map(item=>{
-              if (item.idType === '死者' && item.id !== row.id){
+            var count = 0
+            this.list.concernedPersonList.map(item => {
+              if (item.idType === '死者' && item.id !== row.id) {
                 count++
               }
             })
-            if (count)
-              this.list.isDeathCase = true;
-            else
-              this.list.isDeathCase = false
-            if (this.isEdit)
-              this.submitForm()
-
-
-
+            if (count) { this.list.isDeathCase = true } else { this.list.isDeathCase = false }
+            if (this.isEdit) { this.submitForm() }
           } else {
             this.$message({
               message: response.reason,
@@ -2671,19 +2613,14 @@ export default {
         })
       } else {
         this.list.concernedPersonList.splice(index, 1)
-        var count = 0;
-        this.list.concernedPersonList.map(item=>{
-          if (item.idType === '死者' && item.id !== row.id){
+        var count = 0
+        this.list.concernedPersonList.map(item => {
+          if (item.idType === '死者' && item.id !== row.id) {
             count++
           }
         })
-        if (count)
-          this.list.isDeathCase = true;
-        else
-          this.list.isDeathCase = false
-
+        if (count) { this.list.isDeathCase = true } else { this.list.isDeathCase = false }
       }
-
     },
     resetMaterialListForm() {
       const change = {
@@ -2709,7 +2646,7 @@ export default {
       this.dialogMaterialListFormMethod = 'add'
     },
     handleClickToAddMaterial() {
-      this.dialogMaterialListFormMethod = 'add';
+      this.dialogMaterialListFormMethod = 'add'
       // this.resetMaterialListForm()
       if (this.list.id == null) {
         this.dialogPointContent = '添加物证'
@@ -2723,8 +2660,8 @@ export default {
         this.submitForm(true)
       }
     },
-    addmaterialPhoto(){
-      var data ={
+    addmaterialPhoto() {
+      var data = {
         id: '',
         materialNo: '',
         hasTransfered: false,
@@ -2744,31 +2681,31 @@ export default {
         note: '',
         noned: '',
         evidenceId: this.list.id,
-        status:0,
-      };
-      this.materialPhotoList.push(data);
+        status: 0
+      }
+      this.materialPhotoList.push(data)
     },
     addMaterialListForm() {
-      if (!this.materialListForm.evidenceId){
+      if (!this.materialListForm.evidenceId) {
         this.$confirm('请选择物证!')
-                .then(_ => {
+          .then(_ => {
 
-                })
-                .catch(_ => {
+          })
+          .catch(_ => {
 
-                });
-        return;
+          })
+        return
       }
-      var data =Object.assign({}, this.materialListForm)
+      var data = Object.assign({}, this.materialListForm)
 
       if (data.materialCategory.constructor === Array) {
         data.materialCategory = data.materialCategoryShow
       }
 
       if (data.extractTime.toString().length > 10) { data.extractTime = parseInt(data.extractTime / 1000) }
-      const  sendData={
-        evidenceId:this.materialListForm.evidenceId,
-        materialList:[data]
+      const sendData = {
+        evidenceId: this.materialListForm.evidenceId,
+        materialList: [data]
       }
       createMaterial(sendData).then(response => {
         if (response.code === 200) {
@@ -2779,17 +2716,16 @@ export default {
             duration: 2000
           })
           response = response.list[0]
-          this.materialListForm.materialNo = response.materialNo;
-          this.materialListForm.status = 1;
+          this.materialListForm.materialNo = response.materialNo
+          this.materialListForm.status = 1
           this.materialListForm.id = response.id
-          var index = this.materialListForm.index;
-          if (this.materialListForm.extractTime.toString().length === 10) { this.materialListForm.extractTime = this.materialListForm.extractTime *1000 }
-          this.$set(this.materialPhotoList,this.materialListForm.index,this.materialListForm);
+          var index = this.materialListForm.index
+          if (this.materialListForm.extractTime.toString().length === 10) { this.materialListForm.extractTime = this.materialListForm.extractTime * 1000 }
+          this.$set(this.materialPhotoList, this.materialListForm.index, this.materialListForm)
           index++
           if (this.materialPhotoList[index]) {
-
-              this.materialListForm =  this.materialPhotoList[index]
-              this.$refs.materialPhotoList.setCurrentRow(this.$refs.materialPhotoList.data[index]);
+            this.materialListForm = this.materialPhotoList[index]
+            this.$refs.materialPhotoList.setCurrentRow(this.$refs.materialPhotoList.data[index])
           }
           // this.resetMaterialListForm()
         } else {
@@ -2802,21 +2738,21 @@ export default {
         }
       })
     },
-    addMultipleMaterialListForm(){
+    addMultipleMaterialListForm() {
       var sendData = {
-        evidenceId:this.list.id,
-        materialList:[],
+        evidenceId: this.list.id,
+        materialList: []
       }
-      var arrayPush=[]
-      this.materialPhotoList.map(data=>{
+      var arrayPush = []
+      this.materialPhotoList.map(data => {
         if (data.materialCategory.constructor === Array) {
           data.materialCategory = data.materialCategoryShow
         }
         if (data.extractTime.toString().length > 10) { data.extractTime = parseInt(data.extractTime / 1000) }
-        if (data.status !== 1){
+        if (data.status !== 1) {
           arrayPush.push(data)
         }
-        if (data.status === 1){
+        if (data.status === 1) {
           // updateMaterial(data).then(response => {
           //   if (response.code === 200) {
           //     this.$message({
@@ -2836,10 +2772,10 @@ export default {
           //     })
           //   }
           // })
-        } else{
+        } else {
         }
       })
-      sendData.materialList = arrayPush;
+      sendData.materialList = arrayPush
       createMaterial(sendData).then(response => {
         if (response.code === 200) {
           this.$message({
@@ -2847,10 +2783,9 @@ export default {
             type: 'success',
             showClose: true,
             duration: 2000
-          });
-          if (this.isEdit)
-            this.submitForm();
-          this.fetchData(this.list.id);
+          })
+          if (this.isEdit) { this.submitForm() }
+          this.fetchData(this.list.id)
           this.dialogMaterialListForm = false
 
           // data.materialNo = response.materialNo;
@@ -2867,7 +2802,6 @@ export default {
           })
         }
       })
-
     },
     handleEditMaterialListForm(row) {
       row.extractTime = row.extractTime * 1000
@@ -2875,21 +2809,20 @@ export default {
       this.dialogMaterialListFormMethod = 'edit'
       this.getUseType()
       this.dialogMaterialListForm = true
-
     },
     updateMaterialListForm() {
       // if (this.isEdit) {
-      if (!this.materialListForm.evidenceId){
+      if (!this.materialListForm.evidenceId) {
         this.$confirm('请选择物证!')
-                .then(_ => {
+          .then(_ => {
 
-                })
-                .catch(_ => {
+          })
+          .catch(_ => {
 
-                });
-        return;
+          })
+        return
       }
-      var data =Object.assign({}, this.materialListForm)
+      var data = Object.assign({}, this.materialListForm)
 
       if (data.materialCategory.constructor === Array) {
         data.materialCategory = data.materialCategoryShow
@@ -2905,8 +2838,8 @@ export default {
             showClose: true,
             duration: 2000
           })
-          if (this.materialListForm.extractTime.toString().length === 10) { this.materialListForm.extractTime = this.materialListForm.extractTime *1000 }
-          this.$set(this.materialPhotoList,this.materialListForm.index,this.materialListForm);
+          if (this.materialListForm.extractTime.toString().length === 10) { this.materialListForm.extractTime = this.materialListForm.extractTime * 1000 }
+          this.$set(this.materialPhotoList, this.materialListForm.index, this.materialListForm)
           // this.resetMaterialListForm()
         } else {
           this.$message({
@@ -2917,7 +2850,6 @@ export default {
           })
         }
       })
-
     },
     handleDeleteMaterialListForm(row) {
       // if (this.isEdit) {
@@ -2933,8 +2865,7 @@ export default {
             showClose: true,
             duration: 2000
           })
-          if (this.isEdit)
-            this.submitForm()
+          if (this.isEdit) { this.submitForm() }
           this.fetchData(this.list.id)
         } else {
           this.$message({
@@ -2957,7 +2888,6 @@ export default {
         if (data.caseEndTime.toString().length > 10) { data.caseEndTime = parseInt(data.caseEndTime / 1000) }
         if (data.caseHappenTime.toString().length > 10) { data.caseHappenTime = parseInt(data.caseHappenTime / 1000) }
       } else {
-
         if (data.examBeginTime.toString().length === 10) { data.examBeginTime = parseInt(data.examBeginTime * 1000) }
         if (data.examEndTime.toString().length === 10) { data.examEndTime = parseInt(data.examEndTime * 1000) }
         if (data.caseBeginTime.toString().length === 10) { data.caseBeginTime = parseInt(data.caseBeginTime * 1000) }
@@ -2966,190 +2896,178 @@ export default {
       }
       return data
     },
-    proResponse(){
+    proResponse() {
       this.list = this.changeTime(this.list, false)
 
-      if (this.list.supporterUid){
+      if (this.list.supporterUid) {
         this.list.supporterUidArray = this.list.supporterUid.split(',').map(data => {
           return parseInt(data)
         })
       }
 
-      if (this.list.sceneProtect === 0)
-        this.list.sceneProtect = '';
-      if (this.list.photographUid === 0)
-        this.list.photographUid = '';
-      if (this.list.medicalUid === 0)
-        this.list.medicalUid = '';
-      if (this.list.cameraUid === 0)
-        this.list.cameraUid = '';
+      if (this.list.sceneProtect === 0) { this.list.sceneProtect = '' }
+      if (this.list.photographUid === 0) { this.list.photographUid = '' }
+      if (this.list.medicalUid === 0) { this.list.medicalUid = '' }
+      if (this.list.cameraUid === 0) { this.list.cameraUid = '' }
 
-      if (this.list.crimeTime){
+      if (this.list.crimeTime) {
         this.list.crimeTime = JSON.parse(this.list.crimeTime)
       }
-      if (this.list.sceneType){
+      if (this.list.sceneType) {
         this.list.sceneType = JSON.parse(this.list.sceneType)
       }
-      if (this.list.invadeType){
+      if (this.list.invadeType) {
         this.list.invadeType = JSON.parse(this.list.invadeType)
       }
-      if (this.list.escapeType){
+      if (this.list.escapeType) {
         this.list.escapeType = JSON.parse(this.list.escapeType)
       }
-
     },
-    submitForm(toAddMaterial = false,out=false) {
+    submitForm(toAddMaterial = false, out = false) {
+      this.$refs.listForm.validate(valid => {
+        if (valid) {
+          var data = Object.assign({}, this.list)
+          data.caseId = this.caseId
+          data = this.changeTime(data, true)
+          if (data.instanceNo === this.$store.getters.instanceNo) {
+            data.instanceNo = ''
+          } if (data.caseNo === this.$store.getters.caseNo) {
+            data.caseNo = ''
+          } if (data.thirdEvidenceNo === this.$store.getters.evidenceNo) {
+            data.thirdEvidenceNo = ''
+          }
 
-        this.$refs.listForm.validate(valid => {
-          if (valid) {
-            var data = Object.assign({}, this.list)
-            data.caseId = this.caseId
-            data = this.changeTime(data, true)
-            if (data.instanceNo === this.$store.getters.instanceNo) {
-              data.instanceNo = ''
-            } if (data.caseNo === this.$store.getters.caseNo) {
-              data.caseNo = ''
-            } if (data.thirdEvidenceNo === this.$store.getters.evidenceNo) {
-              data.thirdEvidenceNo = ''
+          if (data.supporterUidArray) {
+            if (data.supporterUidArray.length > 0) {
+              data.supporterUid = data.supporterUidArray.join(',')
             }
+          }
+          if (data.crimeTime) {
+            if (data.crimeTime.length > 0) {
+              data.crimeTime = JSON.stringify(data.crimeTime)
+            }
+          }
 
-            if (data.supporterUidArray){
-              if (data.supporterUidArray.length > 0) {
-                data.supporterUid = data.supporterUidArray.join(',')
-              }
+          if (data.sceneType) {
+            if (data.sceneType.length > 0) {
+              data.sceneType = JSON.stringify(data.sceneType)
             }
-            if (data.crimeTime) {
-              if (data.crimeTime.length > 0) {
-                data.crimeTime = JSON.stringify(data.crimeTime)
-              }
-            }
+          }
 
-            if (data.sceneType) {
-              if (data.sceneType.length > 0) {
-                data.sceneType = JSON.stringify(data.sceneType)
-              }
+          if (data.invadeType) {
+            if (data.invadeType.length > 0) {
+              data.invadeType = JSON.stringify(data.invadeType)
             }
+          }
 
-            if (data.invadeType) {
-              if (data.invadeType.length > 0) {
-                data.invadeType = JSON.stringify(data.invadeType)
-              }
+          if (data.escapeType) {
+            if (data.escapeType.length > 0) {
+              data.escapeType = JSON.stringify(data.escapeType)
             }
+          }
 
-            if (data.escapeType) {
-              if (data.escapeType.length > 0) {
-                data.escapeType = JSON.stringify(data.escapeType)
-              }
-            }
+          if (data.caseHappenRegion.constructor === Array) {
+            data.caseHappenRegion = data.caseHappenRegion.slice(-1)[0]
+          }
+          if (data.caseCategory.constructor === Array) {
+            data.caseCategory = data.caseCategory.slice(-1)[0]
+          }
+          if (data.sceneType.constructor === Array) {
+            data.sceneType = data.sceneType.slice(-1)[0]
+          }
 
+          if (data.invadeType.constructor === Array) {
+            data.invadeType = data.invadeType.slice(-1)[0]
+          }
+          if (data.escapeType.constructor === Array) {
+            data.escapeType = data.escapeType.slice(-1)[0]
+          }
+          this.loading = true
 
-            if (data.caseHappenRegion.constructor === Array) {
-              data.caseHappenRegion = data.caseHappenRegion.slice(-1)[0]
-            }
-            if (data.caseCategory.constructor === Array) {
-              data.caseCategory = data.caseCategory.slice(-1)[0]
-            }
-            if (data.sceneType.constructor === Array) {
-              data.sceneType = data.sceneType.slice(-1)[0]
-            }
+          if (this.isEdit) {
+            data.needGenerateEvidenceNo = 1
+            updateSearch(data).then(response => {
+              if (response.code === 200) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  showClose: true,
+                  duration: 2000
+                })
+                this.fetchData(this.list.id)
 
-            if (data.invadeType.constructor === Array) {
-              data.invadeType = data.invadeType.slice(-1)[0]
-            }
-            if (data.escapeType.constructor === Array) {
-              data.escapeType = data.escapeType.slice(-1)[0]
-            }
-            this.loading = true
-
-            if (this.isEdit) {
-              data.needGenerateEvidenceNo = 1;
-              updateSearch(data).then(response => {
-                if (response.code === 200) {
-                  this.$message({
-                    message: '操作成功',
-                    type: 'success',
-                    showClose: true,
-                    duration: 2000
-                  })
-                  this.fetchData(this.list.id)
-
-                  if (out) {
-                    this.$store.dispatch('delView', this.$route)
-                    this.$router.push({
-                      path: '/search/index',
-                      query: {
-                        t: +new Date()
-                      }
-                    })
-
-                  }
-                  // this.list = response;
-                  // this.list.suspectPersonList = response.suspectPersonList;
-                  // this.proResponse()
-                } else {
-                  this.$message({
-                    message: response.reason,
-                    type: 'success',
-                    showClose: true,
-                    duration: 2000
+                if (out) {
+                  this.$store.dispatch('delView', this.$route)
+                  this.$router.push({
+                    path: '/search/index',
+                    query: {
+                      t: +new Date()
+                    }
                   })
                 }
-              })
-              this.loading = false
-            } else {
-              createSearch(data).then(response => {
-                if (response.code === 200) {
-                  this.$message({
-                    message: '操作成功',
-                    type: 'success',
-                    showClose: true,
-                    duration: 2000
-                  })
-
-                  this.list = this.changeTime(this.list, false)
-
-                  if (toAddMaterial) {
-                    const id = response.id
-                    this.isEdit = true
-                    this.materialListForm.evidenceId = id
-                    this.searchId = id
-                    this.list.id = id
-                    this.dialogPoint = false
-                  }else{
-                    this.$store.dispatch('delView', this.$route)
-                    this.$router.push({
-                      path: '/search/index',
-                      query: {
-                        t: +new Date()
-                      }
-                    })
-
-                  }
-
-                } else {
-                  this.$message({
-                    message: response.reason,
-                    type: 'success',
-                    showClose: true,
-                    duration: 2000
-                  })
-                }
-              })
-              this.loading = false
-            }
-          } else {
-            this.$message({
-              message: '操作失败，请检查数据',
-              type: 'error',
-              showClose: true,
-              duration: 2000
+                // this.list = response;
+                // this.list.suspectPersonList = response.suspectPersonList;
+                // this.proResponse()
+              } else {
+                this.$message({
+                  message: response.reason,
+                  type: 'success',
+                  showClose: true,
+                  duration: 2000
+                })
+              }
             })
             this.loading = false
-            return false
+          } else {
+            createSearch(data).then(response => {
+              if (response.code === 200) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  showClose: true,
+                  duration: 2000
+                })
+
+                this.list = this.changeTime(this.list, false)
+
+                if (toAddMaterial) {
+                  const id = response.id
+                  this.isEdit = true
+                  this.materialListForm.evidenceId = id
+                  this.searchId = id
+                  this.list.id = id
+                  this.dialogPoint = false
+                } else {
+                  this.$store.dispatch('delView', this.$route)
+                  this.$router.push({
+                    path: '/search/index',
+                    query: {
+                      t: +new Date()
+                    }
+                  })
+                }
+              } else {
+                this.$message({
+                  message: response.reason,
+                  type: 'success',
+                  showClose: true,
+                  duration: 2000
+                })
+              }
+            })
+            this.loading = false
           }
-        })
-
-
+        } else {
+          this.$message({
+            message: '操作失败，请检查数据',
+            type: 'error',
+            showClose: true,
+            duration: 2000
+          })
+          this.loading = false
+          return false
+        }
+      })
     }
 
   }
