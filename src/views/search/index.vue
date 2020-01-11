@@ -282,7 +282,7 @@ export default {
         var downloadUrl = URL.createObjectURL(blob)
         var a = document.createElement('a')
         a.href = downloadUrl
-        a.download = '现勘' + row.selfEvidenceNo + '.xls'
+        a.download = '现勘分析报告' + row.selfEvidenceNo + '.xls'
         document.body.appendChild(a)
         a.click()
         // let blob = new Blob([response], {type: "application/vnd.ms-excel;charset=utf-8"});
