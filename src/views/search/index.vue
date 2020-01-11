@@ -158,11 +158,12 @@
                         </router-link>
                     </el-tooltip>
                     <el-tooltip class="item" effect="dark" content="导出Excel" placement="top">
-                        <el-button size="mini" type="warning" @click="handleExportExcelAlone(row)" icon="el-icon-download">
-
-                        </el-button>
+                        <el-button size="mini" type="warning" @click="handleExportExcelAlone(row)" icon="el-icon-download"></el-button>
                     </el-tooltip>
-
+                    <el-tooltip class="item" effect="dark" content="分析报告" placement="top">
+                        <el-button size="mini" type="danger" @click="handleExportAnalysisReport(row)" icon="el-icon-data-analysis
+" style="margin-left: 0"></el-button>
+                    </el-tooltip>
 
                 </template>
             </el-table-column>
@@ -185,7 +186,7 @@
 </template>
 
 <script>
-    import {searchList,exportExcelAlone,exportExcel} from '@/api/search'
+    import {searchList,exportExcelAlone,exportAnalysisReport,exportExcel} from '@/api/search'
     import waves from '@/directive/waves' // waves directive
     import {fetchList} from '@/api/dictionary'
     import {parseTime} from '@/utils'
@@ -258,6 +259,20 @@
             },
             handleExportExcelAlone(row){
                 exportExcelAlone(row.id).then(response=>{
+                    var blob = new Blob([response], { type: 'data:application/vnd.ms-excel' });
+                    var downloadUrl = URL.createObjectURL(blob);
+                    var a = document.createElement("a");
+                    a.href = downloadUrl;
+                    a.download = '现勘'+row.selfEvidenceNo+".xls";
+                    document.body.appendChild(a);
+                    a.click();
+                    // let blob = new Blob([response], {type: "application/vnd.ms-excel;charset=utf-8"});
+                    // let url = window.URL.createObjectURL(blob);
+                    // window.location.href = url;
+                })
+            },
+            handleExportAnalysisReport(row) {
+                exportAnalysisReport(row.id).then(response=>{
                     var blob = new Blob([response], { type: 'data:application/vnd.ms-excel' });
                     var downloadUrl = URL.createObjectURL(blob);
                     var a = document.createElement("a");
