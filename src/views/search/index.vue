@@ -162,10 +162,10 @@
               <el-button type="success" size="mini" icon="el-icon-document"/>
             </router-link>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="导出Excel" placement="top">
+          <el-tooltip class="item" effect="dark" content="导出现勘详情" placement="top">
             <el-button size="mini" type="warning" icon="el-icon-download" @click="handleExportExcelAlone(row)"/>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="分析报告" placement="top">
+          <el-tooltip class="item" effect="dark" content="导出分析报告" placement="top">
             <el-button
               size="mini"
               type="danger"
