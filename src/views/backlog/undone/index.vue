@@ -670,6 +670,9 @@
                 this.$router.push({ name:'medicalResult',params:{id:row.id},query: { evidence:JSON.stringify(row)}})
             },
             handleCancelEvidence(data){
+                if (!data) {
+                    return this.$message.error('现勘不存在!');
+                }
                 const sendData={
                     recordId:data.id
                 }
