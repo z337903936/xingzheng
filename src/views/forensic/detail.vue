@@ -127,7 +127,7 @@
 
             <el-table-column label="委托人" align="center">
                 <template slot-scope="{row}">
-                    <span>{{ row.delegateOrg  }}</span>
+                    <span>{{ row.delegateName  }}</span>
                 </template>
             </el-table-column>
 
@@ -161,6 +161,11 @@
             <el-table-column label="文书" align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.documentNo }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="是否移交" align="center">
+                <template slot-scope="{row}">
+                    <span>{{ row.hasTransfered?"是":"否" }}</span>
                 </template>
             </el-table-column>
 

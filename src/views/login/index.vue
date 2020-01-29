@@ -53,22 +53,22 @@
       <!--</a>-->
       <!--</el-form-item>-->
 
-      <el-form-item id="sms-container" prop="vcode" label="">
-        <span class="svg-container">
-          <svg-icon icon-class="password"/>
-        </span>
-        <el-input
-          v-model="loginForm.vcode"
-          :placeholder="$t('login.vcode')"
-          @blur="handleBlur('vcode')"/>
-        <el-button
-          id="btn-getsms"
-          :disabled="sendSmsButtonDisable"
-          type="primary"
-          class="btn-primary"
-        >{{ sendSmsButtonTitle }}
-        </el-button>
-      </el-form-item>
+      <!--<el-form-item id="sms-container" prop="vcode" label="">-->
+        <!--<span class="svg-container">-->
+          <!--<svg-icon icon-class="password"/>-->
+        <!--</span>-->
+        <!--<el-input-->
+          <!--v-model="loginForm.vcode"-->
+          <!--:placeholder="$t('login.vcode')"-->
+          <!--@blur="handleBlur('vcode')"/>-->
+        <!--<el-button-->
+          <!--id="btn-getsms"-->
+          <!--:disabled="sendSmsButtonDisable"-->
+          <!--type="primary"-->
+          <!--class="btn-primary"-->
+        <!--&gt;{{ sendSmsButtonTitle }}-->
+        <!--</el-button>-->
+      <!--</el-form-item>-->
 
       <el-button
         :loading="loading"

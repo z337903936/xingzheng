@@ -46,21 +46,21 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="受理时间" prop="time">
-                <el-input v-model="postForm.time" disabled/>
+              <el-form-item label="受理时间" prop="delegateTime2">
+                <el-date-picker
+                  v-model="postForm.delegateTime2"
+                  type="date"
+                  timestamp
+                  placeholder="选择日期"
+                  style="width: 100%">
+                </el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="协办" prop="supportName" >
-                <el-input v-model="postForm.supportName" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
               <el-form-item label="受理人" prop="supportName22" >
-
-                <el-select v-model="postForm.supportName22" disabled placeholder="请选择" style="width: 100%">
+                <el-select v-model="postForm.delegateName" placeholder="请选择" style="width: 100%">
                   <el-option
                           v-for="item in userList"
                           :key="item.id"
@@ -68,6 +68,17 @@
                           :value="item.id">
                   </el-option>
                 </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="出具鉴定书时间" prop="documentDate2">
+                <el-date-picker
+                  v-model="postForm.documentDate2"
+                  type="date"
+                  timestamp
+                  placeholder="选择日期"
+                  style="width: 100%">
+                </el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>
@@ -93,24 +104,20 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="鉴定结论" prop="delegateResult">
-                <el-input v-model="postForm.delegateResult" :autosize="{ minRows: 2, maxRows: 4}"   type="textarea"/>
+                <el-select v-model="postForm.delegateResult"
+                           filterable
+                           clearable
+                           class="filter-item"
+                           @change="selectUpdate"
+                           value-key="id"
+                           style="width: 100%">
+                  <el-option
+                    v-for="item in delegateResult"
+                    :key="item.title"
+                    :label="item.title"
+                    :value="item.title"/>
+                </el-select>
               </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="12">
-
-              <el-form-item label="出具鉴定书时间" prop="documentNo22">
-
-                  <el-date-picker
-                          v-model="postForm.documentNo22"
-                          type="date"
-                          placeholder="选择日期"
-                          style="width: 100%">
-                  </el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
 
             </el-col>
           </el-row>
@@ -119,8 +126,6 @@
             <el-checkbox v-model="postForm.hasTransfered"></el-checkbox>
 
           </el-form-item>
-
-
               <el-form-item style="margin-bottom: 40px;text-align: center;" label-width="100px">
                 <el-button v-loading="loading"  style="width: 200px" type="primary" @click="submitForm">保存
                 </el-button>
@@ -150,6 +155,27 @@ export default {
   },
   data() {
     return {
+      delegateResult: [
+        {
+          title: '轻微伤'
+        }, {
+          title: '轻伤二级 '
+        }, {
+          title: '轻伤一级'
+        }, {
+          title: '重伤二级'
+        },{
+          title: '重伤一级'
+        },{
+          title: '未构成轻微伤'
+        },{
+          title: '不予评定'
+        },{
+          title: '不予受理'
+        },{
+          title: '评伤残等级'
+        },
+      ],
       postForm: {
         id: undefined,
         delegateOrg: '',
@@ -160,8 +186,8 @@ export default {
         delegateResult: '',
         refereeName: '',
         documentNo: '',
-        time: '',
-        documentNo22: '',
+        delegateTime2: '',
+        documentDate2: '',
         supportName: '',
         supportName22: '',
         caseCategory: "",
@@ -189,8 +215,8 @@ export default {
       this.fetchData(id)
     }
     this.postForm.supportName22 = this.$store.getters.id;
-    this.postForm.time = (new Date()).toLocaleDateString();
-    this.postForm.documentNo22 = new Date();
+    // this.postForm.time = (new Date()).toLocaleDateString();
+    // this.postForm.documentNo22 = new Date();
   },
   methods: {
     restForm(){
@@ -220,6 +246,9 @@ export default {
         })
 
       })
+    },
+    selectUpdate(val) {
+      this.$forceUpdate()
     },
     remoteSearch(node,value){
       var p =  /^[a-zA-Z]+$/;
@@ -255,9 +284,18 @@ export default {
       })
     },
 
-
     fetchData(id) {
       fetchMedical(id).then(data => {
+        if (data.delegateTime < 1) {
+          data.delegateTime2 = Math.round( new Date().getTime() )
+        } else {
+          data.delegateTime2 = data.delegateTime * 1000
+        }
+        if (data.documentDate < 1) {
+          data.documentDate2 = Math.round( new Date().getTime() )
+        } else {
+          data.documentDate2 = data.documentDate * 1000
+        }
        this.postForm =  Object.assign({}, data);
 
       }).catch(err => {
@@ -265,28 +303,33 @@ export default {
       })
     },
     submitForm() {
-      var data = this.postForm;
+      var param = this.postForm;
       this.$refs.postForm.validate(valid => {
         if (valid) {
           this.loading = true
           if (this.isEdit) {
-            updateMedical(data).then(data => {
+            param.documentDate = Math.round(param.documentDate2 / 1000)
+            param.delegateTime = Math.round(param.delegateTime2 / 1000)
+            updateMedical(param).then(data => {
               this.loading = false
-              if (data.code === 200) {
-                this.$message({
-                  message: '保存成功',
-                  type: 'success',
-                  showClose: true,
-                  duration: 1000
-                })
-              } else {
-                this.$message({
-                  message: data.reason,
-                  type: 'error',
-                  showClose: true,
-                  duration: 1000
-                })
+              if (data) {
+                if (data.code === 200) {
+                  this.$message({
+                    message: '保存成功',
+                    type: 'success',
+                    showClose: true,
+                    duration: 1000
+                  })
+                } else {
+                  this.$message({
+                    message: data.reason,
+                    type: 'error',
+                    showClose: true,
+                    duration: 1000
+                  })
+                }
               }
+
             }).catch(err => {
               console.log(err)
               this.loading = false

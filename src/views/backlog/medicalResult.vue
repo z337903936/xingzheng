@@ -22,27 +22,6 @@
 
                 <el-row :gutter="20">
                     <el-col :span="12">
-
-                        <el-form-item label="文书号" prop="documentNo">
-                            <el-input v-model="resultFrom.documentNo"/>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-
-                        <el-form-item label="文书日期" prop="documentDate">
-                            <el-date-picker
-                                    v-model="resultFrom.documentDate"
-                                    type="date"
-                                    clearable
-                                    value-format="timestamp"
-                                    placeholder="选择日期"
-                                    style="width: 100%">
-                            </el-date-picker>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row :gutter="20">
-                    <el-col :span="12">
                         <el-form-item label="任务编号" prop="taskNo">
                             <el-input v-model="resultFrom.taskNo"/>
                         </el-form-item>
@@ -89,6 +68,7 @@
                             <el-select v-model="resultFrom.delegateUid"
                                        filterable
                                        clearable
+                                       allow-create
                                        :filter-method="filterUserSearch"
                                        @visible-change="restUserSearch"
                                        class="filter-item"
@@ -157,9 +137,9 @@
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <el-form-item label="法医任务号" prop="medicalTaskNo">
-                            <el-input v-model="resultFrom.medicalTaskNo"/>
-                        </el-form-item>
+                      <el-form-item label="文书号" prop="documentNo">
+                        <el-input v-model="resultFrom.documentNo"/>
+                      </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="鉴定结论" prop="conclusion">
@@ -198,6 +178,10 @@
                 <el-button   style="width: 200px" type="primary"
                            @click="submitForm">保存
                 </el-button>
+
+              <el-button   style="width: 200px" type="primary"
+                           @click="">移交尸检材料
+              </el-button>
             </el-form-item>
 
         </el-form>
@@ -296,7 +280,6 @@
                     if (!this.resultFrom.delegateUid) {
                         this.resultFrom.delegateUid = ''
                     }
-
 
                 }).catch(err => {
                     console.log(err)
