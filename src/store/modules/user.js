@@ -2,7 +2,7 @@ import { loginByUsername, logout, getUserInfo } from '@/api/login'
 import { getToken, setToken, removeToken, getUID, setUID, removeUID } from '@/utils/auth'
 import { fetchList } from '@/api/paramConfig'
 import { taskList } from '@/api/backlog'
-import { userDictList,userUseDict,delUserUseDict } from '@/api/dictionary'
+import { userDictList, userUseDict, delUserUseDict } from '@/api/dictionary'
 const user = {
   state: {
     user: '',
@@ -19,8 +19,9 @@ const user = {
     instanceNo: '',
     evidenceNo: '',
     roles: [],
-    orgName:'',
-    webName:'',
+    orgName: '',
+    webName: '',
+    userName: '',
     setting: {
       articlePlatform: []
     }
@@ -35,6 +36,9 @@ const user = {
     },
     SET_WEBNAME: (state, webName) => {
       state.webName = webName
+    },
+    SET_USERNAME: (state, userName) => {
+      state.userName = userName
     },
     SET_CASE: (state, caseNo) => {
       state.caseNo = caseNo
@@ -109,6 +113,7 @@ const user = {
             reject('获取用户岗位出错啦!')
           }
           commit('SET_GROUPNAME', data.groupName)
+          commit('SET_USERNAME', data.userName)
           commit('SET_NAME', data.name)
           commit('SET_ID', data.id)
           if (!data.avatar) data.avatar = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
@@ -120,32 +125,25 @@ const user = {
         })
       })
     },
-    GetSystemParam({ commit, state }){
+    GetSystemParam({ commit, state }) {
       return new Promise((resolve, reject) => {
-       fetchList().then(response=>{
+        fetchList().then(response => {
+          response.list.map(data => {
+            if (data.key === 'CASE_NO_PREFIX') { commit('SET_CASE', data.value) }
 
-         response.list.map(data=>{
-           if (data.key ==='CASE_NO_PREFIX')
-             commit('SET_CASE', data.value)
+            if (data.key === 'INSTANCE_NO_PREFIX') { commit('SET_INSTANCE', data.value) }
 
-           if (data.key ==='INSTANCE_NO_PREFIX')
-             commit('SET_INSTANCE', data.value)
-
-           if (data.key ==='EVIDENCE_NO_PREFIX')
-             commit('SET_EVIDENCE', data.value)
-           if (data.key ==='PARAM_KEY_TITLE')
-             commit('SET_WEBNAME', data.value)
-           if (data.key ==='PARAM_KEY_ORG_NAME')
-             commit('SET_ORGNAME', data.value)
-         })
-       })
+            if (data.key === 'EVIDENCE_NO_PREFIX') { commit('SET_EVIDENCE', data.value) }
+            if (data.key === 'PARAM_KEY_TITLE') { commit('SET_WEBNAME', data.value) }
+            if (data.key === 'PARAM_KEY_ORG_NAME') { commit('SET_ORGNAME', data.value) }
+          })
+        })
       })
     },
 
-    PostUserUseDict({ commit, state },dict) {
+    PostUserUseDict({ commit, state }, dict) {
       return new Promise((resolve, reject) => {
         userUseDict(dict).then(data => {
-
           resolve(data)
         }).catch(error => {
           reject(error)
@@ -158,7 +156,6 @@ const user = {
           status: 1
         }
         taskList(data).then(data => {
-
           resolve(data)
         }).catch(error => {
           reject(error)

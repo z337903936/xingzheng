@@ -78,7 +78,7 @@ export const constantRouterMap = [
         meta: { title: 'dashboard', icon: 'dashboard', noCache: true, affix: true }
       }
     ]
-  },
+  }
   // {
   //   path: '/alarm',
   //   component: Layout,

@@ -1,12 +1,12 @@
 <template>
-    <member-detail :is-edit="false"/>
+  <member-detail :is-edit="false"/>
 </template>
 
 <script>
-    import MemberDetail from './memberDetail'
-    export default {
-        name: "Create",
-        components: { MemberDetail }
-    }
+import MemberDetail from './memberDetail'
+export default {
+  name: 'Create',
+  components: { MemberDetail }
+}
 </script>
 

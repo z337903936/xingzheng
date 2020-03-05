@@ -703,7 +703,7 @@
             align="center"
             width="100px">
             <template slot-scope="{row}">
-              <span v-if="row.extractTime !== ''">{{ row.extractTime*1000 | parseTime('{y}-{m}-{d}') }}</span>
+              <span v-if="row.extractTime !== ''">{{ row.extractTime | parseTime('{y}-{m}-{d}') }}</span>
               <span v-else/>
             </template>
           </el-table-column>
@@ -746,7 +746,7 @@
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDeleteMaterialListForm( scope.row)">删除
+                @click="handleDeleteMaterialListForm(scope.row)">删除
               </el-button>
             </template>
           </el-table-column>
@@ -1152,24 +1152,33 @@
           <Upload v-model="materialListForm.imgUrl" @tell="setStayPart"/>
         </el-form-item>
       </el-form>
-      <el-button
-        type="primary"
-        style="float: right"
-        @click="addmaterialPhoto()">
-        添加无图片物证
-      </el-button>
-      <el-button
-        type="primary"
-        style="float: right;margin-right: 10px"
-        @click="dialogMaterialListFormMethod === 'add'?addMaterialListForm():updateMaterialListForm()">
-        保存
-      </el-button>
-      <el-button
-        type="primary"
-        style="float: right;margin-right: 10px"
-        @click="addMultipleMaterialListForm()">
-        批量保存
-      </el-button>
+      <div class="button">
+        <el-button
+          type="primary"
+          style="float: right"
+          @click="addmaterialPhoto()">
+          添加无图片物证
+        </el-button>
+        <el-button
+          type="primary"
+          style=""
+          @click="dialogMaterialListFormMethod === 'add'?addMaterialListForm():updateMaterialListForm()">
+          保存
+          <!-- {{ dialogMaterialListFormMethod === 'add'?'保存' : '修改' }} -->
+        </el-button>
+        <!-- <el-button
+          v-if="dialogMaterialListFormMethod === 'edit'"
+          style=""
+          @click="handleCloseButton">
+          关闭
+        </el-button> -->
+        <el-button
+          type="primary"
+          style="float: right;margin-right: 10px"
+          @click="addMultipleMaterialListForm()">
+          批量保存
+        </el-button>
+      </div>
 
       <el-table
         ref="materialPhotoList"
@@ -1892,7 +1901,6 @@ export default {
       this.isDna = false
       this.materialListForm.materialCategoryShow = val
       var data = this.searchMaterial(this.materialCategoryList, val)
-      console.log(data)
       if (data === '手印物证') {
         this.isInput = false
         this.isFingerprint = true
@@ -2370,7 +2378,6 @@ export default {
     addSuspectPersonListForm() {
       if (this.isEdit) {
         this.suspectPersonListForm.evidenceId = this.list.id
-        console.log(this.suspectPersonListForm.evidenceId)
         createSuspect(this.suspectPersonListForm).then(response => {
           if (response.code === 200) {
             this.$message({
@@ -2647,6 +2654,12 @@ export default {
     },
     handleClickToAddMaterial() {
       this.dialogMaterialListFormMethod = 'add'
+      this.materialPhotoList = []
+      this.list.materialList.forEach(item => {
+        item.status = 1
+        item.extractTime = item.extractTime.toString().length === 10 ? item.extractTime * 1000 : item.extractTime
+        this.materialPhotoList.push(item)
+      })
       // this.resetMaterialListForm()
       if (this.list.id == null) {
         this.dialogPointContent = '添加物证'
@@ -2696,6 +2709,10 @@ export default {
           })
         return
       }
+      if (this.materialListForm.status !== 0) {
+        this.updateMaterialListForm()
+        return
+      }
       var data = Object.assign({}, this.materialListForm)
 
       if (data.materialCategory.constructor === Array) {
@@ -2720,13 +2737,14 @@ export default {
           this.materialListForm.status = 1
           this.materialListForm.id = response.id
           var index = this.materialListForm.index
-          if (this.materialListForm.extractTime.toString().length === 10) { this.materialListForm.extractTime = this.materialListForm.extractTime * 1000 }
+          // if (this.materialListForm.extractTime.toString().length === 10) { this.materialListForm.extractTime = this.materialListForm.extractTime * 1000 }
           this.$set(this.materialPhotoList, this.materialListForm.index, this.materialListForm)
           index++
           if (this.materialPhotoList[index]) {
             this.materialListForm = this.materialPhotoList[index]
             this.$refs.materialPhotoList.setCurrentRow(this.$refs.materialPhotoList.data[index])
           }
+          this.list.materialList.push(this.materialListForm)
           // this.resetMaterialListForm()
         } else {
           this.$message({
@@ -2748,9 +2766,10 @@ export default {
         if (data.materialCategory.constructor === Array) {
           data.materialCategory = data.materialCategoryShow
         }
-        if (data.extractTime.toString().length > 10) { data.extractTime = parseInt(data.extractTime / 1000) }
+        if (data.extractTime.toString().length === 10) { data.extractTime = parseInt(data.extractTime * 1000) }
         if (data.status !== 1) {
           arrayPush.push(data)
+          data.status = 1
         }
         if (data.status === 1) {
           // updateMaterial(data).then(response => {
@@ -2786,7 +2805,7 @@ export default {
           })
           if (this.isEdit) { this.submitForm() }
           this.fetchData(this.list.id)
-          this.dialogMaterialListForm = false
+          // this.dialogMaterialListForm = false
 
           // data.materialNo = response.materialNo;
           // data.status = 1;
@@ -2804,8 +2823,14 @@ export default {
       })
     },
     handleEditMaterialListForm(row) {
-      row.extractTime = row.extractTime * 1000
+      row.extractTime = row.extractTime.toString().length === 10 ? row.extractTime * 1000 : row.extractTime
       this.materialListForm = Object.assign({}, row) // copy obj
+      this.materialPhotoList = []
+      this.list.materialList.forEach(item => {
+        item.status = 1
+        item.extractTime = item.extractTime.toString().length === 10 ? item.extractTime * 1000 : item.extractTime
+        this.materialPhotoList.push(item)
+      })
       this.dialogMaterialListFormMethod = 'edit'
       this.getUseType()
       this.dialogMaterialListForm = true
@@ -2838,8 +2863,9 @@ export default {
             showClose: true,
             duration: 2000
           })
-          if (this.materialListForm.extractTime.toString().length === 10) { this.materialListForm.extractTime = this.materialListForm.extractTime * 1000 }
+          // if (this.materialListForm.extractTime.toString().length === 10) { this.materialListForm.extractTime = this.materialListForm.extractTime * 1000 }
           this.$set(this.materialPhotoList, this.materialListForm.index, this.materialListForm)
+          this.dialogMaterialListForm = false
           // this.resetMaterialListForm()
         } else {
           this.$message({
@@ -3075,5 +3101,7 @@ export default {
 </script>
 
 <style scoped>
-
+    .button{
+      text-align: right
+    }
 </style>

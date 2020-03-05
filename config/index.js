@@ -53,15 +53,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/v1': {
-        target: 'https://starnew.cn',
-        changeOrigin: true,
-        // secure: false,
-        headers: {
-          Referer: 'https://starnew.cn'
-        },
-        pathRewrite: {
-          '^/v1': '/v1'
-        }
+        target: 'http://106.13.179.254/',
+        changeOrigin: true
       }
     },
 
